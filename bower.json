@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "javascript library for game programming.",
   "homepage": "http://tmlife.io",
-  "main": ["phina.js", "phina.min.js"],
+  "main": ["build/phina.js", "build/phina.min.js"],
   "repository": {
     "type": "git",
     "url": "git@github.com:phi-jp/phina.js.git"

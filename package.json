@@ -1,0 +1,32 @@
+{
+  "name": "phina.js",
+  "version": "0.0.4",
+  "description": "phina.js is a JavaScript library",
+  "main": "build/phina.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phi-jp/phina.js.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "phi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-jp/phina.js/issues"
+  },
+  "homepage": "https://github.com/phi-jp/phina.js",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "gulp": "^3.8.10",
+    "gulp-concat": "^2.4.3",
+    "gulp-helper": "^1.0.3",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.5.2",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.3"
+  }
+}
