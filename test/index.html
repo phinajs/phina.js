@@ -9,7 +9,7 @@
     <title>test - phina.js</title>
     <meta name="description" content="${description}" />
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.js"></script>
     <script src="http://rawgit.com/phi-jp/riot/build/dist/riot/riot+compiler.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
     <script src="http://cdn.rawgit.com/phi-jp/high/0.0.3/high.js"></script>
@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+
+    <script src='./testhelper.js'></script>
+    <script src='./graphics/canvas.js'></script>
+
   </head>
   <body>
     <app></app>
@@ -38,7 +42,7 @@
 
 <script type='riot/tag' template='jade'>
   phina-nav.mdl-layout__drawer
-    span.mdl-layout-title Title
+    span.mdl-layout-title phina.js
     nav.mdl-navigation
       itemgroup(each='{sections}')
 
@@ -48,7 +52,8 @@
 
 <script type='riot/tag' template='jade'>
   phina-main.mdl-layout__content
-    div.page-content <!-- Your content goes here --> Hello
+    div.page-content
+      iframe(name='preview', style='position:absolute;height:100%;')
 </script>
 
 <script type='riot/tag' template='jade'>
@@ -85,7 +90,7 @@
         -webkit-transition: 200ms;
       }
     script(type='text/javascript').
-      this.open = false;
+      this.open = true;
 
       this.toggle = function() {
         this.open = !this.open;
@@ -94,39 +99,26 @@
 
 <script type='riot/tag' template='jade'>
   item
-    a.mdl-navigation__link {name}
+    a.mdl-navigation__link(href='{link}', target='preview') {name}
 </script>
 
 <script>
+  var data = th.toJSON('templates/simple.html?{link}');
+
+  data.unshift({
+    name: 'core',
+    items: [
+      {name:'object',},
+      {name:'number',},
+      {name:'string',},
+      {name:'array',},
+      {name:'function',},
+      {name:'date',},
+      {name:'math',},
+    ],
+  });
+
   riot.mount('app', {
-    sections: [
-      {
-        name: 'hoge',
-        items: [
-          {name:'aaaa',},
-          {name:'bbbb',},
-          {name:'cccc',},
-          {name:'dddd',},
-        ],
-      },
-      {
-        name: 'foo',
-        items: [
-          {name:'aaaa',},
-          {name:'bbbb',},
-          {name:'cccc',},
-          {name:'dddd',},
-        ],
-      },
-      {
-        name: 'bar',
-        items: [
-          {name:'aaaa',},
-          {name:'bbbb',},
-          {name:'cccc',},
-          {name:'dddd',},
-        ],
-      },
-    ]
+    sections: data,
   });
 </script>
