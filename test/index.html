@@ -60,15 +60,18 @@
         item(each='{items}')
 
     style(scoped='scoped').
-      itemgroup .opened > a {
+      itemgroup div > a.mdl-navigation__link {
+        padding-left: 14px !important;
+      }
+      itemgroup div.opened > a {
         background: hsl(0, 0%, 90%);
       }
-      itemgroup a.mdl-navigation__link i {
+      itemgroup div a.mdl-navigation__link i {
         position: absolute;
         right: 5px;
         -webkit-transition: 200ms;
       }
-      itemgroup .opened a.mdl-navigation__link i {
+      itemgroup div.opened a.mdl-navigation__link i {
         -webkit-transform: rotate(-180deg);
       }
       itemgroup nav {
@@ -91,7 +94,7 @@
 
 <script type='riot/tag' template='jade'>
   item
-    a.mdl-navigation__link - {name}
+    a.mdl-navigation__link {name}
 </script>
 
 <script>
