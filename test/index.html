@@ -53,17 +53,30 @@
 
 <script type='riot/tag' template='jade'>
   itemgroup
-    a.mdl-navigation__link(href='', onclick='{toggle}') {name}
-    nav(class='{opened:open}')
-      item(each='{items}')
+    div(class='{opened:this.open}')
+      a.mdl-navigation__link(href='', onclick='{toggle}') {name}
+        i.material-icons.md-18 keyboard_arrow_down
+      nav
+        item(each='{items}')
 
     style(scoped='scoped').
+      itemgroup .opened > a {
+        background: hsl(0, 0%, 90%);
+      }
+      itemgroup a.mdl-navigation__link i {
+        position: absolute;
+        right: 5px;
+        -webkit-transition: 200ms;
+      }
+      itemgroup .opened a.mdl-navigation__link i {
+        -webkit-transform: rotate(-180deg);
+      }
       itemgroup nav {
         max-height: 0px;
         overflow: hidden;
         -webkit-transition: 200ms;
       }
-      itemgroup nav.opened {
+      itemgroup .opened nav {
         max-height: 500px;
         overflow: scroll;
         -webkit-transition: 200ms;
