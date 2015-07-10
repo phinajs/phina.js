@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title>test - phina.js</title>
+    <meta name="description" content="${description}" />
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+    <script src="http://rawgit.com/phi-jp/riot/build/dist/riot/riot+compiler.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
+    <script src="http://cdn.rawgit.com/phi-jp/high/0.0.3/high.js"></script>
+
+    <!-- material design lite -->
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  </head>
+  <body>
+    <app></app>
+  </body>
+</html>
+
+<script type='riot/tag' template='jade'>
+  app
+    img(src='assets/images/phina.png')
+    style.
+      img {
+        width: 640px;
+        position: absolute;
+        display: block;
+        margin: auto;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+      }
+</script>
+
+<script>
+  riot.mount('app');
+</script>
