@@ -82,9 +82,11 @@
 
       for (var testKey in suite.testMap) {
         var test = suite.testMap[testKey];
+        var path = [key, testKey].join('/');
         suiteJson.items.push({
           name: testKey,
-          link: link.replace('{link}', [key, testKey].join('/'))
+          path: path,
+          link: link.replace('{link}', path)
         });
       }
     }

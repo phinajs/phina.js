@@ -89,7 +89,7 @@
         -webkit-transition: 200ms;
       }
     script(type='text/javascript').
-      this.open = true;
+      // this.open = true;
 
       this.toggle = function() {
         this.open = !this.open;
@@ -98,7 +98,13 @@
 
 <script type='riot/tag' template='jade'>
   item
-    a.mdl-navigation__link(href='{link}', target='preview') {name}
+    a.mdl-navigation__link(href='{link}', target='preview', onclick='{click}') {name}
+
+    script(type='text/javascript').
+      this.click = function() {
+        location.hash = this.path;
+        return true;
+      };
 </script>
 
 <!--
@@ -106,7 +112,7 @@
   -->
 
 <script>
-
+  var hash = location.hash.substr(1);
   var data = {
     sections: [{
       name: 'core',
@@ -134,6 +140,7 @@
 
       json.forEach(function(s) {
         data.sections.push(s);
+        s.open = true;
       });
 
       riot.update();
