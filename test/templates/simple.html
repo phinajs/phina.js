@@ -13,14 +13,29 @@
   </body>
 </html>
 
-<script src='../../src/object.js'></script>
-<script src='../../src/phina.js'></script>
-<script src='../../src/graphics/canvas.js'></script>
-
 <script src='../testhelper.js'></script>
-<script src='../graphics/canvas.js'></script>
 
 <script>
-var query = location.search.substr(1);
-th.run(query);
+
+// phina の scirpt をロード
+th.load('../../src/config.json', function(d) {
+  var files = [];
+  d.files.forEach(function(file) {
+    var file = '../../src/' + file;
+    files.push(file);
+  });
+
+  // test の scripts をロード
+  th.load('../config.json', function(d) {
+    d.files.forEach(function(file) {
+      var file = '../' + file;
+      files.push(file);
+    });
+
+    th.loadScripts(files, function() {
+      var query = location.search.substr(1);
+      th.run(query);
+    });
+  });
+});
 </script>
