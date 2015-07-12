@@ -43,10 +43,40 @@
   phina-nav.mdl-layout__drawer
     span.mdl-layout-title phina.js
     nav.mdl-navigation
-      itemgroup(each='{sections}')
+      div.mdl-navigation__link
+        phina-search(oninput='{search}')
+      itemgroup(each='{sections.filter(filter)}')
 
     script(type='text/javascript').
       this.sections = opts.sections;
+
+      var searchValue = '';
+
+      this.search = function(event) {
+        searchValue = event.target.value;
+        this.update();
+      };
+      this.filter = function(item) {
+        if (searchValue) {
+          var flag = item.name.indexOf(searchValue);
+          return flag !== -1;
+        }
+        else {
+          return true;
+        }
+      };
+</script>
+
+<!-- 検索 -->
+<script type='riot/tag' template='jade'>
+  phina-search.mdl-textfield.mdl-js-textfield
+    input.mdl-textfield__input(name='_value', type='text')
+    label.mdl-textfield__label search
+
+    style.
+      phina-search {
+        width: initial !important;
+      }
 </script>
 
 <script type='riot/tag' template='jade'>
@@ -57,7 +87,7 @@
 
 <script type='riot/tag' template='jade'>
   itemgroup
-    div(class='{opened:this.open}')
+    div(class='{opened:open}')
       a.mdl-navigation__link(href='', onclick='{toggle}') {name}
         i.material-icons.md-18 keyboard_arrow_down
       nav
@@ -89,10 +119,11 @@
         -webkit-transition: 200ms;
       }
     script(type='text/javascript').
-      // this.open = true;
+      this.open = true;
 
       this.toggle = function() {
         this.open = !this.open;
+        this.update();
       };
 </script>
 
@@ -114,18 +145,20 @@
 <script>
   var hash = location.hash.substr(1);
   var data = {
-    sections: [{
-      name: 'core',
-      items: [
-        {name:'object',},
-        {name:'number',},
-        {name:'string',},
-        {name:'array',},
-        {name:'function',},
-        {name:'date',},
-        {name:'math',},
-      ],
-    }],
+    sections: [
+      {
+        name: 'core',
+        items: [
+          {name:'object',},
+          {name:'number',},
+          {name:'string',},
+          {name:'array',},
+          {name:'function',},
+          {name:'date',},
+          {name:'math',},
+        ],
+      }
+    ],
   };
 
   th.load('config.json', function(d) {
@@ -140,7 +173,7 @@
 
       json.forEach(function(s) {
         data.sections.push(s);
-        s.open = true;
+        // s.open = true;
       });
 
       riot.update();
