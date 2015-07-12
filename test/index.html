@@ -45,9 +45,7 @@
     nav.mdl-navigation
       div.mdl-navigation__link
         phina-search(oninput='{search}')
-      itemgroup(each='{sections.filter(filter)}')
-
-
+      itemgroup(each='{sections.filter(filter)}', data='{this}')
     style.
       div.mdl-navigation__link {
         padding: 0px 10px !important;
@@ -97,7 +95,7 @@
 
 <script type='riot/tag' template='jade'>
   itemgroup
-    div(class='{opened:open}')
+    div(class='{opened:_open}')
       a.mdl-navigation__link(href='', onclick='{toggle}') {name}
         i.material-icons.md-18 keyboard_arrow_down
       nav
@@ -129,11 +127,10 @@
         -webkit-transition: 200ms;
       }
     script(type='text/javascript').
-      this.open = true;
+      this._open = opts.data.open;
 
       this.toggle = function() {
-        this.open = !this.open;
-        this.update();
+        this._open = !this._open;
       };
 </script>
 
@@ -147,10 +144,6 @@
         return true;
       };
 </script>
-
-<!--
-    <script src='./graphics/canvas.js'></script>
-  -->
 
 <script>
   var hash = location.hash.substr(1);
@@ -183,7 +176,7 @@
 
       json.forEach(function(s) {
         data.sections.push(s);
-        // s.open = true;
+        s.open = true;
       });
 
       riot.update();
