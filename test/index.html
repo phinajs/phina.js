@@ -47,6 +47,12 @@
         phina-search(oninput='{search}')
       itemgroup(each='{sections.filter(filter)}')
 
+
+    style.
+      div.mdl-navigation__link {
+        padding: 0px 10px !important;
+      }
+
     script(type='text/javascript').
       this.sections = opts.sections;
 
@@ -71,11 +77,15 @@
 <script type='riot/tag' template='jade'>
   phina-search.mdl-textfield.mdl-js-textfield
     input.mdl-textfield__input(name='_value', type='text')
-    label.mdl-textfield__label search
-
-    style.
+    label.mdl-textfield__label
+      i.material-icons search
+    style(scoped).
       phina-search {
-        width: initial !important;
+        width: 100% !important;
+      }
+      phina-search i.material-icons {
+        position: absolute;
+        top: -2px;
       }
 </script>
 
