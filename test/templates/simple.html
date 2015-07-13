@@ -10,12 +10,27 @@
   </head>
   <body>
     <canvas id='world'></canvas>
+    <button class='btn-standalone' onclick='openStandalone();'>View</button>
   </body>
 </html>
+
+<style>
+  .btn-standalone {
+    position: absolute;
+    top: 10px;
+    right: 260px;
+    border: none;
+    padding: 5px 10px;
+  }
+</style>
 
 <script src='../testhelper.js'></script>
 
 <script>
+
+window.openStandalone = function() {
+  var w = window.open(location.href);
+};
 
 // phina の scirpt をロード
 th.load('../../src/config.json', function(d) {
@@ -38,4 +53,5 @@ th.load('../../src/config.json', function(d) {
     });
   });
 });
+
 </script>

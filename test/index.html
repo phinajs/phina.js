@@ -44,7 +44,7 @@
     span.mdl-layout-title phina.js
     nav.mdl-navigation
       div.mdl-navigation__link
-        phina-search(oninput='{search}')
+        search(oninput='{search}')
       itemgroup(each='{sections.filter(filter)}', data='{this}')
     style.
       div.mdl-navigation__link {
@@ -71,81 +71,22 @@
       };
 </script>
 
-<!-- 検索 -->
-<script type='riot/tag' template='jade'>
-  phina-search.mdl-textfield.mdl-js-textfield
-    input.mdl-textfield__input(name='_value', type='text')
-    label.mdl-textfield__label
-      i.material-icons search
-    style(scoped).
-      phina-search {
-        width: 100% !important;
-      }
-      phina-search i.material-icons {
-        position: absolute;
-        top: -2px;
-      }
-</script>
-
 <script type='riot/tag' template='jade'>
   phina-main.mdl-layout__content
     div.page-content
       iframe(name='preview', style='position:absolute;height:100%;')
 </script>
 
-<script type='riot/tag' template='jade'>
-  itemgroup
-    div(class='{opened:_open}')
-      a.mdl-navigation__link(href='', onclick='{toggle}') {name}
-        i.material-icons.md-18 keyboard_arrow_down
-      nav
-        item(each='{items}')
+<script src='tags/search.jade' type='riot/tag' template='jade'></script>
+<script src='tags/item.jade' type='riot/tag' template='jade'></script>
+<script src='tags/itemgroup.jade' type='riot/tag' template='jade'></script>
 
-    style(scoped='scoped').
-      itemgroup div > a.mdl-navigation__link {
-        padding-left: 14px !important;
-      }
-      itemgroup div.opened > a {
-        background: hsl(0, 0%, 90%);
-      }
-      itemgroup div a.mdl-navigation__link i {
-        position: absolute;
-        right: 5px;
-        -webkit-transition: 200ms;
-      }
-      itemgroup div.opened a.mdl-navigation__link i {
-        -webkit-transform: rotate(-180deg);
-      }
-      itemgroup nav {
-        max-height: 0px;
-        overflow: hidden;
-        -webkit-transition: 200ms;
-      }
-      itemgroup .opened nav {
-        max-height: 500px;
-        overflow: scroll;
-        -webkit-transition: 200ms;
-      }
-    script(type='text/javascript').
-      this._open = opts.data.open;
-
-      this.toggle = function() {
-        this._open = !this._open;
-      };
-</script>
-
-<script type='riot/tag' template='jade'>
-  item
-    a.mdl-navigation__link(href='{link}', target='preview', onclick='{click}') {name}
-
-    script(type='text/javascript').
-      this.click = function() {
-        location.hash = this.path;
-        return true;
-      };
-</script>
 
 <script>
+  riot.compile(function() {
+    componentHandler.upgradeDom();
+  });
+
   var hash = location.hash.substr(1);
   var data = {
     sections: [
