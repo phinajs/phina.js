@@ -1,0 +1,7 @@
+{
+  "files": [
+    "object.js",
+    "phina.js",
+    "graphics/canvas.js"
+  ]
+}
