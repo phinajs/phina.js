@@ -74,7 +74,11 @@
 <script type='riot/tag' template='jade'>
   phina-main.mdl-layout__content
     div.page-content
-      iframe(name='preview', style='position:absolute;height:100%;')
+      iframe#preview(name='preview')
+    style.
+      phina-main, phina-main div.page-content, phina-main div.page-content iframe {
+        height: 100%;
+      }
 </script>
 
 <script src='tags/search.jade' type='riot/tag' template='jade'></script>
@@ -117,7 +121,16 @@
 
       json.forEach(function(s) {
         data.sections.push(s);
-        s.open = true;
+
+        var matchedItems = s.items.filter(function(item) {
+          return item.path === hash;
+        });
+
+        if (matchedItems.length > 0) {
+          document.querySelector('#preview').src = matchedItems[0].link;
+          s.flag = true;
+        }
+
       });
 
       riot.update();

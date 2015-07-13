@@ -9,16 +9,19 @@
     <title>test - phina.js</title>
   </head>
   <body>
-    <canvas id='world'></canvas>
+    <canvas id='world' width='640' height='960'></canvas>
     <button class='btn-standalone' onclick='openStandalone();'>View</button>
   </body>
 </html>
 
 <style>
+  #world {
+    box-shadow: 0px 0px 4px 0px #aaa;
+  }
   .btn-standalone {
     position: absolute;
     top: 10px;
-    right: 260px;
+    right: 10px;
     border: none;
     padding: 5px 10px;
   }
