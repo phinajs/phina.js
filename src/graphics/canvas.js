@@ -103,7 +103,7 @@ phina.namespace(function() {
       var context = this.context;
 
       context.save();
-      context.resetTransform();          // 行列初期化
+      context.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0); // 行列初期化
       context.fillStyle = fillStyle;     // 塗りつぶしスタイルセット
       context.fillRect(x, y, width, height);
       context.restore();
@@ -416,6 +416,21 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * 行列をセット
+     */
+    setTransform: function(m11, m12, m21, m22, dx, dy) {
+      this.context.setTransform(m11, m12, m21, m22, dx, dy);
+      return this;
+    },
+
+    /**
+     * 行列をリセット
+     */
+    resetTransform: function() {
+      this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+      return this;
+    },
     /**
      * 中心に移動
      */

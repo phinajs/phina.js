@@ -15,6 +15,17 @@ th.describe("graphics.Canvas", function() {
     canvas.fitScreen();
   });
 
+  th.it('clear', function() {
+    var canvas = phina.graphics.Canvas('#world');
+    canvas.fillRect(0, 0, 200, 200);
+    canvas.clear(50, 50, 50, 50);
+  });
+
+  th.it('clearColor', function() {
+    var canvas = phina.graphics.Canvas('#world');
+    canvas.clearColor('red');
+  });
+
   th.it('fillRect', function() {
     var canvas = phina.graphics.Canvas('#world');
     canvas.fillRect(0, 0, 100, 100);
