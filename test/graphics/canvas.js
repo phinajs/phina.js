@@ -52,3 +52,17 @@ th.describe("graphics.Canvas", function() {
   });
 
 });
+
+th.describe("bitmap", function() {
+
+  th.it('hoge', function() {
+    var canvas = phina.graphics.Canvas('#world');
+    canvas.fillRect(0, 0, 100, 100);
+  });
+
+  th.it('foo', function() {
+    var canvas = phina.graphics.Canvas('#world');
+    canvas.fillStar(100, 100);
+  });
+
+});
