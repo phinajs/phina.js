@@ -44,7 +44,7 @@
 
 
   /**
-   * @method $forIn
+   * @method forIn
    * オブジェクト用ループ処理
    */
   Object.prototype.method("forIn", function(fn, self) {
