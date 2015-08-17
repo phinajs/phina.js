@@ -5,14 +5,29 @@
 ;(function() {
   var phina = {};
 
-  phina.namespace = function(fn) {
+  phina.method('namespace', function(fn) {
     fn.call(this);
-  };
+  });
 
   /**
    * phina(フィナ)
    */
   window.phina = phina;
+
+  /**
+   * global
+   */
+  phina.accessor('global', {
+    get: function() {
+      return window;
+    },
+  });
+
+  // support node.js
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = phina;
+  }
+
 })();
 
 
@@ -60,7 +75,6 @@ phina.namespace(function() {
     return _class;
   });
 
-  phina.global = window || global || this;
   var chachedClasses = {};
   /*
    * 
@@ -115,20 +129,9 @@ phina.namespace(function() {
 
 
   phina.method('globalize', function() {
-    var namespaces = [
-      'util',
-      'dom',
-      'graphics',
-      'app',
-      'asset',
-      'game',
-      'display',
-    ];
+    phina.forIn(function(key, value) {
 
-    namespaces.forEach(function(ns) {
-      if (!phina[ns]) return ;
-
-      phina[ns].forIn(function(key, value) {
+      value.forIn(function(key, value) {
         phina.global[key] = value;
       });
     });
