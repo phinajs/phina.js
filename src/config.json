@@ -2,6 +2,7 @@
   "files": [
     "object.js",
     "phina.js",
-    "graphics/canvas.js"
+    "graphics/canvas.js",
+    "geom/vector2.js"
   ]
 }

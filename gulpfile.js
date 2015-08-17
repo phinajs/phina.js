@@ -16,15 +16,16 @@ gulp.task('concat', function() {
   var scripts = config.files.map(function(f) {
     return './src/' + f;
   });
-  gulp.src(scripts)
+
+  return gulp.src(scripts)
     .pipe(concat('phina.js'))
     .pipe(replace('<%= version %>', pkg.version))
     .pipe(gulp.dest('./build/'))
     ;
 });
 
-gulp.task('uglify', function() {
-  gulp.src('./build/phina.js')
+gulp.task('uglify', ['concat'], function() {
+  return gulp.src('./build/phina.js')
     .pipe(uglify())
     .pipe(rename({
       extname: '.min.js'

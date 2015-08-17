@@ -2,8 +2,9 @@
  *
  */
 
-;(function() {
-  var phina = {};
+var phina = phina || {};
+
+;(function(global) {
 
   phina.method('namespace', function(fn) {
     fn.call(this);
@@ -12,14 +13,14 @@
   /**
    * phina(フィナ)
    */
-  window.phina = phina;
+  global.phina = phina;
 
   /**
    * global
    */
   phina.accessor('global', {
     get: function() {
-      return window;
+      return global;
     },
   });
 
@@ -28,7 +29,7 @@
     module.exports = phina;
   }
 
-})();
+})(this);
 
 
 phina.namespace(function() {
