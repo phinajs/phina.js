@@ -37,7 +37,22 @@ gulp.task('uglify', ['concat'], function() {
     });
 });
 
+gulp.task('docs', shell.task([
+  'jsduck ./src --output ./docs --title "phina.js docs"',
+]));
 
 gulp.task('watch', function() {
   gulp.watch(['./src/*', './src/**/*'], ['default']);
 });
+
+
+gulp.task('webserver', function() {
+  gulp.src('.')
+    .pipe(webserver({
+      // livereload: true,
+      // port: 9000,
+      directoryListing: true,
+      // open: true,
+    }));
+});
+
