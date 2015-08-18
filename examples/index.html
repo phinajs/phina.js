@@ -41,9 +41,8 @@ app.run();
 
 var test1 = function() {
   var elm = CanvasElement().addChildTo(scene);
-  elm.x = 0;
   elm.update = function() {
-    this.x += 1;
+    this.position.x += 1;
   };
   elm.draw = function(canvas) {
     canvas.fillStar(this.x, 100, 100);
@@ -104,8 +103,7 @@ var test4 = function() {
 };
 
 test3();
-
-
+test1();
 
 /*
 var scene = CanvasScene();
