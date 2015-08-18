@@ -36,10 +36,10 @@ window.openStandalone = function() {
 };
 
 // phina の scirpt をロード
-th.load('../../src/config.json', function(d) {
+th.load('../../../src/config.json', function(d) {
   var files = [];
   d.files.forEach(function(file) {
-    var file = '../../src/' + file;
+    var file = '../../../src/' + file;
     files.push(file);
   });
 
