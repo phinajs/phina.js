@@ -2,7 +2,7 @@
 
 phina.namespace(function() {
   
-  phina.define('phina.graphics.CanvasRenderer', {
+  phina.define('phina.display.CanvasRenderer', {
 
     init: function(canvas) {
       this.canvas = canvas;
