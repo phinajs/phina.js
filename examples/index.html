@@ -4,21 +4,116 @@
 <head>
 </head>
 <body>
+  <canvas id='world'></canvas>
 </body>
 </html>
+
+
+<style>
+#world {
+  box-shadow: 0px 0px 4px 0px #aaa;
+}
+</style>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js'></script>
 
 <script src='../build/phina.js'></script>
 
 <script>
 phina.globalize();
 
+var SCREEN_WIDTH = 640;
+var SCREEN_HEIGHT = 960;
+
+var app = CanvasApp({
+  query: '#world',
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+});
+var scene = CanvasScene({
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+});
+app.currentScene = scene;
+app.run();
+
+
+
+
+var test1 = function() {
+  var elm = CanvasElement().addChildTo(scene);
+  elm.x = 0;
+  elm.update = function() {
+    this.x += 1;
+  };
+  elm.draw = function(canvas) {
+    canvas.fillStar(this.x, 100, 100);
+  };
+};
+
+
+var test2 = function() {
+  var layer = ThreeLayer({
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+  }).addChildTo(scene);
+};
+
+var test3 = function() {
+  var layer = ThreeLayer({
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+  }).addChildTo(scene);
+
+  var geometry = new THREE.BoxGeometry( 20, 20, 20 );
+
+  for ( var i = 0; i < 2000; i ++ ) {
+    var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+
+    object.position.x = Math.random() * 800 - 400;
+    object.position.y = Math.random() * 800 - 400;
+    object.position.z = Math.random() * 800 - 400;
+
+    object.rotation.x = Math.random() * 2 * Math.PI;
+    object.rotation.y = Math.random() * 2 * Math.PI;
+    object.rotation.z = Math.random() * 2 * Math.PI;
+
+    object.scale.x = Math.random() + 0.5;
+    object.scale.y = Math.random() + 0.5;
+    object.scale.z = Math.random() + 0.5;
+
+    layer.scene.add( object );
+  }
+
+  var theta = 0;
+  var radius = 100;
+  layer.update = function() {
+    theta += 0.5;
+
+    this.camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
+    this.camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+    this.camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
+    this.camera.lookAt( this.scene.position );
+
+    this.camera.updateMatrixWorld();
+
+    this.renderer.render( this.scene, this.camera );
+  }
+
+};
+
+test3();
+
+
+
+/*
 var scene = CanvasScene();
 document.body.appendChild(scene.canvas.domElement);
 
 scene.draw = function(canvas) {
-	canvas.fillStar(100, 100, 100);
+  canvas.fillStar(100, 100, 100);
 };
 scene._render();
+*/
 
 </script>
 
