@@ -4,7 +4,6 @@
     "phina.js",
     "geom/vector2.js",
     "graphics/canvas.js",
-    "graphics/canvasrenderer.js",
 
     "event/eventdispatcher.js",
 
@@ -14,9 +13,10 @@
     "app/object2d.js",
     "app/scene.js",
 
-    "display/canvasapp.js",
     "display/canvaselement.js",
     "display/canvasscene.js",
-    "display/canvaslayer.js"
+    "display/canvaslayer.js",
+    "display/canvasrenderer.js",
+    "display/canvasapp.js"
   ]
 }
