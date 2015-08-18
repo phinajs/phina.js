@@ -1,3 +1,4 @@
+
 phina.namespace(function() {
 
   phina.define('phina.app.Element', {
@@ -17,7 +18,7 @@ phina.namespace(function() {
       this.children = [];
     },
 
-    addChild: function() {
+    addChild: function(child) {
       if (child.parent) child.remove();
 
       child.parent = this;
@@ -64,7 +65,7 @@ phina.namespace(function() {
     getRoot: function() {
       var elm = this;
       for (elm=this.parent; elm.parent != null; elm = elm.parent) {
-        
+
       }
       return elm;
     },
