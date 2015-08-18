@@ -5,14 +5,12 @@ phina.namespace(function() {
    * @class
    */
   phina.define('phina.display.CanvasApp', {
+    superClass: 'phina.app.BaseApp',
 
     init: function(params) {
-
       this.domElement = document.querySelector(params.query);
-
+      this.superInit(this.domElement);
       this.canvas = phina.graphics.Canvas(this.domElement);
-
-      this._scenes = [];
     },
 
     run: function() {
@@ -56,10 +54,6 @@ phina.namespace(function() {
       this.prevTime = now;
     },
 
-    _update: function() {
-      this.currentScene._update();
-    },
-
     _draw: function() {
       this.canvas.clear();
 
@@ -67,13 +61,6 @@ phina.namespace(function() {
 
       var c = this.currentScene.canvas;
       this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
-    },
-
-    _accessor: {
-      currentScene: {
-        "get": function()   { return this._scenes[0]; },
-        "set": function(v)  { this._scenes[0] = v; },
-      },
     },
 
   });
