@@ -36,7 +36,15 @@ phina.namespace(function() {
     },
 
     flare: function(type, param) {
+      var e = {type:type};
+      if (param) {
+        param.forIn(function(val, key) {
+          e[key] = val;
+        });
+      }
+      this.fire(e);
 
+      return this;
     },
 
     one: function(type, listener) {

@@ -53,15 +53,15 @@ var test1 = function() {
 
 var test2 = function() {
   var layer = ThreeLayer({
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
   }).addChildTo(scene);
 };
 
 var test3 = function() {
   var layer = ThreeLayer({
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
   }).addChildTo(scene);
 
   var geometry = new THREE.BoxGeometry( 20, 20, 20 );
@@ -95,10 +95,12 @@ var test3 = function() {
     this.camera.lookAt( this.scene.position );
 
     this.camera.updateMatrixWorld();
-
-    this.renderer.render( this.scene, this.camera );
   }
 
+};
+
+var test4 = function() {
+  
 };
 
 test3();
