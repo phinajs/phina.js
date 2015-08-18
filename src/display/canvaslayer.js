@@ -26,6 +26,11 @@ phina.namespace(function() {
   phina.define('phina.display.ThreeLayer', {
     superClass: 'phina.display.CanvasElement',
 
+    scene: null,
+    camera: null,
+    light: null,
+    renderer: null,
+
     init: function(params) {
       this.superInit();
 
@@ -38,21 +43,13 @@ phina.namespace(function() {
       this.light.position.set( 1, 1, 1 ).normalize();
       this.scene.add( this.light );
 
-      var geometry = new THREE.BoxGeometry( 200, 200, 200 );
-      var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-
-      // var mesh = new THREE.Mesh( geometry, material );
-      // this.scene.add( mesh );
-      // this.mesh = mesh;
-
       this.renderer = new THREE.WebGLRenderer();
       this.renderer.setClearColor( 0xf0f0f0 );
       this.renderer.setSize( params.width, params.height );
-    },
 
-    update: function() {
-      this.renderer.render( this.scene, this.camera );
-      // this.mesh.rotation.x += 0.01;
+      this.on('enterframe', function() {
+        this.renderer.render( this.scene, this.camera );
+      });
     },
 
     draw: function(canvas) {
