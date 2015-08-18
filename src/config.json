@@ -1,6 +1,12 @@
 {
   "files": [
-    "object.js",
+    "core/object.js",
+    "core/number.js",
+    "core/string.js",
+    "core/array.js",
+    "core/date.js",
+    "core/math.js",
+
     "phina.js",
     "geom/vector2.js",
     "graphics/canvas.js",
