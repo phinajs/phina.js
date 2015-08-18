@@ -2,14 +2,19 @@
 phina.namespace(function() {
 
   /**
-   * @class
+   * @class phina.display.CanvasApp
+   * 
    */
   phina.define('phina.display.CanvasApp', {
     superClass: 'phina.app.BaseApp',
 
+    /**
+     * @constructor
+     */
     init: function(params) {
+      this.superInit();
+
       this.domElement = document.querySelector(params.query);
-      this.superInit(this.domElement);
       this.canvas = phina.graphics.Canvas(this.domElement);
 
       this.canvas.setSize(params.width, params.height);

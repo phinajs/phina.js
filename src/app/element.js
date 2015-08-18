@@ -1,6 +1,10 @@
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.app.Element
+   * @extends phina.event.EventDispatcher
+   */
   phina.define('phina.app.Element', {
     superClass: 'phina.event.EventDispatcher',
 

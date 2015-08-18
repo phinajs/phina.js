@@ -1,15 +1,19 @@
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.BaseApp
+   * ベースとなるアプリケーションクラス
+   */
   phina.define('phina.app.BaseApp', {
     superClass: 'phina.event.EventDispatcher',
 
     awake: true,
 
+    /**
+     * @constructor
+     */
     init: function(element) {
       this.superInit();
-
-      this.domElement = element;
       this._scenes = [];
 
       this.updater = phina.app.Updater(this);

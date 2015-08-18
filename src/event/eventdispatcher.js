@@ -1,5 +1,8 @@
 phina.namespace(function() {
 
+  /**
+   * @class phina.event.EventDispatcher
+   */
   phina.define('phina.event.EventDispatcher', {
 
     init: function() {

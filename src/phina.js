@@ -2,6 +2,11 @@
  *
  */
 
+
+
+/*
+ * tm namespace
+ */
 var phina = phina || {};
 
 ;(function(global) {
@@ -10,12 +15,12 @@ var phina = phina || {};
     fn.call(this);
   });
 
-  /**
+  /*
    * phina(フィナ)
    */
   global.phina = phina;
 
-  /**
+  /*
    * global
    */
   phina.accessor('global', {

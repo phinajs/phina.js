@@ -4,6 +4,11 @@
 
 
 ;(function() {
+  /**
+   * @class global.Object
+   * Objectの拡張
+   */
+
   
   Object.defineProperty(Object.prototype, "property", {
     value: function(name, val) {
