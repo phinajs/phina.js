@@ -37,24 +37,7 @@ gulp.task('uglify', ['concat'], function() {
     });
 });
 
-gulp.task('docs', shell.task([
-  'jsduck ./src --output ./docs --title "phina.js docs"',
-]));
 
-/*
-gulp.task('docs', function() {
-  var command = 'jsduck ./src --output ./docs --title "tmlib.js docs" --eg-iframe=tm-iframe.html';
-
-  gulp.src('./build/phina.js')
-    .pipe(uglify())
-    .pipe(rename({
-      extname: '.min.js'
-    }))
-    .pipe(gulp.dest('./build/'))
-    .on('end', function() {
-      util.log(util.colors.blue('finish'));
-      gutil.beep();
-    });
+gulp.task('watch', function() {
+  gulp.watch(['./src/*', './src/**/*'], ['default']);
 });
-
-*/
