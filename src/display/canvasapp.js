@@ -11,6 +11,10 @@ phina.namespace(function() {
       this.domElement = document.querySelector(params.query);
       this.superInit(this.domElement);
       this.canvas = phina.graphics.Canvas(this.domElement);
+
+      this.canvas.setSize(params.width, params.height);
+
+      this.fitScreen();
     },
 
     _draw: function() {
@@ -20,6 +24,10 @@ phina.namespace(function() {
 
       var c = this.currentScene.canvas;
       this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+    },
+
+    fitScreen: function() {
+      this.canvas.fitScreen();
     },
 
   });
