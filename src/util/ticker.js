@@ -61,15 +61,15 @@
     },
 
     resume: function() {
-
+      // TODO: 
     },
 
     stop: function() {
-
+      // TODO: 
     },
 
     rewind: function() {
-
+      // TODO: 
     },
 
     _accessor: {

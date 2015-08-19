@@ -30,12 +30,36 @@
     }
   });
 
+  /**
+   * @method setter
+   * セッターを定義する
+   */
+  Object.prototype.method("setter", function(name, fn){
+    Object.defineProperty(this, name, {
+      set: fn,
+      enumerable: false,
+      configurable: true,
+    });
+  });
+
+  /**
+   * @method getter
+   * ゲッターを定義する
+   */
+  Object.prototype.method("getter", function(name, fn){
+    Object.defineProperty(this, name, {
+      get: fn,
+      enumerable: false,
+      configurable: true,
+    });
+  });
+
   Object.prototype.method("accessor", function(name, param) {
     Object.defineProperty(this, name, {
       set: param["set"],
       get: param["get"],
       enumerable: false,
-      configurable: true
+      configurable: true,
     });
   });
 
