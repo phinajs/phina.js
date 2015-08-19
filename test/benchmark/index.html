@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html>
+<head>
+</head>
+<body>
+  <canvas id='world'></canvas>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r14/Stats.js"></script>
+<script src='../../build/phina.js'></script>
+<script>
+
+phina.globalize();
+
+var SCREEN_WIDTH  = 640;
+var SCREEN_HEIGHT = 960;
+
+var SCREEN_WIDTH  = 800;
+var SCREEN_HEIGHT = 600;
+
+var CHILD_NUM = 10;
+var CHILD_RADIUS = 50;
+
+var MAX_NUM = 100;
+
+// Stats
+stats = new Stats();
+document.body.appendChild(stats.domElement);
+
+
+phina.define("MainScene", {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    var image = new Image();
+    image.src = 'http://clockmaker.jp/labs/130409_objectrender_performance/commons/piyo.png';
+
+    image.onload = function() {
+      this.update = this._update;
+
+      MAX_NUM.times(function() {
+        this.create();
+      }.bind(this));
+    }.bind(this);
+
+    this.image = image;
+  },
+
+  _update: function() {
+    // if (this.app.ticker.frame % 30 == 0) {
+    //   this.create();
+    // }
+    stats.end();
+    stats.begin();
+  },
+
+  create: function() {
+    var group = CanvasElement().addChildTo(this);
+    group.vy = 5 * Math.random();
+    group.vr = 5 * Math.random();
+    group.x = Math.random() * SCREEN_WIDTH;
+
+    var self = this;
+    CHILD_NUM.times(function(i) {
+      var child = Sprite(self.image).addChildTo(group);
+      var deg = i/CHILD_NUM * 360;
+      child.x = CHILD_RADIUS * Math.cos(deg * Math.PI/180);
+      child.y = CHILD_RADIUS * Math.sin(deg * Math.PI/180);
+      child.rotation = deg;
+      child.scaleX = child.scaleY = i / CHILD_NUM + 0.5;
+    });
+
+    group.update = function() {
+      this.y += group.vy;
+      this.rotation -= group.vr;
+
+      if (this.y > SCREEN_HEIGHT) {
+        this.y = 0;
+      }
+    };
+  },
+
+});
+
+
+var app = CanvasApp({
+  query: '#world',
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+});
+
+app.replaceScene(MainScene());
+
+app.ticker.fps = 60;
+
+app.run();
+
+
+</script>
