@@ -86,6 +86,10 @@ phina.namespace(function() {
    * 
    */
   phina.method('using', function(path) {
+    if (!path) {
+      return phina.global;
+    }
+    
     var pathes = path.split(/[,.\/ ]|::/);
     var current = phina.global;
 
