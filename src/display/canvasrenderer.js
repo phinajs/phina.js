@@ -18,7 +18,13 @@ phina.namespace(function() {
     renderObject: function(obj) {
       if (obj.visible === false) return ;
 
+      obj._calcWorldMatrix && obj._calcWorldMatrix();
+
       if (obj.draw) {
+        // 行列をセット
+        var m = obj._worldMatrix;
+        this.canvas.context.setTransform( m.m11, m.m21, m.m12, m.m22, m.m13, m.m23 );
+
         obj.draw(this.canvas);
       }
       // 子供たちも実行

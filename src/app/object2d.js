@@ -20,9 +20,55 @@ phina.namespace(function() {
 
     init: function() {
       this.superInit();
+      
       this.position = phina.geom.Vector2(0, 0);
       this.scale    = phina.geom.Vector2(1, 1);
       this.origin   = phina.geom.Vector2(0.5, 0.5);
+
+      this._matrix = phina.geom.Matrix33().identity();
+      this._worldMatrix = phina.geom.Matrix33().identity();
+    },
+
+    _calcWorldMatrix: function() {
+      if (!this.parent) return ;
+
+      // cache check
+      if (this.rotation != this._cachedRotation) {
+        this._cachedRotation = this.rotation;
+
+        var r = this.rotation*(Math.PI/180);
+        this._sr = Math.sin(r);
+        this._cr = Math.cos(r);
+      }
+
+      var local = this._matrix;
+      var parent = this.parent._worldMatrix || phina.geom.Matrix33.IDENTITY;
+      var world = this._worldMatrix;
+
+      // ローカルの行列を計算
+      local.m11 = this._cr * this.scale.x;
+      local.m12 =-this._sr * this.scale.y
+      local.m21 = this._sr * this.scale.x;
+      local.m22 = this._cr * this.scale.y;
+      local.m13 = this.position.x;
+      local.m23 = this.position.y;
+
+      // cache
+      var a11 = local.m11; var a12 = local.m12; var a13 = local.m13;
+      var a21 = local.m21; var a22 = local.m22; var a23 = local.m23;
+      var b11 = parent.m11; var b12 = parent.m12; var b13 = parent.m13;
+      var b21 = parent.m21; var b22 = parent.m22; var b23 = parent.m23;
+
+      // 親の行列と掛け合わせる
+      world.m11 = b11 * a11 + b12 * a21;
+      world.m12 = b11 * a12 + b12 * a22;
+      world.m13 = b11 * a13 + b12 * a23 + b13;
+
+      world.m21 = b21 * a11 + b22 * a21;
+      world.m22 = b21 * a12 + b22 * a22;
+      world.m23 = b21 * a13 + b22 * a23 + b23;
+
+      return this;
     },
 
     _accessor: {
