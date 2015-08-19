@@ -7,46 +7,34 @@ phina.namespace(function() {
   phina.define('phina.app.BaseApp', {
     superClass: 'phina.event.EventDispatcher',
 
-    awake: true,
+    /** awake */
+    awake: null,
+    /** fps */
+    fps: null,
+    /** frame */
+    frame: null,
 
     /**
      * @constructor
      */
     init: function(element) {
       this.superInit();
-      this._scenes = [];
+      this._scenes = [phina.app.Scene()];
 
       this.updater = phina.app.Updater(this);
+
+      this.awake = true;
+      this.ticker = phina.util.Ticker();
     },
 
     run: function() {
       var self = this;
 
-      this.startedTime = new Date();
-      this.prevTime = new Date();
-      this.deltaTime = 0;
-
-      var fps = 1000/30;
-
-      var _run = function() {
-        // start
-        var start = (new Date()).getTime();
-
-        // run
+      this.ticker.tick(function() {
         self._loop();
+      });
 
-        // calculate progress time
-        var progress = (new Date()).getTime() - start;
-        // calculate next waiting time
-        // var newDelay = self.timer.frameTime-progress;
-        var newDelay = fps-progress;
-
-
-        // set next running function
-        setTimeout(_run, newDelay);
-      };
-
-      _run();
+      this.ticker.start();
 
       return this;
     },
@@ -54,15 +42,12 @@ phina.namespace(function() {
     _loop: function() {
       this._update();
       this._draw();
-
-      var now = new Date();
-      this.deltaTime = now - this.prevTime;
-      this.prevTime = now;
     },
 
 
     _update: function() {
       if (this.awake) {
+        this.update && this.update();
         this.updater.update(this.currentScene);
       }
     },

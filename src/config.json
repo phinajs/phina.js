@@ -13,6 +13,8 @@
 
     "event/eventdispatcher.js",
 
+    "util/ticker.js",
+
     "app/updater.js",
     "app/baseapp.js",
     "app/element.js",
