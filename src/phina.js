@@ -9,7 +9,8 @@
  */
 var phina = phina || {};
 
-;(function(global) {
+;(function() {
+  var ns = (typeof module !== 'undefined') ? global : window;
 
   phina.method('namespace', function(fn) {
     fn.call(this);
@@ -18,14 +19,14 @@ var phina = phina || {};
   /*
    * phina(フィナ)
    */
-  global.phina = phina;
+  ns.phina = phina;
 
   /*
    * global
    */
   phina.accessor('global', {
     get: function() {
-      return global;
+      return ns;
     },
   });
 

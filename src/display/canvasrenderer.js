@@ -20,10 +20,12 @@ phina.namespace(function() {
 
       obj._calcWorldMatrix && obj._calcWorldMatrix();
 
+      var context = this.canvas.context;
+      
       if (obj.draw) {
         // 行列をセット
         var m = obj._worldMatrix;
-        this.canvas.context.setTransform( m.m11, m.m21, m.m12, m.m22, m.m13, m.m23 );
+        context.setTransform( m.m11, m.m21, m.m12, m.m22, m.m13, m.m23 );
 
         obj.draw(this.canvas);
       }

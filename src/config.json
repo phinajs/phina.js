@@ -23,6 +23,7 @@
     "app/scene.js",
 
     "display/canvaselement.js",
+    "display/shape.js",
     "display/canvasscene.js",
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
