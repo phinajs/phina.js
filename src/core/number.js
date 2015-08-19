@@ -4,6 +4,10 @@
 
 
 ;(function() {
+  /**
+   * @class global.Number
+   * Objectの拡張
+   */
 
   /**
    * @method  times

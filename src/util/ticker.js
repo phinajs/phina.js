@@ -1,6 +1,10 @@
 
 ;(function() {
 
+  /**
+   * @class phina.util.Ticker
+   * tick management class
+   */
   phina.define('phina.util.Ticker', {
     superClass: 'phina.event.EventDispatcher',
 
