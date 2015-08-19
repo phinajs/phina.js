@@ -16,9 +16,9 @@ describe('#app', function() {
 
     it('run', function(done) {
       var app = phina.app.BaseApp();
-      
+
       app.update = function() {
-        if (this.frame===30) {
+        if (this.ticker.frame===30) {
           done();
         }
       };
