@@ -39,6 +39,23 @@ phina.namespace(function() {
       return this;
     },
 
+    replaceScene: function(scene) {
+      var e = null;
+      if (this.currentScene) {
+        this.flare('exit', {
+          app: this
+        });
+        this.currentScene.app = null;
+      }
+      this.currentScene = scene;
+      this.currentScene.app = this;
+      this.flare('enter', {
+        app: this,
+      });
+
+      return this;
+    },
+
     _loop: function() {
       this._update();
       this._draw();
