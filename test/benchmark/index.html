@@ -17,13 +17,11 @@ phina.globalize();
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 
-var SCREEN_WIDTH  = 800;
-var SCREEN_HEIGHT = 600;
-
 var CHILD_NUM = 10;
 var CHILD_RADIUS = 50;
 
-var MAX_NUM = 100;
+var MAX_NUM = 128;
+var IMAGE = '../../assets/images/tomapiko_min.png';
 
 // Stats
 stats = new Stats();
@@ -40,7 +38,7 @@ phina.define("MainScene", {
     });
 
     var image = new Image();
-    image.src = 'http://clockmaker.jp/labs/130409_objectrender_performance/commons/piyo.png';
+    image.src = IMAGE;
 
     image.onload = function() {
       this.update = this._update;
