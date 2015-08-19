@@ -9,6 +9,7 @@
 
     "phina.js",
     "geom/vector2.js",
+    "geom/matrix33.js",
     "graphics/canvas.js",
 
     "event/eventdispatcher.js",
