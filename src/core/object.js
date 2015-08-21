@@ -101,7 +101,7 @@
    * @method  $has
    * そのプロパティを持っているかを判定する
    */
-  Object.prototype.method("$has", function() {
+  Object.prototype.method("$has", function(key) {
     return this.hasOwnProperty(key);
   });
 
@@ -117,6 +117,68 @@
     }, this);
     return this;
   });
+
+
+  /**
+   * @method  $safe
+   * 安全拡張
+   * 上書きしない
+   */
+  Object.prototype.method("$safe", function(source) {
+    Array.prototype.forEach.call(arguments, function(source) {
+      for (var property in source) {
+        if (this[property] === undefined) this[property] = source[property];
+      }
+    }, this);
+    return this;
+  });
+  
+  
+  /**
+   * @method  $strict
+   * 厳格拡張
+   * すでにあった場合は警告
+   */
+  Object.prototype.method("$strict", function(source) {
+    Array.prototype.forEach.call(arguments, function(source) {
+      for (var property in source) {
+        console.assert(!this[property], "tm error: {0} is Already".format(property));
+        this[property] = source[property];
+      }
+    }, this);
+    return this;
+  });
+
+  /**
+   * @method  $pick
+   * ピック
+   */
+  Object.prototype.method("$pick", function() {
+    var temp = {};
+
+    Array.prototype.forEach.call(arguments, function(key) {
+      if (key in this) temp[key] = this[key];
+    }, this);
+
+    return temp;
+  });
+
+  /**
+   * @method  $omit
+   * オミット
+   */
+  Object.prototype.method("$omit", function() {
+    var temp = {};
+
+    for (var key in this) {
+      if (Array.prototype.indexOf.call(arguments, key) == -1) {
+        temp[key] = this[key];
+      }
+    }
+
+    return temp;
+  });
+
 
 })();
 
