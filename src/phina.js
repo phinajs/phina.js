@@ -69,7 +69,7 @@ phina.namespace(function() {
       _class.prototype.constructor = _class;
     }
 
-    _class.prototype.extend(params);
+    _class.prototype.$extend(params);
     _class.prototype.selfClass = _class;
 
     if (params._accessor) {
