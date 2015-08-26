@@ -50,8 +50,22 @@ phina.define("MainScene", {
         rect.x = gridX.span(xIndex+1);
         rect.y = gridY.span(yIndex+1)+150;
         rect.width = 64;
+
+        rect.update = function(app) {
+          var p = app.pointer;
+          if (this.left < p.x && p.x < this.right) {
+            this.fillStyle = 'blue';
+          }
+          else {
+            this.fillStyle = 'red';
+          }
+        }
       });
     });
+  },
+
+  update: function(app) {
+    // console.log(app.pointer.y);
   },
 
 });
