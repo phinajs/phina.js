@@ -131,7 +131,12 @@ phina.namespace(function() {
    */
   phina.method('define', function(path, params) {
     if (params.superClass) {
-      params.superClass = phina.using(params.superClass);
+      if (typeof params.superClass === 'string') {
+        params.superClass = phina.using(params.superClass);
+      }
+      else {
+        params.superClass = params.superClass;
+      }
     }
 
     var _class = phina.createClass(params);

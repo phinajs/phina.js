@@ -17,13 +17,17 @@
     "util/ticker.js",
     "util/grid.js",
 
+    "input/input.js",
     "input/mouse.js",
+    "input/touch.js",
 
     "app/updater.js",
     "app/baseapp.js",
     "app/element.js",
     "app/object2d.js",
     "app/scene.js",
+
+    "dom/event.js",
 
     "graphics/canvas.js",
 

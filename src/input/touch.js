@@ -2,10 +2,10 @@
 ;(function() {
 
   /**
-   * @class phina.input.Mouse
+   * @class phina.input.Touch
    * @extends phina.input.Input
    */
-  phina.define('phina.input.Mouse', {
+  phina.define('phina.input.Touch', {
 
     superClass: 'phina.input.Input',
 
@@ -16,15 +16,15 @@
       this.superInit(domElement);
 
       var self = this;
-      this.domElement.addEventListener('mousedown', function(e) {
+      this.domElement.addEventListener('touchstart', function(e) {
         self._move(e.pointX, e.pointY, true);
-        self.flags |= 1<<e.flags;
+        self.touched = 1;
       });
 
-      this.domElement.addEventListener('mouseup', function(e) {
-        self.flags &= ~(1<<e.flags);
+      this.domElement.addEventListener('touchend', function(e) {
+        self.touched = 0;
       });
-      this.domElement.addEventListener('mousemove', function(e) {
+      this.domElement.addEventListener('touchmove', function(e) {
         self._move(e.pointX, e.pointY);
       });
     },
