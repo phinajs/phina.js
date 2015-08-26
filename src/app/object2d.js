@@ -29,6 +29,15 @@ phina.namespace(function() {
       this._worldMatrix = phina.geom.Matrix33().identity();
     },
 
+    /**
+     * 点と衝突しているかを判定
+     * @param {Number} x
+     * @param {Number} y
+     */
+    isHitPoint: function(x, y) {
+      return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
+    },
+
     _calcWorldMatrix: function() {
       if (!this.parent) return ;
 
