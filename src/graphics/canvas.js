@@ -489,6 +489,17 @@ phina.namespace(function() {
         "get": function()   { return this.context.strokeStyle; },
         "set": function(v)  { this.context.strokeStyle = v; }
       },
-    }
+    },
+
+    _static: {
+      dummyCanvas: (function() {
+        if (!phina.isNode()) {
+          return document.createElement('canvas');
+        }
+        else {
+          return null;
+        }
+      })(),
+    },
   });
 });
