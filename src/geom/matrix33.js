@@ -117,6 +117,15 @@ phina.namespace(function() {
       return phina.geom.Vector2(vx, vy);
     },
 
+    // 行
+    getRow: function() {
+      // TODO:
+    },
+
+    // 列
+    getCol: function() {
+      // TODO:
+    },
 
     _accessor: {
       /**
