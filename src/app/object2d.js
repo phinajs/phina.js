@@ -34,8 +34,28 @@ phina.namespace(function() {
      * @param {Number} x
      * @param {Number} y
      */
-    isHitPoint: function(x, y) {
+    hitTest: function(x, y) {
       return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
+    },
+
+    hitTest2: function(x, y) {
+      var p = this.globalToLocal(phina.geom.Vector2(x, y));
+
+      var left   = -this.width*this.originX;
+      var right  = +this.width*(1-this.originX);
+      var top    = -this.height*this.originY;
+      var bottom = +this.height*(1-this.originY);
+
+      return ( left < p.x && p.x < right ) && ( top  < p.y && p.y < bottom );
+    },
+
+    globalToLocal: function(p) {
+      var matrix = this._worldMatrix.clone();
+      matrix.invert();
+      // matrix.transpose();
+
+      var temp = matrix.multiplyVector2(p);
+      return temp;
     },
 
     _calcWorldMatrix: function() {
