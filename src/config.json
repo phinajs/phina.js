@@ -8,19 +8,22 @@
     "core/math.js",
 
     "phina.js",
-    "geom/vector2.js",
-    "geom/matrix33.js",
-    "graphics/canvas.js",
 
     "event/eventdispatcher.js",
+    
+    "geom/vector2.js",
+    "geom/matrix33.js",
 
     "util/ticker.js",
+    "util/grid.js",
 
     "app/updater.js",
     "app/baseapp.js",
     "app/element.js",
     "app/object2d.js",
     "app/scene.js",
+
+    "graphics/canvas.js",
 
     "display/canvaselement.js",
     "display/shape.js",
