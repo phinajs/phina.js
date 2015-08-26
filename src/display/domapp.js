@@ -18,11 +18,14 @@ phina.namespace(function() {
       this.domElement = document.querySelector(query);
       // this.domElement = domElement;
 
-      this.pointer = phina.input.Mouse(this.domElement);
+      this.mouse = phina.input.Mouse(this.domElement);
+      this.touch = phina.input.Touch(this.domElement);
+      this.pointer = this.touch;
     },
 
     update: function() {
-      this.pointer.update();
+      this.mouse.update();
+      this.touch.update();
     },
 
   });
