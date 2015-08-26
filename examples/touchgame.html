@@ -1,0 +1,70 @@
+<!doctype html>
+
+<html>
+<head>
+</head>
+<body>
+  <canvas id='world'></canvas>
+</body>
+</html>
+
+<style>
+#world {
+  box-shadow: 0px 0px 4px 0px #aaa;
+}
+</style>
+
+<script src='../build/phina.js'></script>
+<script>
+
+phina.globalize();
+
+var SCREEN_WIDTH  = 640;
+var SCREEN_HEIGHT = 960;
+
+
+phina.define("MainScene", {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    var gridX = Grid({
+      width: SCREEN_WIDTH,
+      columns: 9,
+    });
+    var gridY = Grid({
+      width: SCREEN_WIDTH,
+      columns: 9,
+    });
+
+    var self = this;
+    (8).times(function(yIndex) {
+      (8).times(function(xIndex) {
+        var rect = Shape().addChildTo(self);
+        rect.fillStyle = 'red';
+
+        rect.x = gridX.span(xIndex+1);
+        rect.y = gridY.span(yIndex+1)+150;
+        rect.width = 64;
+      });
+    });
+  },
+
+});
+
+var app = CanvasApp({
+  query: '#world',
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+});
+
+app.replaceScene(MainScene());
+
+app.run();
+
+
+</script>
