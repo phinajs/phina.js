@@ -6,17 +6,15 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.display.CanvasApp', {
-    superClass: 'phina.app.BaseApp',
+    superClass: 'phina.display.DomApp',
 
     /**
      * @constructor
      */
     init: function(params) {
-      this.superInit();
+      this.superInit(params.query);
 
-      this.domElement = document.querySelector(params.query);
       this.canvas = phina.graphics.Canvas(this.domElement);
-
       this.canvas.setSize(params.width, params.height);
 
       this.fitScreen();
