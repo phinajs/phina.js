@@ -10,16 +10,16 @@
 var phina = phina || {};
 
 ;(function() {
-  var ns = (typeof module !== 'undefined') ? global : window;
+
+  phina.method('isNode', function() {
+    return (typeof module !== 'undefined');
+  });
 
   phina.method('namespace', function(fn) {
     fn.call(this);
   });
 
-  /*
-   * phina(フィナ)
-   */
-  ns.phina = phina;
+  var ns = phina.isNode() ? global : window;
 
   /*
    * global
@@ -31,9 +31,11 @@ var phina = phina || {};
   });
 
   // support node.js
-  if (typeof module !== 'undefined' && module.exports) {
+  if (phina.isNode()) {
     module.exports = phina;
   }
+
+  ns.phina = phina;
 
 })(this);
 
