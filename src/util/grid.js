@@ -2,7 +2,7 @@
 ;(function() {
 
   /**
-   * @class phina.util.Ticker
+   * @class phina.util.Grid
    * tick management class
    */
   phina.define('phina.util.Grid', {
