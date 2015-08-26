@@ -7,6 +7,13 @@ phina.js
 
 ## for developer
 
+### clone
+
+```
+$git clone https://github.com/phi-jp/phina.js.git
+$cd phina.js
+```
+
 ### setup
 
 ```
