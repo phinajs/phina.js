@@ -74,12 +74,18 @@ phina.namespace(function() {
     _class.prototype.$extend(params);
     _class.prototype.selfClass = _class;
 
+    // accessor
     if (params._accessor) {
       _class.prototype = Object.create(_class.prototype, params._accessor);
     }
 
     _class.prototype._creator = function() { return this; };
     _class.prototype._creator.prototype = _class.prototype;
+
+    // static method
+    if (params._static) {
+      _class.$extend(params._static);
+    }
 
     return _class;
   });
