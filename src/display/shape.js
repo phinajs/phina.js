@@ -17,7 +17,8 @@ phina.namespace(function() {
       var context = canvas.context;
       if (this.fillStyle)   context.fillStyle   = this.fillStyle;
       if (this.strokeStyle) context.strokeStyle = this.strokeStyle;
-      canvas.fillRect(0, 0, 64, 64);
+
+      canvas.fillRect(-this.width*this.origin.x, -this.height*this.origin.y, this.width, this.height);
     },
   });
 

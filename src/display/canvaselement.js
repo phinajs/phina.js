@@ -10,6 +10,9 @@ phina.namespace(function() {
 
     init: function() {
       this.superInit();
+
+      this.width = 64;
+      this.height = 64;
     },
   });
 
