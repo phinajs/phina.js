@@ -7,6 +7,12 @@ phina.namespace(function() {
    */
   phina.define('phina.geom.Matrix33', {
 
+    /**
+     * @constructor
+     * m00 m01 m02
+     * m10 m11 m12
+     * m20 m21 m22
+     */
     init: function() {
       if (arguments.length >= 9) {
           this.set.apply(this, arguments);
