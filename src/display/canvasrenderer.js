@@ -25,7 +25,7 @@ phina.namespace(function() {
       if (obj.draw) {
         // 行列をセット
         var m = obj._worldMatrix;
-        context.setTransform( m.m11, m.m21, m.m12, m.m22, m.m13, m.m23 );
+        context.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
 
         obj.draw(this.canvas);
       }

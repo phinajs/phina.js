@@ -22,17 +22,18 @@ phina.namespace(function() {
       }
     },
 
-    set: function(m11, m12, m13, m21, m22, m23, m31, m32, m33) {
-      this.m11 = m11; this.m12 = m12; this.m13 = m13;
-      this.m21 = m21; this.m22 = m22; this.m23 = m23;
-      this.m31 = m31; this.m32 = m32; this.m33 = m33;
+    set: function(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
+      this.m00 = m00; this.m01 = m01; this.m02 = m02;
+      this.m10 = m10; this.m11 = m11; this.m12 = m12;
+      this.m20 = m20; this.m21 = m21; this.m22 = m22;
+
       return this;
     },
 
     identity: function() {
-      this.m11 = 1; this.m12 = 0; this.m13 = 0;
-      this.m21 = 0; this.m22 = 1; this.m23 = 0;
-      this.m31 = 0; this.m32 = 0; this.m33 = 1;
+      this.m00 = 1; this.m01 = 0; this.m02 = 0;
+      this.m10 = 0; this.m11 = 1; this.m12 = 0;
+      this.m20 = 0; this.m21 = 0; this.m22 = 1;
       return this;
     },
 
@@ -41,9 +42,9 @@ phina.namespace(function() {
      */
     clone: function() {
       return phina.geom.Matrix33(
-        this.m11, this.m12, this.m13,
-        this.m21, this.m22, this.m23,
-        this.m31, this.m32, this.m33
+        this.m00, this.m01, this.m02,
+        this.m10, this.m11, this.m12,
+        this.m20, this.m21, this.m22
       );
     },
 
@@ -51,27 +52,25 @@ phina.namespace(function() {
      * 逆行列
      */
     invert: function() {
-      var m = this.m;
-      var m11 = this.m11; var m12 = this.m12; var m13 = this.m13; 
-      var m21 = this.m21; var m22 = this.m22; var m23 = this.m23; 
-      var m31 = this.m31; var m32 = this.m32; var m33 = this.m33; 
+      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
+      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
+      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
       var det = this.determinant();
       
       // |m00, m01, m02|
       // |m10, m11, m12|
       // |m20, m21, m22|
+      this.m00 = (m11*m22-m12*m21)/det;
+      this.m01 = (m10*m22-m12*m20)/det*-1;
+      this.m02 = (m10*m21-m11*m20)/det;
       
-      this.m11 = (m22*m33-m23*m32)/det;
-      this.m12 = (m21*m33-m23*m31)/det*-1;
-      this.m13 = (m21*m32-m22*m31)/det;
+      this.m10 = (m01*m22-m02*m21)/det*-1;
+      this.m11 = (m00*m22-m02*m20)/det;
+      this.m12 = (m00*m21-m01*m20)/det*-1;
       
-      this.m21 = (m12*m33-m13*m32)/det*-1;
-      this.m22 = (m11*m33-m13*m31)/det;
-      this.m23 = (m11*m32-m12*m31)/det*-1;
-      
-      this.m31 = (m12*m23-m13*m22)/det;
-      this.m32 = (m11*m23-m13*m21)/det*-1;
-      this.m33 = (m11*m22-m12*m21)/det;
+      this.m20 = (m01*m12-m02*m11)/det;
+      this.m21 = (m00*m12-m02*m10)/det*-1;
+      this.m22 = (m00*m11-m01*m10)/det;
       
       this.transpose();
       
@@ -83,11 +82,11 @@ phina.namespace(function() {
      * 行列式
      */
     determinant: function() {
-      var m11 = this.m11; var m12 = this.m12; var m13 = this.m13; 
-      var m21 = this.m21; var m22 = this.m22; var m23 = this.m23; 
-      var m31 = this.m31; var m32 = this.m32; var m33 = this.m33; 
+      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
+      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
+      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
       
-      return m11*m22*m33 + m21*m32*m13 + m12*m23*m31 - m13*m22*m31 - m12*m21*m33 - m23*m32*m11;
+      return m00*m11*m22 + m10*m21*m02 + m01*m12*m20 - m02*m11*m20 - m01*m10*m22 - m12*m21*m00;
     },
 
     /**
@@ -100,19 +99,48 @@ phina.namespace(function() {
         this[b] = this[a];
       }.bind(this);
 
+      swap('m01', 'm10');
+      swap('m02', 'm20');
       swap('m12', 'm21');
-      swap('m13', 'm31');
-      swap('m23', 'm32');
       
       return this;
+    },
+
+    /**
+     * 掛け算
+     */
+    multiply: function(mat) {
+        var tm = this.m;
+        var om = mat.m;
+
+        var a00 = this.m00, a01 = this.m01, a02 = this.m02;
+        var a10 = this.m10, a11 = this.m11, a12 = this.m12;
+        var a20 = this.m20, a21 = this.m21, a22 = this.m22;
+        var b00 = mat.m00, b01 = mat.m01, b02 = mat.m02;
+        var b10 = mat.m10, b11 = mat.m11, b12 = mat.m12;
+        var b20 = mat.m20, b21 = mat.m21, b22 = mat.m22;
+
+        this.m00 = a00*b00 + a01*b10 + a02*b20;
+        this.m01 = a00*b01 + a01*b11 + a02*b21;
+        this.m02 = a00*b02 + a01*b12 + a02*b22;
+
+        this.m10 = a10*b00 + a11*b10 + a12*b20;
+        this.m11 = a10*b01 + a11*b11 + a12*b21;
+        this.m12 = a10*b02 + a11*b12 + a12*b22;
+
+        this.m20 = a20*b00 + a21*b10 + a22*b20;
+        this.m21 = a20*b01 + a21*b11 + a22*b21;
+        this.m22 = a20*b02 + a21*b12 + a22*b22;
+        
+        return this;
     },
 
     /**
      * ベクトルとの掛け算
      */
     multiplyVector2: function(v) {
-      var vx = this.m11*v.x + this.m12*v.y + this.m13;
-      var vy = this.m21*v.x + this.m22*v.y + this.m23;
+      var vx = this.m00*v.x + this.m01*v.y + this.m02;
+      var vy = this.m10*v.x + this.m11*v.y + this.m12;
       
       return phina.geom.Vector2(vx, vy);
     },
@@ -125,6 +153,12 @@ phina.namespace(function() {
     // 列
     getCol: function() {
       // TODO:
+    },
+    /**
+     * 文字列化
+     */
+    toString: function() {
+      return "|{m00}, {m01}, {m02}|\n|{m10}, {m11}, {m12}|\n|{m20}, {m21}, {m22}|".format(this);
     },
 
     _accessor: {

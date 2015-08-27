@@ -52,7 +52,7 @@ phina.namespace(function() {
     globalToLocal: function(p) {
       var matrix = this._worldMatrix.clone();
       matrix.invert();
-      // matrix.transpose();
+      matrix.transpose();
 
       var temp = matrix.multiplyVector2(p);
       return temp;
@@ -75,27 +75,27 @@ phina.namespace(function() {
       var world = this._worldMatrix;
 
       // ローカルの行列を計算
-      local.m11 = this._cr * this.scale.x;
-      local.m12 =-this._sr * this.scale.y
-      local.m21 = this._sr * this.scale.x;
-      local.m22 = this._cr * this.scale.y;
-      local.m13 = this.position.x;
-      local.m23 = this.position.y;
+      local.m00 = this._cr * this.scale.x;
+      local.m01 =-this._sr * this.scale.y
+      local.m10 = this._sr * this.scale.x;
+      local.m11 = this._cr * this.scale.y;
+      local.m02 = this.position.x;
+      local.m12 = this.position.y;
 
       // cache
-      var a11 = local.m11; var a12 = local.m12; var a13 = local.m13;
-      var a21 = local.m21; var a22 = local.m22; var a23 = local.m23;
-      var b11 = parent.m11; var b12 = parent.m12; var b13 = parent.m13;
-      var b21 = parent.m21; var b22 = parent.m22; var b23 = parent.m23;
+      var a00 = local.m00; var a01 = local.m01; var a02 = local.m02;
+      var a10 = local.m10; var a11 = local.m11; var a12 = local.m12;
+      var b00 = parent.m00; var b01 = parent.m01; var b02 = parent.m02;
+      var b10 = parent.m10; var b11 = parent.m11; var b12 = parent.m12;
 
       // 親の行列と掛け合わせる
-      world.m11 = b11 * a11 + b12 * a21;
-      world.m12 = b11 * a12 + b12 * a22;
-      world.m13 = b11 * a13 + b12 * a23 + b13;
+      world.m00 = b00 * a00 + b01 * a10;
+      world.m01 = b00 * a01 + b01 * a11;
+      world.m02 = b00 * a02 + b01 * a12 + b02;
 
-      world.m21 = b21 * a11 + b22 * a21;
-      world.m22 = b21 * a12 + b22 * a22;
-      world.m23 = b21 * a13 + b22 * a23 + b23;
+      world.m10 = b10 * a00 + b11 * a10;
+      world.m11 = b10 * a01 + b11 * a11;
+      world.m12 = b10 * a02 + b11 * a12 + b12;
 
       return this;
     },

@@ -6,7 +6,7 @@
 ;(function() {
   /**
    * @class global.Number
-   * Objectの拡張
+   * Numberの拡張
    */
 
   /**
