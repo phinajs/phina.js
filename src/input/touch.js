@@ -17,6 +17,8 @@
 
       this.id = null;
 
+      return ;
+
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
         self._move(e.pointX, e.pointY, true);
@@ -53,7 +55,7 @@
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
-        var touch = self.getTouch();
+        var touch = self.getEmpty();
         var t = e.changedTouches[0];
 
         touch.id = e.changedTouches[0].identifier;
@@ -64,7 +66,8 @@
       this.domElement.addEventListener('touchend', function(e) {
         var id = e.changedTouches[0].identifier;
         var touch = self.getTouch(id);
-        touch.id = null;
+        touch.flags = 0;
+        // touch.id = null;
         // self.flags = 0;
       });
       this.domElement.addEventListener('touchmove', function(e) {
@@ -73,12 +76,17 @@
           var touch = self.getTouch(t.identifier);
           touch._move(t.pointX, t.pointY);
         });
+        e.stop();
       });
     },
 
-    getTouch: function(id) {
-      if (arguments.length === 0) id = null;
+    getEmpty: function() {
+      return this.touches.filter(function(touch) {
+        return touch.flags === 0;
+      })[0];
+    },
 
+    getTouch: function(id) {
       return this.touches.filter(function(touch) {
         return touch.id === id;
       })[0];

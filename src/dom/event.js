@@ -1,5 +1,27 @@
 
 
+
+
+(function() {
+
+  /**
+   * @class global.Event
+   * 既存のEventオブジェクト拡張
+   */
+    
+  /**
+   * @method stop
+   * イベントのデフォルト処理 & 伝達を止める
+   */
+  Event.prototype.stop = function() {
+    // イベントキャンセル
+    this.preventDefault();
+    // イベント伝達を止める
+    this.stopPropagation();
+  };
+
+})();
+
 (function() {
     
   /**

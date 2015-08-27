@@ -41,7 +41,7 @@ phina.namespace(function() {
     flare: function(type, param) {
       var e = {type:type};
       if (param) {
-        param.forIn(function(val, key) {
+        param.forIn(function(key, val) {
           e[key] = val;
         });
       }

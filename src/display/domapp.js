@@ -34,6 +34,10 @@ phina.namespace(function() {
         this.pointer = this.mouse;
         this.pointers = [this.mouse];
       }.bind(this));
+
+      // 決定時の処理をオフにする(iPhone 時のちらつき対策)
+      this.domElement.addEventListener("touchstart", function(e) { e.stop(); });
+      this.domElement.addEventListener("touchmove", function(e) { e.stop(); });
     },
 
     update: function() {

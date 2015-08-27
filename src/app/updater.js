@@ -57,7 +57,9 @@ phina.namespace(function() {
       obj._overFlags[p.id] = overFlag;
 
       if (!prevOverFlag && overFlag) {
-        obj.flare('pointover');
+        obj.flare('pointover', {
+          pointer: p,
+        });
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout');
@@ -65,8 +67,8 @@ phina.namespace(function() {
 
       if (overFlag) {
         if (p.flags === 1) {
-          obj.flare('pointstart');
           obj._touchFlags[p.id] = true;
+          obj.flare('pointstart');
         }
       }
 
@@ -75,8 +77,13 @@ phina.namespace(function() {
       }
 
       if (obj._touchFlags[p.id]===true && p.flags === 0) {
-        obj.flare('pointend');
         obj._touchFlags[p.id] = false;
+        obj.flare('pointend');
+
+        if (obj._overFlags[p.id]) {
+          obj._overFlags[p.id] = false;
+          obj.flare('pointout');
+        }
       }
     },
 
