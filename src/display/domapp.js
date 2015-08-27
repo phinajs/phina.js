@@ -21,10 +21,19 @@ phina.namespace(function() {
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 4);
-      this.pointer = this.touch;
 
+      // ポインタをセット(PC では Mouse, Mobile では Touch)
+      this.pointer = this.touch;
       this.pointers = this.touchList.touches;
-      // this.pointers = [this.touch];
+
+      this.domElement.addEventListener("touchstart", function () {
+        this.pointer = this.touch;
+        this.pointers = this.touchList.touches;
+      }.bind(this));
+      this.domElement.addEventListener("mousedown", function () {
+        this.pointer = this.mouse;
+        this.pointers = [this.mouse];
+      }.bind(this));
     },
 
     update: function() {
