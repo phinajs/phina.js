@@ -37,36 +37,31 @@ phina.define("MainScene", {
     this.group.y = 100;
     this.group.rotation = -20;
 
+    this.addRect(100, 100);
+    this.addRect(300, 200);
+  },
+
+  addRect: function(x, y) {
     var rect = Shape().addChildTo(this.group);
+    rect.x = x;
+    rect.y = y;
     rect.width = 64;
-    rect.x = 100;
-    rect.y = 100;
     rect.rotation = 0;
-    rect.scale.x = 2;
+    rect.scale.x = 4;
+    rect.scale.y = 4;
 
-    rect.onpointover = function() {
-    	this.fillStyle = 'red';
+    rect.fillStyle = 'blue';
+
+    rect.onpointstart = function(e) {
+      this.fillStyle = 'red';
+      console.log(JSON.stringify(this._touchFlags));
     };
-    rect.onpointout = function() {
-    	this.fillStyle = 'blue';
+    rect.onpointend = function() {
+      this.fillStyle = 'blue';
+      console.log(JSON.stringify(this._touchFlags));
     };
 
-    return ;
-    // rect.update = function(app) {
-    //   var p = app.pointer;
-    //   if (this.hitTest2(p.x, p.y)) {
-    //     this.fillStyle = 'blue';
-    //   }
-    //   else {
-    //     this.fillStyle = 'red';
-    //   }
-    // }
-    var rect = Shape().addChildTo(this);
-    rect.width = 64;
-    rect.x = 200;
-    rect.y = 200;
-    rect.fillStyle = 'black';
-    rect.rotation = -5;
+    return rect;
   },
 
   update: function(app) {
