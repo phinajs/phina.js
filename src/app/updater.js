@@ -43,14 +43,41 @@ phina.namespace(function() {
     _checkPoint: function(obj) {
       var p = this.app.pointer;
 
-      if (p.flags !== 1) return ;
+      if (!this.interactive) return ;
 
-      if (obj.hitTest2 && obj.hitTest2(p.x, p.y)) {
+      var prevOverFlag = obj._overFlags[p.id];
+      var overFlag = (obj.hitTest2 && obj.hitTest2(p.x, p.y));
+      obj._overFlags[p.id] = overFlag;
+
+      if (!prevOverFlag && overFlag) {
+        obj.flare('pointover');
+      }
+      if (prevOverFlag && !overFlag) {
+        obj.flare('pointout');
+      }
+
+      if (overFlag) {
+        if (p.flags === 1) {
+          obj.flare('pointstart');
+          obj._touchFlags[p.id] = true;
+        }
+      }
+
+      if (obj._touchFlags[p.id]) {
         obj.flare('pointstay');
       }
-      else {
+
+      if (obj._touchFlags[p.id]===true && p.flags === 0) {
         obj.flare('pointend');
+        obj._touchFlags[p.id] = false;
       }
+
+      // if (obj.hitTest2 && obj.hitTest2(p.x, p.y)) {
+      //   obj.flare('pointstay');
+      // }
+      // else {
+      //   obj.flare('pointend');
+      // }
     },
 
   });

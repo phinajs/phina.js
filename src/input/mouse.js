@@ -15,6 +15,8 @@
     init: function(domElement) {
       this.superInit(domElement);
 
+      this.id = 0;
+
       var self = this;
       this.domElement.addEventListener('mousedown', function(e) {
         self._move(e.pointX, e.pointY, true);

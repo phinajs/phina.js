@@ -44,13 +44,12 @@ phina.define("MainScene", {
     rect.rotation = 0;
     // rect.scale.x = 2;
 
-    rect.onpointstay = function() {
+    rect.onpointstart = function() {
     	this.fillStyle = 'red';
     };
     rect.onpointend = function() {
     	this.fillStyle = 'blue';
     };
-
 
     return ;
     // rect.update = function(app) {

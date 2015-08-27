@@ -27,6 +27,10 @@ phina.namespace(function() {
 
       this._matrix = phina.geom.Matrix33().identity();
       this._worldMatrix = phina.geom.Matrix33().identity();
+
+      this.interactive = true;
+      this._overFlags = {};
+      this._touchFlags = {};
     },
 
     /**
