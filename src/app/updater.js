@@ -45,6 +45,10 @@ phina.namespace(function() {
       app.pointers.forEach(function(p) {
         if (p.id !== null) {
           this.__checkPoint(obj, p);
+
+          // if (p.flags === 0) {
+          //   p.id = null;
+          // }
         }
       }, this);
     },

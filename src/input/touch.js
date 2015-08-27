@@ -46,11 +46,12 @@
       this.domElement = domElement;
 
       this.touches = [];
+      this.stockes = [];
 
       (length).times(function() {
         var touch = phina.input.Touch(domElement);
         touch.id = null;
-        this.touches.push(touch);
+        this.stockes.push(touch);
       }, this);
 
       var self = this;
@@ -81,15 +82,21 @@
     },
 
     getEmpty: function() {
-      return this.touches.filter(function(touch) {
-        return touch.flags === 0;
+      var touch = this.stockes.filter(function(touch) {
+        return touch.flags === 0 && touch.id === null;
       })[0];
+      this.touches.push(touch);
+      return touch;
     },
 
     getTouch: function(id) {
       return this.touches.filter(function(touch) {
         return touch.id === id;
       })[0];
+    },
+
+    removeTouch: function(id) {
+
     },
 
     update: function() {
