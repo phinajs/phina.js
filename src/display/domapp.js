@@ -22,6 +22,9 @@ phina.namespace(function() {
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 4);
       this.pointer = this.touch;
+
+      this.pointers = this.touchList.touches;
+      // this.pointers = [this.touch];
     },
 
     update: function() {

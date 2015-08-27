@@ -15,7 +15,7 @@
     init: function(domElement) {
       this.superInit(domElement);
 
-      this.id = 0;
+      this.id = null;
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
@@ -54,10 +54,11 @@
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
         var touch = self.getTouch();
+        var t = e.changedTouches[0];
 
         touch.id = e.changedTouches[0].identifier;
-        // self._move(e.pointX, e.pointY, true);
-        // self.flags = 1;
+        touch._move(t.pointX, t.pointY, true);
+        touch.flags = 1;
       });
 
       this.domElement.addEventListener('touchend', function(e) {
@@ -70,8 +71,8 @@
         var changedTouches = e.changedTouches;
         Array.prototype.forEach.call(changedTouches, function(t) {
           var touch = self.getTouch(t.identifier);
+          touch._move(t.pointX, t.pointY);
         });
-        // self._move(e.pointX, e.pointY);
       });
     },
 
@@ -85,7 +86,7 @@
 
     update: function() {
       this.touches.forEach(function(touch) {
-        if (touch.id) {
+        if (touch.id !== null) {
           touch.update();
         }
       });

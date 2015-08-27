@@ -54,7 +54,35 @@
   TouchEvent.prototype.getter("pointY", function() {
       return this.touches[0].clientY - this.target.getBoundingClientRect().top;
       // return this.touches[0].pageY - this.target.getBoundingClientRect().top - tm.global.scrollY;
-  });
+  });  
+    
+})();
+
+
+(function() {
+    
+  if (window.Touch === undefined) { return ; }
   
+  
+  /**
+   * @class global.Touch
+   * TouchEvent クラス
+   */
+  
+  /**
+   * @method    pointX
+   * タッチイベント.
+   */
+  Touch.prototype.getter("pointX", function() {
+      return this.clientX - this.target.getBoundingClientRect().left;
+  });
+
+  /**
+   * @method    pointY
+   * タッチイベント.
+   */
+  Touch.prototype.getter("pointY", function() {
+      return this.clientY - this.target.getBoundingClientRect().top;
+  });
     
 })();

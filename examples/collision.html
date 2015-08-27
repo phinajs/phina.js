@@ -42,12 +42,12 @@ phina.define("MainScene", {
     rect.x = 100;
     rect.y = 100;
     rect.rotation = 0;
-    // rect.scale.x = 2;
+    rect.scale.x = 2;
 
-    rect.onpointstart = function() {
+    rect.onpointover = function() {
     	this.fillStyle = 'red';
     };
-    rect.onpointend = function() {
+    rect.onpointout = function() {
     	this.fillStyle = 'blue';
     };
 
