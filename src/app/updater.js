@@ -20,6 +20,9 @@ phina.namespace(function() {
       // 更新
       if (element.update) element.update(app);
 
+      // タッチ判定
+      this._checkPoint(element);
+
       // エンターフレームイベント
       if (element.has('enterframe')) {
         element.flare('enterframe', {
@@ -34,6 +37,19 @@ phina.namespace(function() {
         for (var i=0; i<len; ++i) {
           this._updateElement(tempChildren[i]);
         }
+      }
+    },
+
+    _checkPoint: function(obj) {
+      var p = this.app.pointer;
+
+      if (p.flags !== 1) return ;
+
+      if (obj.hitTest2 && obj.hitTest2(p.x, p.y)) {
+        obj.flare('pointstay');
+      }
+      else {
+        obj.flare('pointend');
       }
     },
 
