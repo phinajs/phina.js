@@ -52,9 +52,10 @@ phina.namespace(function() {
     globalToLocal: function(p) {
       var matrix = this._worldMatrix.clone();
       matrix.invert();
-      matrix.transpose();
+      // matrix.transpose();
 
       var temp = matrix.multiplyVector2(p);
+
       return temp;
     },
 
@@ -76,7 +77,7 @@ phina.namespace(function() {
 
       // ローカルの行列を計算
       local.m00 = this._cr * this.scale.x;
-      local.m01 =-this._sr * this.scale.y
+      local.m01 =-this._sr * this.scale.y;
       local.m10 = this._sr * this.scale.x;
       local.m11 = this._cr * this.scale.y;
       local.m02 = this.position.x;

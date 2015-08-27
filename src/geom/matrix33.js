@@ -55,8 +55,9 @@ phina.namespace(function() {
       var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
       var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
       var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
+
       var det = this.determinant();
-      
+
       // |m00, m01, m02|
       // |m10, m11, m12|
       // |m20, m21, m22|
@@ -96,7 +97,7 @@ phina.namespace(function() {
       var swap = function(a, b) {
         var temp = this[a];
         this[a] = this[b];
-        this[b] = this[a];
+        this[b] = temp;
       }.bind(this);
 
       swap('m01', 'm10');

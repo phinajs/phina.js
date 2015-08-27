@@ -35,14 +35,14 @@ phina.define("MainScene", {
     this.group = CanvasElement().addChildTo(this);
     this.group.x = 100;
     this.group.y = 100;
-    // this.group.rotation = -90;
+    this.group.rotation = -20;
 
     var rect = Shape().addChildTo(this.group);
     rect.width = 64;
     rect.x = 100;
     rect.y = 100;
-
-    return ;
+    rect.rotation = 0;
+    // rect.scale.x = 2;
 
     rect.onpointstay = function() {
     	this.fillStyle = 'red';
@@ -51,6 +51,8 @@ phina.define("MainScene", {
     	this.fillStyle = 'blue';
     };
 
+
+    return ;
     // rect.update = function(app) {
     //   var p = app.pointer;
     //   if (this.hitTest2(p.x, p.y)) {
@@ -84,8 +86,9 @@ app.replaceScene(MainScene());
 
 app.run();
 
-
-// var mat = Matrix33(0, -1, 1, -1, 4, -2, 1, -2, 1);
+// var mat =    Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+// // var mat = Matrix33(0, -1, 1, -1, 4, -2, 1, -2, 1);
+// console.log(mat.determinant());
 // var b = mat.clone().invert();
 // console.log(b.toString());
 // console.log(mat.clone().multiply(b).toString())
