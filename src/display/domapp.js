@@ -20,12 +20,14 @@ phina.namespace(function() {
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
+      this.touchList = phina.input.TouchList(this.domElement, 4);
       this.pointer = this.touch;
     },
 
     update: function() {
       this.mouse.update();
       this.touch.update();
+      this.touchList.update();
     },
 
   });
