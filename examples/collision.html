@@ -54,11 +54,9 @@ phina.define("MainScene", {
 
     rect.onpointstart = function(e) {
       this.fillStyle = 'red';
-      console.log(JSON.stringify(this._touchFlags));
     };
     rect.onpointend = function() {
       this.fillStyle = 'blue';
-      console.log(JSON.stringify(this._touchFlags));
     };
 
     return rect;

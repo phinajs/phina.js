@@ -56,24 +56,23 @@
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
-        var touch = self.getEmpty();
-        var t = e.changedTouches[0];
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
+          var touch = self.getEmpty();
 
-        touch.id = e.changedTouches[0].identifier;
-        touch._move(t.pointX, t.pointY, true);
-        touch.flags = 1;
+          touch.id = t.identifier;
+          touch._move(t.pointX, t.pointY, true);
+          touch.flags = 1;
+        });
       });
 
       this.domElement.addEventListener('touchend', function(e) {
-        var id = e.changedTouches[0].identifier;
-        var touch = self.getTouch(id);
-        touch.flags = 0;
-        // touch.id = null;
-        // self.flags = 0;
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
+          var touch = self.getTouch(t.identifier);
+          touch.flags = 0;
+        });
       });
       this.domElement.addEventListener('touchmove', function(e) {
-        var changedTouches = e.changedTouches;
-        Array.prototype.forEach.call(changedTouches, function(t) {
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
           var touch = self.getTouch(t.identifier);
           touch._move(t.pointX, t.pointY);
         });
@@ -82,10 +81,9 @@
     },
 
     getEmpty: function() {
-      var touch = this.stockes.filter(function(touch) {
-        return touch.flags === 0 && touch.id === null;
-      })[0];
+      var touch = this.stockes.pop();
       this.touches.push(touch);
+
       return touch;
     },
 
@@ -95,16 +93,28 @@
       })[0];
     },
 
-    removeTouch: function(id) {
-
+    removeTouch: function(touch) {
+      var i = this.touches.indexOf(touch);
+      this.touches.splice(i, 1);
+      this.stockes.push(touch);
     },
 
     update: function() {
       this.touches.forEach(function(touch) {
         if (touch.id !== null) {
-          touch.update();
+          if (!touch.released) {
+            touch.update();
+
+            if (touch.flags === 0) {
+              touch.released = true;
+            }
+          }
+          else {
+            touch.released = false;
+            this.removeTouch(touch);
+          }
         }
-      });
+      }, this);
     }
   })
 
