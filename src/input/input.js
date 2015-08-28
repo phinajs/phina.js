@@ -32,6 +32,13 @@
       this.deltaPosition.x = this._tempPosition.x - this.position.x;
       this.deltaPosition.y = this._tempPosition.y - this.position.y;
 
+      if (this.deltaPosition.x === 0 && this.deltaPosition.y === 0) {
+        this._moveFlag = false;
+      }
+      else {
+        this._moveFlag = true;
+      }
+
       // 前回の座標を更新
       this.prevPosition.set(this.position.x, this.position.y);
 

@@ -74,6 +74,9 @@ phina.namespace(function() {
 
       if (obj._touchFlags[p.id]) {
         obj.flare('pointstay');
+        if (p._moveFlag) {
+          obj.flare('pointmove');
+        }
       }
 
       if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
