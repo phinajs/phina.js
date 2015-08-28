@@ -12,18 +12,6 @@ phina.namespace(function() {
       this.superInit();
 
       this.canvas = phina.graphics.Canvas();
-
-      // this.style = {
-      //   width: 64,
-      //   height: 64,
-      //   padding: 2,
-      //   radius: 16,
-      //   color: 'blue',
-      //   backgroundColor: 'transparent',
-      // };
-      // this.startObserveStyle();
-
-      // this._render();
     },
 
     startObserveStyle: function() {

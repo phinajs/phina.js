@@ -6,7 +6,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.display.Label', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.Shape',
 
     init: function(text) {
       this.superInit();
@@ -20,75 +20,80 @@ phina.namespace(function() {
         stroke: true,
         strokeWidth: 4,
         
+        fontSize: 128,
         align: 'center',
         baseline: 'middle',
 
         shadowBlur: 10,
         shadowColor: 'yellow',
 
+        backgroundColor: '#222',
+
         padding: 16,
       };
 
-      this.text = text || 'hoge';
+      this.startObserveStyle();
 
-      Object.observe(this.style, function(changes) {
-        this._render();
-      }.bind(this));
+      this.text = text || 'hoge\nfoo\nbar';
 
       setTimeout(function() {
         this.style.color = 'blue';
       }.bind(this), 1000);
     },
 
-    _render: function() {
-      var fontSize = 128;
-      var fontFamily = fontSize+"px 'メイリオ'";
-      var lines = this.text.split('\n');
-      this.canvas.context.font = fontFamily;
+    calcWidth: function() {
       var width = 0;
-      lines.forEach(function(line) {
-        var w = this.canvas.context.measureText(line).width;
+      var canvas = this.canvas;
+      this._lines.forEach(function(line) {
+        var w = canvas.context.measureText(line).width;
         if (width < w) {
           width = w;
         }
       }, this);
-      this.width = width;
-      this.height = fontSize * lines.length;
+      return width;
+    },
 
-      // this.canvas.clearColor('#aaa');
-      this.canvas.transformCenter();
-      this.canvas.context.font = fontFamily;
-      this.canvas.context.textAlign = this.style.align;
-      this.canvas.context.textBaseline = this.style.baseline;
+    calcHeight: function() {
+      return this.style.fontSize * this._lines.length;
+    },
 
-      this.canvas.context.fillStyle = this.style.color;
-      this.canvas.context.strokeStyle = this.style.strokeColor;
-      this.canvas.context.lineWidth = this.style.strokeWidth;
+    _render: function() {
+      var style = this.style;
+      var canvas = this.canvas;
+      var context = canvas.context;
 
-      this.canvas.context.shadowBlur = this.style.shadowBlur;
-      this.canvas.context.shadowColor = this.style.shadowColor;
+      var fontSize = this.style.fontSize;
+      var fontFamily = fontSize+"px 'メイリオ'";
+      var lines = this.text.split('\n');
+      canvas.context.font = fontFamily;
+
+      canvas.width = this.calcWidth() + style.padding*2;
+      canvas.height = this.calcHeight() + style.padding*2;
+      canvas.clearColor(style.backgroundColor);
+
+      canvas.transformCenter();
+      context.font = fontFamily;
+      context.textAlign = this.style.align;
+      context.textBaseline = this.style.baseline;
+
+      context.fillStyle = this.style.color;
+      context.strokeStyle = this.style.strokeColor;
+      context.lineWidth = this.style.strokeWidth;
+
+      context.shadowBlur = this.style.shadowBlur;
+      context.shadowColor = this.style.shadowColor;
 
       var offset = -Math.floor(lines.length/2)*fontSize;
       lines.forEach(function(line, i) {
-        this.canvas.context.fillText(line, 0, i*fontSize+offset);
+        context.fillText(line, 0, i*fontSize+offset);
       }, this);
 
       if (this.style.stroke) {
-        this.canvas.context.shadowBlur = 0;
+        context.shadowBlur = 0;
         lines.forEach(function(line, i) {
-          this.canvas.context.strokeText(line, 0, i*fontSize+offset);
+          context.strokeText(line, 0, i*fontSize+offset);
         }, this);
       }
-    },
-
-    draw: function(canvas) {
-      var image = this.canvas.domElement;
-      var w = image.width;
-      var h = image.height;
-      canvas.context.drawImage(image,
-        0, 0, w, h,
-        -w*this.origin.x, -h*this.origin.y, w, h
-        );
     },
 
     _accessor: {
@@ -98,9 +103,11 @@ phina.namespace(function() {
         },
         set: function(v) {
           this._text = v;
+          this._lines = v.split('\n');
           this._render();
         },
       },
+      /*
       width: {
         get: function() {
           return this._width;
@@ -121,6 +128,7 @@ phina.namespace(function() {
           this.canvas.height = v + this.style.padding*2;
         },
       },
+      */
     }
   });
 
