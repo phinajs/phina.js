@@ -22,6 +22,9 @@ phina.globalize();
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 
+var MAX_PER_LINE    = 8;                            // ピースの横に並ぶ最大数
+var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
+
 
 phina.define("MainScene", {
   superClass: 'CanvasScene',
@@ -44,24 +47,29 @@ phina.define("MainScene", {
     });
 
     var self = this;
+
+    var numbers = Array.range(1, MAX_NUM+1).shuffle();
+
+    numbers.each(function(index, i) {
+      // グリッド上でのインデックス
+      var xIndex = i%MAX_PER_LINE;
+      var yIndex = Math.floor(i/MAX_PER_LINE);
+      var p = Piece(index).addChildTo(self.group);
+
+      p.x = gridX.span(xIndex+1);
+      p.y = gridY.span(yIndex+1)+150;
+    });
+
+    return ;
+
+
     (8).times(function(yIndex) {
       (8).times(function(xIndex) {
-        var rect = Shape().addChildTo(self.group);
-        rect.fillStyle = 'red';
+        var p = Piece().addChildTo(self.group);
+        p.fillStyle = 'red';
 
-        rect.x = gridX.span(xIndex+1);
-        rect.y = gridY.span(yIndex+1)+150;
-        rect.width = 64;
-
-        rect.update = function(app) {
-          var p = app.pointer;
-          if (this.hitTest2(p.x, p.y)) {
-            this.fillStyle = 'blue';
-          }
-          else {
-            this.fillStyle = 'red';
-          }
-        }
+        p.x = gridX.span(xIndex+1);
+        p.y = gridY.span(yIndex+1)+150;
       });
     });
   },
@@ -70,6 +78,31 @@ phina.define("MainScene", {
     // console.log(app.pointer.y);
   },
 
+});
+
+phina.define('Piece', {
+  superClass: 'RectangleShape',
+
+  init: function(index) {
+    this.superInit();
+
+    this.index = index;
+    this.width = this.style.width = 64;
+    this.height = this.style.height = 64;
+    this.style.color = 'white';
+
+    this.label = Label(index+'').addChildTo(this);
+    this.label.style.stroke = false;
+
+    this.on('pointstart', function() {
+      this.style.color = 'blue';
+      this.label.style.color = 'white';
+    });
+    this.on('pointend', function() {
+      this.style.color = 'white';
+      this.label.style.color = 'black';
+    });
+  },
 });
 
 var app = CanvasApp({
