@@ -39,31 +39,47 @@ phina.define("MainScene", {
 
     this.addRect(100, 100);
     this.addRect(300, 200);
+
+
+    var label = phina.global.label = Label().addChildTo(this);
+    label.position.set(320, 480);
   },
 
   addRect: function(x, y) {
-    var rect = Shape().addChildTo(this.group);
+    var rect = RectangleShape().addChildTo(this.group);
     rect.x = x;
     rect.y = y;
-    rect.width = 64;
+    // rect.width = 64;
     rect.rotation = 0;
     rect.scale.x = 4;
     rect.scale.y = 4;
 
-    rect.fillStyle = 'blue';
+    // rect.style.backgroundColor = 'black';
+    rect.style.color = 'blue';
 
     rect.onpointstart = function(e) {
-      this.fillStyle = 'red';
+      this.style.color = 'red';
     };
     rect.onpointend = function() {
-      this.fillStyle = 'blue';
+      this.style.color = 'blue';
     };
+    // rect.onpointmove = function() {
+    //   console.log('move');
+    // };
+    // rect.onpointstay = function() {
+    //   console.log('stay');
+    // };
+
+    window.rect = rect;
 
     return rect;
   },
 
   update: function(app) {
-    // console.log(app.pointer.y);
+    // var p = app.pointer;
+    // if (p.getPointing && p.getPointing()) {
+    //   console.log('hoge');
+    // }
   },
 
 });
