@@ -12,6 +12,7 @@ phina.namespace(function() {
       this.superInit();
 
       this.canvas = phina.graphics.Canvas();
+      this.style = {};
     },
 
     observeStyle: function() {
@@ -121,7 +122,6 @@ phina.namespace(function() {
       this.canvas.context.lineWidth = style.strokeWidth;
       this.canvas.strokeStyle = style.strokeColor;
       this.canvas.strokeCircle(0, 0, style.radius);
-
     },
   });
 

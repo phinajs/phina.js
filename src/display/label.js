@@ -14,31 +14,30 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas();
 
       this.style = {
-        color: 'red',
+        color: 'black',
         
-        strokeColor: 'green',
+        strokeColor: '#222',
         stroke: true,
-        strokeWidth: 4,
+        strokeWidth: 2,
         
-        fontSize: 128,
+        fontSize: 32,
+        fontWeight: '',
+        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+
         align: 'center',
         baseline: 'middle',
 
-        shadowBlur: 10,
-        shadowColor: 'yellow',
+        shadowBlur: 0,
+        shadowColor: 'black',
 
-        backgroundColor: '#222',
+        backgroundColor: 'transparent',
 
-        padding: 16,
+        padding: 8,
       };
 
       this.observeStyle();
 
       this.text = text || 'hoge\nfoo\nbar';
-
-      setTimeout(function() {
-        this.style.color = 'blue';
-      }.bind(this), 1000);
     },
 
     calcWidth: function() {
@@ -63,16 +62,16 @@ phina.namespace(function() {
       var context = canvas.context;
 
       var fontSize = this.style.fontSize;
-      var fontFamily = fontSize+"px 'メイリオ'";
+      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this.style);
       var lines = this.text.split('\n');
-      canvas.context.font = fontFamily;
+      canvas.context.font = font;
 
       canvas.width = this.calcWidth() + style.padding*2;
       canvas.height = this.calcHeight() + style.padding*2;
       canvas.clearColor(style.backgroundColor);
 
       canvas.transformCenter();
-      context.font = fontFamily;
+      context.font = font;
       context.textAlign = this.style.align;
       context.textBaseline = this.style.baseline;
 
@@ -107,28 +106,6 @@ phina.namespace(function() {
           this._render();
         },
       },
-      /*
-      width: {
-        get: function() {
-          return this._width;
-        },
-        set: function(v) {
-          this._width = v;
-          if (!this.canvas) return ;
-          this.canvas.width = v + this.style.padding*2;
-        },
-      },
-      height: {
-        get: function() {
-          return this._height;
-        },
-        set: function(v) {
-          this._height = v;
-          if (!this.canvas) return ;
-          this.canvas.height = v + this.style.padding*2;
-        },
-      },
-      */
     }
   });
 

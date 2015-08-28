@@ -40,6 +40,30 @@ phina.define("MainScene", {
 
     var circle = phina.global.circle = CircleShape().addChildTo(this);
     circle.position.set(200, 100);
+
+    label.style.$extend({
+      color: 'red',
+      
+      strokeColor: 'blue',
+      stroke: true,
+      strokeWidth: 2,
+      
+      fontSize: 128,
+      fontWeight: 'bold',
+      fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+
+      align: 'center',
+      baseline: 'middle',
+
+      shadowBlur: 12,
+      shadowColor: 'red',
+
+      backgroundColor: '#222',
+    });
+
+    label.update = function() {
+      this.rotation+=1;
+    }
   },
 
 });

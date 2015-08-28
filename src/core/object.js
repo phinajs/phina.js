@@ -185,7 +185,7 @@
     Object.method('observe', function(obj, callback) {
       var keys = Object.keys(obj);
       keys.forEach(function(key) {
-        var tempKey = '_' + key;
+        var tempKey = '__' + key;
         var tempValue = obj[key];
         obj[tempKey] = tempValue;
         
