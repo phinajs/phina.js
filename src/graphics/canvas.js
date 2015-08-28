@@ -339,6 +339,38 @@ phina.namespace(function() {
     strokeRoundRect: function(x, y, width, height, radius) {
       return this.beginPath().roundRect(x, y, width, height, radius).stroke();
     },
+
+    /**
+     * 円のパスを設定
+     */
+    circle: function(x, y, radius) {
+      this.context.arc(x, y, radius, 0, Math.PI*2, false);
+      return this;
+    },
+    
+    /**
+     * 塗りつぶし円を描画
+     */
+    fillCircle: function(x, y, radius) {
+      var c = this.context;
+      c.beginPath();
+      c.arc(x, y, radius, 0, Math.PI*2, false);
+      c.closePath();
+      c.fill();
+      return this;
+    },
+    
+    /**
+     * ストローク円を描画
+     */
+    strokeCircle: function(x, y, radius) {
+      var c = this.context;
+      c.beginPath();
+      c.arc(x, y, radius, 0, Math.PI*2, false);
+      c.closePath();
+      c.stroke();
+      return this;
+    },
     
     /**
      * ポリゴンパス
