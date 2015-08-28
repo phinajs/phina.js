@@ -19,8 +19,11 @@ phina.namespace(function() {
       if (obj.visible === false) return ;
 
       obj._calcWorldMatrix && obj._calcWorldMatrix();
+      obj._calcWorldAlpha && obj._calcWorldAlpha();
 
       var context = this.canvas.context;
+
+      context.globalAlpha = obj._worldAlpha;
       
       if (obj.draw) {
         // 行列をセット
