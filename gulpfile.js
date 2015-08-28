@@ -9,6 +9,7 @@ ghelper.require();
 
 var pkg = require('./package.json');
 var config = require('./src/config.json');
+var ip = require('ip');
 
 gulp.task('default', ['concat', 'uglify']);
 
@@ -49,7 +50,7 @@ gulp.task('watch', function() {
 gulp.task('webserver', function() {
   gulp.src('.')
     .pipe(webserver({
-      host: '192.168.0.11',
+      host: ip.address(),
       // livereload: true,
       // port: 9000,
       directoryListing: true,
