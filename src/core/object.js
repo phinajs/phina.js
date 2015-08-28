@@ -42,6 +42,8 @@
     }
   });
 
+
+
   /**
    * @method setter
    * セッターを定義する
@@ -179,6 +181,26 @@
     return temp;
   });
 
+  if (!Object.observe) {
+    Object.method('observe', function(obj, callback) {
+      var keys = Object.keys(obj);
+      keys.forEach(function(key) {
+        var tempKey = '_' + key;
+        var tempValue = obj[key];
+        obj[tempKey] = tempValue;
+        
+        obj.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            this[tempKey] = v;
+            callback();
+          },
+        });
+      });
+    });
+  }
 
 })();
 
