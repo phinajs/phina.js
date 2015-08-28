@@ -19,10 +19,9 @@
 
 phina.globalize();
 
-var SCREEN_WIDTH  = 640;
-var SCREEN_HEIGHT = 960;
-
-var MAX_PER_LINE    = 8;                            // ピースの横に並ぶ最大数
+var SCREEN_WIDTH    = 640;
+var SCREEN_HEIGHT   = 960;
+var MAX_PER_LINE    = 5;                            // ピースの横に並ぶ最大数
 var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
 
 
@@ -39,11 +38,11 @@ phina.define("MainScene", {
 
     var gridX = Grid({
       width: SCREEN_WIDTH,
-      columns: 9,
+      columns: 6,
     });
     var gridY = Grid({
       width: SCREEN_WIDTH,
-      columns: 9,
+      columns: 6,
     });
 
     var self = this;
@@ -60,22 +59,25 @@ phina.define("MainScene", {
       p.y = gridY.span(yIndex+1)+150;
     });
 
-    return ;
+    // タイマーラベルを生成
+    var timerLabel = Label('0').addChildTo(this);
+    timerLabel.origin.x = 1;
+    timerLabel.x = 580;
+    timerLabel.y = 130;
+    timerLabel.style.color = '#444';
+    timerLabel.style.fontSize = 100;
+    // timerLabel.align = 'right';
+    timerLabel.baseline = 'bottom';
+    this.timerLabel = timerLabel;
 
-
-    (8).times(function(yIndex) {
-      (8).times(function(xIndex) {
-        var p = Piece().addChildTo(self.group);
-        p.fillStyle = 'red';
-
-        p.x = gridX.span(xIndex+1);
-        p.y = gridY.span(yIndex+1)+150;
-      });
-    });
+    this.time = 0;
   },
 
   update: function(app) {
-    // console.log(app.pointer.y);
+    // タイマーを更新
+    this.time += app.ticker.deltaTime;
+    var sec = this.time/1000; // 秒数に変換
+    this.timerLabel.text = sec.toFixed(3);
   },
 
 });
@@ -87,11 +89,13 @@ phina.define('Piece', {
     this.superInit();
 
     this.index = index;
-    this.width = this.style.width = 64;
-    this.height = this.style.height = 64;
+    this.width = this.style.width = 100;
+    this.height = this.style.height = 100;
     this.style.color = 'white';
 
     this.label = Label(index+'').addChildTo(this);
+    this.label.style.fontSize = 48;
+    this.label.style.fontWeight = 'bold';
     this.label.style.stroke = false;
 
     this.on('pointstart', function() {
@@ -103,6 +107,10 @@ phina.define('Piece', {
       this.label.style.color = 'black';
     });
   },
+
+  update: function() {
+    // console.log(this._worldAlpha);
+  }
 });
 
 var app = CanvasApp({
