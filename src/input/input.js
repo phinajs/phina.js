@@ -39,15 +39,27 @@
       this.position.set(this._tempPosition.x, this._tempPosition.y);
     },
 
+    _start: function(x, y, flag) {
+      flag = (flag !== undefined) ? flag : 1;
+      this._move(x, y);
+
+      this.flags |= flag;
+
+      var x = this._tempPosition.x;
+      var y = this._tempPosition.y;
+      this.position.set(x, y);
+      this.prevPosition.set(x, y);
+    },
+
+    _end: function(flag) {
+      flag = (flag !== undefined) ? flag : 1;
+      this.flags &= ~(flag);
+    },
+
     // スケールを考慮
-    _move: function(x, y, firstFlag) {
+    _move: function(x, y) {
       this._tempPosition.x = x;
       this._tempPosition.y = y;
-
-      if (firstFlag) {
-        this.position.set(x, y);
-        this.prevPosition.set(x, y);
-      }
 
       // adjust scale
       var elm = this.domElement;

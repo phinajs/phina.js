@@ -45,10 +45,6 @@ phina.namespace(function() {
       app.pointers.forEach(function(p) {
         if (p.id !== null) {
           this.__checkPoint(obj, p);
-
-          // if (p.flags === 0) {
-          //   p.id = null;
-          // }
         }
       }, this);
     },
@@ -70,7 +66,7 @@ phina.namespace(function() {
       }
 
       if (overFlag) {
-        if (p.flags === 1) {
+        if (p.getPointingStart()) {
           obj._touchFlags[p.id] = true;
           obj.flare('pointstart');
         }
@@ -80,7 +76,7 @@ phina.namespace(function() {
         obj.flare('pointstay');
       }
 
-      if (obj._touchFlags[p.id]===true && p.flags === 0) {
+      if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
         obj._touchFlags[p.id] = false;
         obj.flare('pointend');
 

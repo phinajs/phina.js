@@ -32,7 +32,46 @@
         self._move(e.pointX, e.pointY);
       });
     },
+
+    /**
+     * タッチしているかを判定
+     */
+    getTouch: function() {
+      return this.touched != 0;
+    },
+    
+    /**
+     * タッチ開始時に true
+     */
+    getTouchStart: function() {
+      return this.start != 0;
+    },
+    
+    /**
+     * タッチ終了時に true
+     */
+    getTouchEnd: function() {
+      return this.end != 0;
+    },
+
   });
+
+  /**
+   * @method
+   * ポインティング状態取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointing        = phina.input.Touch.prototype.getTouch;
+  /**
+   * @method
+   * ポインティングを開始したかを取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointingStart   = phina.input.Touch.prototype.getTouchStart;
+  /**
+   * @method
+   * ポインティングを終了したかを取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointingEnd     = phina.input.Touch.prototype.getTouchEnd;
+
 
 })();
 
@@ -60,15 +99,14 @@
           var touch = self.getEmpty();
 
           touch.id = t.identifier;
-          touch._move(t.pointX, t.pointY, true);
-          touch.flags = 1;
+          touch._start(t.pointX, t.pointY);
         });
       });
 
       this.domElement.addEventListener('touchend', function(e) {
         Array.prototype.forEach.call(e.changedTouches, function(t) {
           var touch = self.getTouch(t.identifier);
-          touch.flags = 0;
+          touch._end();
         });
       });
       this.domElement.addEventListener('touchmove', function(e) {
