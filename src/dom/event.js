@@ -4,6 +4,8 @@
 
 (function() {
 
+  if (!phina.global.Event) return ;
+
   /**
    * @class global.Event
    * 既存のEventオブジェクト拡張
@@ -23,7 +25,9 @@
 })();
 
 (function() {
-    
+
+  if (!phina.global.MouseEvent) return ;
+
   /**
    * @class global.MouseEvent
    * MouseEvent クラス
@@ -52,7 +56,7 @@
 
 (function() {
     
-  if (window.TouchEvent === undefined) { return ; }
+  if (!phina.global.TouchEvent) return ;
   
   
   /**
@@ -83,8 +87,7 @@
 
 (function() {
     
-  if (window.Touch === undefined) { return ; }
-  
+  if (!phina.global.Touch) return ;
   
   /**
    * @class global.Touch
