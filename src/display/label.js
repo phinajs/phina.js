@@ -32,7 +32,7 @@ phina.namespace(function() {
         padding: 16,
       };
 
-      this.startObserveStyle();
+      this.observeStyle();
 
       this.text = text || 'hoge\nfoo\nbar';
 

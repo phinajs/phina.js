@@ -202,6 +202,12 @@
     });
   }
 
+  if (!Object.unobserve) {
+    Object.method('unobserve', function(obj, callback) {
+      console.assert(false);
+    });
+  }
+
 })();
 
 

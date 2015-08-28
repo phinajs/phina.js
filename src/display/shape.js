@@ -14,10 +14,15 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas();
     },
 
-    startObserveStyle: function() {
-      Object.observe(this.style, function(changes) {
+    observeStyle: function() {
+      this._observe = function(changes) {
         this._render();
-      }.bind(this));
+      }.bind(this);
+      Object.observe(this.style, this._observe);
+    },
+
+    unobserveStyle: function() {
+      Object.unobserve(this.style, this._observe);
     },
 
     _render: function() {
@@ -59,7 +64,7 @@ phina.namespace(function() {
 
         backgroundColor: 'transparent',
       };
-      this.startObserveStyle();
+      this.observeStyle();
       this._render();
     },
 
@@ -98,7 +103,7 @@ phina.namespace(function() {
 
         backgroundColor: 'transparent',
       };
-      this.startObserveStyle();
+      this.observeStyle();
       this._render();
     },
 
