@@ -34,6 +34,7 @@
     "display/canvaselement.js",
     "display/shape.js",
     "display/sprite.js",
+    "display/label.js",
     "display/canvasscene.js",
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
