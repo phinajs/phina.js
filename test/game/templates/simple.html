@@ -28,6 +28,7 @@
 </style>
 
 <script src='../testhelper.js'></script>
+<script src='../../../build/phina.js'></script>
 
 <script>
 
@@ -36,24 +37,17 @@ window.openStandalone = function() {
 };
 
 // phina の scirpt をロード
-th.load('../../../src/config.json', function(d) {
-  var files = [];
+// test の scripts をロード
+var files = [];
+th.load('../config.json', function(d) {
   d.files.forEach(function(file) {
-    var file = '../../../src/' + file;
+    var file = '../' + file;
     files.push(file);
   });
 
-  // test の scripts をロード
-  th.load('../config.json', function(d) {
-    d.files.forEach(function(file) {
-      var file = '../' + file;
-      files.push(file);
-    });
-
-    th.loadScripts(files, function() {
-      var query = location.search.substr(1);
-      th.run(query);
-    });
+  th.loadScripts(files, function() {
+    var query = location.search.substr(1);
+    th.run(query);
   });
 });
 
