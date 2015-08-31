@@ -13,6 +13,7 @@
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <!-- materialize -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css' />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js'></script>
 
     <!-- jade -->
@@ -29,6 +30,7 @@
 
     <!-- test files -->
     <script src='./../game/src/display/index.js'></script>
+    <script src='./../game/graphics/canvas.js'></script>
   </head>
   <body>
     <app></app>
@@ -50,8 +52,9 @@
             label
               i.mdi-action-search
             i.mdi-navigation-close
+        // sections
         li(each='{sections}')
-          a(href='') {name}
+          section(data='{this.item}')
       a.button-collapse(href='', data-activates="mobile-nav")
         i.mdi-navigation-menu
 
@@ -59,9 +62,10 @@
       side {
         display: block;
       }
+      side nav ul li {
+        padding: 0px !important;
+      }
       side nav ul li.search {
-        padding-left: 0px;
-        padding-right: 0px;
         background-color: hsl(0, 100%, 70%);
       }
       side nav ul li.search i.mdi-action-search {
@@ -71,6 +75,50 @@
     script.
       this.sections = window.sections;
 
+</script>
+
+<script type='riot/tag' template='jade'>
+  section
+    div(class='{opened:_open}')
+      a(href='', onclick='{toggle}') {name}
+        span.badge
+          i.material-icons keyboard_arrow_down
+      ul.items()
+        li.item(each='{items}')
+          a(href='') {name}
+
+    style.
+      section .items {
+        max-height: 0px;
+        overflow: hidden;
+        -webkit-transition: 200ms;
+      }
+      section .opened .items {
+        max-height: 500px;
+        overflow: scroll;
+      }
+
+      section span.badge {
+        padding-top: 7px;
+        right: 5px;
+      }
+
+      section .badge i {
+        -webkit-transition: 200ms;
+      }
+      section .opened .badge i {
+        -webkit-transform: rotate(-180deg);
+      }
+
+      section .item {
+        background-color: #fff;
+        padding-left: 15px !important;
+      }
+    script.
+      this.toggle = function() {
+        this._open = !this._open;
+        return false;
+      };
 </script>
 
 
