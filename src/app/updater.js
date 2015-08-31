@@ -42,7 +42,7 @@ phina.namespace(function() {
 
     _checkPoint: function(obj) {
 
-      app.pointers.forEach(function(p) {
+      this.app.pointers.forEach(function(p) {
         if (p.id !== null) {
           this.__checkPoint(obj, p);
         }
