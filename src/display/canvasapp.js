@@ -17,6 +17,16 @@ phina.namespace(function() {
       params.$safe({
         width: 640,
         height: 960,
+        columns: 12,
+      });
+
+      this.gridX = phina.util.Grid({
+        width: params.width,
+        columns: params.columns,
+      });
+      this.gridY = phina.util.Grid({
+        width: params.height,
+        columns: params.columns,
       });
 
       this.canvas = phina.graphics.Canvas(this.domElement);

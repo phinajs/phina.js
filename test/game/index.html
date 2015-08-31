@@ -93,20 +93,7 @@
 
   var hash = location.hash.substr(1);
   var data = {
-    sections: [
-      {
-        name: 'core',
-        items: [
-          {name:'object',},
-          {name:'number',},
-          {name:'string',},
-          {name:'array',},
-          {name:'function',},
-          {name:'date',},
-          {name:'math',},
-        ],
-      }
-    ],
+    sections: [],
   };
 
   th.load('config.json', function(d) {

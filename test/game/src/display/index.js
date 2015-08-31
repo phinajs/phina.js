@@ -5,8 +5,8 @@ th.describe("display.Label", function() {
       query:'#world',
     });
     var scene = app.currentScene;
-    var label = phina.display.Label('hoge').addChildTo(scene);
-    label.position.set(100, 100);
+    var label = phina.display.Label('Hello, world!').addChildTo(scene);
+    label.position.set(app.gridX.center(), app.gridY.center());
     app.run();
   });
 
