@@ -1,5 +1,6 @@
 {
   "files": [
-    "graphics/canvas.js"
+    "graphics/canvas.js",
+    "src/display/index.js"
   ]
 }
