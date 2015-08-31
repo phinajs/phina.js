@@ -62,6 +62,13 @@
     return test;
   };
 
+  th.code = function(path) {
+    var pathes = path.split('/');
+    var test = suiteMap[pathes[0]].testMap[pathes[1]];
+
+    return test.fn.toString();
+  };
+
   th.run = function(path) {
     var pathes = path.split('/');
     var test = suiteMap[pathes[0]].testMap[pathes[1]];

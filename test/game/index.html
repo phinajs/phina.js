@@ -14,10 +14,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
     <script src="http://cdn.rawgit.com/phi-jp/high/0.0.3/high.js"></script>
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+
     <!-- material design lite -->
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+
+    <!-- jframe -->
+    <script src='http://cdn.rawgit.com/phi-jp/jframe/0.0.1/jframe.js'></script>
 
     <!-- test helper -->
     <script src='./testhelper.js'></script>
@@ -74,11 +80,21 @@
 <script type='riot/tag' template='jade'>
   phina-main.mdl-layout__content
     div.page-content
-      iframe#preview(name='preview')
+      div#preview(name='preview')
     style.
-      phina-main, phina-main div.page-content, phina-main div.page-content iframe {
+      phina-main, phina-main div.page-content, phina-main div.page-content #prev iframe {
         height: 100%;
       }
+      #preview {
+        height: 100%;
+      }
+      #preview iframe {
+        height: 100%;
+      }
+    script.
+      this.on('mount', function() {
+        window.preview = jframe("#preview");
+      });
 </script>
 
 <script src='tags/search.jade' type='riot/tag' template='jade'></script>
@@ -114,7 +130,22 @@
         });
 
         if (matchedItems.length > 0) {
-          document.querySelector('#preview').src = matchedItems[0].link;
+          var code = (function() {
+            var code = th.code(matchedItems[0].path);
+            var lines = code.split('\n');
+            lines.splice(0, 1);
+            lines.splice(lines.length-1, 1);
+            return lines.join('\n');
+          })();
+
+          var a = $.ajax({
+            url: 'templates/display.html',
+          });
+          a.done(function(res) {
+            var html = res.replace('{{code}}', code);
+            preview.load(html);
+          });
+
           s.open = true;
         }
       });

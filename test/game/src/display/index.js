@@ -10,4 +10,9 @@ th.describe("display.Label", function() {
     app.run();
   });
 
+  th.it('hoge', function() {
+    var label = phina.display.Label('Hello, world!').addChildTo(this);
+    label.position.set(640/2, 960/2);
+  });
+
 });
