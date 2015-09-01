@@ -25,11 +25,16 @@
     <!-- jframe -->
     <script src='http://cdn.rawgit.com/phi-jp/jframe/0.0.1/jframe.js'></script>
 
+    <!-- phina -->
+    <!--
+    <script src='../../build/phina.js'></script>
+  -->
     <!-- test helper -->
     <script src='testhelper.js'></script>
 
     <!-- test files -->
     <script src='src/display/index.js'></script>
+    <script src='src/ui/index.js'></script>
     <script src='graphics/canvas.js'></script>
   </head>
   <body>
@@ -220,6 +225,8 @@
 
   var hash = location.hash.replace('#', '');
   riot.route(hash || '');
+
+  $(".button-collapse").sideNav();
 
 </script>
 
