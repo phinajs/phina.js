@@ -1,0 +1,66 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title>test - phina.js</title>
+  </head>
+  <body>
+    <canvas id='world' width='640' height='960'></canvas>
+    <button class='btn-standalone' onclick='openStandalone();'>View</button>
+  </body>
+</html>
+
+<style>
+  #world {
+    box-shadow: 0px 0px 4px 0px #aaa;
+  }
+  .btn-standalone {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    padding: 5px 10px;
+  }
+</style>
+
+<script src='../../build/phina.js'></script>
+
+<script>
+
+window.openStandalone = function() {
+  var w = window.open(location.href);
+};
+
+window.onload = function() {
+  var app = phina.display.CanvasApp({
+    query:'#world',
+  });
+  var scene = MainScene();
+  app.replaceScene(scene);
+  app.run();
+};
+
+phina.define('MainScene', {
+  superClass: 'phina.display.CanvasScene',
+  init: function() {
+    this.superInit({
+      width: 640,
+      height: 960,
+    });
+
+    {{code}}
+
+    // var label = phina.display.Label('Hello, world!').addChildTo(this);
+    // // label.position.set(app.gridX.center(), app.gridY.center());
+    // label.position.set(640/2, 960/2);
+  },
+});
+
+
+
+
+</script>

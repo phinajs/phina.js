@@ -40,6 +40,30 @@
 <script type='riot/tag' template='jade'>
   app
     side
+    main
+
+</script>
+
+<script type='riot/tag' template='jade'>
+  main
+    div.main
+      div#preview
+    style.
+      @media only screen and (min-width: 601px) {
+        .main {
+          padding-left: 240px;
+        }
+      }
+      #preview, #preview iframe {
+        width: 100%;
+        height: calc(100vh - 70px);
+        border: none;
+      }
+    script.
+      this.on('mount', function() {
+        window.preview = jframe("#preview");
+      });
+
 </script>
 
 <script type='riot/tag' template='jade'>
@@ -61,6 +85,10 @@
     style.
       side {
         display: block;
+      }
+
+      side nav .side-nav {
+        width: 240px;
       }
       side nav ul li {
         padding: 0px !important;
@@ -85,8 +113,7 @@
           i.material-icons keyboard_arrow_down
       ul.items()
         li.item(each='{items}')
-          a(href='') {name}
-
+          a(href='', onclick='{open}') {name}
     style.
       section .items {
         max-height: 0px;
@@ -115,52 +142,86 @@
         padding-left: 15px !important;
       }
     script.
+      this._open = false;
+      var hash = location.hash.substr(1);
+
+      this.on('mount', function() {
+        if (this.items) {
+          this._open = this.items.some(function(item) {
+            return item.path === hash;
+          });
+          this.update();
+        }
+      });
       this.toggle = function() {
         this._open = !this._open;
         return false;
+      };
+      this.open = function(e) {
+        riot.route(e.item.path);
       };
 </script>
 
 
 <script>
   var hash = location.hash.substr(1);
-  var data = {
-    sections: [],
-  };
 
   // // マウントする
   var json = th.toJSON('');
   console.log(json);
   window.sections = json;
 
-  json.forEach(function(s) {
-    data.sections.push(s);
+  riot.mount('app');
 
-    var matchedItems = s.items.filter(function(item) {
-      return item.path === hash;
-    });
+  // routing
+  riot.route.parser(function(path) {
+    var raw = path.split('?');
+    var hashes = raw[0].split('/');
+    var qs = raw[1];
+    var params = {};
 
-    if (matchedItems.length > 0) {
-      var code = (function() {
-        var code = th.code(matchedItems[0].path);
-        var lines = code.split('\n');
-        lines.splice(0, 1);
-        lines.splice(lines.length-1, 1);
-        return lines.join('\n');
-      })();
-
-      var a = $.ajax({
-        url: 'templates/display.html',
+    if (qs) {
+      qs.split('&').forEach(function(v) {
+        var c = v.split('=');
+        params[c[0]] = c[1];
       });
-      a.done(function(res) {
-        var html = res.replace('{{code}}', code);
-        preview.load(html);
-      });
-
-      s.open = true;
     }
+
+    return [hashes, params];
   });
 
-  riot.mount('app', data);
+
+  riot.route.start();
+
+  riot.route(function(path, query) {
+    console.log('hoge');
+    var p = path.join('/');
+    var code = (function() {
+      var code = th.code(p);
+      var lines = code.split('\n');
+      lines.splice(0, 1);
+      lines.splice(lines.length-1, 1);
+      return lines.join('\n');
+    })();
+
+    var a = $.ajax({
+      url: 'templates/display.html',
+    });
+    a.done(function(res) {
+      var html = res.replace('{{code}}', code);
+      preview.load(html);
+    });
+  });
+
+  var hash = location.hash.replace('#', '');
+  riot.route(hash || '');
 
 </script>
+
+
+
+
+
+
+
+
