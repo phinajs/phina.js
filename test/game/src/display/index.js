@@ -1,3 +1,16 @@
+th.describe("display.Shape", function() {
+
+  th.it('CircleShape', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.position.set(100, 100);
+  });
+
+  th.it('RectangleShape', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    shape.position.set(100, 100);
+  });
+});
+
 th.describe("display.Label", function() {
 
   th.it('init', function() {
