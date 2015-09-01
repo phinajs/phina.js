@@ -6,45 +6,47 @@ th.describe("display.Label", function() {
   });
 
   th.it('style', function() {
+    var center = 640/2;
+    var gridY = phina.util.Grid(960, 14);
     // 
     var label = phina.display.Label('color="red"').addChildTo(this);
     label.style.color = 'red';
-    label.position.set(640/2, 50);
+    label.position.set(center, gridY.span(1));
     // 
     var label = phina.display.Label('stroke=false').addChildTo(this);
     label.style.stroke = false;
-    label.position.set(640/2, 100);
+    label.position.set(center, gridY.span(2));
     // 
     var label = phina.display.Label('strokeColor="green"').addChildTo(this);
     label.style.color = 'white';
     label.style.strokeColor = 'green';
-    label.position.set(640/2, 150);
+    label.position.set(center, gridY.span(3));
     // 
     var label = phina.display.Label('strokeWidth=8').addChildTo(this);
     label.style.color = 'white';
     label.style.strokeWidth = 8;
-    label.position.set(640/2, 200);
+    label.position.set(center, gridY.span(4));
     // 
     var label = phina.display.Label('fontSize(16)').addChildTo(this);
     label.style.fontSize = 16;
-    label.position.set(640/2, 250);
+    label.position.set(center, gridY.span(5));
     // 
     var label = phina.display.Label('fontWeight="bold"').addChildTo(this);
     label.style.fontWeight = 'bold';
-    label.position.set(640/2, 300);
+    label.position.set(center, gridY.span(6));
     // 
     var label = phina.display.Label('fontFamily="ゴシック"').addChildTo(this);
     label.style.fontFamily = 'ゴシック';
-    label.position.set(640/2, 350);
+    label.position.set(center, gridY.span(7));
     // 
     var label = phina.display.Label('shadowBlur=6').addChildTo(this);
     label.style.shadowBlur = 6;
-    label.position.set(640/2, 400);
+    label.position.set(center, gridY.span(8));
     // 
     var label = phina.display.Label('shadowColor="blue"').addChildTo(this);
     label.style.shadowBlur = 6;
     label.style.shadowColor = "blue";
-    label.position.set(640/2, 450);
+    label.position.set(center, gridY.span(9));
   });
 
   th.it('align', function() {
