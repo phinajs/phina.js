@@ -5,21 +5,51 @@ phina.namespace(function() {
 
     init: function(app) {
       this.app = app;
+      this._enable = true;
+    },
+
+    enable: function() {
+      this._enable = true;
+      return this;
+    },
+    disable: function() {
+      this._enable = false;
+      return this;
     },
 
     check: function(root) {
-      this._checkElement()
+      if (!this._enable) return ;
+      this._checkElement(root)
     },
 
-    _checkElement: function(obj) {
+    _checkElement: function(element) {
+      var app = this.app;
+
+      // 更新するかを判定
+      if (element.awake === false) return ;
+
+      // タッチ判定
+      this._checkPoint(element);
+
+      // 子供を更新
+      var len = element.children.length;
+      if (element.children.length > 0) {
+        var tempChildren = element.children.slice();
+        for (var i=0; i<len; ++i) {
+          this._checkElement(tempChildren[i]);
+        }
+      }
+    },
+
+    _checkPoint: function(obj) {
       this.app.pointers.forEach(function(p) {
         if (p.id !== null) {
-          this.__checkElement(obj, p);
+          this.__checkPoint(obj, p);
         }
       }, this);
     },
 
-    __checkElement: function(obj, p) {
+    __checkPoint: function(obj, p) {
       if (!obj.interactive) return ;
 
       var prevOverFlag = obj._overFlags[p.id];
