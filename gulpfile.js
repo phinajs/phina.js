@@ -11,7 +11,7 @@ var pkg = require('./package.json');
 var config = require('./src/config.json');
 var ip = require('ip');
 
-gulp.task('default', ['concat', 'uglify']);
+gulp.task('default', ['uglify']);
 
 gulp.task('concat', function() {
   var scripts = config.files.map(function(f) {
