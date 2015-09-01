@@ -16,19 +16,19 @@ phina.namespace(function() {
       this.style = {
         color: 'black',
         
-        strokeColor: '#222',
         stroke: true,
+        strokeColor: '#222',
         strokeWidth: 2,
         
         fontSize: 32,
         fontWeight: '',
         fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
 
-        align: 'center',
-        baseline: 'middle',
-
         shadowBlur: 0,
         shadowColor: 'black',
+
+        align: 'center',
+        baseline: 'middle',
 
         backgroundColor: 'transparent',
 
@@ -49,11 +49,14 @@ phina.namespace(function() {
           width = w;
         }
       }, this);
+      if (this.style.align !== 'center') width*=2;
       return width;
     },
 
     calcHeight: function() {
-      return this.style.fontSize * this._lines.length;
+      var height = this.style.fontSize * this._lines.length;
+      if (this.style.baseline !== 'middle') height*=2;
+      return height;
     },
 
     _render: function() {
@@ -79,13 +82,9 @@ phina.namespace(function() {
       context.strokeStyle = this.style.strokeColor;
       context.lineWidth = this.style.strokeWidth;
 
-      context.shadowBlur = this.style.shadowBlur;
-      context.shadowColor = this.style.shadowColor;
+      context.lineJoin = "round";
 
       var offset = -Math.floor(lines.length/2)*fontSize;
-      lines.forEach(function(line, i) {
-        context.fillText(line, 0, i*fontSize+offset);
-      }, this);
 
       if (this.style.stroke) {
         context.shadowBlur = 0;
@@ -93,6 +92,12 @@ phina.namespace(function() {
           context.strokeText(line, 0, i*fontSize+offset);
         }, this);
       }
+
+      context.shadowBlur = this.style.shadowBlur;
+      context.shadowColor = this.style.shadowColor;
+      lines.forEach(function(line, i) {
+        context.fillText(line, 0, i*fontSize+offset);
+      }, this);
     },
 
     _accessor: {
