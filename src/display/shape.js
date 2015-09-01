@@ -12,18 +12,16 @@ phina.namespace(function() {
       this.superInit();
 
       this.canvas = phina.graphics.Canvas();
-      this.style = {};
-    },
+      this.style = phina.util.ChangeDispatcher();
 
-    observeStyle: function() {
-      this._observe = function(changes) {
+      this.style.onchange = function() {
         this._render();
       }.bind(this);
-      Object.observe(this.style, this._observe);
-    },
 
-    unobserveStyle: function() {
-      Object.unobserve(this.style, this._observe);
+      this.style.register('backgroundColor', '#aaa');
+      this.style.register('width', 64);
+      this.style.register('height', 64);
+      this.style.register('padding', 8);
     },
 
     _render: function() {
@@ -46,26 +44,21 @@ phina.namespace(function() {
   });
 
   /**
-   * @class phina.display.Shape
+   * @class phina.display.RectangleShape
    * 
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
     init: function() {
       this.superInit();
-      this.style = {
-        padding: 4,
-        width: 64,
-        height: 64,
 
-        color: 'blue',
+      this.style.register('color', 'blue');
 
-        strokeWidth: 4,
-        strokeColor: '#aaa',
+      this.style.register('strokeWidth', 4);
+      this.style.register('strokeColor', '#aaa');
 
-        backgroundColor: 'transparent',
-      };
-      this.observeStyle();
+      this.style.register('backgroundColor', 'transparent');
+
       this._render();
     },
 
@@ -94,17 +87,14 @@ phina.namespace(function() {
     init: function() {
       this.superInit();
 
-      this.style = {
-        padding: 12,
-        radius: 32,
-        color: 'red',
+      this.style.register('color', 'red');
+      this.style.register('radius', 32);
 
-        strokeWidth: 4,
-        strokeColor: '#aaa',
+      this.style.register('strokeWidth', 4);
+      this.style.register('strokeColor', '#aaa');
 
-        backgroundColor: 'transparent',
-      };
-      this.observeStyle();
+      this.style.register('backgroundColor', 'transparent');
+      
       this._render();
     },
 

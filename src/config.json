@@ -16,6 +16,7 @@
 
     "util/ticker.js",
     "util/grid.js",
+    "util/changedispatcher.js",
 
     "input/input.js",
     "input/mouse.js",
@@ -40,6 +41,8 @@
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
     "display/domapp.js",
-    "display/canvasapp.js"
+    "display/canvasapp.js",
+
+    "ui/button.js"
   ]
 }

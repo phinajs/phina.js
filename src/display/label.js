@@ -13,29 +13,23 @@ phina.namespace(function() {
 
       this.canvas = phina.graphics.Canvas();
 
-      this.style = {
-        color: 'black',
-        
-        stroke: true,
-        strokeColor: '#222',
-        strokeWidth: 2,
-        
-        fontSize: 32,
-        fontWeight: '',
-        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+      this.style.register('color', 'black');
 
-        shadowBlur: 0,
-        shadowColor: 'black',
+      this.style.register('stroke', true);
+      this.style.register('strokeColor', '#222');
+      this.style.register('strokeWidth', 2);
 
-        align: 'center',
-        baseline: 'middle',
+      this.style.register('fontSize', 32);
+      this.style.register('fontWeight', '');
+      this.style.register('fontFamily', "'HiraKakuProN-W3'"); // Hiragino or Helvetica,
 
-        backgroundColor: 'transparent',
+      this.style.register('shadowBlur', 0);
+      this.style.register('shadowColor', 'black');
 
-        padding: 8,
-      };
+      this.style.register('align', 'center');
+      this.style.register('baseline', 'middle');
 
-      this.observeStyle();
+      this.style.register('backgroundColor', 'transparent');
 
       this.text = text || 'hoge\nfoo\nbar';
     },
