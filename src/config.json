@@ -22,6 +22,7 @@
     "input/touch.js",
 
     "app/updater.js",
+    "app/interactive.js",
     "app/baseapp.js",
     "app/element.js",
     "app/object2d.js",
