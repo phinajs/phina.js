@@ -9,24 +9,28 @@
     <title>test - phina.js</title>
     <meta name="description" content="${description}" />
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.js"></script>
-    <script src="http://rawgit.com/phi-jp/riot/build/dist/riot/riot+compiler.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
-    <script src="http://cdn.rawgit.com/phi-jp/high/0.0.3/high.js"></script>
-
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <!-- materialize -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css' />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js'></script>
 
-    <!-- material design lite -->
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
-
+    <!-- jade -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.js"></script>
+    <!-- riot -->
+    <script src="http://rawgit.com/phi-jp/riot/build/dist/riot/riot+compiler.js"></script>
+    <!-- high -->
+    <script src="http://cdn.rawgit.com/phi-jp/high/0.0.3/high.js"></script>
     <!-- jframe -->
     <script src='http://cdn.rawgit.com/phi-jp/jframe/0.0.1/jframe.js'></script>
 
     <!-- test helper -->
-    <script src='./testhelper.js'></script>
+    <script src='testhelper.js'></script>
+
+    <!-- test files -->
+    <script src='src/display/index.js'></script>
+    <script src='graphics/canvas.js'></script>
   </head>
   <body>
     <app></app>
@@ -35,125 +39,190 @@
 
 <script type='riot/tag' template='jade'>
   app
-    div.
-      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
-                  mdl-layout--overlay-drawer-button">
-        <phina-nav sections='{this.sections}'></phina-nav>
-        <phina-main></phina-main>
-      </div>
-    script(type='text/javascript').
-      this.sections = opts.sections;
+    side
+    main
+
 </script>
 
 <script type='riot/tag' template='jade'>
-  phina-nav.mdl-layout__drawer
-    span.mdl-layout-title phina.js
-    nav.mdl-navigation
-      div.mdl-navigation__link
-        search(oninput='{search}')
-      itemgroup(each='{sections.filter(filter)}', data='{this}')
+  main
+    div.main
+      div#preview
     style.
-      div.mdl-navigation__link {
-        padding: 0px 10px !important;
-      }
-
-    script(type='text/javascript').
-      this.sections = opts.sections;
-
-      var searchValue = '';
-
-      this.search = function(event) {
-        searchValue = event.target.value;
-        this.update();
-      };
-      this.filter = function(item) {
-        if (searchValue) {
-          var flag = item.name.indexOf(searchValue);
-          return flag !== -1;
+      @media only screen and (min-width: 992px) {
+        .main {
+          padding-left: 240px;
         }
-        else {
-          return true;
-        }
-      };
-</script>
-
-<script type='riot/tag' template='jade'>
-  phina-main.mdl-layout__content
-    div.page-content
-      div#preview(name='preview')
-    style.
-      phina-main, phina-main div.page-content, phina-main div.page-content #prev iframe {
-        height: 100%;
       }
-      #preview {
-        height: 100%;
-      }
-      #preview iframe {
-        height: 100%;
+      #preview, #preview iframe {
+        width: 100%;
+        height: calc(100vh - 70px);
+        border: none;
       }
     script.
       this.on('mount', function() {
         window.preview = jframe("#preview");
       });
+
 </script>
 
-<script src='tags/search.jade' type='riot/tag' template='jade'></script>
-<script src='tags/item.jade' type='riot/tag' template='jade'></script>
-<script src='tags/itemgroup.jade' type='riot/tag' template='jade'></script>
+<script type='riot/tag' template='jade'>
+  side
+    nav
+      ul#mobile-nav.side-nav.fixed
+        li.search
+          div.input-field
+            input#search(type='search')
+            label
+              i.mdi-action-search
+            i.mdi-navigation-close
+        // sections
+        li(each='{sections}')
+          section(data='{this.item}')
+      a.button-collapse(href='', data-activates="mobile-nav")
+        i.mdi-navigation-menu
+
+    style.
+      side {
+        display: block;
+      }
+
+      side nav .side-nav {
+        width: 240px;
+      }
+      side nav ul li {
+        padding: 0px !important;
+      }
+      side nav ul li.search {
+        background-color: hsl(0, 100%, 70%);
+      }
+      side nav ul li.search i.mdi-action-search {
+        font-size: 2rem;
+      }
+
+    script.
+      this.sections = window.sections;
+
+</script>
+
+<script type='riot/tag' template='jade'>
+  section
+    div(class='{opened:_open}')
+      a(href='', onclick='{toggle}') {name}
+        span.badge
+          i.material-icons keyboard_arrow_down
+      ul.items()
+        li.item(each='{items}')
+          a(href='', onclick='{open}') {name}
+    style.
+      section .items {
+        max-height: 0px;
+        overflow: hidden;
+        -webkit-transition: 200ms;
+      }
+      section div.opened > a {
+        background: hsl(0, 0%, 90%);
+      }
+      section .opened .items {
+        max-height: 500px;
+        overflow: scroll;
+      }
+
+      section span.badge {
+        padding-top: 7px;
+        right: 5px;
+      }
+
+      section .badge i {
+        -webkit-transition: 200ms;
+      }
+      section .opened .badge i {
+        -webkit-transform: rotate(-180deg);
+      }
+
+      section .item {
+        background-color: #fff;
+        padding-left: 15px !important;
+      }
+    script.
+      this._open = false;
+      var hash = location.hash.substr(1);
+
+      this.on('mount', function() {
+        if (this.items) {
+          this._open = this.items.some(function(item) {
+            return item.path === hash;
+          });
+          this.update();
+        }
+      });
+      this.toggle = function() {
+        this._open = !this._open;
+        return false;
+      };
+      this.open = function(e) {
+        riot.route(e.item.path);
+      };
+</script>
 
 
 <script>
-  riot.compile(function() {
-    componentHandler.upgradeDom();
-  });
-
   var hash = location.hash.substr(1);
-  var data = {
-    sections: [],
-  };
 
-  th.load('config.json', function(d) {
-    var files = [];
-    d.files.each(function(file) {
-      files.push(file);
-    });
+  // // マウントする
+  var json = th.toJSON('');
+  window.sections = json;
 
-    th.loadScripts(files, function() {
-      // // マウントする
-      var json = th.toJSON('templates/simple.html?{link}');
+  riot.mount('app');
 
-      json.forEach(function(s) {
-        data.sections.push(s);
+  // routing
+  riot.route.parser(function(path) {
+    var raw = path.split('?');
+    var hashes = raw[0].split('/');
+    var qs = raw[1];
+    var params = {};
 
-        var matchedItems = s.items.filter(function(item) {
-          return item.path === hash;
-        });
-
-        if (matchedItems.length > 0) {
-          var code = (function() {
-            var code = th.code(matchedItems[0].path);
-            var lines = code.split('\n');
-            lines.splice(0, 1);
-            lines.splice(lines.length-1, 1);
-            return lines.join('\n');
-          })();
-
-          var a = $.ajax({
-            url: 'templates/display.html',
-          });
-          a.done(function(res) {
-            var html = res.replace('{{code}}', code);
-            preview.load(html);
-          });
-
-          s.open = true;
-        }
+    if (qs) {
+      qs.split('&').forEach(function(v) {
+        var c = v.split('=');
+        params[c[0]] = c[1];
       });
+    }
 
-      riot.update();
+    return [hashes, params];
+  });
+
+
+  riot.route.start();
+
+  riot.route(function(path, query) {
+    var p = path.join('/');
+    var code = (function() {
+      var code = th.code(p);
+      var lines = code.split('\n');
+      lines.splice(0, 1);
+      lines.splice(lines.length-1, 1);
+      return lines.join('\n');
+    })();
+
+    var a = $.ajax({
+      url: 'templates/display.html',
+    });
+    a.done(function(res) {
+      var html = res.replace('{{code}}', code);
+      preview.load(html);
     });
   });
 
-  riot.mount('app', data);
+  var hash = location.hash.replace('#', '');
+  riot.route(hash || '');
 
 </script>
+
+
+
+
+
+
+
+
