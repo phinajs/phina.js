@@ -17,9 +17,14 @@
     init: function() {
       if (typeof arguments[0] === 'object') {
         var param = arguments[0];
-        width = param.width || 640;
-        columns = param.columns || 12;
-        loop = param.loop || false;
+        var width = param.width || 640;
+        var columns = param.columns || 12;
+        var loop = param.loop || false;
+      }
+      else {
+        var width   = arguments[0] || 640;
+        var columns = arguments[1] || 12;
+        var loop    = arguments[2] || false;
       }
 
       this.width = width;
@@ -30,7 +35,7 @@
 
     // スパン指定で値を取得(負数もok)
     span: function(index) {
-      if (loop) {
+      if (this.loop) {
         index += this.columns;
         index %= this.columns;
       }
