@@ -1,0 +1,3736 @@
+/*
+ *
+ */
+
+
+;(function() {
+  /**
+   * @class global.Object
+   * Objectの拡張
+   */
+
+  
+  /**
+   * @method property
+   * 変数を追加
+   * @param   {String} key name
+   * @param   {Object} param
+   */
+  Object.defineProperty(Object.prototype, "property", {
+    value: function(name, val) {
+      Object.defineProperty(this, name, {
+        value: val,
+        enumerable: true,
+        writable: true
+      });
+    }
+  });
+
+  /**
+   * @method method
+   * 関数を追加
+   * @param   {String} key name
+   * @param   {Function} function
+   */
+  Object.defineProperty(Object.prototype, "method", {
+    value: function(name, fn) {
+      Object.defineProperty(this, name, {
+        value: fn,
+        enumerable: false,
+        writable: true
+      });
+    }
+  });
+
+
+
+  /**
+   * @method setter
+   * セッターを定義する
+   */
+  Object.prototype.method("setter", function(name, fn){
+    Object.defineProperty(this, name, {
+      set: fn,
+      enumerable: false,
+      configurable: true,
+    });
+  });
+
+  /**
+   * @method getter
+   * ゲッターを定義する
+   */
+  Object.prototype.method("getter", function(name, fn){
+    Object.defineProperty(this, name, {
+      get: fn,
+      enumerable: false,
+      configurable: true,
+    });
+  });
+
+  /**
+   * @method accessor
+   * アクセッサ(セッター/ゲッター)を定義する
+   */
+  Object.prototype.method("accessor", function(name, param) {
+    Object.defineProperty(this, name, {
+      set: param["set"],
+      get: param["get"],
+      enumerable: false,
+      configurable: true,
+    });
+  });
+
+
+  /**
+   * @method forIn
+   * オブジェクト用ループ処理
+   */
+  Object.prototype.method("forIn", function(fn, self) {
+    self = self || this;
+
+    Object.keys(this).forEach(function(key, index) {
+      var value = this[key];
+
+      fn.call(self, key, value, index);
+    }, this);
+
+    return this;
+  });
+
+
+  /**
+   * @method  $has
+   * そのプロパティを持っているかを判定する
+   */
+  Object.prototype.method("$has", function(key) {
+    return this.hasOwnProperty(key);
+  });
+
+  /**
+   * @method  $extend
+   * 他のライブラリと競合しちゃうので extend -> $extend としました
+   */
+  Object.prototype.method("$extend", function() {
+    Array.prototype.forEach.call(arguments, function(source) {
+      for (var property in source) {
+        this[property] = source[property];
+      }
+    }, this);
+    return this;
+  });
+
+
+  /**
+   * @method  $safe
+   * 安全拡張
+   * 上書きしない
+   */
+  Object.prototype.method("$safe", function(source) {
+    Array.prototype.forEach.call(arguments, function(source) {
+      for (var property in source) {
+        if (this[property] === undefined) this[property] = source[property];
+      }
+    }, this);
+    return this;
+  });
+  
+  
+  /**
+   * @method  $strict
+   * 厳格拡張
+   * すでにあった場合は警告
+   */
+  Object.prototype.method("$strict", function(source) {
+    Array.prototype.forEach.call(arguments, function(source) {
+      for (var property in source) {
+        console.assert(!this[property], "tm error: {0} is Already".format(property));
+        this[property] = source[property];
+      }
+    }, this);
+    return this;
+  });
+
+  /**
+   * @method  $pick
+   * ピック
+   */
+  Object.prototype.method("$pick", function() {
+    var temp = {};
+
+    Array.prototype.forEach.call(arguments, function(key) {
+      if (key in this) temp[key] = this[key];
+    }, this);
+
+    return temp;
+  });
+
+  /**
+   * @method  $omit
+   * オミット
+   */
+  Object.prototype.method("$omit", function() {
+    var temp = {};
+
+    for (var key in this) {
+      if (Array.prototype.indexOf.call(arguments, key) == -1) {
+        temp[key] = this[key];
+      }
+    }
+
+    return temp;
+  });
+
+  if (!Object.observe) {
+    Object.method('observe', function(obj, callback) {
+      var keys = Object.keys(obj);
+      keys.forEach(function(key) {
+        var tempKey = '__' + key;
+        var tempValue = obj[key];
+        obj[tempKey] = tempValue;
+        
+        obj.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            this[tempKey] = v;
+            callback();
+          },
+        });
+      });
+    });
+  }
+
+  if (!Object.unobserve) {
+    Object.method('unobserve', function(obj, callback) {
+      console.assert(false);
+    });
+  }
+
+})();
+
+
+
+/*
+ *
+ */
+
+
+;(function() {
+  /**
+   * @class global.Number
+   * Numberの拡張
+   */
+
+  /**
+   * @method  times
+   * 数値分繰り返す
+   */
+  Number.prototype.method("times",  function(fn, self) {
+    self = self || this;
+    for (var i=0; i<this; ++i) {
+      fn.call(self, i);
+    }
+    return this;
+  });
+
+})();
+
+
+/*
+ *
+ */
+
+
+;(function() {
+  /**
+   * @class global.String
+   * Stringの拡張
+   */
+
+  /**
+   * @method  format
+   * フォーマット
+   * ## example
+   *      document.write("{0} + {1} = {2}".format(5, 10, 5+10));   // "5 + 10 = 15"
+   *      document.write("rgb({r}, {g}, {b})".format({             // "rgb(128, 0, 255)"
+   *          r: 128,
+   *          g: 0,
+   *          b: 255
+   *      }));
+   */
+  String.prototype.method("format", function(arg) {
+    // 置換ファンク
+    var rep_fn = undefined;
+    
+    // オブジェクトの場合
+    if (typeof arg == "object") {
+      /** @ignore */
+      rep_fn = function(m, k) {
+        if (arg[k] === undefined) {
+          return '';
+        }
+        else {
+          return arg[k];
+        }
+      }
+    }
+    // 複数引数だった場合
+    else {
+      var args = arguments;
+      /** @ignore */
+      rep_fn = function(m, k) { return args[ parseInt(k) ]; }
+    }
+    
+    return this.replace( /\{(\w+)\}/g, rep_fn );
+  });
+
+})();
+
+
+
+;(function() {
+
+  /**
+   * @property    first
+   * 最初の要素
+   */
+  Array.prototype.accessor("first", {
+      "get": function()   { return this[0]; },
+      "set": function(v)  { this[0] = v; }
+  });
+  
+  /**
+   * @property    last
+   * 最後の要素
+   */
+  Array.prototype.accessor("last", {
+    "get": function()   { return this[this.length-1]; },
+    "set": function(v)  { this[this.length-1] = v; }
+  });
+
+  /**
+   * @method  equals
+   * 渡された配列と等しいかどうかをチェック
+   */
+  Array.prototype.method("equals", function(arr) {
+    // 長さチェック
+    if (this.length !== arr.length) return false;
+    
+    for (var i=0,len=this.length; i<len; ++i) {
+      if (this[i] !== arr[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  /**
+   * @method  deepEquals
+   * ネストされている配列含め渡された配列と等しいかどうかをチェック
+   * equalsDeep にするか検討. (Java では deepEquals なのでとりあえず合わせとく)
+   */
+  Array.prototype.method("deepEquals", function(arr) {
+    // 長さチェック
+    if (this.length !== arr.length) return false;
+    
+    for (var i=0,len=this.length; i<len; ++i) {
+      var result = (this[i].deepEquals) ? this[i].deepEquals(arr[i]) : (this[i] === arr[i]);
+      if (result === false) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  /**
+   * @method    contains
+   * 要素が含まれいるかをチェック
+   */
+  Array.prototype.method("contains", function(item, fromIndex) {
+    return this.indexOf(item, fromIndex) != -1;
+  });
+  
+  /**
+   * @method  at
+   * ループ添字アクセス(Ruby っぽいやつ)
+   */
+  Array.prototype.method("at", function(i) {
+    i%=this.length;
+    i+=this.length;
+    i%=this.length;
+    return this[i];
+  });
+
+
+  Array.prototype.method("find", function(fn, self) {
+    var target = null;
+
+    this.some(function(elm, i) {
+      if (fn.call(self, elm, i, this)) {
+        target = elm;
+        return true;
+      }
+    });
+
+    return target;
+  });
+
+  Array.prototype.method("findIndex", function(fn, self) {
+    var target = null;
+
+    this.some(function(elm, i) {
+      if (fn.call(self, elm, i, this)) {
+        target = i;
+        return true;
+      }
+    });
+
+    return target;
+  });
+  
+  /**
+   * @method  swap
+   * a番目 と b番目 を入れ替える
+   */
+  Array.prototype.method("swap", function(a, b) {
+    var temp = this[a];
+    this[a] = this[b];
+    this[b] = temp;
+    
+    return this;
+  });
+
+  /**
+   * @method  erase
+   * elm と一致する要素を削除
+   * イレース
+   */
+  Array.prototype.method("erase", function(elm) {
+    var index  = this.indexOf(elm);
+    if (index >= 0) {
+      this.splice(index, 1);
+    }
+    return this;
+  });
+  
+  /**
+   * @method  eraseAll
+   * elm と一致する要素を全て削除
+   */
+  Array.prototype.method("eraseAll", function(elm) {
+    for (var i=0,len=this.length; i<len; ++i) {
+      if (this[i] == elm) {
+        this.splice(i--, 1);
+      }
+    }
+    return this;
+  });
+  
+  /**
+   * @method  eraseIf
+   * 条件にマッチした要素を削除
+   */
+  Array.prototype.method("eraseIf", function(fn) {
+    for (var i=0,len=this.length; i<len; ++i) {
+      if ( fn(this[i], i, this) ) {
+        this.splice(i, 1);
+        break;
+      }
+    }
+    return this;
+  });
+  
+  /**
+   * @method  eraseIfAll
+   * 条件にマッチした要素を削除
+   */
+  Array.prototype.method("eraseIfAll", function(fn) {
+    for (var i=0,len=this.length; i<len; ++i) {
+      if ( fn(this[i], i, this) ) {
+        this.splice(i--, 1);
+        len--;
+      }
+    }
+    return this;
+  });
+  
+  /**
+   * @method  random
+   * 要素の中からランダムで取り出す
+   */
+  Array.prototype.method("random", function(min, max) {
+    min = min || 0;
+    max = max || this.length-1;
+    return this[ Math.rand(min, max) ];
+  });
+  
+  /**
+   * @method  pickup
+   * 要素の中からランダムで取り出す
+   */
+  Array.prototype.method("pickup", function(min, max) {
+    min = min || 0;
+    max = max || this.length-1;
+    return this[ Math.rand(min, max) ];
+  });
+  
+  /**
+   * @method  pickup
+   * 要素の中からランダムで取り出す
+   */
+  Array.prototype.method("lot", function(min, max) {
+    min = min || 0;
+    max = max || this.length-1;
+    return this[ Math.rand(min, max) ];
+  });
+  
+  /**
+   * @method  uniq
+   * 重複削除
+   */
+  Array.prototype.method("uniq", function(deep) {
+    return this.filter(function(value, index, self) {
+      return self.indexOf(value) === index;
+    });
+  });
+  
+
+  /**
+   * @method  flatten
+   * フラット.
+   * Ruby のやつ.
+   */
+  Array.prototype.method("flatten", function(level) {
+    var arr = null;
+
+    if (level) {
+      arr = this;
+      for (var i=0; i<level; ++i) {
+        arr = Array.prototype.concat.apply([], arr);
+      }
+    }
+    else {
+      // 完全フラット
+      arr = this.reduce(function (previousValue, curentValue) {
+        return Array.isArray(curentValue) ?
+          previousValue.concat(curentValue.flatten()) : previousValue.concat(curentValue);
+      }, []);
+    }
+
+    return arr;
+  });
+
+  /**
+   * @method  clone
+   * 配列をクローン
+   */
+  Array.prototype.method("clone", function(deep) {
+    if (deep === true) {
+      var a = Array(this.length);
+      for (var i=0,len=this.length; i<len; ++i) {
+        a[i] = (this[i].clone) ? this[i].clone(deep) : this[i];
+      }
+      return a;
+    }
+    else {
+      return Array.prototype.slice.apply(this);
+    }
+  });
+
+
+  /**
+   * @method  clear
+   * クリア
+   */
+  Array.prototype.method("clear", function() {
+    this.length = 0;
+    return this;
+  });
+  
+  /**
+   * @method  fill
+   * 特定の値で満たす
+   */
+  Array.prototype.method("fill", function(value, start, end) {
+    start = start || 0;
+    end   = end   || (this.length);
+    
+    for (var i=start; i<end; ++i) {
+      this[i] = value;
+    }
+    
+    return this;
+  });
+  
+
+  /**
+   * @method  range
+   * python のやつ
+   */
+  Array.prototype.method("range", function(start, end, step) {
+    this.clear();
+    
+    if (arguments.length == 1) {
+      for (var i=0; i<start; ++i) this[i] = i;
+    }
+    else if (start < end){
+      step  = step || 1;
+      for (var i=start, index=0; i<end; i+=step, ++index) {
+        this[index] = i;
+      }
+    }
+    else {
+      step  = step || -1;
+      for (var i=start, index=0; i>end; i+=step, ++index) {
+        this[index] = i;
+      }
+    }
+    
+    return this;
+  });
+  
+  /**
+   * @method  shuffle
+   * シャッフル
+   */
+  Array.prototype.method("shuffle", function() {
+    for (var i=0,len=this.length; i<len; ++i) {
+      var j = Math.rand(0, len-1);
+      
+      if (i != j) {
+        this.swap(i, j);
+      }
+    }
+    
+    return this;
+  });
+
+  /**
+   * @method  sum
+   * 合計
+   */
+  Array.prototype.method("sum", function() {
+    var sum = 0;
+    for (var i=0,len=this.length; i<len; ++i) {
+      sum += this[i];
+    }
+    return sum;
+  });
+
+  /**
+   * @method  average
+   * 平均
+   */
+  Array.prototype.method("average", function() {
+    var sum = 0;
+    var len = this.length;
+    for (var i=0; i<len; ++i) {
+      sum += this[i];
+    }
+    return sum/len;
+  });
+
+  /**
+   * @method  each
+   * 繰り返し
+   * チェーンメソッド対応
+   */
+  Array.prototype.method("each", function() {
+    this.forEach.apply(this, arguments);
+    return this;
+  });
+
+  
+  /**
+   * @method  toULElement
+   * ULElement に変換
+   */
+  Array.prototype.method("toULElement", function(){
+      // TODO: 
+  });
+
+  /**
+   * @method  toOLElement
+   * OLElement に変換
+   */
+  Array.prototype.method("toOLElement", function(){
+      // TODO:
+  });
+
+  
+  /**
+   * @static
+   * @method  range
+   * range
+   */
+  Array.method("range", function(start, end, step) {
+    return Array.prototype.range.apply([], arguments);
+  });
+
+
+  /**
+   * @method of
+   * of関数 可変長引数をとってArrayにして返す
+   * @example:
+   * Array.of('a', 'b', 'c'); // ['a', 'b', 'c']
+   * ES6準拠
+   */
+  Array.method("of", function() {
+    return Array.prototype.slice.call(arguments);
+  });
+
+  /**
+   * @method from
+   * from関数 Array like objectに対してArrayのメソッドを追加する
+   * @example:
+   *
+   * 1.
+   * function array () {
+   *   return Array.from(arguments);
+   * }
+   *
+   * array(1,2,3); // [1, 2, 3];
+   *
+   * 2.
+   * Array.from(document.body).forEach(function(item) {
+   *    return item;
+   * });
+   *
+   * ES6準拠
+   */
+  Array.method("from", function(arrayLike, callback, context) {
+    if (!Object(arrayLike).length) return [];
+
+    return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {
+      return item;
+    }, context);
+  });
+
+})();
+
+
+/*
+ * math.js
+ */
+
+;(function() {
+    
+  /**
+   * @class global.Math
+   * Mathの拡張
+   */
+
+  
+  /**
+   * @property    DEG_TO_RAD
+   * Degree to Radian.
+   */
+  Math.DEG_TO_RAD = Math.PI/180;
+  
+  /**
+   * @property    RAD_TO_DEG
+   * Radian to Degree.
+   */
+  Math.RAD_TO_DEG = 180/Math.PI;
+  
+  /**
+   * @method
+   * Degree を Radian に変換
+   */
+  Math.degToRad = function(deg) {
+    return deg * Math.DEG_TO_RAD;
+  };
+  
+  /**
+   * @method
+   * Radian を Degree に変換
+   */
+  Math.radToDeg = function(rad) {
+    return rad * Math.RAD_TO_DEG;
+  };
+  
+
+  
+  /**
+   * @method clamp
+   * クランプ
+   */
+  Math.method("clamp", function(value, min, max) {
+    return (value < min) ? min : ( (value > max) ? max : value );
+  });
+  
+  /**
+   * @method inside
+   * min <= value <= max のとき true を返す
+   */
+  Math.method("inside", function(value, min, max) {
+    return (value >= min) && (value) <= max;
+  });
+  
+  /**
+   * @method rand
+   * ランダムな値を指定された範囲内で生成
+   */
+  Math.method("rand", function(min, max) {
+    return window.Math.floor( Math.random()*(max-min+1) ) + min;
+  });
+  
+  /**
+   * @method randf
+   * ランダムな値を指定された範囲内で生成
+   */
+  Math.method("randf", function(min, max) {
+    return window.Math.random()*(max-min)+min;
+  });
+    
+})();
+/*
+ *
+ */
+
+
+
+/*
+ * tm namespace
+ */
+var phina = phina || {};
+
+;(function() {
+
+  phina.method('isNode', function() {
+    return (typeof module !== 'undefined');
+  });
+
+  phina.method('namespace', function(fn) {
+    fn.call(this);
+  });
+
+  var ns = phina.isNode() ? global : window;
+
+  /*
+   * global
+   */
+  phina.accessor('global', {
+    get: function() {
+      return ns;
+    },
+  });
+
+  // support node.js
+  if (phina.isNode()) {
+    module.exports = phina;
+  }
+
+  ns.phina = phina;
+
+})(this);
+
+
+phina.namespace(function() {
+
+  /**
+   * @member phina
+   * @static
+   * @method createClass
+   * クラスを生成
+   */
+  phina.method('createClass', function(params) {
+    var props = {};
+
+    var _class = function() {
+      var instance = new _class.prototype._creator();
+      _class.prototype.init.apply(instance, arguments);
+      return instance;
+    };
+
+    if (params.superClass) {
+      _class.prototype = Object.create(params.superClass.prototype);
+      params.init.owner = _class;
+      _class.prototype.superInit = function() {
+        var caller = this.superInit.caller;
+        var subclass = caller.owner;
+        var superclass = subclass.prototype.superClass;
+        var superInit = superclass.prototype.init;
+
+        superInit.apply(this, arguments);
+      };
+      _class.prototype.constructor = _class;
+    }
+
+    _class.prototype.$extend(params);
+    _class.prototype.selfClass = _class;
+
+    // accessor
+    if (params._accessor) {
+      _class.prototype = Object.create(_class.prototype, params._accessor);
+    }
+
+    _class.prototype._creator = function() { return this; };
+    _class.prototype._creator.prototype = _class.prototype;
+
+    // static method
+    if (params._static) {
+      _class.$extend(params._static);
+    }
+
+    return _class;
+  });
+
+  var chachedClasses = {};
+  /*
+   * 
+   */
+  phina.method('using', function(path) {
+    if (!path) {
+      return phina.global;
+    }
+    
+    var pathes = path.split(/[,.\/ ]|::/);
+    var current = phina.global;
+
+    pathes.forEach(function(p) {
+      current = current[p] || (current[p]={});
+    });
+
+    return current;
+  });
+  
+  /*
+   * 
+   */
+  phina.method('register', function(path, _class) {
+    var pathes = path.split(/[,.\/ ]|::/);
+    var className = pathes.last;
+    var parentPath = path.substring(0, path.lastIndexOf('.'));
+    var parent = phina.using(parentPath);
+
+    parent[className] = _class;
+
+    return _class;
+  });
+
+  /**
+   * @member phina
+   * @static
+   * @method define
+   * クラスを定義
+   */
+  phina.method('define', function(path, params) {
+    if (params.superClass) {
+      if (typeof params.superClass === 'string') {
+        params.superClass = phina.using(params.superClass);
+      }
+      else {
+        params.superClass = params.superClass;
+      }
+    }
+
+    var _class = phina.createClass(params);
+    _class.prototype.accessor('className', {
+      get: function() {
+        return path;
+      },
+    });
+
+    phina.register(path, _class);
+
+    return _class;
+  });
+
+
+  phina.method('globalize', function() {
+    phina.forIn(function(key, value) {
+
+      value.forIn(function(key, value) {
+        phina.global[key] = value;
+      });
+    });
+  });
+
+});
+
+
+
+
+
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.event.EventDispatcher
+   */
+  phina.define('phina.event.EventDispatcher', {
+
+    init: function() {
+      this._listeners = {};
+    },
+
+    on: function(type, listener) {
+      if (this._listeners[type] === undefined) {
+        this._listeners[type] = [];
+      }
+
+      this._listeners[type].push(listener);
+      return this;
+    },
+
+    off: function(type, listener) {
+
+    },
+
+    fire: function(e) {
+      e.target = this;
+      var oldEventName = 'on' + e.type;
+      if (this[oldEventName]) this[oldEventName](e);
+      
+      var listeners = this._listeners[e.type];
+      if (listeners) {
+        var temp = listeners.clone();
+        for (var i=0,len=temp.length; i<len; ++i) {
+            temp[i].call(this, e);
+        }
+      }
+      
+      return this;
+    },
+
+    flare: function(type, param) {
+      var e = {type:type};
+      if (param) {
+        param.forIn(function(key, val) {
+          e[key] = val;
+        });
+      }
+      this.fire(e);
+
+      return this;
+    },
+
+    one: function(type, listener) {
+
+    },
+
+    has: function(type) {
+      if (this._listeners[type] === undefined && !this["on" + type]) return false;
+      return true;
+    },
+
+    clear: function(type) {
+      var oldEventName = 'on' + type;
+      if (this[oldEventName]) delete this[oldEventName];
+      this._listeners[type] = [];
+      return this;
+    },
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Vector2
+   * ベクトルクラス
+   */
+  phina.define('phina.geom.Vector2', {
+
+    init: function(x, y) {
+      this.x = x;
+      this.y = y;
+    },
+
+    clone: function() {
+      return phina.geom.Vector2(this.x, this.y);
+    },
+
+    equals: function(v) {
+      return (this.x === v.x && this.y === v.y);
+    },
+
+    set: function(x, y) {
+      this.x = x;
+      this.y = y;
+    },
+
+    /**
+     * 加算
+     */
+    add: function(v) {
+      this.x += v.x;
+      this.y += v.y;
+    },
+
+    /**
+     * 減算
+     */
+    sub: function(v) {
+      this.x -= v.x;
+      this.y -= v.y;
+    },
+
+    /**
+     * 乗算
+     */
+    mul: function(n) {
+      this.x *= n;
+      this.y *= n;
+    },
+
+    /**
+     * 除算
+     */
+    div: function(v) {
+      //console.assert(n != 0, "0 division!!");
+      n = n || 0.01;
+      this.x /= n;
+      this.y /= n;
+    },
+
+    /**
+     * 反転
+     */
+    negate: function() {
+      this.x = -this.x;
+      this.y = -this.y;
+      
+      return this;
+    },
+
+    /**
+     * @method
+     * 内積.
+     * 投影ベクトルを求めたり, 類似度に使ったり.
+     */
+    dot: function(v) {
+      return this.x * v.x + this.y * v.y;
+    },
+
+    /**
+     * @method
+     * 外積
+     */
+    cross: function(v) {
+      return (this.x*v.y) - (this.y*v.x);
+    },
+
+    /**
+     * 長さを取得
+     * ### memo
+     * magnitude って名前の方が良いかも. 検討中.
+     */
+    length: function() {
+      return Math.sqrt(this.x*this.x + this.y*this.y);
+    },
+    
+    /**
+     * 2乗された長さを取得
+     * C# の名前を引用
+     * or lengthSquare or lengthSqrt
+     */
+    lengthSquared: function() {
+      return this.x*this.x + this.y*this.y;
+    },
+    
+    /**
+     * ２点間の距離を返す
+     */
+    distance: function(v) {
+      return Math.sqrt( Math.pow(this.x-v.x, 2) + Math.pow(this.y-v.y, 2) );
+    },
+    
+    /**
+     * ２点間の距離を返す
+     */
+    distanceSquared: function(v) {
+      return Math.pow(this.x-v.x, 2) + Math.pow(this.y-v.y, 2);
+    },
+
+    /**
+     * ランダムベクトルをセット
+     */
+    random: function(min, max) {
+      var degree = Math.randf(min || 0, max || 360);
+      var rad = degree*Math.DEG_TO_RAD;
+
+      this.x = Math.cos(rad);
+      this.y = Math.sin(rad);
+
+      return this;
+    },
+
+    _accessor: {
+      // x: {
+      //   "get": function()   { return this._x; },
+      //   "set": function(v)  { this._x = v; }
+      // },
+    },
+
+    _defined: function() {
+      
+    },
+
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Matrix33
+   * マトリックスクラス
+   */
+  phina.define('phina.geom.Matrix33', {
+
+    /**
+     * @constructor
+     * m00 m01 m02
+     * m10 m11 m12
+     * m20 m21 m22
+     */
+    init: function() {
+      if (arguments.length >= 9) {
+          this.set.apply(this, arguments);
+      }
+      else {
+          this.identity();
+      }
+    },
+
+    set: function(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
+      this.m00 = m00; this.m01 = m01; this.m02 = m02;
+      this.m10 = m10; this.m11 = m11; this.m12 = m12;
+      this.m20 = m20; this.m21 = m21; this.m22 = m22;
+
+      return this;
+    },
+
+    identity: function() {
+      this.m00 = 1; this.m01 = 0; this.m02 = 0;
+      this.m10 = 0; this.m11 = 1; this.m12 = 0;
+      this.m20 = 0; this.m21 = 0; this.m22 = 1;
+      return this;
+    },
+
+    /**
+     * クローン
+     */
+    clone: function() {
+      return phina.geom.Matrix33(
+        this.m00, this.m01, this.m02,
+        this.m10, this.m11, this.m12,
+        this.m20, this.m21, this.m22
+      );
+    },
+
+    /**
+     * 行列式
+     */
+    determinant: function() {
+      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
+      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
+      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
+      
+      return m00*m11*m22 + m10*m21*m02 + m01*m12*m20 - m02*m11*m20 - m01*m10*m22 - m12*m21*m00;
+    },
+
+    /**
+     * 転置
+     */
+    transpose: function() {
+      var swap = function(a, b) {
+        var temp = this[a];
+        this[a] = this[b];
+        this[b] = temp;
+      }.bind(this);
+
+      swap('m01', 'm10');
+      swap('m02', 'm20');
+      swap('m12', 'm21');
+      
+      return this;
+    },
+
+    /**
+     * 逆行列
+     */
+    invert: function() {
+      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
+      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
+      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
+
+      var det = this.determinant();
+
+      // |m00, m01, m02|
+      // |m10, m11, m12|
+      // |m20, m21, m22|
+      this.m00 = (m11*m22-m12*m21)/det;
+      this.m01 = (m10*m22-m12*m20)/det*-1;
+      this.m02 = (m10*m21-m11*m20)/det;
+      
+      this.m10 = (m01*m22-m02*m21)/det*-1;
+      this.m11 = (m00*m22-m02*m20)/det;
+      this.m12 = (m00*m21-m01*m20)/det*-1;
+      
+      this.m20 = (m01*m12-m02*m11)/det;
+      this.m21 = (m00*m12-m02*m10)/det*-1;
+      this.m22 = (m00*m11-m01*m10)/det;
+      
+      this.transpose();
+      
+      return this;
+
+    },
+
+    /**
+     * 掛け算
+     */
+    multiply: function(mat) {
+        var tm = this.m;
+        var om = mat.m;
+
+        var a00 = this.m00, a01 = this.m01, a02 = this.m02;
+        var a10 = this.m10, a11 = this.m11, a12 = this.m12;
+        var a20 = this.m20, a21 = this.m21, a22 = this.m22;
+        var b00 = mat.m00, b01 = mat.m01, b02 = mat.m02;
+        var b10 = mat.m10, b11 = mat.m11, b12 = mat.m12;
+        var b20 = mat.m20, b21 = mat.m21, b22 = mat.m22;
+
+        this.m00 = a00*b00 + a01*b10 + a02*b20;
+        this.m01 = a00*b01 + a01*b11 + a02*b21;
+        this.m02 = a00*b02 + a01*b12 + a02*b22;
+
+        this.m10 = a10*b00 + a11*b10 + a12*b20;
+        this.m11 = a10*b01 + a11*b11 + a12*b21;
+        this.m12 = a10*b02 + a11*b12 + a12*b22;
+
+        this.m20 = a20*b00 + a21*b10 + a22*b20;
+        this.m21 = a20*b01 + a21*b11 + a22*b21;
+        this.m22 = a20*b02 + a21*b12 + a22*b22;
+        
+        return this;
+    },
+
+    /**
+     * ベクトルとの掛け算
+     */
+    multiplyVector2: function(v) {
+      var vx = this.m00*v.x + this.m01*v.y + this.m02;
+      var vy = this.m10*v.x + this.m11*v.y + this.m12;
+      
+      return phina.geom.Vector2(vx, vy);
+    },
+
+    // 行
+    getRow: function() {
+      // TODO:
+    },
+
+    // 列
+    getCol: function() {
+      // TODO:
+    },
+    /**
+     * 文字列化
+     */
+    toString: function() {
+      return "|{m00}, {m01}, {m02}|\n|{m10}, {m11}, {m12}|\n|{m20}, {m21}, {m22}|".format(this);
+    },
+
+    _accessor: {
+      /**
+       * x
+       */
+      x: {
+        "get": function()   { return this._x; },
+        "set": function(v)  { this._x = v; }
+      },
+    }
+    
+  });
+
+
+  phina.geom.Matrix33.IDENTITY = phina.geom.Matrix33().identity();
+
+});
+
+
+;(function() {
+
+  /**
+   * @class phina.util.Ticker
+   * tick management class
+   */
+  phina.define('phina.util.Ticker', {
+    superClass: 'phina.event.EventDispatcher',
+
+    /** 経過フレーム数 */
+    frame: null,
+    /** 1フレームの経過時間 */
+    deltaTime: null,
+    /** 全体の経過時間 */
+    elapsedTime: null,
+
+    init: function() {
+      this.superInit();
+
+      this.fps = 30;
+      this.frame = 0;
+      this.deltaTime = 0;
+      this.elapsedTime = 0;
+    },
+
+    tick: function(func) {
+      this.on('tick', func);
+    },
+
+    run: function() {
+      var now = (new Date()).getTime();
+      // 1フレームに掛かった時間
+      this.deltaTime = now - this.currentTime;
+      // 全体の経過時間
+      this.elapsedTime = now - this.startTime;
+
+      var start = this.currentTime = now;
+      this.flare('tick');
+      var end = (new Date()).getTime();
+
+      // フレームを更新
+      this.frame += 1;
+
+      // calculate elapsed time
+      var elapsed = end-start;
+
+      // calculate next waiting time
+      var delay = Math.max(this.frameTime-elapsed, 0);
+
+      return delay;
+    },
+
+    start: function() {
+      var self = this;
+
+      this.startTime = this.currentTime = (new Date()).getTime();
+
+      (function() {
+        var delay = self.run();
+        setTimeout(arguments.callee, delay);
+      })();
+
+      return this;
+    },
+
+    resume: function() {
+      // TODO: 
+    },
+
+    stop: function() {
+      // TODO: 
+    },
+
+    rewind: function() {
+      // TODO: 
+    },
+
+    _accessor: {
+      fps: {
+        "get": function()   { return this._fps; },
+        "set": function(v)  {
+          this._fps = v;
+          this.frameTime = 1000/this._fps;
+        },
+      },
+    },
+  });
+
+})();
+
+;(function() {
+
+  /**
+   * @class phina.util.Grid
+   * tick management class
+   */
+  phina.define('phina.util.Grid', {
+
+    /** 幅 */
+    width: 640,
+    /** 列数 */
+    columns: 12,
+    /** ループ */
+    loop: false,
+
+    init: function() {
+      if (typeof arguments[0] === 'object') {
+        var param = arguments[0];
+        var width = param.width || 640;
+        var columns = param.columns || 12;
+        var loop = param.loop || false;
+      }
+      else {
+        var width   = arguments[0] || 640;
+        var columns = arguments[1] || 12;
+        var loop    = arguments[2] || false;
+      }
+
+      this.width = width;
+      this.columns = columns;
+      this.loop = loop;
+      this.unitWidth = this.width/this.columns;
+    },
+
+    // スパン指定で値を取得(負数もok)
+    span: function(index) {
+      if (this.loop) {
+        index += this.columns;
+        index %= this.columns;
+      }
+      return this.unitWidth * index;
+    },
+
+    //
+    unit: function() {
+      return this.unitWidth;
+    },
+
+    center: function() {
+      return this.width/2;
+    },
+
+  });
+
+})();
+
+;(function() {
+  /**
+   * @class phina.input.Input
+   * 
+   */
+  phina.define('phina.input.Input', {
+
+    /** domElement */
+    domElement: null,
+
+    /**
+     * @constructor
+     */
+    init: function(domElement) {
+      this.domElement = domElement || window.document;
+
+      this.position = phina.geom.Vector2(0, 0);
+      this.deltaPosition = phina.geom.Vector2(0, 0);
+      this.prevPosition = phina.geom.Vector2(0, 0);
+      this._tempPosition = phina.geom.Vector2(0, 0);
+      this.flags = 0;
+    },
+
+    update: function() {
+      this.last = this.now;
+      this.now = this.flags;
+      this.start = (this.now ^ this.last) & this.now;
+      this.end   = (this.now ^ this.last) & this.last;
+
+      // 変化値を更新
+      this.deltaPosition.x = this._tempPosition.x - this.position.x;
+      this.deltaPosition.y = this._tempPosition.y - this.position.y;
+
+      if (this.deltaPosition.x === 0 && this.deltaPosition.y === 0) {
+        this._moveFlag = false;
+      }
+      else {
+        this._moveFlag = true;
+      }
+
+      // 前回の座標を更新
+      this.prevPosition.set(this.position.x, this.position.y);
+
+      // 現在の位置を更新
+      this.position.set(this._tempPosition.x, this._tempPosition.y);
+    },
+
+    _start: function(x, y, flag) {
+      flag = (flag !== undefined) ? flag : 1;
+      this._move(x, y);
+
+      this.flags |= flag;
+
+      var x = this._tempPosition.x;
+      var y = this._tempPosition.y;
+      this.position.set(x, y);
+      this.prevPosition.set(x, y);
+    },
+
+    _end: function(flag) {
+      flag = (flag !== undefined) ? flag : 1;
+      this.flags &= ~(flag);
+    },
+
+    // スケールを考慮
+    _move: function(x, y) {
+      this._tempPosition.x = x;
+      this._tempPosition.y = y;
+
+      // adjust scale
+      var elm = this.domElement;
+      if (elm.style.width) {
+        this._tempPosition.x *= elm.width / parseInt(elm.style.width);
+      }
+      if (elm.style.height) {
+        this._tempPosition.y *= elm.height / parseInt(elm.style.height);
+      }
+    },
+
+    _accessor: {
+      /**
+       * @property    x
+       * x座標値
+       */
+      x: {
+        "get": function()   { return this.position.x; },
+        "set": function(v)  { this.position.x = v; }
+      },
+      /**
+       * @property    y
+       * y座標値
+       */
+      y: {
+        "get": function()   { return this.position.y; },
+        "set": function(v)  { this.position.y = v; }
+      },
+      /**
+       * @property    dx
+       * dx値
+       */
+      dx: {
+        "get": function()   { return this.deltaPosition.x; },
+        "set": function(v)  { this.deltaPosition.x = v; }
+      },
+      /**
+       * @property    dy
+       * dy値
+       */
+      dy: {
+        "get": function()   { return this.deltaPosition.y; },
+        "set": function(v)  { this.deltaPosition.y = v; }
+      },
+    },
+  });
+
+
+})();
+
+;(function() {
+
+  /**
+   * @class phina.input.Mouse
+   * @extends phina.input.Input
+   */
+  phina.define('phina.input.Mouse', {
+
+    superClass: 'phina.input.Input',
+
+    /**
+     * @constructor
+     */
+    init: function(domElement) {
+      this.superInit(domElement);
+
+      this.id = 0;
+
+      var self = this;
+      this.domElement.addEventListener('mousedown', function(e) {
+        self._start(e.pointX, e.pointY, 1<<e.flags);
+      });
+
+      this.domElement.addEventListener('mouseup', function(e) {
+        self._end(1<<e.flags);
+      });
+      this.domElement.addEventListener('mousemove', function(e) {
+        self._move(e.pointX, e.pointY);
+      });
+    },
+
+    /**
+     * ボタン取得
+     */
+    getButton: function(button) {
+      if (typeof(button) == "string") {
+        button = BUTTON_MAP[button];
+      }
+      
+      return (this.now & button) != 0;
+    },
+
+    /**
+     * ボタンダウン取得
+     */
+    getButtonDown: function(button) {
+      if (typeof(button) === 'string') {
+        button = BUTTON_MAP[button];
+      }
+
+      return (this.start & button) != 0;
+    },
+        
+    /**
+     * ボタンアップ取得
+     */
+    getButtonUp: function(button) {
+      if (typeof(button) == "string") {
+        button = BUTTON_MAP[button];
+      }
+      
+      return (this.end & button) != 0;
+    },
+
+    _static: {
+      /** @static @property */
+      BUTTON_LEFT: 0x1,
+      /** @static @property */
+      BUTTON_MIDDLE: 0x2,
+      /** @static @property */
+      BUTTON_RIGHT: 0x4,
+    }
+  });
+
+  var BUTTON_MAP = {
+    "left"  : phina.input.Mouse.BUTTON_LEFT,
+    "middle": phina.input.Mouse.BUTTON_MIDDLE,
+    "right" : phina.input.Mouse.BUTTON_RIGHT
+  };
+
+  phina.input.Mouse.prototype.getPointing = function() { return this.getButton("left"); };
+  phina.input.Mouse.prototype.getPointingStart = function() { return this.getButtonDown("left"); };
+  phina.input.Mouse.prototype.getPointingEnd = function() { return this.getButtonUp("left"); };
+
+})();
+
+;(function() {
+
+  /**
+   * @class phina.input.Touch
+   * @extends phina.input.Input
+   */
+  phina.define('phina.input.Touch', {
+
+    superClass: 'phina.input.Input',
+
+    /**
+     * @constructor
+     */
+    init: function(domElement) {
+      this.superInit(domElement);
+
+      this.id = null;
+
+      return ;
+
+      var self = this;
+      this.domElement.addEventListener('touchstart', function(e) {
+        self._move(e.pointX, e.pointY, true);
+        self.flags = 1;
+      });
+
+      this.domElement.addEventListener('touchend', function(e) {
+        self.flags = 0;
+      });
+      this.domElement.addEventListener('touchmove', function(e) {
+        self._move(e.pointX, e.pointY);
+      });
+    },
+
+    /**
+     * タッチしているかを判定
+     */
+    getTouch: function() {
+      return this.touched != 0;
+    },
+    
+    /**
+     * タッチ開始時に true
+     */
+    getTouchStart: function() {
+      return this.start != 0;
+    },
+    
+    /**
+     * タッチ終了時に true
+     */
+    getTouchEnd: function() {
+      return this.end != 0;
+    },
+
+  });
+
+  /**
+   * @method
+   * ポインティング状態取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointing        = phina.input.Touch.prototype.getTouch;
+  /**
+   * @method
+   * ポインティングを開始したかを取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointingStart   = phina.input.Touch.prototype.getTouchStart;
+  /**
+   * @method
+   * ポインティングを終了したかを取得(mouse との差異対策)
+   */
+  phina.input.Touch.prototype.getPointingEnd     = phina.input.Touch.prototype.getTouchEnd;
+
+
+})();
+
+
+;(function() {
+
+  phina.define('phina.input.TouchList', {
+    domElement: null,
+
+    init: function(domElement, length) {
+      this.domElement = domElement;
+
+      this.touches = [];
+      this.stockes = [];
+
+      (length).times(function() {
+        var touch = phina.input.Touch(domElement);
+        touch.id = null;
+        this.stockes.push(touch);
+      }, this);
+
+      var self = this;
+      this.domElement.addEventListener('touchstart', function(e) {
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
+          var touch = self.getEmpty();
+
+          touch.id = t.identifier;
+          touch._start(t.pointX, t.pointY);
+        });
+      });
+
+      this.domElement.addEventListener('touchend', function(e) {
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
+          var touch = self.getTouch(t.identifier);
+          touch._end();
+        });
+      });
+      this.domElement.addEventListener('touchmove', function(e) {
+        Array.prototype.forEach.call(e.changedTouches, function(t) {
+          var touch = self.getTouch(t.identifier);
+          touch._move(t.pointX, t.pointY);
+        });
+        e.stop();
+      });
+    },
+
+    getEmpty: function() {
+      var touch = this.stockes.pop();
+      this.touches.push(touch);
+
+      return touch;
+    },
+
+    getTouch: function(id) {
+      return this.touches.filter(function(touch) {
+        return touch.id === id;
+      })[0];
+    },
+
+    removeTouch: function(touch) {
+      var i = this.touches.indexOf(touch);
+      this.touches.splice(i, 1);
+      this.stockes.push(touch);
+    },
+
+    update: function() {
+      this.touches.forEach(function(touch) {
+        if (touch.id !== null) {
+          if (!touch.released) {
+            touch.update();
+
+            if (touch.flags === 0) {
+              touch.released = true;
+            }
+          }
+          else {
+            touch.released = false;
+            this.removeTouch(touch);
+          }
+        }
+      }, this);
+    }
+  })
+
+})();
+phina.namespace(function() {
+
+
+  phina.define('phina.app.Updater', {
+
+    init: function(app) {
+      this.app = app;
+    },
+
+    update: function(root) {
+      this._updateElement(root);
+    },
+
+    _updateElement: function(element) {
+      var app = this.app;
+
+      // 更新するかを判定
+      if (element.awake === false) return ;
+
+      // 更新
+      if (element.update) element.update(app);
+
+      // タッチ判定
+      // this._checkPoint(element);
+
+      // エンターフレームイベント
+      if (element.has('enterframe')) {
+        element.flare('enterframe', {
+          app: this.app,
+        });
+      }
+
+      // 子供を更新
+      var len = element.children.length;
+      if (element.children.length > 0) {
+        var tempChildren = element.children.slice();
+        for (var i=0; i<len; ++i) {
+          this._updateElement(tempChildren[i]);
+        }
+      }
+    },
+
+    _checkPoint: function(obj) {
+
+      this.app.pointers.forEach(function(p) {
+        if (p.id !== null) {
+          this.__checkPoint(obj, p);
+        }
+      }, this);
+    },
+
+    __checkPoint: function(obj, p) {
+      if (!obj.interactive) return ;
+
+      var prevOverFlag = obj._overFlags[p.id];
+      var overFlag = obj.hitTest2(p.x, p.y);
+      obj._overFlags[p.id] = overFlag;
+
+      if (!prevOverFlag && overFlag) {
+        obj.flare('pointover', {
+          pointer: p,
+        });
+      }
+      if (prevOverFlag && !overFlag) {
+        obj.flare('pointout');
+      }
+
+      if (overFlag) {
+        if (p.getPointingStart()) {
+          obj._touchFlags[p.id] = true;
+          obj.flare('pointstart');
+        }
+      }
+
+      if (obj._touchFlags[p.id]) {
+        obj.flare('pointstay');
+        if (p._moveFlag) {
+          obj.flare('pointmove');
+        }
+      }
+
+      if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
+        obj._touchFlags[p.id] = false;
+        obj.flare('pointend');
+
+        if (obj._overFlags[p.id]) {
+          obj._overFlags[p.id] = false;
+          obj.flare('pointout');
+        }
+      }
+    },
+
+  });
+
+  
+});
+
+phina.namespace(function() {
+
+
+  phina.define('phina.app.Interactive', {
+
+    init: function(app) {
+      this.app = app;
+      this._enable = true;
+    },
+
+    enable: function() {
+      this._enable = true;
+      return this;
+    },
+    disable: function() {
+      this._enable = false;
+      return this;
+    },
+
+    check: function(root) {
+      if (!this._enable) return ;
+      this._checkElement(root)
+    },
+
+    _checkElement: function(element) {
+      var app = this.app;
+
+      // 更新するかを判定
+      if (element.awake === false) return ;
+
+      // タッチ判定
+      this._checkPoint(element);
+
+      // 子供を更新
+      var len = element.children.length;
+      if (element.children.length > 0) {
+        var tempChildren = element.children.slice();
+        for (var i=0; i<len; ++i) {
+          this._checkElement(tempChildren[i]);
+        }
+      }
+    },
+
+    _checkPoint: function(obj) {
+      this.app.pointers.forEach(function(p) {
+        if (p.id !== null) {
+          this.__checkPoint(obj, p);
+        }
+      }, this);
+    },
+
+    __checkPoint: function(obj, p) {
+      if (!obj.interactive) return ;
+
+      var prevOverFlag = obj._overFlags[p.id];
+      var overFlag = obj.hitTest2(p.x, p.y);
+      obj._overFlags[p.id] = overFlag;
+
+      if (!prevOverFlag && overFlag) {
+        obj.flare('pointover', {
+          pointer: p,
+        });
+      }
+      if (prevOverFlag && !overFlag) {
+        obj.flare('pointout');
+      }
+
+      if (overFlag) {
+        if (p.getPointingStart()) {
+          obj._touchFlags[p.id] = true;
+          obj.flare('pointstart');
+        }
+      }
+
+      if (obj._touchFlags[p.id]) {
+        obj.flare('pointstay');
+        if (p._moveFlag) {
+          obj.flare('pointmove');
+        }
+      }
+
+      if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
+        obj._touchFlags[p.id] = false;
+        obj.flare('pointend');
+
+        if (obj._overFlags[p.id]) {
+          obj._overFlags[p.id] = false;
+          obj.flare('pointout');
+        }
+      }
+    },
+  });
+
+  
+});
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.app.BaseApp
+   * ベースとなるアプリケーションクラス
+   */
+  phina.define('phina.app.BaseApp', {
+    superClass: 'phina.event.EventDispatcher',
+
+    /** awake */
+    awake: null,
+    /** fps */
+    fps: null,
+    /** frame */
+    frame: null,
+
+    /**
+     * @constructor
+     */
+    init: function(element) {
+      this.superInit();
+      this._scenes = [phina.app.Scene()];
+
+      this.updater = phina.app.Updater(this);
+      this.interactive = phina.app.Interactive(this);
+
+      this.awake = true;
+      this.ticker = phina.util.Ticker();
+    },
+
+    run: function() {
+      var self = this;
+
+      this.ticker.tick(function() {
+        self._loop();
+      });
+
+      this.ticker.start();
+
+      return this;
+    },
+
+    replaceScene: function(scene) {
+      var e = null;
+      if (this.currentScene) {
+        this.flare('exit', {
+          app: this
+        });
+        this.currentScene.app = null;
+      }
+      this.currentScene = scene;
+      this.currentScene.app = this;
+      this.flare('enter', {
+        app: this,
+      });
+
+      return this;
+    },
+
+    _loop: function() {
+      this._update();
+      this._draw();
+    },
+
+
+    _update: function() {
+      if (this.awake) {
+        this.update && this.update();
+        this.updater.update(this.currentScene);
+        this.interactive.check(this.currentScene);
+      }
+    },
+
+    /**
+     * 描画用仮想関数
+     * @private
+     */
+    _draw: function() {},
+
+    _accessor: {
+      currentScene: {
+        "get": function()   { return this._scenes[0]; },
+        "set": function(v)  { this._scenes[0] = v; },
+      },
+    },
+
+  });
+
+  
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.app.Element
+   * @extends phina.event.EventDispatcher
+   */
+  phina.define('phina.app.Element', {
+    superClass: 'phina.event.EventDispatcher',
+
+    /// 親
+    parent: null,
+
+    /// 子供
+    children: null,
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+      this.children = [];
+    },
+
+    addChild: function(child) {
+      if (child.parent) child.remove();
+
+      child.parent = this;
+      this.children.push(child);
+
+      child.has('added') && child.flare('added');
+
+      return child;
+    },
+
+    addChildTo: function(parent) {
+      parent.addChild(this);
+
+      return this;
+    },
+
+    addChildAt: function(child, index) {
+      if (child.parent) child.remove();
+
+      child.parent = this;
+      this.children.splice(index, 0, child);
+
+      child.has('added') && child.flare('added');
+
+      return child;
+    },
+
+    getChildAt: function(index) {
+      return this.children.at(index);
+    },
+
+    getChildByName: function(name) {
+      // TODO: 
+    },
+
+    getChildIndex: function(child) {
+      return this.children.indexOf(child);
+    },
+
+    getParent: function() {
+      return this.parent;
+    },
+
+    getRoot: function() {
+      var elm = this;
+      for (elm=this.parent; elm.parent != null; elm = elm.parent) {
+
+      }
+      return elm;
+    },
+
+    removeChild: function(child) {
+      var index = this.children.indexOf(child);
+      if (index !== -1) {
+        this.children.splice(index, 1);
+        child.has('removed') && child.flare('removed');
+      }
+      return this;
+    },
+
+    remove: function() {
+      if (!this.parent) return ;
+
+      this.parent.removeChild(this);
+      this.parent = null;
+      
+      return this;
+    },
+  });
+  
+});
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.app.Object2D
+   * Object2D
+   * @extends phina.app.Element
+   */
+  phina.define('phina.app.Object2D', {
+    superClass: 'phina.app.Element',
+
+    /** 位置 */
+    position: null,
+    /** 回転 */
+    rotation: 0,
+    /** スケール */
+    scale: null,
+    /** 基準位置 */
+    origin: null,
+
+
+    init: function() {
+      this.superInit();
+      
+      this.position = phina.geom.Vector2(0, 0);
+      this.scale    = phina.geom.Vector2(1, 1);
+      this.origin   = phina.geom.Vector2(0.5, 0.5);
+
+      this._matrix = phina.geom.Matrix33().identity();
+      this._worldMatrix = phina.geom.Matrix33().identity();
+
+      this.interactive = true;
+      this._overFlags = {};
+      this._touchFlags = {};
+    },
+
+    /**
+     * 点と衝突しているかを判定
+     * @param {Number} x
+     * @param {Number} y
+     */
+    hitTest: function(x, y) {
+      return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
+    },
+
+    hitTest2: function(x, y) {
+      var p = this.globalToLocal(phina.geom.Vector2(x, y));
+
+      var left   = -this.width*this.originX;
+      var right  = +this.width*(1-this.originX);
+      var top    = -this.height*this.originY;
+      var bottom = +this.height*(1-this.originY);
+
+      return ( left < p.x && p.x < right ) && ( top  < p.y && p.y < bottom );
+    },
+
+    globalToLocal: function(p) {
+      var matrix = this._worldMatrix.clone();
+      matrix.invert();
+      // matrix.transpose();
+
+      var temp = matrix.multiplyVector2(p);
+
+      return temp;
+    },
+
+    _calcWorldMatrix: function() {
+      if (!this.parent) return ;
+
+      // cache check
+      if (this.rotation != this._cachedRotation) {
+        this._cachedRotation = this.rotation;
+
+        var r = this.rotation*(Math.PI/180);
+        this._sr = Math.sin(r);
+        this._cr = Math.cos(r);
+      }
+
+      var local = this._matrix;
+      var parent = this.parent._worldMatrix || phina.geom.Matrix33.IDENTITY;
+      var world = this._worldMatrix;
+
+      // ローカルの行列を計算
+      local.m00 = this._cr * this.scale.x;
+      local.m01 =-this._sr * this.scale.y;
+      local.m10 = this._sr * this.scale.x;
+      local.m11 = this._cr * this.scale.y;
+      local.m02 = this.position.x;
+      local.m12 = this.position.y;
+
+      // cache
+      var a00 = local.m00; var a01 = local.m01; var a02 = local.m02;
+      var a10 = local.m10; var a11 = local.m11; var a12 = local.m12;
+      var b00 = parent.m00; var b01 = parent.m01; var b02 = parent.m02;
+      var b10 = parent.m10; var b11 = parent.m11; var b12 = parent.m12;
+
+      // 親の行列と掛け合わせる
+      world.m00 = b00 * a00 + b01 * a10;
+      world.m01 = b00 * a01 + b01 * a11;
+      world.m02 = b00 * a02 + b01 * a12 + b02;
+
+      world.m10 = b10 * a00 + b11 * a10;
+      world.m11 = b10 * a01 + b11 * a11;
+      world.m12 = b10 * a02 + b11 * a12 + b12;
+
+      return this;
+    },
+
+    _accessor: {
+      /**
+       * @property    x
+       * x座標値
+       */
+      x: {
+          "get": function()   { return this.position.x; },
+          "set": function(v)  { this.position.x = v; }
+      },
+      /**
+       * @property    y
+       * y座標値
+       */
+      y: {
+          "get": function()   { return this.position.y; },
+          "set": function(v)  { this.position.y = v; }
+      },
+
+      /**
+       * @property    originX
+       * x座標値
+       */
+      originX: {
+          "get": function()   { return this.origin.x; },
+          "set": function(v)  { this.origin.x = v; }
+      },
+      
+      /**
+       * @property    originY
+       * y座標値
+       */
+      originY: {
+          "get": function()   { return this.origin.y; },
+          "set": function(v)  { this.origin.y = v; }
+      },
+      
+      /**
+       * @property    scaleX
+       * スケールX値
+       */
+      scaleX: {
+          "get": function()   { return this.scale.x; },
+          "set": function(v)  { this.scale.x = v; }
+      },
+      
+      /**
+       * @property    scaleY
+       * スケールY値
+       */
+      scaleY: {
+          "get": function()   { return this.scale.y; },
+          "set": function(v)  { this.scale.y = v; }
+      },
+      
+      /**
+       * @property    width
+       * width
+       */
+      width: {
+          "get": function()   { return this._width; },
+          "set": function(v)  { this._width = v; }
+      },
+      /**
+       * @property    height
+       * height
+       */
+      height: {
+          "get": function()   { return this._height; },
+          "set": function(v)  { this._height = v; }
+      },
+
+      /**
+       * @property    radius
+       * 半径
+       */
+      radius: {
+          "get": function()   {
+              return (this._radius !== undefined) ? this._radius : (this.width+this.height)/4;
+          },
+          "set": function(v)  { this._radius = v; }
+      },
+      
+      /**
+       * @property    top
+       * 左
+       */
+      top: {
+          "get": function()   { return this.y - this.height*this.originY; },
+          "set": function(v)  { this.y = v + this.height*this.originY; },
+      },
+   
+      /**
+       * @property    right
+       * 左
+       */
+      right: {
+          "get": function()   { return this.x + this.width*(1-this.originX); },
+          "set": function(v)  { this.x = v - this.width*(1-this.originX); },
+      },
+   
+      /**
+       * @property    bottom
+       * 左
+       */
+      bottom: {
+          "get": function()   { return this.y + this.height*(1-this.originY); },
+          "set": function(v)  { this.y = v - this.height*(1-this.originY); },
+      },
+   
+      /**
+       * @property    left
+       * 左
+       */
+      left: {
+        "get": function()   { return this.x - this.width*this.originX; },
+        "set": function(v)  { this.x = v + this.width*this.originX; },
+      },
+
+      /**
+       * @property    centerX
+       * centerX
+       */
+      centerX: {
+        "get": function()   { return this.x + this.width/2 - this.width*this.originX; },
+        "set": function(v)  {
+          // TODO: どうしようかな??
+        }
+      },
+   
+      /**
+       * @property    centerY
+       * centerY
+       */
+      centerY: {
+        "get": function()   { return this.y + this.height/2 - this.height*this.originY; },
+        "set": function(v)  {
+          // TODO: どうしようかな??
+        }
+      },
+    }
+  });
+
+  
+});
+
+phina.namespace(function() {
+
+
+  phina.define('phina.app.Scene', {
+    superClass: 'phina.app.Element',
+
+    init: function() {
+      this.superInit();
+    },
+  });
+  
+});
+
+
+
+
+
+(function() {
+
+  if (!phina.global.Event) return ;
+
+  /**
+   * @class global.Event
+   * 既存のEventオブジェクト拡張
+   */
+    
+  /**
+   * @method stop
+   * イベントのデフォルト処理 & 伝達を止める
+   */
+  Event.prototype.stop = function() {
+    // イベントキャンセル
+    this.preventDefault();
+    // イベント伝達を止める
+    this.stopPropagation();
+  };
+
+})();
+
+(function() {
+
+  if (!phina.global.MouseEvent) return ;
+
+  /**
+   * @class global.MouseEvent
+   * MouseEvent クラス
+   */
+  
+  /**
+   * @method    pointX
+   * マウスのX座標.
+   */
+  MouseEvent.prototype.getter("pointX", function() {
+    return this.clientX - this.target.getBoundingClientRect().left;
+    // return this.pageX - this.target.getBoundingClientRect().left - window.scrollX;
+  });
+  
+  /**
+   * @method    pointY
+   * マウスのY座標.
+   */
+  MouseEvent.prototype.getter("pointY", function() {
+    return this.clientY - this.target.getBoundingClientRect().top;
+    // return this.pageY - this.target.getBoundingClientRect().top - window.scrollY;
+  });
+    
+})();
+
+
+(function() {
+    
+  if (!phina.global.TouchEvent) return ;
+  
+  
+  /**
+   * @class global.TouchEvent
+   * TouchEvent クラス
+   */
+  
+  /**
+   * @method    pointX
+   * タッチイベント.
+   */
+  TouchEvent.prototype.getter("pointX", function() {
+      return this.touches[0].clientX - this.target.getBoundingClientRect().left;
+      // return this.touches[0].pageX - this.target.getBoundingClientRect().left - tm.global.scrollX;
+  });
+  
+  /**
+   * @method    pointY
+   * タッチイベント.
+   */
+  TouchEvent.prototype.getter("pointY", function() {
+      return this.touches[0].clientY - this.target.getBoundingClientRect().top;
+      // return this.touches[0].pageY - this.target.getBoundingClientRect().top - tm.global.scrollY;
+  });  
+    
+})();
+
+
+(function() {
+    
+  if (!phina.global.Touch) return ;
+  
+  /**
+   * @class global.Touch
+   * TouchEvent クラス
+   */
+  
+  /**
+   * @method    pointX
+   * タッチイベント.
+   */
+  Touch.prototype.getter("pointX", function() {
+      return this.clientX - this.target.getBoundingClientRect().left;
+  });
+
+  /**
+   * @method    pointY
+   * タッチイベント.
+   */
+  Touch.prototype.getter("pointY", function() {
+      return this.clientY - this.target.getBoundingClientRect().top;
+  });
+    
+})();
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.graphics.Canvas
+   * キャンバス拡張クラス
+   */
+  phina.define('phina.graphics.Canvas', {
+    domElement: null,
+    canvas: null,
+    context: null,
+
+    /**
+     * 初期化
+     */
+    init: function(canvas) {
+      if (typeof canvas === 'string') {
+        this.canvas = document.querySelector(canvas);
+      }
+      else {
+        this.canvas = canvas || document.createElement('canvas');
+      }
+
+      this.domElement = this.canvas;
+      this.context = this.canvas.getContext('2d');
+      this.context.lineCap = 'round';
+      this.context.lineJoin = 'round';
+    },
+
+    /**
+     * サイズをセット
+     */
+    setSize: function(width, height) {
+      this.canvas.width   = width;
+      this.canvas.height  = height;
+      return this;
+    },
+
+    setSizeToScreen: function() {
+      this.canvas.style.position  = "fixed";
+      this.canvas.style.margin    = "0px";
+      this.canvas.style.padding   = "0px";
+      this.canvas.style.left      = "0px";
+      this.canvas.style.top       = "0px";
+      return this.setSize(window.innerWidth, window.innerHeight);
+    },
+
+    fitScreen: function(isEver) {
+      isEver = isEver === undefined ? true : isEver;
+
+      var _fitFunc = function() {
+        var e = this.domElement;
+        var s = e.style;
+        
+        s.position = "absolute";
+        s.margin = "auto";
+        s.left = "0px";
+        s.top  = "0px";
+        s.bottom = "0px";
+        s.right = "0px";
+
+        var rateWidth = e.width/window.innerWidth;
+        var rateHeight= e.height/window.innerHeight;
+        var rate = e.height/e.width;
+        
+        if (rateWidth > rateHeight) {
+          s.width  = Math.floor(innerWidth)+"px";
+          s.height = Math.floor(innerWidth*rate)+"px";
+        }
+        else {
+          s.width  = Math.floor(innerHeight/rate)+"px";
+          s.height = Math.floor(innerHeight)+"px";
+        }
+      }.bind(this);
+      
+      // 一度実行しておく
+      _fitFunc();
+
+      // リサイズ時のリスナとして登録しておく
+      if (isEver) {
+        window.addEventListener("resize", _fitFunc, false);
+      }
+    },
+
+    /**
+     * クリア
+     */
+    clear: function(x, y, width, height) {
+      x = x || 0;
+      y = y || 0;
+      width = width || this.width;
+      height= height|| this.height;
+      this.context.clearRect(x, y, width, height);
+      return this;
+    },
+
+    clearColor: function(fillStyle, x, y, width, height) {
+      x = x || 0;
+      y = y || 0;
+      width = width || this.width;
+      height= height|| this.height;
+
+      var context = this.context;
+
+      context.save();
+      context.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0); // 行列初期化
+      context.fillStyle = fillStyle;     // 塗りつぶしスタイルセット
+      context.fillRect(x, y, width, height);
+      context.restore();
+
+      return this;
+    },
+
+
+    /**
+     * パスを開始(リセット)
+     */
+    beginPath: function() {
+      this.context.beginPath();
+      return this;
+    },
+
+    /**
+     *  パスを閉じる
+     */
+    closePath: function() {
+      this.context.closePath();
+      return this;
+    },
+
+
+    /**
+     *  新規パス生成
+     */
+    moveTo: function(x, y) {
+      this.context.moveTo(x, y);
+      return this;
+    },
+
+    /**
+     * パスに追加
+     */
+    lineTo: function(x, y) {
+      this.context.lineTo(x, y);
+      return this;
+    },
+
+    /**
+     * パス内を塗りつぶす
+     */
+    fill: function() {
+      this.context.fill();
+      return this;
+    },
+
+    /**
+     * パス上にラインを引く
+     */
+    stroke: function() {
+      this.context.stroke();
+      return this;
+    },
+
+    /**
+     * クリップ
+     */
+    clip: function() {
+      this.context.clip();
+      return this;
+    },
+
+        
+    /**
+     * 点描画
+     */
+    drawPoint: function(x, y) {
+      return this.strokeRect(x, y, 1, 1);
+    },
+
+    /**
+     * ラインパスを作成
+     */
+    line: function(x0, y0, x1, y1) {
+      return this.moveTo(x0, y0).lineTo(x1, y1);
+    },
+    
+    /**
+     * ラインを描画
+     */
+    drawLine: function(x0, y0, x1, y1) {
+      return this.beginPath().line(x0, y0, x1, y1).stroke();
+    },
+
+    /**
+     * ダッシュラインを描画
+     */
+    drawDashLine: function(x0, y0, x1, y1, pattern) {
+      var patternTable = null;
+      if (typeof(pattern) == "string") {
+        patternTable = pattern;
+      }
+      else {
+        pattern = pattern || 0xf0f0;
+        patternTable = pattern.toString(2);
+      }
+      patternTable = patternTable.padding(16, '1');
+      
+      var vx = x1-x0;
+      var vy = y1-y0;
+      var len = Math.sqrt(vx*vx + vy*vy);
+      vx/=len; vy/=len;
+      
+      var x = x0;
+      var y = y0;
+      for (var i=0; i<len; ++i) {
+        if (patternTable[i%16] == '1') {
+          this.drawPoint(x, y);
+          // this.fillRect(x, y, this.context.lineWidth, this.context.lineWidth);
+        }
+        x += vx;
+        y += vy;
+      }
+      
+      return this;
+    },
+
+    /**
+     * v0(x0, y0), v1(x1, y1) から角度を求めて矢印を描画
+     * http://hakuhin.jp/as/rotation.html
+     */
+    drawArrow: function(x0, y0, x1, y1, arrowRadius) {
+      var vx = x1-x0;
+      var vy = y1-y0;
+      var angle = Math.atan2(vy, vx)*180/Math.PI;
+      
+      this.drawLine(x0, y0, x1, y1);
+      this.fillPolygon(x1, y1, arrowRadius || 5, 3, angle);
+      
+      return this;
+    },
+
+
+    /**
+     * lines
+     */
+    lines: function() {
+      this.moveTo(arguments[0], arguments[1]);
+      for (var i=1,len=arguments.length/2; i<len; ++i) {
+        this.lineTo(arguments[i*2], arguments[i*2+1]);
+      }
+      return this;
+    },
+
+    /**
+     * ラインストローク描画
+     */
+    strokeLines: function() {
+      this.beginPath();
+      this.lines.apply(this, arguments);
+      this.stroke();
+      return this;
+    },
+
+    /**
+     * ライン塗りつぶし描画
+     */
+    fillLines: function() {
+      this.beginPath();
+      this.lines.apply(this, arguments);
+      this.fill();
+      return this;
+    },
+    
+    /**
+     * 四角形パスを作成する
+     */
+    rect: function(x, y, width, height) {
+      this.context.rect.apply(this.context, arguments);
+      return this;
+    },
+    
+    /**
+     * 四角形塗りつぶし描画
+     */
+    fillRect: function() {
+      this.context.fillRect.apply(this.context, arguments);
+      return this;
+    },
+    
+    /**
+     * 四角形ライン描画
+     */
+    strokeRect: function() {
+      this.context.strokeRect.apply(this.context, arguments);
+      return this;
+    },
+    
+    /**
+     * 角丸四角形パス
+     */
+    roundRect: function(x, y, width, height, radius) {
+      var l = x + radius;
+      var r = x + width - radius;
+      var t = y + radius;
+      var b = y + height - radius;
+      
+      /*
+      var ctx = this.context;
+      ctx.moveTo(l, y);
+      ctx.lineTo(r, y);
+      ctx.quadraticCurveTo(x+width, y, x+width, t);
+      ctx.lineTo(x+width, b);
+      ctx.quadraticCurveTo(x+width, y+height, r, y+height);
+      ctx.lineTo(l, y+height);
+      ctx.quadraticCurveTo(x, y+height, x, b);
+      ctx.lineTo(x, t);
+      ctx.quadraticCurveTo(x, y, l, y);
+      /**/
+      
+      this.context.arc(l, t, radius,     -Math.PI, -Math.PI*0.5, false);  // 左上
+      this.context.arc(r, t, radius, -Math.PI*0.5,            0, false);  // 右上
+      this.context.arc(r, b, radius,            0,  Math.PI*0.5, false);  // 右下
+      this.context.arc(l, b, radius,  Math.PI*0.5,      Math.PI, false);  // 左下
+      this.closePath();
+      
+      return this;
+    },
+
+    /**
+     * 角丸四角形塗りつぶし
+     */
+    fillRoundRect: function(x, y, width, height, radius) {
+      return this.beginPath().roundRect(x, y, width, height, radius).fill();
+    },
+
+    /**
+     * 角丸四角形ストローク描画
+     */
+    strokeRoundRect: function(x, y, width, height, radius) {
+      return this.beginPath().roundRect(x, y, width, height, radius).stroke();
+    },
+
+    /**
+     * 円のパスを設定
+     */
+    circle: function(x, y, radius) {
+      this.context.arc(x, y, radius, 0, Math.PI*2, false);
+      return this;
+    },
+    
+    /**
+     * 塗りつぶし円を描画
+     */
+    fillCircle: function(x, y, radius) {
+      var c = this.context;
+      c.beginPath();
+      c.arc(x, y, radius, 0, Math.PI*2, false);
+      c.closePath();
+      c.fill();
+      return this;
+    },
+    
+    /**
+     * ストローク円を描画
+     */
+    strokeCircle: function(x, y, radius) {
+      var c = this.context;
+      c.beginPath();
+      c.arc(x, y, radius, 0, Math.PI*2, false);
+      c.closePath();
+      c.stroke();
+      return this;
+    },
+    
+    /**
+     * ポリゴンパス
+     */
+    polygon: function(x, y, size, sides, offsetAngle) {
+      var radDiv = (Math.PI*2)/sides;
+      var radOffset = (offsetAngle!=undefined) ? offsetAngle*Math.PI/180 : -Math.PI/2;
+      
+      this.moveTo(x + Math.cos(radOffset)*size, y + Math.sin(radOffset)*size);
+      for (var i=1; i<sides; ++i) {
+        var rad = radDiv*i+radOffset;
+        this.lineTo(
+          x + Math.cos(rad)*size,
+          y + Math.sin(rad)*size
+        );
+      }
+      this.closePath();
+      return this;
+    },
+    /**
+     * ポリゴン塗りつぶし
+     */
+    fillPolygon: function(x, y, radius, sides, offsetAngle) {
+      return this.beginPath().polygon(x, y, radius, sides, offsetAngle).fill();
+    },
+    /**
+     * ポリゴンストローク描画
+     */
+    strokePolygon: function(x, y, radius, sides, offsetAngle) {
+      return this.beginPath().polygon(x, y, radius, sides, offsetAngle).stroke();
+    },
+    
+    /**
+     * star
+     */
+    star: function(x, y, radius, sides, sideIndent, offsetAngle) {
+      var x = x || 0;
+      var y = y || 0;
+      var radius = radius || 64;
+      var sides = sides || 5;
+      var sideIndentRadius = radius * (sideIndent || 0.38);
+      var radOffset = (offsetAngle) ? offsetAngle*Math.PI/180 : -Math.PI/2;
+      var radDiv = (Math.PI*2)/sides/2;
+
+      this.moveTo(
+        x + Math.cos(radOffset)*radius,
+        y + Math.sin(radOffset)*radius
+      );
+      for (var i=1; i<sides*2; ++i) {
+        var rad = radDiv*i + radOffset;
+        var len = (i%2) ? sideIndentRadius : radius;
+        this.lineTo(
+          x + Math.cos(rad)*len,
+          y + Math.sin(rad)*len
+        );
+      }
+      this.closePath();
+
+      return this;
+    },
+
+    /**
+     * 星を塗りつぶし描画
+     */
+    fillStar: function(x, y, radius, sides, sideIndent, offsetAngle) {
+      this.beginPath().star(x, y, radius, sides, sideIndent, offsetAngle).fill();
+      return this;
+    },
+
+    /**
+     * 星をストローク描画
+     */
+    strokeStar: function(x, y, radius, sides, sideIndent, offsetAngle) {
+      this.beginPath().star(x, y, radius, sides, sideIndent, offsetAngle).stroke();
+      return this;
+    },
+
+    /**
+     * 行列をセット
+     */
+    setTransform: function(m11, m12, m21, m22, dx, dy) {
+      this.context.setTransform(m11, m12, m21, m22, dx, dy);
+      return this;
+    },
+
+    /**
+     * 行列をリセット
+     */
+    resetTransform: function() {
+      this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+      return this;
+    },
+    /**
+     * 中心に移動
+     */
+    transformCenter: function() {
+      this.context.setTransform(1, 0, 0, 1, this.width/2, this.height/2);
+      return this;
+    },
+
+    /**
+     * 移動
+     */
+    translate: function(x, y) {
+      this.context.translate(x, y);
+      return this;
+    },
+    
+    /**
+     * 回転
+     */
+    rotate: function(rotation) {
+      this.context.rotate(rotation);
+      return this;
+    },
+    
+    /**
+     * スケール
+     */
+    scale: function(scaleX, scaleY) {
+      this.context.scale(scaleX, scaleY);
+      return this;
+    },
+
+    _accessor: {
+      /**
+       * 幅
+       */
+      width: {
+        "get": function()   { return this.canvas.width; },
+        "set": function(v)  { this.canvas.width = v; }
+      },
+
+      /**
+       * 高さ
+       */
+      height: {
+        "get": function()   { return this.canvas.height; },
+        "set": function(v)  { this.canvas.height = v; }
+      },
+
+      fillStyle: {
+        "get": function()   { return this.context.fillStyle; },
+        "set": function(v)  { this.context.fillStyle = v; }
+      },
+
+      strokeStyle: {
+        "get": function()   { return this.context.strokeStyle; },
+        "set": function(v)  { this.context.strokeStyle = v; }
+      },
+    },
+
+    _static: {
+      dummyCanvas: (function() {
+        if (!phina.isNode()) {
+          return document.createElement('canvas');
+        }
+        else {
+          return null;
+        }
+      })(),
+    },
+  });
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.CanvasElement
+   * 
+   */
+  phina.define('phina.display.CanvasElement', {
+    superClass: 'phina.app.Object2D',
+
+    init: function() {
+      this.superInit();
+
+      this.alpha = 1.0;
+      this._worldAlpha = 1.0;
+
+      this.width = 64;
+      this.height = 64;
+    },
+
+    /**
+     * @private
+     */
+    _calcWorldAlpha: function() {
+      if (!this.parent) {
+        this._worldAlpha = this.alpha;
+        return ;
+      }
+      else {
+        var worldAlpha = (this.parent._worldAlpha !== undefined) ? this.parent._worldAlpha : 1.0; 
+        // alpha
+        this._worldAlpha = worldAlpha * this.alpha;
+      }
+    },
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.Shape
+   * 
+   */
+  phina.define('phina.display.Shape', {
+    superClass: 'phina.display.CanvasElement',
+
+    init: function() {
+      this.superInit();
+
+      this.canvas = phina.graphics.Canvas();
+      this.style = {};
+    },
+
+    observeStyle: function() {
+      this._observe = function(changes) {
+        this._render();
+      }.bind(this);
+      Object.observe(this.style, this._observe);
+    },
+
+    unobserveStyle: function() {
+      Object.unobserve(this.style, this._observe);
+    },
+
+    _render: function() {
+      var style = this.style;
+      this.canvas.width = style.width + style.padding*2;
+      this.canvas.height= style.height + style.padding*2;
+
+      this.canvas.clearColor(style.backgroundColor);
+    },
+
+    draw: function(canvas) {
+      var image = this.canvas.domElement;
+      var w = image.width;
+      var h = image.height;
+      canvas.context.drawImage(image,
+        0, 0, w, h,
+        -w*this.origin.x, -h*this.origin.y, w, h
+        );
+    },
+  });
+
+  /**
+   * @class phina.display.Shape
+   * 
+   */
+  phina.define('phina.display.RectangleShape', {
+    superClass: 'phina.display.Shape',
+    init: function() {
+      this.superInit();
+      this.style = {
+        padding: 4,
+        width: 64,
+        height: 64,
+
+        color: 'blue',
+
+        strokeWidth: 4,
+        strokeColor: '#aaa',
+
+        backgroundColor: 'transparent',
+      };
+      this.observeStyle();
+      this._render();
+    },
+
+    _render: function() {
+      var style = this.style;
+      this.canvas.width = style.width + style.padding*2;
+      this.canvas.height= style.height + style.padding*2;
+      this.canvas.clearColor(style.backgroundColor);
+
+      this.canvas.transformCenter();
+      this.canvas.context.fillStyle = style.color;
+      this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
+
+      this.canvas.context.lineWidth = style.strokeWidth;
+      this.canvas.strokeStyle = style.strokeColor;
+      this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
+    },
+  });
+
+  /**
+   * @class phina.display.Shape
+   * 
+   */
+  phina.define('phina.display.CircleShape', {
+    superClass: 'phina.display.Shape',
+    init: function() {
+      this.superInit();
+
+      this.style = {
+        padding: 12,
+        radius: 32,
+        color: 'red',
+
+        strokeWidth: 4,
+        strokeColor: '#aaa',
+
+        backgroundColor: 'transparent',
+      };
+      this.observeStyle();
+      this._render();
+    },
+
+    _render: function() {
+      var style = this.style;
+      this.canvas.width = style.radius*2 + style.padding*2;
+      this.canvas.height= style.radius*2 + style.padding*2;
+      this.canvas.clearColor(style.backgroundColor);
+
+      this.canvas.transformCenter();
+
+      this.canvas.context.fillStyle = style.color;
+      this.canvas.fillCircle(0, 0, style.radius);
+
+      this.canvas.context.lineWidth = style.strokeWidth;
+      this.canvas.strokeStyle = style.strokeColor;
+      this.canvas.strokeCircle(0, 0, style.radius);
+    },
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.Sprite
+   * 
+   */
+  phina.define('phina.display.Sprite', {
+    superClass: 'phina.display.CanvasElement',
+
+    init: function(image) {
+      this.superInit();
+
+      this.image = image;
+      this.width = image.width;
+      this.height = image.height;
+    },
+
+    draw: function(canvas) {
+
+      // canvas.context.drawImage(this.image, 0, 0, this.image.width, this.image.height);
+      canvas.context.drawImage(this.image,
+        0, 0, this.image.width, this.image.height,
+        -this.width*this.origin.x, -this.height*this.origin.y, this.width, this.height
+        );
+    },
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.Label
+   * 
+   */
+  phina.define('phina.display.Label', {
+    superClass: 'phina.display.Shape',
+
+    init: function(text) {
+      this.superInit();
+
+      this.canvas = phina.graphics.Canvas();
+
+      this.style = {
+        color: 'black',
+        
+        stroke: true,
+        strokeColor: '#222',
+        strokeWidth: 2,
+        
+        fontSize: 32,
+        fontWeight: '',
+        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+
+        shadowBlur: 0,
+        shadowColor: 'black',
+
+        align: 'center',
+        baseline: 'middle',
+
+        backgroundColor: 'transparent',
+
+        padding: 8,
+      };
+
+      this.observeStyle();
+
+      this.text = text || 'hoge\nfoo\nbar';
+    },
+
+    calcWidth: function() {
+      var width = 0;
+      var canvas = this.canvas;
+      this._lines.forEach(function(line) {
+        var w = canvas.context.measureText(line).width;
+        if (width < w) {
+          width = w;
+        }
+      }, this);
+      if (this.style.align !== 'center') width*=2;
+      return width;
+    },
+
+    calcHeight: function() {
+      var height = this.style.fontSize * this._lines.length;
+      if (this.style.baseline !== 'middle') height*=2;
+      return height;
+    },
+
+    _render: function() {
+      var style = this.style;
+      var canvas = this.canvas;
+      var context = canvas.context;
+
+      var fontSize = this.style.fontSize;
+      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this.style);
+      var lines = this.text.split('\n');
+      canvas.context.font = font;
+
+      canvas.width = this.calcWidth() + style.padding*2;
+      canvas.height = this.calcHeight() + style.padding*2;
+      canvas.clearColor(style.backgroundColor);
+
+      canvas.transformCenter();
+      context.font = font;
+      context.textAlign = this.style.align;
+      context.textBaseline = this.style.baseline;
+
+      context.fillStyle = this.style.color;
+      context.strokeStyle = this.style.strokeColor;
+      context.lineWidth = this.style.strokeWidth;
+
+      context.lineJoin = "round";
+
+      var offset = -Math.floor(lines.length/2)*fontSize;
+
+      if (this.style.stroke) {
+        context.shadowBlur = 0;
+        lines.forEach(function(line, i) {
+          context.strokeText(line, 0, i*fontSize+offset);
+        }, this);
+      }
+
+      context.shadowBlur = this.style.shadowBlur;
+      context.shadowColor = this.style.shadowColor;
+      lines.forEach(function(line, i) {
+        context.fillText(line, 0, i*fontSize+offset);
+      }, this);
+    },
+
+    _accessor: {
+      text: {
+        get: function() {
+          return this._text;
+        },
+        set: function(v) {
+          this._text = v;
+          this._lines = v.split('\n');
+          this._render();
+        },
+      },
+    }
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class
+   */
+  phina.define('phina.display.CanvasScene', {
+    superClass: 'phina.app.Scene',
+
+    init: function(params) {
+      this.superInit();
+
+      this.canvas = phina.graphics.Canvas();
+      this.canvas.setSize(params.width, params.height);
+      this.renderer = phina.display.CanvasRenderer(this.canvas);
+    },
+
+    _update: function() {
+      if (this.update) {
+        this.update();
+      }
+    },
+
+    _render: function() {
+      this.renderer.render(this);
+    },
+
+  });
+
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class
+   */
+  phina.define('phina.display.Layer', {
+    superClass: 'phina.display.CanvasElement',
+
+    init: function(params) {
+      this.canvas = phina.graphics.Canvas();
+    },
+
+    draw: function(canvas) {
+      var c = this.currentScene.canvas;
+      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+    },
+  });
+});
+
+phina.namespace(function() {
+
+  /**
+   * @class
+   */
+  phina.define('phina.display.ThreeLayer', {
+    superClass: 'phina.display.CanvasElement',
+
+    scene: null,
+    camera: null,
+    light: null,
+    renderer: null,
+
+    init: function(params) {
+      this.superInit();
+
+      this.scene = new THREE.Scene();
+
+      this.camera = new THREE.PerspectiveCamera( 75, params.width / params.height, 1, 10000 );
+      this.camera.position.z = 1000;
+
+      this.light = new THREE.DirectionalLight( 0xffffff, 1 );
+      this.light.position.set( 1, 1, 1 ).normalize();
+      this.scene.add( this.light );
+
+      this.renderer = new THREE.WebGLRenderer();
+      this.renderer.setClearColor( 0xf0f0f0 );
+      this.renderer.setSize( params.width, params.height );
+
+      this.on('enterframe', function() {
+        this.renderer.render( this.scene, this.camera );
+      });
+    },
+
+    draw: function(canvas) {
+      var domElement = this.renderer.domElement;
+      canvas.context.drawImage(domElement, 0, 0, domElement.width, domElement.height);
+    },
+  });
+});
+
+
+
+phina.namespace(function() {
+  
+  phina.define('phina.display.CanvasRenderer', {
+
+    init: function(canvas) {
+      this.canvas = canvas;
+      this._context = this.canvas.context;
+    },
+    render: function(scene) {
+      this.canvas.clear();
+      
+      this._context.save();
+      this.renderObject(scene);
+      this._context.restore();
+    },
+    renderObject: function(obj) {
+      if (obj.visible === false) return ;
+
+      obj._calcWorldMatrix && obj._calcWorldMatrix();
+      obj._calcWorldAlpha && obj._calcWorldAlpha();
+
+      var context = this.canvas.context;
+
+      context.globalAlpha = obj._worldAlpha;
+      
+      if (obj.draw) {
+        // 行列をセット
+        var m = obj._worldMatrix;
+        context.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
+
+        obj.draw(this.canvas);
+      }
+      // 子供たちも実行
+      if (obj.children.length > 0) {
+          var tempChildren = obj.children.slice();
+          for (var i=0,len=tempChildren.length; i<len; ++i) {
+              this.renderObject(tempChildren[i]);
+          }
+      }
+    },
+  });
+
+});
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.DomApp
+   * @extends phina.app.BaseApp
+   */
+  phina.define('phina.display.DomApp', {
+    superClass: 'phina.app.BaseApp',
+
+    domElement: null,
+
+    /**
+     * @constructor
+     */
+    init: function(query) {
+      this.superInit();
+
+      this.domElement = document.querySelector(query);
+      // this.domElement = domElement;
+
+      this.mouse = phina.input.Mouse(this.domElement);
+      this.touch = phina.input.Touch(this.domElement);
+      this.touchList = phina.input.TouchList(this.domElement, 4);
+
+      // ポインタをセット(PC では Mouse, Mobile では Touch)
+      this.pointer = this.touch;
+      this.pointers = this.touchList.touches;
+
+      this.domElement.addEventListener("touchstart", function () {
+        this.pointer = this.touch;
+        this.pointers = this.touchList.touches;
+      }.bind(this));
+      this.domElement.addEventListener("mousedown", function () {
+        this.pointer = this.mouse;
+        this.pointers = [this.mouse];
+      }.bind(this));
+
+      // 決定時の処理をオフにする(iPhone 時のちらつき対策)
+      this.domElement.addEventListener("touchstart", function(e) { e.stop(); });
+      this.domElement.addEventListener("touchmove", function(e) { e.stop(); });
+    },
+
+    update: function() {
+      this.mouse.update();
+      this.touch.update();
+      this.touchList.update();
+    },
+
+  });
+
+  
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.CanvasApp
+   * 
+   */
+  phina.define('phina.display.CanvasApp', {
+    superClass: 'phina.display.DomApp',
+
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit(params.query);
+
+      params.$safe({
+        width: 640,
+        height: 960,
+        columns: 12,
+      });
+
+      this.gridX = phina.util.Grid({
+        width: params.width,
+        columns: params.columns,
+      });
+      this.gridY = phina.util.Grid({
+        width: params.height,
+        columns: params.columns,
+      });
+
+      this.canvas = phina.graphics.Canvas(this.domElement);
+      this.canvas.setSize(params.width, params.height);
+
+      this.replaceScene(phina.display.CanvasScene({
+        width: params.width,
+        height: params.height,
+      }));
+
+      this.fitScreen();
+    },
+
+    _draw: function() {
+      this.canvas.clear();
+
+      this.currentScene._render();
+
+      var c = this.currentScene.canvas;
+      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+    },
+
+    fitScreen: function() {
+      this.canvas.fitScreen();
+    },
+
+  });
+});
