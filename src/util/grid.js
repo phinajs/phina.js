@@ -42,6 +42,11 @@
       return this.unitWidth * index;
     },
 
+    //
+    unit: function() {
+      return this.unitWidth;
+    },
+
     center: function() {
       return this.width/2;
     },
