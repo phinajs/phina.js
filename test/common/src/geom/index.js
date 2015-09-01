@@ -20,6 +20,42 @@ describe('#geom', function() {
       assert.equal(a.toString(), phina.geom.Matrix33.IDENTITY.toString());
     });
 
+    it('set', function() {
+      var a = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+      var b = phina.geom.Matrix33().set(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+      assert.equal(a.toString(), b.toString());
+    });
+
+    it('identity', function() {
+      var a = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+      a.identity();
+
+      assert.equal(a.toString(), phina.geom.Matrix33.IDENTITY.toString());
+    });
+
+    it('determinant', function() {
+      var a = phina.geom.Matrix33(0, -2, 0, -1, 3, 1, 4, 2, 1);
+      var d = a.determinant();
+
+      assert.equal(d, -10);
+    });
+
+    it('transpose', function() {
+      var a = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+      a.transpose();
+      var b = phina.geom.Matrix33(1, 4, 7, 2, 5, 8, 3, 6, 9);
+
+      assert.equal(a.toString(), b.toString());
+    });
+
+    it('clone', function() {
+      var a = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+      var b = a.clone();
+
+      assert.equal(a.toString(), b.toString());
+    });
+
     it('invert', function() {
       var a = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
       var b = a.clone().invert();

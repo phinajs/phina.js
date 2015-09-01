@@ -49,6 +49,34 @@ phina.namespace(function() {
     },
 
     /**
+     * 行列式
+     */
+    determinant: function() {
+      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
+      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
+      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
+      
+      return m00*m11*m22 + m10*m21*m02 + m01*m12*m20 - m02*m11*m20 - m01*m10*m22 - m12*m21*m00;
+    },
+
+    /**
+     * 転置
+     */
+    transpose: function() {
+      var swap = function(a, b) {
+        var temp = this[a];
+        this[a] = this[b];
+        this[b] = temp;
+      }.bind(this);
+
+      swap('m01', 'm10');
+      swap('m02', 'm20');
+      swap('m12', 'm21');
+      
+      return this;
+    },
+
+    /**
      * 逆行列
      */
     invert: function() {
@@ -77,34 +105,6 @@ phina.namespace(function() {
       
       return this;
 
-    },
-
-    /**
-     * 行列式
-     */
-    determinant: function() {
-      var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
-      var m10 = this.m10; var m11 = this.m11; var m12 = this.m12;
-      var m20 = this.m20; var m21 = this.m21; var m22 = this.m22;
-      
-      return m00*m11*m22 + m10*m21*m02 + m01*m12*m20 - m02*m11*m20 - m01*m10*m22 - m12*m21*m00;
-    },
-
-    /**
-     * 転置
-     */
-    transpose: function() {
-      var swap = function(a, b) {
-        var temp = this[a];
-        this[a] = this[b];
-        this[b] = temp;
-      }.bind(this);
-
-      swap('m01', 'm10');
-      swap('m02', 'm20');
-      swap('m12', 'm21');
-      
-      return this;
     },
 
     /**
