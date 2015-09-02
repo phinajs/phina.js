@@ -1,11 +1,11 @@
 <!doctype html>
 
 <html>
-<head>
-</head>
-<body>
-  <canvas id='world'></canvas>
-</body>
+  <head>
+  </head>
+  <body>
+    <canvas id='world'></canvas>
+  </body>
 </html>
 
 <style>
@@ -34,16 +34,12 @@ phina.define("MainScene", {
       height: SCREEN_HEIGHT,
     });
 
+    this.currentIndex = 1;
+
     this.group = CanvasElement().addChildTo(this);
 
-    var gridX = Grid({
-      width: SCREEN_WIDTH,
-      columns: 6,
-    });
-    var gridY = Grid({
-      width: SCREEN_WIDTH,
-      columns: 6,
-    });
+    var gridX = Grid(SCREEN_WIDTH, 6);
+    var gridY = Grid(SCREEN_WIDTH, 6);
 
     var self = this;
 
@@ -57,6 +53,10 @@ phina.define("MainScene", {
 
       p.x = gridX.span(xIndex+1);
       p.y = gridY.span(yIndex+1)+150;
+
+      p.onpush = function() {
+        self.check(this);
+      };
     });
 
     // タイマーラベルを生成
@@ -80,6 +80,19 @@ phina.define("MainScene", {
     this.timerLabel.text = sec.toFixed(3);
   },
 
+  check: function(piece) {
+    if (this.currentIndex === piece.index) {
+      piece.alpha = 0.5;
+
+      if (this.currentIndex >= MAX_NUM) {
+        alert('clear');
+      }
+      else {
+        this.currentIndex += 1;
+      }
+    }
+  }
+
 });
 
 phina.define('Piece', {
@@ -93,30 +106,21 @@ phina.define('Piece', {
     });
 
     this.index = index;
-    // this.on('pointstart', function() {
-    //   this.bg.style.color = 'blue';
-    //   this.label.style.color = 'white';
-    // });
-    // this.on('pointend', function() {
-    //   this.bg.style.color = 'white';
-    //   this.label.style.color = 'black';
-    // });
   },
-
-  update: function() {
-    // console.log(this._worldAlpha);
-  }
 });
 
-var app = CanvasApp({
-  query: '#world',
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-});
+window.onload = function() {
+  var app = CanvasApp({
+    query: '#world',
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  });
 
-app.replaceScene(MainScene());
+  app.replaceScene(MainScene());
 
-app.run();
+  app.run();
+};
+
 
 
 </script>
