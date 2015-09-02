@@ -8,20 +8,24 @@ phina.namespace(function() {
   phina.define('phina.display.Shape', {
     superClass: 'phina.display.CanvasElement',
 
-    init: function() {
+    init: function(style) {
       this.superInit();
+
+      style = (style || {}).$safe({
+        width: 64,
+        height: 64,
+        padding: 8,
+        backgroundColor: '#aaa',
+      });
 
       this.canvas = phina.graphics.Canvas();
       this.style = phina.util.ChangeDispatcher();
-
+      this.style.register(style);
       this.style.onchange = function() {
         this._render();
       }.bind(this);
 
-      this.style.register('backgroundColor', '#aaa');
-      this.style.register('width', 64);
-      this.style.register('height', 64);
-      this.style.register('padding', 8);
+      this._render();
     },
 
     _render: function() {
@@ -49,19 +53,21 @@ phina.namespace(function() {
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
-    init: function() {
-      this.superInit();
+    init: function(style) {
 
-      this.style.register('color', 'blue');
+      style = (style || {}).$safe({
+        color: 'blue',
 
-      this.style.register('strokeWidth', 4);
-      this.style.register('strokeColor', '#aaa');
+        stroke: true,
+        strokeWidth: 4,
+        strokeColor: '#aaa',
 
-      this.style.register('cornerRadius', 0);
+        cornerRadius: 0,
 
-      this.style.register('backgroundColor', 'transparent');
+        backgroundColor: 'transparent',
+      });
 
-      this._render();
+      this.superInit(style);
     },
 
     _render: function() {
@@ -71,18 +77,15 @@ phina.namespace(function() {
       this.canvas.clearColor(style.backgroundColor);
 
       this.canvas.transformCenter();
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.context.lineWidth = style.strokeWidth;
-      this.canvas.strokeStyle = style.strokeColor;
 
-      if (style.cornerRadius > 0) {
+      if (style.stroke) {
+        this.canvas.context.lineWidth = style.strokeWidth;
+        this.canvas.strokeStyle = style.strokeColor;
         this.canvas.strokeRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
-        this.canvas.fillRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
       }
-      else {
-        this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
-        this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
-      }
+
+      this.canvas.context.fillStyle = style.color;
+      this.canvas.fillRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
     },
   });
 
@@ -92,18 +95,21 @@ phina.namespace(function() {
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
-    init: function() {
-      this.superInit();
+    init: function(style) {
+      style = (style || {}).$safe({
+        color: 'red',
+        radius: 32,
 
-      this.style.register('color', 'red');
-      this.style.register('radius', 32);
+        stroke: true,
+        strokeWidth: 4,
+        strokeColor: '#aaa',
 
-      this.style.register('strokeWidth', 4);
-      this.style.register('strokeColor', '#aaa');
+        cornerRadius: 0,
 
-      this.style.register('backgroundColor', 'transparent');
-      
-      this._render();
+        backgroundColor: 'transparent',
+      });
+
+      this.superInit(style);
     },
 
     _render: function() {
@@ -114,12 +120,14 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
+      if (style.stroke) {
+        this.canvas.context.lineWidth = style.strokeWidth;
+        this.canvas.strokeStyle = style.strokeColor;
+        this.canvas.strokeCircle(0, 0, style.radius);
+      }
+
       this.canvas.context.fillStyle = style.color;
       this.canvas.fillCircle(0, 0, style.radius);
-
-      this.canvas.context.lineWidth = style.strokeWidth;
-      this.canvas.strokeStyle = style.strokeColor;
-      this.canvas.strokeCircle(0, 0, style.radius);
     },
   });
 

@@ -16,6 +16,9 @@ th.describe("display.Label", function() {
   th.it('init', function() {
     var label = phina.display.Label('Hello, world!').addChildTo(this);
     label.position.set(640/2, 960/2);
+
+    var shape = phina.display.Shape().addChildTo(this);
+    shape.position.set(200, 200);
   });
 
   th.it('style', function() {

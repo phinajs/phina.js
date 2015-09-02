@@ -26,19 +26,28 @@ phina.namespace(function() {
     },
 
     register: function(key, defaultValue) {
-      var tempKey = '__' + key;
-      this[tempKey] = defaultValue;
-      this.accessor(key, {
-        get: function() {
-          return this[tempKey];
-        },
-        set: function(v) {
-          this[tempKey] = v;
-          if (this._observe) {
-            this.flare('change');
-          }
-        },
-      });
+      if (arguments.length === 1) {
+        var obj = arguments[0];
+        obj.forIn(function(key, value) {
+          this.register(key, value);
+        }, this);
+      }
+      else {
+        var tempKey = '__' + key;
+        this[tempKey] = defaultValue;
+        this.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            this[tempKey] = v;
+            if (this._observe) {
+              this.flare('change');
+            }
+          },
+        });
+      }
+      return this;
     },
 
     observe: function() {

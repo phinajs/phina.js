@@ -8,30 +8,30 @@ phina.namespace(function() {
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
 
-    init: function(text) {
-      this.superInit();
-
-      this.canvas = phina.graphics.Canvas();
-
-      this.style.register('color', 'black');
-
-      this.style.register('stroke', true);
-      this.style.register('strokeColor', '#222');
-      this.style.register('strokeWidth', 2);
-
-      this.style.register('fontSize', 32);
-      this.style.register('fontWeight', '');
-      this.style.register('fontFamily', "'HiraKakuProN-W3'"); // Hiragino or Helvetica,
-
-      this.style.register('shadowBlur', 0);
-      this.style.register('shadowColor', 'black');
-
-      this.style.register('align', 'center');
-      this.style.register('baseline', 'middle');
-
-      this.style.register('backgroundColor', 'transparent');
+    init: function(text, style) {
 
       this.text = text || 'hoge\nfoo\nbar';
+      style = (style || {}).$safe({
+        color: 'black',
+
+        stroke: true,
+        strokeColor: '#222',
+        strokeWidth: 2,
+
+        fontSize: 32,
+        fontWeight: '',
+        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+
+        shadowBlur: 0,
+        shadowColor: 'black',
+
+        align: 'center',
+        baseline: 'middle',
+
+        backgroundColor: 'transparent',
+      });
+
+      this.superInit(style);
     },
 
     calcWidth: function() {
@@ -102,7 +102,9 @@ phina.namespace(function() {
         set: function(v) {
           this._text = v;
           this._lines = v.split('\n');
-          this._render();
+          if (this.canvas) {
+            this._render();
+          }
         },
       },
     }

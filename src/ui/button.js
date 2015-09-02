@@ -50,21 +50,25 @@ phina.namespace(function() {
       params = (params || {}).$safe({
         text: 'Hello',
         color: 'white',
+        backgroundColor: 'hsl(200, 80%, 60%)',
       });
 
-      this.bg = phina.display.RectangleShape().addChildTo(this);
-      this.bg.style.$extend({
-        width: this.width,
-        height: this.height,
-        cornerRadius: 8,
-      });
-      this.label = phina.display.Label(params.text).addChildTo(this);
-      this.label.style.color = params.color;
       this.setInteractive(true, 'rect');
-
       this.on('pointend', function() {
         this.flare('push');
       });
+
+      this.bg = phina.display.RectangleShape({
+        width: this.width,
+        height: this.height,
+        cornerRadius: 8,
+        color: params.backgroundColor,
+        stroke: false,
+      }).addChildTo(this);
+      this.label = phina.display.Label(params.text, {
+        color: params.color,
+        stroke: false,
+      }).addChildTo(this);
     },
   });
 
