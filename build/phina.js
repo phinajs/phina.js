@@ -959,77 +959,6 @@ phina.namespace(function() {
 
 
 
-phina.namespace(function() {
-
-  /**
-   * @class phina.event.EventDispatcher
-   */
-  phina.define('phina.event.EventDispatcher', {
-
-    init: function() {
-      this._listeners = {};
-    },
-
-    on: function(type, listener) {
-      if (this._listeners[type] === undefined) {
-        this._listeners[type] = [];
-      }
-
-      this._listeners[type].push(listener);
-      return this;
-    },
-
-    off: function(type, listener) {
-
-    },
-
-    fire: function(e) {
-      e.target = this;
-      var oldEventName = 'on' + e.type;
-      if (this[oldEventName]) this[oldEventName](e);
-      
-      var listeners = this._listeners[e.type];
-      if (listeners) {
-        var temp = listeners.clone();
-        for (var i=0,len=temp.length; i<len; ++i) {
-            temp[i].call(this, e);
-        }
-      }
-      
-      return this;
-    },
-
-    flare: function(type, param) {
-      var e = {type:type};
-      if (param) {
-        param.forIn(function(key, val) {
-          e[key] = val;
-        });
-      }
-      this.fire(e);
-
-      return this;
-    },
-
-    one: function(type, listener) {
-
-    },
-
-    has: function(type) {
-      if (this._listeners[type] === undefined && !this["on" + type]) return false;
-      return true;
-    },
-
-    clear: function(type) {
-      var oldEventName = 'on' + type;
-      if (this[oldEventName]) delete this[oldEventName];
-      this._listeners[type] = [];
-      return this;
-    },
-  });
-
-});
-
 
 phina.namespace(function() {
 
@@ -1359,6 +1288,406 @@ phina.namespace(function() {
 
 });
 
+phina.namespace(function() {
+
+  /**
+   * @class phina.util.EventDispatcher
+   */
+  phina.define('phina.util.EventDispatcher', {
+
+    init: function() {
+      this._listeners = {};
+    },
+
+    on: function(type, listener) {
+      if (this._listeners[type] === undefined) {
+        this._listeners[type] = [];
+      }
+
+      this._listeners[type].push(listener);
+      return this;
+    },
+
+    off: function(type, listener) {
+
+    },
+
+    fire: function(e) {
+      e.target = this;
+      var oldEventName = 'on' + e.type;
+      if (this[oldEventName]) this[oldEventName](e);
+      
+      var listeners = this._listeners[e.type];
+      if (listeners) {
+        var temp = listeners.clone();
+        for (var i=0,len=temp.length; i<len; ++i) {
+            temp[i].call(this, e);
+        }
+      }
+      
+      return this;
+    },
+
+    flare: function(type, param) {
+      var e = {type:type};
+      if (param) {
+        param.forIn(function(key, val) {
+          e[key] = val;
+        });
+      }
+      this.fire(e);
+
+      return this;
+    },
+
+    one: function(type, listener) {
+
+    },
+
+    has: function(type) {
+      if (this._listeners[type] === undefined && !this["on" + type]) return false;
+      return true;
+    },
+
+    clear: function(type) {
+      var oldEventName = 'on' + type;
+      if (this[oldEventName]) delete this[oldEventName];
+      this._listeners[type] = [];
+      return this;
+    },
+  });
+
+});
+
+
+;(function() {
+
+  /**
+   * @class phina.util.Tween
+   * 
+   */
+  phina.define('phina.util.Tween', {
+    superClass: 'phina.util.EventDispatcher',
+
+    init: function(target) {
+      this.superInit();
+
+      this.time = 0;
+    },
+
+    fromTo: function(target, beginProps, finishProps, duration, easing) {
+      this.target = target;
+      this.beginProps = beginProps;
+      this.finishProps = finishProps;
+      this.duration = duration;
+      this.easing = easing;
+
+      // setup
+      this.changeProps = {};
+      for (var key in beginProps) {
+          this.changeProps[key] = finishProps[key] - beginProps[key];
+      }
+
+      return this;
+    },
+
+    to: function(target, finishProps, duration, easing) {
+      var beginProps = {};
+
+      for (var key in finishProps) {
+        beginProps[key] = target[key];
+      }
+
+      this.fromTo(target, beginProps, finishProps, duration, easing);
+
+      return this;
+    },
+
+    from: function(target, beginProps, duration, easing) {
+        var finishProps = {};
+
+        for (var key in beginProps) {
+          finishProps[key] = target[key];
+          target[key] = beginProps[key];
+        }
+
+        this.fromTo(target, beginProps, finishProps, duration, easing);
+
+        return this;
+    },
+
+    by: function(target, props, duration, easing) {
+      var beginProps = {};
+      var finishProps = {};
+
+      for (var key in props) {
+        beginProps[key] = target[key];
+        finishProps[key] = target[key] + props[key];
+      }
+
+      this.fromTo(target, beginProps, finishProps, duration, easing);
+
+      return this;
+    },
+
+    gain: function(time) {
+      this.seek(this.time + time);
+    },
+    forward: function(time) {
+      this.seek(this.time + time);
+    },
+
+    backward: function(time) {
+      this.seek(this.time - time);
+    },
+
+    seek: function(time) {
+      this.time = Math.clamp(time, 0, this.duration);
+
+      this.beginProps.forIn(function(key, value) {
+        var v = this.easing(this.time, value, this.changeProps[key], this.duration);
+        this.target[key] = v;
+      }, this);
+
+      return this;
+    },
+
+    _accessor: {
+      easing: {
+        get: function() {
+          return this._easing;
+        },
+        set: function(v) {
+          this._easing = phina.util.Tween.EASING[v] || phina.util.Tween.EASING.default;
+        },
+      },
+    }
+  });
+
+
+  /**
+   * @class tm.anim.easing
+   * イージング
+   * ### Reference
+   * - <http://coderepos.org/share/wiki/JSTweener>
+   * - <http://coderepos.org/share/browser/lang/javascript/jstweener/trunk/src/JSTweener.js>
+   * - <http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js>
+   * - <http://hosted.zeh.com.br/tweener/docs/en-us/misc/transitions.html>
+   */
+  phina.util.Tween.EASING = {
+    /** default */
+    "default": function(t, b, c, d) {
+      return c*t/d + b;
+    },
+    /** linear */
+    linear: function(t, b, c, d) {
+      return c*t/d + b;
+    },
+    /** swing */
+    swing: function(t, b, c, d) {
+      return -c *(t/=d)*(t-2) + b;
+    },
+    /** easeInQuad */
+    easeInQuad: function(t, b, c, d) {
+      return c*(t/=d)*t + b;
+    },
+    /** easeOutQuad */
+    easeOutQuad: function(t, b, c, d) {
+      return -c *(t/=d)*(t-2) + b;
+    },
+    /** easeInOutQuad */
+    easeInOutQuad: function(t, b, c, d) {
+      if((t/=d/2) < 1) return c/2*t*t + b;
+      return -c/2 *((--t)*(t-2) - 1) + b;
+    },
+    /** defeInCubic */
+    easeInCubic: function(t, b, c, d) {
+      return c*(t/=d)*t*t + b;
+    },
+    /** easeOutCubic */
+    easeOutCubic: function(t, b, c, d) {
+      return c*((t=t/d-1)*t*t + 1) + b;
+    },
+    /** easeInOutCubic */
+    easeInOutCubic: function(t, b, c, d) {
+      if((t/=d/2) < 1) return c/2*t*t*t + b;
+      return c/2*((t-=2)*t*t + 2) + b;
+    },
+    /** easeOutInCubic */
+    easeOutInCubic: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutCubic(t*2, b, c/2, d);
+      return tm.anim.easing.easeInCubic((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInQuart */
+    easeInQuart: function(t, b, c, d) {
+      return c*(t/=d)*t*t*t + b;
+    },
+    /** easeOutQuart */
+    easeOutQuart: function(t, b, c, d) {
+      return -c *((t=t/d-1)*t*t*t - 1) + b;
+    },
+    /** easeInOutQuart */
+    easeInOutQuart: function(t, b, c, d) {
+      if((t/=d/2) < 1) return c/2*t*t*t*t + b;
+      return -c/2 *((t-=2)*t*t*t - 2) + b;
+    },
+    /** easeOutInQuart */
+    easeOutInQuart: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutQuart(t*2, b, c/2, d);
+      return tm.anim.easing.easeInQuart((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInQuint */
+    easeInQuint: function(t, b, c, d) {
+      return c*(t/=d)*t*t*t*t + b;
+    },
+    /** easeOutQuint */
+    easeOutQuint: function(t, b, c, d) {
+      return c*((t=t/d-1)*t*t*t*t + 1) + b;
+    },
+    /** easeInOutQuint */
+    easeInOutQuint: function(t, b, c, d) {
+      if((t/=d/2) < 1) return c/2*t*t*t*t*t + b;
+      return c/2*((t-=2)*t*t*t*t + 2) + b;
+    },
+    /** easeOutInQuint */
+    easeOutInQuint: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutQuint(t*2, b, c/2, d);
+      return tm.anim.easing.easeInQuint((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInSine */
+    easeInSine: function(t, b, c, d) {
+      return -c * Math.cos(t/d *(Math.PI/2)) + c + b;
+    },
+    /** easeOutSine */
+    easeOutSine: function(t, b, c, d) {
+      return c * Math.sin(t/d *(Math.PI/2)) + b;
+    },
+    /** easeInOutSine */
+    easeInOutSine: function(t, b, c, d) {
+      return -c/2 *(Math.cos(Math.PI*t/d) - 1) + b;
+    },
+    /** easeOutInSine */
+    easeOutInSine: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutSine(t*2, b, c/2, d);
+      return tm.anim.easing.easeInSine((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInExpo */
+    easeInExpo: function(t, b, c, d) {
+      return(t==0) ? b : c * Math.pow(2, 10 *(t/d - 1)) + b - c * 0.001;
+    },
+    /** easeOutExpo */
+    easeOutExpo: function(t, b, c, d) {
+      return(t==d) ? b+c : c * 1.001 *(-Math.pow(2, -10 * t/d) + 1) + b;
+    },
+    /** easeInOutExpo */
+    easeInOutExpo: function(t, b, c, d) {
+      if(t==0) return b;
+      if(t==d) return b+c;
+      if((t/=d/2) < 1) return c/2 * Math.pow(2, 10 *(t - 1)) + b - c * 0.0005;
+      return c/2 * 1.0005 *(-Math.pow(2, -10 * --t) + 2) + b;
+    },
+    /** easeOutInExpo */
+    easeOutInExpo: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutExpo(t*2, b, c/2, d);
+      return tm.anim.easing.easeInExpo((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInCirc */
+    easeInCirc: function(t, b, c, d) {
+      return -c *(Math.sqrt(1 -(t/=d)*t) - 1) + b;
+    },
+    /** easeOutCirc */
+    easeOutCirc: function(t, b, c, d) {
+      return c * Math.sqrt(1 -(t=t/d-1)*t) + b;
+    },
+    /** easeInOutCirc */
+    easeInOutCirc: function(t, b, c, d) {
+      if((t/=d/2) < 1) return -c/2 *(Math.sqrt(1 - t*t) - 1) + b;
+      return c/2 *(Math.sqrt(1 -(t-=2)*t) + 1) + b;
+    },
+    /** easeOutInCirc */
+    easeOutInCirc: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutCirc(t*2, b, c/2, d);
+      return tm.anim.easing.easeInCirc((t*2)-d, b+c/2, c/2, d);
+    },
+    /** easeInElastic */
+    easeInElastic: function(t, b, c, d, a, p) {
+      var s;
+      if(t==0) return b;  if((t/=d)==1) return b+c;  if(!p) p=d*.3;
+      if(!a || a < Math.abs(c)) { a=c; s=p/4; } else s = p/(2*Math.PI) * Math.asin(c/a);
+      return -(a*Math.pow(2,10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p )) + b;
+    },
+    /** easeOutElastic */
+    easeOutElastic: function(t, b, c, d, a, p) {
+      var s;
+      if(t==0) return b;  if((t/=d)==1) return b+c;  if(!p) p=d*.3;
+      if(!a || a < Math.abs(c)) { a=c; s=p/4; } else s = p/(2*Math.PI) * Math.asin(c/a);
+      return(a*Math.pow(2,-10*t) * Math.sin((t*d-s)*(2*Math.PI)/p ) + c + b);
+    },
+    /** easeInOutElastic */
+    easeInOutElastic: function(t, b, c, d, a, p) {
+      var s;
+      if(t==0) return b;  if((t/=d/2)==2) return b+c;  if(!p) p=d*(.3*1.5);
+      if(!a || a < Math.abs(c)) { a=c; s=p/4; }       else s = p/(2*Math.PI) * Math.asin(c/a);
+      if(t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p )) + b;
+      return a*Math.pow(2,-10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+    },
+    /** easeOutInElastic */
+    easeOutInElastic: function(t, b, c, d, a, p) {
+      if(t < d/2) return tm.anim.easing.easeOutElastic(t*2, b, c/2, d, a, p);
+      return tm.anim.easing.easeInElastic((t*2)-d, b+c/2, c/2, d, a, p);
+    },
+    /** easeInBack */
+    easeInBack: function(t, b, c, d, s) {
+      if(s == undefined) s = 1.70158;
+      return c*(t/=d)*t*((s+1)*t - s) + b;
+    },
+    /** easeOutBack */
+    easeOutBack: function(t, b, c, d, s) {
+      if(s == undefined) s = 1.70158;
+      return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+    },
+    /** easeInOutBack */
+    easeInOutBack: function(t, b, c, d, s) {
+      if(s == undefined) s = 1.70158;
+      if((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+      return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+    },
+    /** easeOutInBack */
+    easeOutInBack: function(t, b, c, d, s) {
+      if(t < d/2) return tm.anim.easing.easeOutBack(t*2, b, c/2, d, s);
+      return tm.anim.easing.easeInBack((t*2)-d, b+c/2, c/2, d, s);
+    },
+    /** easeInBounce */
+    easeInBounce: function(t, b, c, d) {
+      return c - tm.anim.easing.easeOutBounce(d-t, 0, c, d) + b;
+    },
+    /** easeOutBounce */
+    easeOutBounce: function(t, b, c, d) {
+      if((t/=d) <(1/2.75)) {
+        return c*(7.5625*t*t) + b;
+      } else if(t <(2/2.75)) {
+        return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+      } else if(t <(2.5/2.75)) {
+        return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+      } else {
+        return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+      }
+    },
+    /** easeInOutBounce */
+    easeInOutBounce: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeInBounce(t*2, 0, c, d) * .5 + b;
+      else return tm.anim.easing.easeOutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
+    },
+    /** easeOutInBounce */
+    easeOutInBounce: function(t, b, c, d) {
+      if(t < d/2) return tm.anim.easing.easeOutBounce(t*2, b, c/2, d);
+      return tm.anim.easing.easeInBounce((t*2)-d, b+c/2, c/2, d);
+    }
+  };
+
+})();
+
+
 
 ;(function() {
 
@@ -1367,7 +1696,7 @@ phina.namespace(function() {
    * tick management class
    */
   phina.define('phina.util.Ticker', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /** 経過フレーム数 */
     frame: null,
@@ -1505,6 +1834,67 @@ phina.namespace(function() {
   });
 
 })();
+
+
+// 監視オブジェクト
+// register で key を登録 (デフォルト値も一緒に？)
+// event dispatcher を継承
+// event dispatcher って util じゃね？
+// register で登録した値を変更したら change イベントが走る
+
+
+// 名前候補
+//  middleman(仲立人)
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.util.ChangeDispatcher
+   */
+  phina.define('phina.util.ChangeDispatcher', {
+    superClass: 'phina.util.EventDispatcher',
+
+    init: function() {
+      this.superInit();
+
+      this._observe = true;
+    },
+
+    register: function(key, defaultValue) {
+      if (arguments.length === 1) {
+        var obj = arguments[0];
+        obj.forIn(function(key, value) {
+          this.register(key, value);
+        }, this);
+      }
+      else {
+        var tempKey = '__' + key;
+        this[tempKey] = defaultValue;
+        this.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            this[tempKey] = v;
+            if (this._observe) {
+              this.flare('change');
+            }
+          },
+        });
+      }
+      return this;
+    },
+
+    observe: function() {
+      this._observe = true;
+    },
+    unobserve: function() {
+      this._observe = false;
+    },
+  });
+
+});
 
 ;(function() {
   /**
@@ -2035,7 +2425,9 @@ phina.namespace(function() {
       if (overFlag) {
         if (p.getPointingStart()) {
           obj._touchFlags[p.id] = true;
-          obj.flare('pointstart');
+          obj.flare('pointstart', {
+            pointer: p,
+          });
         }
       }
 
@@ -2068,7 +2460,7 @@ phina.namespace(function() {
    * ベースとなるアプリケーションクラス
    */
   phina.define('phina.app.BaseApp', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /** awake */
     awake: null,
@@ -2157,10 +2549,10 @@ phina.namespace(function() {
 
   /**
    * @class phina.app.Element
-   * @extends phina.event.EventDispatcher
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.app.Element', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /// 親
     parent: null,
@@ -2279,7 +2671,7 @@ phina.namespace(function() {
       this._matrix = phina.geom.Matrix33().identity();
       this._worldMatrix = phina.geom.Matrix33().identity();
 
-      this.interactive = true;
+      this.interactive = false;
       this._overFlags = {};
       this._touchFlags = {};
     },
@@ -2312,6 +2704,11 @@ phina.namespace(function() {
       var temp = matrix.multiplyVector2(p);
 
       return temp;
+    },
+
+    setInteractive: function(flag) {
+      this.interactive = flag;
+      return this;
     },
 
     _calcWorldMatrix: function() {
@@ -2509,6 +2906,126 @@ phina.namespace(function() {
 
     init: function() {
       this.superInit();
+    },
+  });
+  
+});
+
+phina.namespace(function() {
+
+  phina.define('phina.app.Tweener', {
+    superClass: 'phina.app.Element',
+
+    init: function(target) {
+      this.superInit();
+
+      this.target = target;
+      this._tasks = [];
+      this._index = 0;
+      this._update = this._updateTask;
+      this.playing = true;
+    },
+
+    update: function(app) {
+      this._update(app);
+    },
+
+    to: function(props, duration, easing) {
+      this._add({
+        type: 'tween',
+        mode: 'to',
+        props: props,
+        duration: duration,
+        easing: easing,
+      });
+      return this;
+    },
+
+    from: function(props, duration, easing) {
+      this._add({
+        type: 'tween',
+        mode: 'from',
+        props: props,
+        duration: duration,
+        easing: easing,
+      });
+      return this;
+    },
+
+    wait: function(time) {
+      this._add({
+        type: 'wait',
+        data: {
+          limit: time,
+        },
+      });
+      return this;
+    },
+
+    _add: function(params) {
+      this._tasks.push(params);
+    },
+
+    _updateTask: function(app) {
+      if (!this.playing) return ;
+
+      var task = this._tasks[this._index];
+      if (!task) {
+        this.playing = false;
+        return ;
+      }
+      else {
+        ++this._index;
+      }
+
+      if (task.type === 'tween') {
+        this._tween = phina.util.Tween();
+
+        if (task.mode === 'to') {
+          this._tween.to(this.target, task.props, task.duration, task.easing);
+        }
+        else {
+          this._tween.from(this.target, task.props, task.duration, task.easing);
+        }
+        this._update = this._updateTween;
+        this._update(app);
+      }
+      else if (task.type === 'wait') {
+        this._wait = {
+          time: 0,
+          limit: task.data.limit,
+        };
+
+        this._update = this._updateWait;
+        this._update(app);
+      }
+    },
+
+    _updateTween: function(app) {
+      var tween = this._tween;
+      var time = app.ticker.deltaTime;
+      // var time = 1000/app.fps;
+
+      if (tween.time >= tween.duration) {
+        delete this._tween;
+        this._tween = null;
+        this._update = this._updateTask;
+      }
+      else {
+        tween.forward(time);
+      }
+    },
+
+    _updateWait: function(app) {
+      var wait = this._wait;
+      var time = app.ticker.deltaTime;
+      wait.time += time;
+
+      if (wait.time >= wait.limit) {
+        delete this._wait;
+        this._wait = null;
+        this._update = this._updateTask;
+      }
     },
   });
   
@@ -3215,22 +3732,24 @@ phina.namespace(function() {
   phina.define('phina.display.Shape', {
     superClass: 'phina.display.CanvasElement',
 
-    init: function() {
+    init: function(style) {
       this.superInit();
 
-      this.canvas = phina.graphics.Canvas();
-      this.style = {};
-    },
+      style = (style || {}).$safe({
+        width: 64,
+        height: 64,
+        padding: 8,
+        backgroundColor: '#aaa',
+      });
 
-    observeStyle: function() {
-      this._observe = function(changes) {
+      this.canvas = phina.graphics.Canvas();
+      this.style = phina.util.ChangeDispatcher();
+      this.style.register(style);
+      this.style.onchange = function() {
         this._render();
       }.bind(this);
-      Object.observe(this.style, this._observe);
-    },
 
-    unobserveStyle: function() {
-      Object.unobserve(this.style, this._observe);
+      this._render();
     },
 
     _render: function() {
@@ -3253,27 +3772,26 @@ phina.namespace(function() {
   });
 
   /**
-   * @class phina.display.Shape
+   * @class phina.display.RectangleShape
    * 
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
-    init: function() {
-      this.superInit();
-      this.style = {
-        padding: 4,
-        width: 64,
-        height: 64,
+    init: function(style) {
 
+      style = (style || {}).$safe({
         color: 'blue',
 
+        stroke: true,
         strokeWidth: 4,
         strokeColor: '#aaa',
 
+        cornerRadius: 0,
+
         backgroundColor: 'transparent',
-      };
-      this.observeStyle();
-      this._render();
+      });
+
+      this.superInit(style);
     },
 
     _render: function() {
@@ -3283,12 +3801,15 @@ phina.namespace(function() {
       this.canvas.clearColor(style.backgroundColor);
 
       this.canvas.transformCenter();
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
 
-      this.canvas.context.lineWidth = style.strokeWidth;
-      this.canvas.strokeStyle = style.strokeColor;
-      this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
+      if (style.stroke) {
+        this.canvas.context.lineWidth = style.strokeWidth;
+        this.canvas.strokeStyle = style.strokeColor;
+        this.canvas.strokeRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
+      }
+
+      this.canvas.context.fillStyle = style.color;
+      this.canvas.fillRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
     },
   });
 
@@ -3298,21 +3819,21 @@ phina.namespace(function() {
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
-    init: function() {
-      this.superInit();
-
-      this.style = {
-        padding: 12,
-        radius: 32,
+    init: function(style) {
+      style = (style || {}).$safe({
         color: 'red',
+        radius: 32,
 
+        stroke: true,
         strokeWidth: 4,
         strokeColor: '#aaa',
 
+        cornerRadius: 0,
+
         backgroundColor: 'transparent',
-      };
-      this.observeStyle();
-      this._render();
+      });
+
+      this.superInit(style);
     },
 
     _render: function() {
@@ -3323,12 +3844,14 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
+      if (style.stroke) {
+        this.canvas.context.lineWidth = style.strokeWidth;
+        this.canvas.strokeStyle = style.strokeColor;
+        this.canvas.strokeCircle(0, 0, style.radius);
+      }
+
       this.canvas.context.fillStyle = style.color;
       this.canvas.fillCircle(0, 0, style.radius);
-
-      this.canvas.context.lineWidth = style.strokeWidth;
-      this.canvas.strokeStyle = style.strokeColor;
-      this.canvas.strokeCircle(0, 0, style.radius);
     },
   });
 
@@ -3376,18 +3899,16 @@ phina.namespace(function() {
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
 
-    init: function(text) {
-      this.superInit();
+    init: function(text, style) {
 
-      this.canvas = phina.graphics.Canvas();
-
-      this.style = {
+      this.text = text || 'hoge\nfoo\nbar';
+      style = (style || {}).$safe({
         color: 'black',
-        
+
         stroke: true,
         strokeColor: '#222',
         strokeWidth: 2,
-        
+
         fontSize: 32,
         fontWeight: '',
         fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
@@ -3399,13 +3920,9 @@ phina.namespace(function() {
         baseline: 'middle',
 
         backgroundColor: 'transparent',
+      });
 
-        padding: 8,
-      };
-
-      this.observeStyle();
-
-      this.text = text || 'hoge\nfoo\nbar';
+      this.superInit(style);
     },
 
     calcWidth: function() {
@@ -3476,7 +3993,9 @@ phina.namespace(function() {
         set: function(v) {
           this._text = v;
           this._lines = v.split('\n');
-          this._render();
+          if (this.canvas) {
+            this._render();
+          }
         },
       },
     }
@@ -3604,21 +4123,45 @@ phina.namespace(function() {
       var context = this.canvas.context;
 
       context.globalAlpha = obj._worldAlpha;
-      
-      if (obj.draw) {
+
+      if (obj._worldMatrix) {
         // 行列をセット
         var m = obj._worldMatrix;
         context.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
+      }
 
-        obj.draw(this.canvas);
+      if (obj.clip) {
+
+        context.save();
+
+        obj.clip(this.canvas);
+        context.clip();
+
+        if (obj.draw) obj.draw(this.canvas);
+
+        // 子供たちも実行
+        if (obj.children.length > 0) {
+            var tempChildren = obj.children.slice();
+            for (var i=0,len=tempChildren.length; i<len; ++i) {
+                this.renderObject(tempChildren[i]);
+            }
+        }
+
+        context.restore();
       }
-      // 子供たちも実行
-      if (obj.children.length > 0) {
-          var tempChildren = obj.children.slice();
-          for (var i=0,len=tempChildren.length; i<len; ++i) {
-              this.renderObject(tempChildren[i]);
-          }
+      else {
+        if (obj.draw) obj.draw(this.canvas);
+
+        // 子供たちも実行
+        if (obj.children.length > 0) {
+            var tempChildren = obj.children.slice();
+            for (var i=0,len=tempChildren.length; i<len; ++i) {
+                this.renderObject(tempChildren[i]);
+            }
+        }
+
       }
+      
     },
   });
 
@@ -3734,3 +4277,151 @@ phina.namespace(function() {
 
   });
 });
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.effect.Wave
+   * Button
+   */
+  phina.define('phina.effect.Wave', {
+    superClass: 'phina.display.CircleShape',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit({
+      	color: 'white',
+      	color: 'red',
+      	stroke: false,
+      });
+      this.clipping = true;
+      this.width = 100;
+      this.height = 100;
+    },
+
+    update: function() {
+      this.style.radius += 2;
+      this.alpha -= 0.05;
+      if (this.alpha <= 0) {
+        this.remove();
+      }
+    }
+  });
+
+});
+
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.ui.Button
+   * Button
+   */
+  phina.define('phina.ui.BaseButton', {
+    superClass: 'phina.display.CanvasElement',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit();
+
+      params = (params || {}).$safe({
+        width: 200,
+        height: 80,
+      });
+
+      this.width = params.width;
+      this.height = params.height;
+
+      this.setInteractive(true, 'rect');
+
+      this.on('pointingend', function() {
+        this.flare('push');
+      });
+    },
+  });
+
+});
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Button
+   * Button
+   */
+  phina.define('phina.ui.Button', {
+    superClass: 'phina.ui.BaseButton',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit(params);
+
+      params = (params || {}).$safe({
+        text: 'Hello',
+        color: 'white',
+        backgroundColor: 'hsl(200, 80%, 60%)',
+      });
+
+      this.setInteractive(true, 'rect');
+      this.on('pointend', function() {
+        this.flare('push');
+      });
+
+      this.bg = phina.display.RectangleShape({
+        width: this.width,
+        height: this.height,
+        cornerRadius: 8,
+        color: params.backgroundColor,
+        stroke: false,
+      }).addChildTo(this);
+      this.label = phina.display.Label(params.text, {
+        color: params.color,
+        stroke: false,
+      }).addChildTo(this);
+    },
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Button
+   * Button
+   */
+  phina.define('phina.ui.FlatButton', {
+    superClass: 'phina.display.CanvasElement',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit();
+
+      params = params || {};
+      params.$safe({
+        width: 200,
+        height: 80,
+      });
+
+      this.width = params.width;
+      this.height = params.height;
+
+      this.bg = phina.display.RectangleShape().addChildTo(this);
+      this.bg.style.$extend({
+        width: params.width,
+        height: params.height,
+      });
+      this.label = phina.display.Label('hoge').addChildTo(this);
+      
+      this.setInteractive(true, 'rect');
+    },
+  });
+
+});
+
