@@ -2,15 +2,16 @@
 
 <html>
   <head>
-    <meta charset='utf-8' />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <title>test - phina.js</title>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js'></script>
   </head>
   <body>
-    <canvas id='world' width='640' height='960'></canvas>
+    <canvas id='world'></canvas>
     <button class='btn-standalone' onclick='openStandalone();'>View</button>
   </body>
 </html>
@@ -37,6 +38,10 @@ window.openStandalone = function() {
 };
 
 window.onload = function() {
+  init();
+};
+
+var init = function() {
   var app = phina.display.CanvasApp({
     query:'#world',
   });

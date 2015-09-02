@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -60,17 +60,24 @@
           padding-left: 240px;
         }
       }
-      #preview, #preview iframe {
-        width: 100%;
+      .main {
         height: 100vh;
         margin-top: -66px;
         padding-top: 66px;
-
+      }
+      #preview {
+        width: 100%;
+        height: 100%;
+      }
+      #preview iframe {
+        width: 100%;
+        height: 100%;
         border: none;
       }
     script.
       this.on('mount', function() {
         window.preview = jframe("#preview");
+        window.preview.load('');
       });
 
 </script>
