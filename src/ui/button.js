@@ -56,6 +56,7 @@ phina.namespace(function() {
       this.bg.style.$extend({
         width: this.width,
         height: this.height,
+        cornerRadius: 8,
       });
       this.label = phina.display.Label(params.text).addChildTo(this);
       this.label.style.color = params.color;

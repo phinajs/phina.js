@@ -57,6 +57,8 @@ phina.namespace(function() {
       this.style.register('strokeWidth', 4);
       this.style.register('strokeColor', '#aaa');
 
+      this.style.register('cornerRadius', 0);
+
       this.style.register('backgroundColor', 'transparent');
 
       this._render();
@@ -70,11 +72,17 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
       this.canvas.context.fillStyle = style.color;
-      this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
-
       this.canvas.context.lineWidth = style.strokeWidth;
       this.canvas.strokeStyle = style.strokeColor;
-      this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
+
+      if (style.cornerRadius > 0) {
+        this.canvas.strokeRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
+        this.canvas.fillRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
+      }
+      else {
+        this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
+        this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
+      }
     },
   });
 
