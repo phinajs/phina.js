@@ -68,7 +68,9 @@ phina.namespace(function() {
       if (overFlag) {
         if (p.getPointingStart()) {
           obj._touchFlags[p.id] = true;
-          obj.flare('pointstart');
+          obj.flare('pointstart', {
+            pointer: p,
+          });
         }
       }
 

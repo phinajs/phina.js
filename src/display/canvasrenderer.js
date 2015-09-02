@@ -24,21 +24,45 @@ phina.namespace(function() {
       var context = this.canvas.context;
 
       context.globalAlpha = obj._worldAlpha;
-      
-      if (obj.draw) {
+
+      if (obj._worldMatrix) {
         // 行列をセット
         var m = obj._worldMatrix;
         context.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
+      }
 
-        obj.draw(this.canvas);
+      if (obj.clip) {
+
+        context.save();
+
+        obj.clip(this.canvas);
+        context.clip();
+
+        if (obj.draw) obj.draw(this.canvas);
+
+        // 子供たちも実行
+        if (obj.children.length > 0) {
+            var tempChildren = obj.children.slice();
+            for (var i=0,len=tempChildren.length; i<len; ++i) {
+                this.renderObject(tempChildren[i]);
+            }
+        }
+
+        context.restore();
       }
-      // 子供たちも実行
-      if (obj.children.length > 0) {
-          var tempChildren = obj.children.slice();
-          for (var i=0,len=tempChildren.length; i<len; ++i) {
-              this.renderObject(tempChildren[i]);
-          }
+      else {
+        if (obj.draw) obj.draw(this.canvas);
+
+        // 子供たちも実行
+        if (obj.children.length > 0) {
+            var tempChildren = obj.children.slice();
+            for (var i=0,len=tempChildren.length; i<len; ++i) {
+                this.renderObject(tempChildren[i]);
+            }
+        }
+
       }
+      
     },
   });
 
