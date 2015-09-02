@@ -28,7 +28,7 @@ phina.namespace(function() {
       this._matrix = phina.geom.Matrix33().identity();
       this._worldMatrix = phina.geom.Matrix33().identity();
 
-      this.interactive = true;
+      this.interactive = false;
       this._overFlags = {};
       this._touchFlags = {};
     },
@@ -61,6 +61,11 @@ phina.namespace(function() {
       var temp = matrix.multiplyVector2(p);
 
       return temp;
+    },
+
+    setInteractive: function(flag) {
+      this.interactive = flag;
+      return this;
     },
 
     _calcWorldMatrix: function() {
