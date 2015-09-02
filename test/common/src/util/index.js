@@ -12,6 +12,36 @@ describe('#util', function() {
     });
   });
 
+  describe('Tween', function() {
+    it('init', function() {
+      var obj = { x: 100, y: 100, };
+      var tween = phina.util.Tween();
+      tween.to(obj, { x: 200, }, 1000);
+
+
+      var arr = Array.range(100, 210, 10);
+      (10+1).times(function(i) {
+        assert.equal(obj.x, arr[i]);
+        tween.gain(100);
+      });
+
+    });
+
+    it('from', function() {
+      var obj = { x: 100, y: 100, };
+      var tween = phina.util.Tween();
+      tween.from(obj, { x: 200, }, 1000);
+
+      var arr = Array.range(100, 210, 10).reverse();
+      (10+1).times(function(i) {
+        assert.equal(obj.x, arr[i]);
+        tween.gain(100);
+      });
+
+    });
+
+  });
+
   describe('Ticker', function() {
     it('init', function() {
       var timer = phina.util.Ticker();

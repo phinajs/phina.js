@@ -13,6 +13,7 @@
     "geom/matrix33.js",
 
     "util/eventdispatcher.js",
+    "util/tween.js",
     "util/ticker.js",
     "util/grid.js",
     "util/changedispatcher.js",
