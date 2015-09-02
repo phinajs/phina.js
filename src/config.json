@@ -42,6 +42,8 @@
     "display/domapp.js",
     "display/canvasapp.js",
 
+    "effect/wave.js",
+
     "ui/button.js"
   ]
 }
