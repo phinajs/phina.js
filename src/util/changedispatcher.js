@@ -17,7 +17,7 @@ phina.namespace(function() {
    * @class phina.util.ChangeDispatcher
    */
   phina.define('phina.util.ChangeDispatcher', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     init: function() {
       this.superInit();

@@ -6,7 +6,7 @@
    * tick management class
    */
   phina.define('phina.util.Ticker', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /** 経過フレーム数 */
     frame: null,

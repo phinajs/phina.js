@@ -3,10 +3,10 @@ phina.namespace(function() {
 
   /**
    * @class phina.app.Element
-   * @extends phina.event.EventDispatcher
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.app.Element', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /// 親
     parent: null,

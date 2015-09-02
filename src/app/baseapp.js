@@ -5,7 +5,7 @@ phina.namespace(function() {
    * ベースとなるアプリケーションクラス
    */
   phina.define('phina.app.BaseApp', {
-    superClass: 'phina.event.EventDispatcher',
+    superClass: 'phina.util.EventDispatcher',
 
     /** awake */
     awake: null,
