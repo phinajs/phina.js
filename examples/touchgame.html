@@ -83,29 +83,24 @@ phina.define("MainScene", {
 });
 
 phina.define('Piece', {
-  superClass: 'RectangleShape',
+  superClass: 'Button',
 
   init: function(index) {
-    this.superInit();
+    this.superInit({
+      width: 100,
+      height: 100,
+      text: index+'',
+    });
 
     this.index = index;
-    this.width = this.style.width = 100;
-    this.height = this.style.height = 100;
-    this.style.color = 'white';
-
-    this.label = Label(index+'').addChildTo(this);
-    this.label.style.fontSize = 48;
-    this.label.style.fontWeight = 'bold';
-    this.label.style.stroke = false;
-
-    this.on('pointstart', function() {
-      this.style.color = 'blue';
-      this.label.style.color = 'white';
-    });
-    this.on('pointend', function() {
-      this.style.color = 'white';
-      this.label.style.color = 'black';
-    });
+    // this.on('pointstart', function() {
+    //   this.bg.style.color = 'blue';
+    //   this.label.style.color = 'white';
+    // });
+    // this.on('pointend', function() {
+    //   this.bg.style.color = 'white';
+    //   this.label.style.color = 'black';
+    // });
   },
 
   update: function() {
