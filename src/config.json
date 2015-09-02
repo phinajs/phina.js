@@ -8,12 +8,11 @@
     "core/math.js",
 
     "phina.js",
-
-    "event/eventdispatcher.js",
     
     "geom/vector2.js",
     "geom/matrix33.js",
 
+    "util/eventdispatcher.js",
     "util/ticker.js",
     "util/grid.js",
     "util/changedispatcher.js",
