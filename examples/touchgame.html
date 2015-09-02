@@ -71,6 +71,14 @@ phina.define("MainScene", {
     this.timerLabel = timerLabel;
 
     this.time = 0;
+
+    var tweener = Tweener(timerLabel).addChildTo(this);
+    tweener
+      .from({x:0,y:0}, 2000)
+      .from({y:500}, 1000)
+      .to({x:200}, 1000)
+      .wait(1000)
+      .to({x:580}, 1000)
   },
 
   update: function(app) {
