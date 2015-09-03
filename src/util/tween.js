@@ -18,7 +18,7 @@
       this.target = target;
       this.beginProps = beginProps;
       this.finishProps = finishProps;
-      this.duration = duration;
+      this.duration = duration || 1000;
       this.easing = easing;
 
       // setup
