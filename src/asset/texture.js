@@ -6,21 +6,23 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.asset.Texture', {
-    superClass: "phina.util.EventDispatcher",
+    superClass: "phina.asset.Asset",
 
     /**
      * @constructor
      */
-    init: function(src) {
+    init: function() {
       this.superInit();
+    },
 
+    _load: function(resolve) {
       this.domElement = new Image();
-      this.domElement.src = src;
+      this.domElement.src = this.src;
 
       var self = this;
       this.domElement.onload = function() {
         self.loaded = true;
-        self.flare( 'load' );
+        resolve(self);
       };
     },
 

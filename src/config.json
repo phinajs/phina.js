@@ -19,7 +19,9 @@
     "util/changedispatcher.js",
     "util/flow.js",
 
+    "asset/asset.js",
     "asset/assetmanager.js",
+    "asset/assetloader.js",
     "asset/texture.js",
 
     "input/input.js",

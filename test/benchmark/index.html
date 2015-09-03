@@ -37,22 +37,20 @@ phina.define("MainScene", {
       height: SCREEN_HEIGHT,
     });
 
-    var texture = Texture(IMAGE);
-    AssetManager.set('image', 'image', texture);
+    var self = this;
 
-    texture.onload = function() {
-      this.update = this._update;
+    var texture = Texture();
+    texture.load(IMAGE).then(function(texture) {
+      AssetManager.set('image', 'image', texture);
 
+      self.update = this._update;
       MAX_NUM.times(function() {
-        this.create();
-      }.bind(this));
-    }.bind(this);
+        self.create();
+      });
+    });
   },
 
   _update: function() {
-    // if (this.app.ticker.frame % 30 == 0) {
-    //   this.create();
-    // }
     stats.end();
     stats.begin();
   },
