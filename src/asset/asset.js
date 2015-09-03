@@ -13,6 +13,8 @@ phina.namespace(function() {
      */
     init: function(src) {
       this.superInit();
+
+      this.loaded = false;
     },
 
     load: function(src) {
@@ -20,8 +22,14 @@ phina.namespace(function() {
       return phina.util.Flow(this._load.bind(this));
     },
 
+    isLoaded: function() {
+      return this.loaded;
+    },
+
     _load: function(resolve) {
+      var self = this;
       setTimeout(function() {
+        self.loaded = true;
         resolve();
       }, 100);
     },
