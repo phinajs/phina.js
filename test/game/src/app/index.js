@@ -32,5 +32,31 @@ th.describe("app.Tweener", function() {
       .to({scaleX:4,scaleY:4, rotation:360}, 1000)
   });
 
+  th.it('call', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.app.Tweener(shape).addChildTo(this);
+    tweener
+      .to({x:320, y:480}, 1000)
+      .call(function() {
+        shape.style.color = 'red';
+      })
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000)
+      .call(function() {
+        shape.style.color = 'blue';
+      })
+  });
+
+  th.it('set', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.app.Tweener(shape).addChildTo(this);
+    tweener
+      .to({x:320, y:480}, 1000)
+      .set('rotation', 90)
+      .set({scaleX:4, scaleY:4})
+      .call(function() {
+        shape.style.color = 'green';
+      })
+  });
+
 
 });

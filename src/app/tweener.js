@@ -49,6 +49,43 @@ phina.namespace(function() {
       return this;
     },
 
+    call: function(func, self, args) {
+      this._add({
+        type: 'call',
+        data: {
+          func: func,
+          self: self || this,
+          args: args,
+        },
+      });
+      return this;
+    },
+
+    /**
+     * プロパティをセット
+     * @param {Object} key
+     * @param {Object} value
+     */
+    set: function(key, value) {
+        var values = null;
+        if (arguments.length == 2) {
+            values = {};
+            values[key] = value;
+        }
+        else {
+            values = key;
+        }
+        this._tasks.push({
+            type: "set",
+            data: {
+                values: values
+            }
+        });
+
+        return this;
+    },
+
+
     _add: function(params) {
       this._tasks.push(params);
     },
@@ -84,6 +121,16 @@ phina.namespace(function() {
         };
 
         this._update = this._updateWait;
+        this._update(app);
+      }
+      else if (task.type === 'call') {
+        task.data.func.apply(task.data.self, task.data.args);
+        // 1フレーム消費しないよう再帰
+        this._update(app);
+      }
+      else if (task.type === 'set') {
+        this.target.$extend(task.data.values);
+        // 1フレーム消費しないよう再帰
         this._update(app);
       }
     },
