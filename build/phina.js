@@ -1379,7 +1379,7 @@ phina.namespace(function() {
       this.target = target;
       this.beginProps = beginProps;
       this.finishProps = finishProps;
-      this.duration = duration;
+      this.duration = duration || 1000;
       this.easing = easing;
 
       // setup
@@ -1427,6 +1427,19 @@ phina.namespace(function() {
 
       this.fromTo(target, beginProps, finishProps, duration, easing);
 
+      return this;
+    },
+
+    yoyo: function() {
+      var temp = this.beginProps;
+      this.beginProps = this.finishProps;
+      this.finishProps = temp;
+      this.changeProps.forIn(function(key, value, index) {
+        this.changeProps[key] = -value;
+        this.target[key] = this.beginProps[key];
+      }, this);
+      // TODO: easing も反転させる
+      // this.easing = easing;
       return this;
     },
 
@@ -2920,10 +2933,15 @@ phina.namespace(function() {
       this.superInit();
 
       this.target = target;
+      this._loop = false;
+      this._init();
+    },
+
+    _init: function() {
       this._tasks = [];
       this._index = 0;
-      this._update = this._updateTask;
       this.playing = true;
+      this._update = this._updateTask;
     },
 
     update: function(app) {
@@ -2962,6 +2980,106 @@ phina.namespace(function() {
       return this;
     },
 
+    call: function(func, self, args) {
+      this._add({
+        type: 'call',
+        data: {
+          func: func,
+          self: self || this,
+          args: args,
+        },
+      });
+      return this;
+    },
+
+    /**
+     * プロパティをセット
+     * @param {Object} key
+     * @param {Object} value
+     */
+    set: function(key, value) {
+      var values = null;
+      if (arguments.length == 2) {
+        values = {};
+        values[key] = value;
+      }
+      else {
+        values = key;
+      }
+      this._tasks.push({
+        type: "set",
+        data: {
+          values: values
+        }
+      });
+
+      return this;
+    },
+
+    /**
+     * アニメーション開始
+     */
+    play: function() {
+      this.playing = true;
+      return this;
+    },
+
+    /**
+     * アニメーションを一時停止
+     */
+    pause: function() {
+      this.playing = false;
+      return this;
+    },
+
+    stop: function() {
+      this.playing = false;
+      this.rewind();
+      return this;
+    },
+
+    /**
+     * アニメーションを巻き戻す
+     */
+    rewind: function() {
+      this._update = this._updateTask;
+      this._index = 0;
+      this.play();
+      return this;
+    },
+
+    yoyo: function() {
+      // TODO: 最初の値が分からないので反転できない...
+      this._update = this._updateTask;
+      this._index = 0;
+      this._tasks.each(function(task) {
+        if (task.type === 'tween') {
+
+        }
+        console.log(task);
+      });
+      this.play();
+
+      return this;
+    },
+
+    /**
+     * アニメーションループ設定
+     * @param {Boolean} flag
+     */
+    setLoop: function(flag) {
+      this._loop = flag;
+      return this;
+    },
+
+    /**
+     * アニメーションをクリア
+     */
+    clear: function() {
+      this._init();
+      return this;
+    },
+
     _add: function(params) {
       this._tasks.push(params);
     },
@@ -2971,7 +3089,12 @@ phina.namespace(function() {
 
       var task = this._tasks[this._index];
       if (!task) {
-        this.playing = false;
+        if (this._loop) {
+          this.rewind();
+        }
+        else {
+          this.playing = false;
+        }
         return ;
       }
       else {
@@ -2997,6 +3120,16 @@ phina.namespace(function() {
         };
 
         this._update = this._updateWait;
+        this._update(app);
+      }
+      else if (task.type === 'call') {
+        task.data.func.apply(task.data.self, task.data.args);
+        // 1フレーム消費しないよう再帰
+        this._update(app);
+      }
+      else if (task.type === 'set') {
+        this.target.$extend(task.data.values);
+        // 1フレーム消費しないよう再帰
         this._update(app);
       }
     },
