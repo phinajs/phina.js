@@ -69,6 +69,19 @@
       return this;
     },
 
+    yoyo: function() {
+      var temp = this.beginProps;
+      this.beginProps = this.finishProps;
+      this.finishProps = temp;
+      this.changeProps.forIn(function(key, value, index) {
+        this.changeProps[key] = -value;
+        this.target[key] = this.beginProps[key];
+      }, this);
+      // TODO: easing も反転させる
+      // this.easing = easing;
+      return this;
+    },
+
     gain: function(time) {
       this.seek(this.time + time);
     },

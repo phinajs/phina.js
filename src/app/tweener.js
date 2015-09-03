@@ -106,6 +106,12 @@ phina.namespace(function() {
       return this;
     },
 
+    stop: function() {
+      this.playing = false;
+      this.rewind();
+      return this;
+    },
+
     /**
      * アニメーションを巻き戻す
      */
@@ -113,6 +119,21 @@ phina.namespace(function() {
       this._update = this._updateTask;
       this._index = 0;
       this.play();
+      return this;
+    },
+
+    yoyo: function() {
+      // TODO: 最初の値が分からないので反転できない...
+      this._update = this._updateTask;
+      this._index = 0;
+      this._tasks.each(function(task) {
+        if (task.type === 'tween') {
+
+        }
+        console.log(task);
+      });
+      this.play();
+
       return this;
     },
 

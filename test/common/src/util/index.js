@@ -37,7 +37,20 @@ describe('#util', function() {
         assert.equal(obj.x, arr[i]);
         tween.gain(100);
       });
+    });
 
+    it('yoyo', function() {
+      var obj = { x: 100, y: 100, };
+      var tween = phina.util.Tween();
+      tween.to(obj, { x: 200, }, 1000);
+      tween.yoyo();
+
+      var arr = Array.range(100, 210, 10).reverse();
+      (10+1).times(function(i) {
+        assert.equal(obj.x, arr[i]);
+        console.log(obj.x);
+        tween.gain(100);
+      });
     });
 
   });

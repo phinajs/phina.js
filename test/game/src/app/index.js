@@ -58,6 +58,18 @@ th.describe("app.Tweener", function() {
       })
   });
 
+  th.it('play', function() {
+    // TODO:
+  });
+
+  th.it('pause', function() {
+    // TODO:
+  });
+
+  th.it('stop', function() {
+    // TODO:
+  });
+
   th.it('rewind', function() {
     var shape = phina.display.RectangleShape().addChildTo(this);
     var tweener = phina.app.Tweener(shape).addChildTo(this);
@@ -66,6 +78,17 @@ th.describe("app.Tweener", function() {
       .to({x:320, y:480}, 1000)
       .call(function() {
         this.rewind();
+      })
+  });
+
+  th.it('yoyo', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    shape.position.set(320-150, 480);
+    var tweener = phina.app.Tweener(shape).addChildTo(this);
+    tweener
+      .to({x:320+150, y:480}, 1000)
+      .call(function() {
+        this.yoyo();
       })
   });
 
