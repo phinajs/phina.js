@@ -54,7 +54,7 @@ phina.define("MainScene", {
       p.x = gridX.span(xIndex+1);
       p.y = gridY.span(yIndex+1)+150;
 
-      p.onpush = function() {
+      p.onpointstart = function() {
         self.check(this);
       };
     });
@@ -72,13 +72,14 @@ phina.define("MainScene", {
 
     this.time = 0;
 
-    var tweener = Tweener(timerLabel).addChildTo(this);
-    tweener
-      .from({x:0,y:0}, 2000)
-      .from({y:500}, 1000)
-      .to({x:200}, 1000)
-      .wait(1000)
-      .to({x:580}, 1000)
+    this.onpointstart = function(e) {
+      console.log('hoge');
+
+      var p = e.pointer;
+      var wave = Wave().addChildTo(this);
+      wave.x = p.x;
+      wave.y = p.y;
+    };
   },
 
   update: function(app) {

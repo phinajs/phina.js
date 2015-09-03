@@ -13,6 +13,15 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
+
+      // TODO: 一旦むりやり対応
+      this.interactive = true;
+      this._overFlags = {};
+      this._touchFlags = {};
+    },
+
+    hitTest: function() {
+      return true;
     },
 
     _update: function() {

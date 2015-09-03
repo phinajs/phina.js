@@ -53,7 +53,7 @@ phina.namespace(function() {
       if (!obj.interactive) return ;
 
       var prevOverFlag = obj._overFlags[p.id];
-      var overFlag = obj.hitTest2(p.x, p.y);
+      var overFlag = obj.hitTest(p.x, p.y);
       obj._overFlags[p.id] = overFlag;
 
       if (!prevOverFlag && overFlag) {

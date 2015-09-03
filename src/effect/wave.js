@@ -13,21 +13,16 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit({
       	color: 'white',
-      	color: 'red',
       	stroke: false,
       });
-      this.clipping = true;
-      this.width = 100;
-      this.height = 100;
-    },
 
-    update: function() {
-      this.style.radius += 2;
-      this.alpha -= 0.05;
-      if (this.alpha <= 0) {
-        this.remove();
-      }
-    }
+      var tweener = phina.app.Tweener(this).addChildTo(this);
+      tweener
+        .to({scaleX:2, scaleY:2, alpha:0}, 500)
+        .call(function() {
+          this.remove();
+        }, this);
+    },
   });
 
 });
