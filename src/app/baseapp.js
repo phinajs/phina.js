@@ -50,7 +50,23 @@ phina.namespace(function() {
       }
       this.currentScene = scene;
       this.currentScene.app = this;
-      this.flare('enter', {
+      this.currentScene.flare('enter', {
+        app: this,
+      });
+
+      return this;
+    },
+
+    pushScene: function(scene) {
+      this.currentScene.flare('pause', {
+        app: this,
+      });
+      
+      this._scenes.push(scene);
+      ++this._sceneIndex;
+      
+      scene.app = this;
+      scene.flare('enter', {
         app: this,
       });
 

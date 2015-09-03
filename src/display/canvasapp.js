@@ -43,10 +43,12 @@ phina.namespace(function() {
     _draw: function() {
       this.canvas.clear();
 
-      this.currentScene._render();
+      if (this.currentScene.canvas) {
+        this.currentScene._render();
 
-      var c = this.currentScene.canvas;
-      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+        var c = this.currentScene.canvas;
+        this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+      }
     },
 
     fitScreen: function() {
