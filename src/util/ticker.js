@@ -15,6 +15,9 @@
     /** 全体の経過時間 */
     elapsedTime: null,
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
 

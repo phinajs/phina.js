@@ -8,6 +8,9 @@
   phina.define('phina.util.Tween', {
     superClass: 'phina.util.EventDispatcher',
 
+    /**
+     * @constructor
+     */
     init: function(target) {
       this.superInit();
 

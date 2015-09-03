@@ -3,6 +3,9 @@ phina.namespace(function() {
   phina.define('phina.app.Tweener', {
     superClass: 'phina.app.Element',
 
+    /**
+     * @constructor
+     */
     init: function(target) {
       this.superInit();
 

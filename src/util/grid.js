@@ -14,6 +14,9 @@
     /** ループ */
     loop: false,
 
+    /**
+     * @constructor
+     */
     init: function() {
       if (typeof arguments[0] === 'object') {
         var param = arguments[0];

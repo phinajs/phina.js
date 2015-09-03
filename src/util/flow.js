@@ -8,6 +8,9 @@
   phina.define('phina.util.Flow', {
     superClass: 'phina.util.EventDispatcher',
 
+    /**
+     * @constructor
+     */
     init: function(func, wait) {
       this.superInit();
 
@@ -31,23 +34,32 @@
       }
     },
 
-    exec: function(arg) {
+    /*
+     * 成功
+     */
+    resolve: function(arg) {
+      this.resultValue = arg;
+
+      // キューに積まれた関数を実行
       this._queue.each(function(func) {
         func(this.resultValue);
       }, this);
+      this._queue.clear();
     },
 
-    resolve: function(arg) {
-      this.resultValue = arg;
-      this.exec();
-    },
-
+    /*
+     * 失敗
+     */
     reject: function() {
 
     },
 
+    /*
+     * 非同期終了時の処理を登録
+     */
     then: function(func) {
       var self = this;
+      // 成功ステータスだった場合は即実行
       if (this.status === 'resolved') {
         var value = func(this.resultValue);
         return phina.util.Flow.resolve(value);

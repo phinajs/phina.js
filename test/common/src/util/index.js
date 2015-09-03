@@ -150,7 +150,7 @@ describe('#util', function() {
         console.log(time+' ミリ秒経過した')
         return time  // 「数値sをもって解決されたpromise」にキャストされる
       }
-      delay(3000).then(log).then(delay).then(log).then(delay).then(log).then(function() {
+      delay(500).then(log).then(delay).then(log).then(delay).then(log).then(function() {
         done()
       })
     });
