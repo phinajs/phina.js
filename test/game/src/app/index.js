@@ -58,5 +58,25 @@ th.describe("app.Tweener", function() {
       })
   });
 
+  th.it('rewind', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.app.Tweener(shape).addChildTo(this);
+    tweener
+      .set({x:0, y:0})
+      .to({x:320, y:480}, 1000)
+      .call(function() {
+        this.rewind();
+      })
+  });
+
+  th.it('loop', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.app.Tweener(shape).addChildTo(this);
+    tweener.setLoop(true);
+    tweener
+      .set({x:0, y:0})
+      .to({x:320, y:480}, 1000)
+  });
+
 
 });

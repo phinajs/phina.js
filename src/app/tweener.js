@@ -7,10 +7,15 @@ phina.namespace(function() {
       this.superInit();
 
       this.target = target;
+      this._loop = false;
+      this._init();
+    },
+
+    _init: function() {
       this._tasks = [];
       this._index = 0;
-      this._update = this._updateTask;
       this.playing = true;
+      this._update = this._updateTask;
     },
 
     update: function(app) {
@@ -67,24 +72,66 @@ phina.namespace(function() {
      * @param {Object} value
      */
     set: function(key, value) {
-        var values = null;
-        if (arguments.length == 2) {
-            values = {};
-            values[key] = value;
+      var values = null;
+      if (arguments.length == 2) {
+        values = {};
+        values[key] = value;
+      }
+      else {
+        values = key;
+      }
+      this._tasks.push({
+        type: "set",
+        data: {
+          values: values
         }
-        else {
-            values = key;
-        }
-        this._tasks.push({
-            type: "set",
-            data: {
-                values: values
-            }
-        });
+      });
 
-        return this;
+      return this;
     },
 
+    /**
+     * アニメーション開始
+     */
+    play: function() {
+      this.playing = true;
+      return this;
+    },
+
+    /**
+     * アニメーションを一時停止
+     */
+    pause: function() {
+      this.playing = false;
+      return this;
+    },
+
+    /**
+     * アニメーションを巻き戻す
+     */
+    rewind: function() {
+      this._update = this._updateTask;
+      this._index = 0;
+      this.play();
+      return this;
+    },
+
+    /**
+     * アニメーションループ設定
+     * @param {Boolean} flag
+     */
+    setLoop: function(flag) {
+      this._loop = flag;
+      return this;
+    },
+
+    /**
+     * アニメーションをクリア
+     */
+    clear: function() {
+      this._init();
+      return this;
+    },
 
     _add: function(params) {
       this._tasks.push(params);
@@ -95,7 +142,12 @@ phina.namespace(function() {
 
       var task = this._tasks[this._index];
       if (!task) {
-        this.playing = false;
+        if (this._loop) {
+          this.rewind();
+        }
+        else {
+          this.playing = false;
+        }
         return ;
       }
       else {
