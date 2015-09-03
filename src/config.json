@@ -17,6 +17,7 @@
     "util/ticker.js",
     "util/grid.js",
     "util/changedispatcher.js",
+    "util/flow.js",
 
     "asset/assetmanager.js",
     "asset/texture.js",

@@ -98,4 +98,62 @@ describe('#util', function() {
     });
   });
 
+
+  describe('Flow', function() {
+    it('init', function(done) {
+      var flow = phina.util.Flow(function(resolve, reject) {
+        setTimeout(function() {
+          resolve('hello');
+        }, 100);
+      });
+
+      flow.then(function(message) {
+        assert.equal(message, 'hello');
+        done();
+      });
+
+      phina.util.Flow.all([flow]).then(function(d) {
+      });
+    });
+
+    it('all', function(done) {
+      var f1 = phina.util.Flow(function(resolve, reject) {
+        setTimeout(function() {
+          resolve('flow1');
+        }, 100);
+      });
+      var f2 = phina.util.Flow(function(resolve, reject) {
+        setTimeout(function() {
+          resolve('flow2');
+        }, 200);
+      });
+
+      phina.util.Flow.all([f1, f2]).then(function(data) {
+        assert.equal(data[0], 'flow1');
+        assert.equal(data[1], 'flow2');
+        done();
+      });
+    });
+
+    it('delay', function(done) {
+      // phina.util.Flow.resolve(123).then(alert);
+      // phina.util.Flow.resolve(phina.util.Flow.resolve(123)).then(alert);
+      // return ;
+      function delay(time) {
+        var p = phina.util.Flow(function (resolve) {
+          setTimeout(resolve, time, time)
+        })
+        return p  // 「s秒後に数値sをもって解決するpromise」を返す
+      }
+
+      function log(time) {
+        console.log(time+' ミリ秒経過した')
+        return time  // 「数値sをもって解決されたpromise」にキャストされる
+      }
+      delay(3000).then(log).then(delay).then(log).then(delay).then(log).then(function() {
+        done()
+      })
+    });
+  });
+
 });
