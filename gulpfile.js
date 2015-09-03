@@ -58,3 +58,8 @@ gulp.task('webserver', function() {
     }));
 });
 
+gulp.task('download', function() {
+  download('http://tmlife.net')
+    .pipe(gulp.dest('downloads/'));
+});
+

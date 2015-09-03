@@ -18,6 +18,9 @@
     "util/grid.js",
     "util/changedispatcher.js",
 
+    "asset/assetmanager.js",
+    "asset/texture.js",
+
     "input/input.js",
     "input/mouse.js",
     "input/touch.js",

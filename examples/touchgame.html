@@ -73,8 +73,6 @@ phina.define("MainScene", {
     this.time = 0;
 
     this.onpointstart = function(e) {
-      console.log('hoge');
-
       var p = e.pointer;
       var wave = Wave().addChildTo(this);
       wave.x = p.x;
