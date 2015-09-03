@@ -1369,6 +1369,9 @@ phina.namespace(function() {
   phina.define('phina.util.Tween', {
     superClass: 'phina.util.EventDispatcher',
 
+    /**
+     * @constructor
+     */
     init: function(target) {
       this.superInit();
 
@@ -1718,6 +1721,9 @@ phina.namespace(function() {
     /** 全体の経過時間 */
     elapsedTime: null,
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
 
@@ -1807,6 +1813,9 @@ phina.namespace(function() {
     /** ループ */
     loop: false,
 
+    /**
+     * @constructor
+     */
     init: function() {
       if (typeof arguments[0] === 'object') {
         var param = arguments[0];
@@ -1908,6 +1917,233 @@ phina.namespace(function() {
   });
 
 });
+
+;(function() {
+
+  /**
+   * @class phina.util.Flow
+   * tick management class
+   */
+  phina.define('phina.util.Flow', {
+    superClass: 'phina.util.EventDispatcher',
+
+    /**
+     * @constructor
+     */
+    init: function(func, wait) {
+      this.superInit();
+
+      this.status = 'pending';
+      this.resultValue = null;
+      this._queue = [];
+      this.func = func;
+
+      if (wait !== true) {
+        var self = this;
+        var resolve = function() {
+          self.resolve.apply(self, arguments);
+          self.status = 'resolved';
+        };
+        var reject = function() {
+          self.reject.apply(self, arguments);
+          self.status = 'rejected';
+        };
+
+        this.func(resolve, reject);
+      }
+    },
+
+    /*
+     * 成功
+     */
+    resolve: function(arg) {
+      this.resultValue = arg;
+
+      // キューに積まれた関数を実行
+      this._queue.each(function(func) {
+        func(this.resultValue);
+      }, this);
+      this._queue.clear();
+    },
+
+    /*
+     * 失敗
+     */
+    reject: function() {
+
+    },
+
+    /*
+     * 非同期終了時の処理を登録
+     */
+    then: function(func) {
+      var self = this;
+      // 成功ステータスだった場合は即実行
+      if (this.status === 'resolved') {
+        var value = func(this.resultValue);
+        return phina.util.Flow.resolve(value);
+      }
+      else {
+        var flow = phina.util.Flow(function(resolve) {
+          resolve();
+        }, true);
+
+        this._queue.push(function(arg) {
+          var resultValue = func(arg);
+
+          if (resultValue instanceof phina.util.Flow) {
+            resultValue.then(function(value) {
+              flow.resolve(value);
+            });
+          }
+          else {
+            flow.resolve(arg);
+          }
+        });
+
+        return flow;
+      }
+    },
+
+    _static: {
+      resolve: function(value) {
+        if (value instanceof phina.util.Flow) {
+          return value;
+        }
+        else {
+          var flow = phina.util.Flow(function(resolve) {
+            resolve(value);
+          });
+          return flow;
+        }
+      },
+      all: function(flows) {
+        return phina.util.Flow(function(resolve) {
+          var count = 0;
+
+          var args = [];
+
+          flows.each(function(flow) {
+            flow.then(function(d) {
+              ++count;
+              args.push(d);
+
+              if (count >= flows.length) {
+                resolve(args);
+              }
+            });
+          });
+        });
+      },
+    },
+  });
+
+})();
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.Asset
+   * 
+   */
+  phina.define('phina.asset.Asset', {
+    superClass: "phina.util.EventDispatcher",
+
+    /**
+     * @constructor
+     */
+    init: function(src) {
+      this.superInit();
+
+      this.loaded = false;
+    },
+
+    load: function(src) {
+      this.src = src;
+      return phina.util.Flow(this._load.bind(this));
+    },
+
+    isLoaded: function() {
+      return this.loaded;
+    },
+
+    _load: function(resolve) {
+      var self = this;
+      setTimeout(function() {
+        self.loaded = true;
+        resolve();
+      }, 100);
+    },
+
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.AssetManager
+   * 
+   */
+  phina.define('phina.asset.AssetManager', {
+    _static: {
+      assets: {
+        image: {},
+        sound: {},
+      },
+      
+      get: function(type, key) {
+        return this.assets[type][key];
+      },
+      set: function(type, key, asset) {
+        this.assets[type][key] = asset;
+      },
+      contains: function(type, key) {
+        return ;
+      }
+    },
+
+  });
+
+});
+
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.Texture
+   * 
+   */
+  phina.define('phina.asset.Texture', {
+    superClass: "phina.asset.Asset",
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+    },
+
+    _load: function(resolve) {
+      this.domElement = new Image();
+      this.domElement.src = this.src;
+
+      var self = this;
+      this.domElement.onload = function() {
+        self.loaded = true;
+        resolve(self);
+      };
+    },
+
+  });
+
+});
+
+
 
 ;(function() {
   /**
@@ -2423,7 +2659,7 @@ phina.namespace(function() {
       if (!obj.interactive) return ;
 
       var prevOverFlag = obj._overFlags[p.id];
-      var overFlag = obj.hitTest2(p.x, p.y);
+      var overFlag = obj.hitTest(p.x, p.y);
       obj._overFlags[p.id] = overFlag;
 
       if (!prevOverFlag && overFlag) {
@@ -2694,11 +2930,10 @@ phina.namespace(function() {
      * @param {Number} x
      * @param {Number} y
      */
+    // hitTest: function(x, y) {
+    //   return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
+    // },
     hitTest: function(x, y) {
-      return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
-    },
-
-    hitTest2: function(x, y) {
       var p = this.globalToLocal(phina.geom.Vector2(x, y));
 
       var left   = -this.width*this.originX;
@@ -2929,6 +3164,9 @@ phina.namespace(function() {
   phina.define('phina.app.Tweener', {
     superClass: 'phina.app.Element',
 
+    /**
+     * @constructor
+     */
     init: function(target) {
       this.superInit();
 
@@ -4004,16 +4242,17 @@ phina.namespace(function() {
     init: function(image) {
       this.superInit();
 
-      this.image = image;
-      this.width = image.width;
-      this.height = image.height;
+      // this.image = image;
+      this.image = phina.asset.AssetManager.get('image', image);
+      this.width = this.image.domElement.width;
+      this.height = this.image.domElement.height;
     },
 
     draw: function(canvas) {
-
+      var image = this.image.domElement;
       // canvas.context.drawImage(this.image, 0, 0, this.image.width, this.image.height);
-      canvas.context.drawImage(this.image,
-        0, 0, this.image.width, this.image.height,
+      canvas.context.drawImage(image,
+        0, 0, image.width, image.height,
         -this.width*this.origin.x, -this.height*this.origin.y, this.width, this.height
         );
     },
@@ -4152,6 +4391,15 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
+
+      // TODO: 一旦むりやり対応
+      this.interactive = true;
+      this._overFlags = {};
+      this._touchFlags = {};
+    },
+
+    hitTest: function() {
+      return true;
     },
 
     _update: function() {
@@ -4426,21 +4674,16 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit({
       	color: 'white',
-      	color: 'red',
       	stroke: false,
       });
-      this.clipping = true;
-      this.width = 100;
-      this.height = 100;
-    },
 
-    update: function() {
-      this.style.radius += 2;
-      this.alpha -= 0.05;
-      if (this.alpha <= 0) {
-        this.remove();
-      }
-    }
+      var tweener = phina.app.Tweener(this).addChildTo(this);
+      tweener
+        .to({scaleX:2, scaleY:2, alpha:0}, 500)
+        .call(function() {
+          this.remove();
+        }, this);
+    },
   });
 
 });
