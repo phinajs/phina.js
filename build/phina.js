@@ -2724,6 +2724,7 @@ phina.namespace(function() {
     init: function(element) {
       this.superInit();
       this._scenes = [phina.app.Scene()];
+      this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
       this.interactive = phina.app.Interactive(this);
@@ -2747,18 +2748,52 @@ phina.namespace(function() {
     replaceScene: function(scene) {
       var e = null;
       if (this.currentScene) {
-        this.flare('exit', {
-          app: this
-        });
         this.currentScene.app = null;
       }
       this.currentScene = scene;
       this.currentScene.app = this;
-      this.flare('enter', {
+      this.currentScene.flare('enter', {
         app: this,
       });
 
       return this;
+    },
+
+    pushScene: function(scene) {
+      this.currentScene.flare('pause', {
+        app: this,
+      });
+      
+      this._scenes.push(scene);
+      ++this._sceneIndex;
+      
+      scene.app = this;
+      scene.flare('enter', {
+        app: this,
+      });
+
+      return this;
+    },
+
+    /**
+     * シーンをポップする(ポーズやオブション画面などで使用)
+     */
+    popScene: function() {
+      var scene = this._scenes.pop();
+      --this._sceneIndex;
+
+      scene.flare('exit', {
+        app: this,
+      });
+      scene.app = null;
+      
+      // 
+      this.currentScene.flare('resume', {
+        app: this,
+        prevScene: scene,
+      });
+      
+      return scene;
     },
 
     _loop: function() {
@@ -2783,8 +2818,8 @@ phina.namespace(function() {
 
     _accessor: {
       currentScene: {
-        "get": function()   { return this._scenes[0]; },
-        "set": function(v)  { this._scenes[0] = v; },
+        "get": function()   { return this._scenes[this._sceneIndex]; },
+        "set": function(v)  { this._scenes[this._sceneIndex] = v; },
       },
     },
 
@@ -3154,6 +3189,28 @@ phina.namespace(function() {
 
     init: function() {
       this.superInit();
+    },
+
+    exit: function(param) {
+      if (!this.app) return ;
+
+      if (typeof param !== 'object') {
+        var temp = {};
+        temp.nextLabel = arguments[0];
+        temp.nextArguments = arguments[1];
+        param = temp;
+      }
+
+      if (param.nextLabel) {
+        this.nextLabel = param.nextLabel;
+      }
+      if (param.nextArguments) {
+        this.nextArguments = param.nextArguments;
+      }
+
+      this.app.popScene();
+
+      return this;
     },
   });
   
@@ -4646,10 +4703,12 @@ phina.namespace(function() {
     _draw: function() {
       this.canvas.clear();
 
-      this.currentScene._render();
+      if (this.currentScene.canvas) {
+        this.currentScene._render();
 
-      var c = this.currentScene.canvas;
-      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+        var c = this.currentScene.canvas;
+        this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+      }
     },
 
     fitScreen: function() {
@@ -4801,3 +4860,147 @@ phina.namespace(function() {
 
 });
 
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.game.ManagerScene
+   * 
+   */
+  phina.define('phina.game.ManagerScene', {
+    superClass: 'phina.app.Scene',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit();
+
+      this.setScenes(params.scenes);
+
+      this.on("enter", function() {
+        this.gotoScene(params.startLabel || 0);
+      }.bind(this));
+
+      this.on("resume", this.onnext.bind(this));
+
+      this.commonArguments = {};
+    },
+
+
+    /**
+     * scenes をセット
+     */
+    setScenes: function(scenes) {
+      this.scenes = scenes;
+      this.sceneIndex = 0;
+
+      return this;
+    },
+
+    /**
+     * index(or label) のシーンへ飛ぶ
+     */
+    gotoScene: function(index, args) {
+      index = (typeof index == 'string') ? this.labelToIndex(index) : index||0;
+
+      // イベント発火
+
+      this.flare('prepare');
+
+      var data = this.scenes[index];
+      var klass = phina.using(data.className);
+      var initArguments = data.arguments;
+      var initArguments = {}.$extend(initArguments, args);
+      var scene = klass.call(null, initArguments);
+      if (!scene.nextLabel) {
+          scene.nextLabel = data.nextLabel;
+      }
+      if (!scene.nextArguments) {
+          scene.nextArguments = data.nextArguments;
+      }
+      this.app.pushScene(scene);
+
+      this.sceneIndex = index;
+      this.currentScene = scene;
+
+      // イベント発火
+      this.flare('goto', {
+        scene: scene,
+      });
+
+      return this;
+    },
+
+    /**
+     * 次のシーンへ飛ぶ
+     */
+    gotoNext: function(args) {
+      var data = this.scenes[this.sceneIndex];
+      var nextIndex = null;
+
+      // 次のラベルが設定されていた場合
+      if (data.nextLabel) {
+          nextIndex = this.labelToIndex(data.nextLabel);
+      }
+      // 次のシーンに遷移
+      else if (this.sceneIndex+1 < this.scenes.length) {
+          nextIndex = this.sceneIndex+1;
+      }
+
+      if (nextIndex !== null) {
+          this.gotoScene(nextIndex, args);
+      }
+      else {
+          this.fire(tm.event.Event("finish"));
+      }
+
+      return this;
+    },
+
+    /**
+     * シーンインデックスを取得
+     */
+    getCurrentIndex: function() {
+      return this.sceneIndex;
+    },
+
+    /**
+     * シーンラベルを取得
+     */
+    getCurrentLabel: function() {
+      return this.scenes[this.sceneIndex].label;
+    },
+
+    /**
+     * ラベルからインデックスに変換
+     */
+    labelToIndex: function(label) {
+      var data = this.scenes.filter(function(data) {
+        return data.label == label;
+      })[0];
+
+      return this.scenes.indexOf(data);
+    },
+
+    /**
+     * インデックスからラベルに変換
+     */
+    indexToLabel: function(index) {
+      return this.scenes[index].label;
+    },
+
+    onnext: function(e) {
+      var nextLabel = e.prevScene.nextLabel;
+      var nextArguments = e.prevScene.nextArguments;
+      if (nextLabel) {
+        this.gotoScene(nextLabel, nextArguments);
+      }
+      else {
+        this.gotoNext(nextArguments);
+      }
+    },
+
+  });
+
+});
