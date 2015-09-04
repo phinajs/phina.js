@@ -34,16 +34,17 @@ phina.define('TitleScene', {
       height: SCREEN_HEIGHT,
     });
 
-    Label('title').addChildTo(this)
-      .position.set(320, 480)
+    var label = Label('title').addChildTo(this);
+    label.position.set(320, 480)
 
+    label.tweener
+      .from({y: 0})
+      .from({rotation:360})
 
     this.onpointstart = function() {
       this.exit();
     };
-
   },
-
 });
 
 

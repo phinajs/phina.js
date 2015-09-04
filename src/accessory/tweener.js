@@ -240,5 +240,12 @@ phina.namespace(function() {
       }
     },
   });
+
+  phina.app.Element.prototype.getter('tweener', function() {
+    if (!this._tweener) {
+      this._tweener = phina.accessory.Tweener().attachTo(this);
+    }
+    return this._tweener;
+  });
   
 });
