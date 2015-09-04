@@ -28,7 +28,7 @@ phina.namespace(function() {
       this.time = 0;
       this.limit = time || 1000*10;
 
-      this.stargting = true;
+      this.starting = true;
     },
 
     update: function(app) {
