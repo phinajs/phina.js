@@ -20,6 +20,7 @@ phina.namespace(function() {
     init: function(element) {
       this.superInit();
       this._scenes = [phina.app.Scene()];
+      this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
       this.interactive = phina.app.Interactive(this);
@@ -43,18 +44,52 @@ phina.namespace(function() {
     replaceScene: function(scene) {
       var e = null;
       if (this.currentScene) {
-        this.flare('exit', {
-          app: this
-        });
         this.currentScene.app = null;
       }
       this.currentScene = scene;
       this.currentScene.app = this;
-      this.flare('enter', {
+      this.currentScene.flare('enter', {
         app: this,
       });
 
       return this;
+    },
+
+    pushScene: function(scene) {
+      this.currentScene.flare('pause', {
+        app: this,
+      });
+      
+      this._scenes.push(scene);
+      ++this._sceneIndex;
+      
+      scene.app = this;
+      scene.flare('enter', {
+        app: this,
+      });
+
+      return this;
+    },
+
+    /**
+     * シーンをポップする(ポーズやオブション画面などで使用)
+     */
+    popScene: function() {
+      var scene = this._scenes.pop();
+      --this._sceneIndex;
+
+      scene.flare('exit', {
+        app: this,
+      });
+      scene.app = null;
+      
+      // 
+      this.currentScene.flare('resume', {
+        app: this,
+        prevScene: scene,
+      });
+      
+      return scene;
     },
 
     _loop: function() {
@@ -79,8 +114,8 @@ phina.namespace(function() {
 
     _accessor: {
       currentScene: {
-        "get": function()   { return this._scenes[0]; },
-        "set": function(v)  { this._scenes[0] = v; },
+        "get": function()   { return this._scenes[this._sceneIndex]; },
+        "set": function(v)  { this._scenes[this._sceneIndex] = v; },
       },
     },
 

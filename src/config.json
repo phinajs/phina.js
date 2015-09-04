@@ -52,6 +52,8 @@
 
     "effect/wave.js",
 
-    "ui/button.js"
+    "ui/button.js",
+
+    "game/managerscene.js"
   ]
 }
