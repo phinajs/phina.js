@@ -77,7 +77,9 @@ phina.namespace(function() {
       if (obj._touchFlags[p.id]) {
         obj.flare('pointstay');
         if (p._moveFlag) {
-          obj.flare('pointmove');
+          obj.flare('pointmove', {
+            pointer: p,
+          });
         }
       }
 

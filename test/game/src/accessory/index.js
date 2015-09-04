@@ -103,3 +103,14 @@ th.describe("accessory.Tweener", function() {
 
 
 });
+
+th.describe("accessory.Draggable", function() {
+
+  th.it('init', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.x = 100;
+    shape.y = 100;
+
+    shape.draggable.enable();
+  });
+});
