@@ -3028,6 +3028,100 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * X 座標値をセット
+     * @param {Number} x
+     */
+    setX: function(x) {
+      this.position.x = x;
+      return this;
+    },
+    
+    /**
+     * Y 座標値をセット
+     * @param {Number} y
+     */
+    setY: function(y) {
+      this.position.y = y;
+      return this;
+    },
+    
+    /**
+     * XY 座標をセット
+     * @param {Number} x
+     * @param {Number} y
+     */
+    setPosition: function(x, y) {
+      this.position.x = x;
+      this.position.y = y;
+      return this;
+    },
+
+    /**
+     * 回転をセット
+     * @param {Number} rotation
+     */
+    setRotation: function(rotation) {
+      this.rotation = rotation;
+      return this;
+    },
+
+    /**
+     * スケールをセット
+     * @param {Number} x
+     * @param {Number} y
+     */
+    setScale: function(x, y) {
+      this.scale.x = x;
+      if (arguments.length <= 1) {
+          this.scale.y = x;
+      } else {
+          this.scale.y = y;
+      }
+      return this;
+    },
+    
+    /**
+     * 基準点をセット
+     * @param {Number} x
+     * @param {Number} y
+     */
+    setOrigin: function(x, y) {
+      this.origin.x = x;
+      this.origin.y = y;
+      return this;
+    },
+    
+    /**
+     * 幅をセット
+     * @param {Number} width
+     */
+    setWidth: function(width) {
+      this.width = width;
+      return this;
+    },
+    
+    /**
+     * 高さをセット
+     * @param {Number} height
+     */
+    setHeight: function(height) {
+      this.height = height;
+      return this;
+    },
+    
+    /**
+     * サイズ(幅, 高さ)をセット
+     * @param {Number} width
+     * @param {Number} height
+     */
+    setSize: function(width, height) {
+      this.width  = width;
+      this.height = height;
+      return this;
+    },
+
+
     _calcWorldMatrix: function() {
       if (!this.parent) return ;
 
@@ -3562,6 +3656,13 @@ phina.namespace(function() {
         this._update = this._updateTask;
       }
     },
+  });
+
+  phina.app.Element.prototype.getter('tweener', function() {
+    if (!this._tweener) {
+      this._tweener = phina.accessory.Tweener().attachTo(this);
+    }
+    return this._tweener;
   });
   
 });
