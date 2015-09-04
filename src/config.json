@@ -34,7 +34,9 @@
     "app/element.js",
     "app/object2d.js",
     "app/scene.js",
-    "app/tweener.js",
+
+    "accessory/accessory.js",
+    "accessory/tweener.js",
 
     "dom/event.js",
 

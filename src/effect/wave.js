@@ -16,7 +16,7 @@ phina.namespace(function() {
       	stroke: false,
       });
 
-      var tweener = phina.app.Tweener(this).addChildTo(this);
+      var tweener = phina.accessory.Tweener().attachTo(this);
       tweener
         .to({scaleX:2, scaleY:2, alpha:0}, 500)
         .call(function() {

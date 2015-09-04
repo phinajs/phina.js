@@ -1,15 +1,17 @@
+
+
+
 phina.namespace(function() {
 
-  phina.define('phina.app.Tweener', {
-    superClass: 'phina.app.Element',
+  phina.define('phina.accessory.Tweener', {
+    superClass: 'phina.accessory.Accessory',
 
     /**
      * @constructor
      */
     init: function(target) {
-      this.superInit();
+      this.superInit(target);
 
-      this.target = target;
       this._loop = false;
       this._init();
     },
