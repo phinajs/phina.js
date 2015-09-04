@@ -9,7 +9,6 @@
 
     <title>test - phina.js</title>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r14/Stats.js"></script>
   </head>
   <body>
     <canvas id='world'></canvas>
@@ -42,11 +41,6 @@ window.onload = function() {
   init();
 };
 
-// Stats
-var stats = new Stats();
-document.body.appendChild(stats.domElement);
-
-
 var init = function() {
   var app = phina.display.CanvasApp({
     query:'#world',
@@ -54,6 +48,8 @@ var init = function() {
   var scene = MainScene();
   app.replaceScene(scene);
   app.run();
+
+  app.enableStats();
 };
 
 phina.define('MainScene', {
@@ -65,11 +61,6 @@ phina.define('MainScene', {
     });
 
 {{code}}
-  },
-
-  update: function() {
-    stats.end();
-    stats.begin();
   },
 });
 
