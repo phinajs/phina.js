@@ -5543,8 +5543,8 @@ phina.namespace(function() {
           {
             className: "SplashScene",
             arguments: {
-              width: param.width,
-              height: param.height,
+              width: params.width,
+              height: params.height,
             },
             label: "splash",
             nextLabel: "title",
