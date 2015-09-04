@@ -2796,11 +2796,30 @@ phina.namespace(function() {
       return scene;
     },
 
+    enableStats: function() {
+      if (phina.global.Stats) {
+        this.stats = new Stats();
+        document.body.appendChild(this.stats.domElement);
+      }
+      else {
+        // console.warn("not defined stats.");
+        var STATS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r14/Stats.js';
+        var script = document.createElement('script');
+        script.src = STATS_URL;
+        document.body.appendChild(script);
+        script.onload = function() {
+          this.enableStats();
+        }.bind(this);
+      }
+    },
+
     _loop: function() {
       this._update();
       this._draw();
-    },
 
+      // stats update
+      if (this.stats) this.stats.update();
+    },
 
     _update: function() {
       if (this.awake) {
@@ -4547,7 +4566,12 @@ phina.namespace(function() {
       this._context = this.canvas.context;
     },
     render: function(scene) {
-      this.canvas.clearColor(scene.backgroundColor || 'white');
+      if (scene.backgroundColor) {
+        this.canvas.clearColor(scene.backgroundColor);
+      }
+      else {
+        this.canvas.clear();
+      }
       
       this._context.save();
       this.renderObject(scene);
@@ -4693,6 +4717,8 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas(this.domElement);
       this.canvas.setSize(params.width, params.height);
 
+      this.backgroundColor = 'white';
+
       this.replaceScene(phina.display.CanvasScene({
         width: params.width,
         height: params.height,
@@ -4702,7 +4728,7 @@ phina.namespace(function() {
     },
 
     _draw: function() {
-      this.canvas.clear();
+      this.canvas.clearColor(this.backgroundColor);
 
       if (this.currentScene.canvas) {
         this.currentScene._render();
