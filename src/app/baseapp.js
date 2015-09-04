@@ -20,6 +20,7 @@ phina.namespace(function() {
     init: function(element) {
       this.superInit();
       this._scenes = [phina.app.Scene()];
+      this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
       this.interactive = phina.app.Interactive(this);
@@ -43,9 +44,6 @@ phina.namespace(function() {
     replaceScene: function(scene) {
       var e = null;
       if (this.currentScene) {
-        this.flare('exit', {
-          app: this
-        });
         this.currentScene.app = null;
       }
       this.currentScene = scene;
@@ -116,8 +114,8 @@ phina.namespace(function() {
 
     _accessor: {
       currentScene: {
-        "get": function()   { return this._scenes[0]; },
-        "set": function(v)  { this._scenes[0] = v; },
+        "get": function()   { return this._scenes[this._sceneIndex]; },
+        "set": function(v)  { this._scenes[this._sceneIndex] = v; },
       },
     },
 
