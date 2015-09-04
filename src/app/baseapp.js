@@ -73,6 +73,27 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * シーンをポップする(ポーズやオブション画面などで使用)
+     */
+    popScene: function() {
+      var scene = this._scenes.pop();
+      --this._sceneIndex;
+
+      scene.flare('exit', {
+        app: this,
+      });
+      scene.app = null;
+      
+      // 
+      this.currentScene.flare('resume', {
+        app: this,
+        prevScene: scene,
+      });
+      
+      return scene;
+    },
+
     _loop: function() {
       this._update();
       this._draw();
