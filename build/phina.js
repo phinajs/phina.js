@@ -4448,6 +4448,7 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
+      this.backgroundColor = 'white';
 
       // TODO: 一旦むりやり対応
       this.interactive = true;
@@ -4546,7 +4547,7 @@ phina.namespace(function() {
       this._context = this.canvas.context;
     },
     render: function(scene) {
-      this.canvas.clear();
+      this.canvas.clearColor(scene.backgroundColor || 'white');
       
       this._context.save();
       this.renderObject(scene);
