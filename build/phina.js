@@ -3250,10 +3250,14 @@ phina.namespace(function() {
   
 });
 
+
 phina.namespace(function() {
 
-  phina.define('phina.app.Tweener', {
-    superClass: 'phina.app.Element',
+  /**
+   * @class phina.accessory.Accessory
+   */
+  phina.define('phina.accessory.Accessory', {
+    superClass: 'phina.util.EventDispatcher',
 
     /**
      * @constructor
@@ -3262,6 +3266,75 @@ phina.namespace(function() {
       this.superInit();
 
       this.target = target;
+    },
+    setTarget: function(target) {
+      if (this.target === target) return ;
+
+      this.target = target;
+      return this;
+    },
+    getTarget: function() {
+      return this.target;
+    },
+    isAttached: function() {
+      return !!this.target;
+    },
+    attachTo: function(element) {
+      element.attach(this);
+      this.setTarget(element);
+      return this;
+    },
+    remove: function() {
+      this.target.detach(this);
+      this.target = null;
+    },
+  });
+
+  phina.app.Element.prototype.method('attach', function(accessory) {
+    if (!this.accessories) {
+      this.accessories = [];
+      this.on('enterframe', function(e) {
+        this.accessories.each(function(accessory) {
+          accessory.update && accessory.update(e.app);
+        });
+      });
+    }
+
+    this.accessories.push(accessory);
+    accessory.setTarget(this);
+    accessory.flare('attached');
+
+    return this;
+  });
+
+  phina.app.Element.prototype.method('detach', function(accessory) {
+    if (this.accessories) {
+      this.accessories.erase(accessory);
+      accessory.setTarget(null);
+      accessory.flare('detached');
+    }
+
+    return this;
+  });
+
+});
+
+
+
+
+
+
+phina.namespace(function() {
+
+  phina.define('phina.accessory.Tweener', {
+    superClass: 'phina.accessory.Accessory',
+
+    /**
+     * @constructor
+     */
+    init: function(target) {
+      this.superInit(target);
+
       this._loop = false;
       this._init();
     },
@@ -3492,7 +3565,6 @@ phina.namespace(function() {
   });
   
 });
-
 
 
 
@@ -4778,7 +4850,7 @@ phina.namespace(function() {
       	stroke: false,
       });
 
-      var tweener = phina.app.Tweener(this).addChildTo(this);
+      var tweener = phina.accessory.Tweener().attachTo(this);
       tweener
         .to({scaleX:2, scaleY:2, alpha:0}, 500)
         .call(function() {
