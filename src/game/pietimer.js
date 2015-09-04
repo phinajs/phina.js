@@ -27,10 +27,22 @@ phina.namespace(function() {
 
       this.time = 0;
       this.limit = time || 1000*10;
+
+      this.stargting = true;
     },
 
     update: function(app) {
+      if (!this.starting) return ;
+
       this.time += app.ticker.deltaTime;
+    },
+
+    start: function() {
+      this.starting = true;
+    },
+
+    stop: function() {
+      this.starting = false;
     },
 
     _render: function() {
