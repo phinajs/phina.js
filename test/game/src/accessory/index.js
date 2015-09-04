@@ -113,4 +113,16 @@ th.describe("accessory.Draggable", function() {
 
     shape.draggable.enable();
   });
+
+  th.it('back', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.x = 100;
+    shape.y = 100;
+
+    shape.draggable.enable();
+
+    shape.draggable.ondragend = function() {
+      this.back();
+    };
+  });
 });
