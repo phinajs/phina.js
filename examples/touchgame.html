@@ -25,6 +25,49 @@ var MAX_PER_LINE    = 5;                            // ピースの横に並ぶ�
 var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
 
 
+phina.define('TitleScene', {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    Label('title').addChildTo(this)
+      .position.set(320, 480)
+
+
+    this.onpointstart = function() {
+      this.exit();
+    };
+
+  },
+
+});
+
+
+phina.define('ResultScene', {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    Label('result').addChildTo(this)
+      .position.set(320, 480)
+
+    this.onpointstart = function() {
+      this.exit();
+    };
+
+  },
+
+});
+
+
 phina.define("MainScene", {
   superClass: 'CanvasScene',
 
@@ -126,7 +169,19 @@ window.onload = function() {
   var scene = ManagerScene({
     scenes: [
       {
+        className: 'TitleScene',
+        label: 'title',
+        nextLabel: 'main',
+      },
+      {
         className: 'MainScene',
+        label: 'main',
+        nextLabel: 'result',
+      },
+      {
+        className: 'ResultScene',
+        label: 'result',
+        nextLabel: 'title',
       },
     ]
   });
