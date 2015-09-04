@@ -57,6 +57,7 @@
 
     "ui/button.js",
 
-    "game/managerscene.js"
+    "game/managerscene.js",
+    "game/pietimer.js"
   ]
 }

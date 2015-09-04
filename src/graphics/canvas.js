@@ -371,6 +371,45 @@ phina.namespace(function() {
       c.stroke();
       return this;
     },
+
+    /**
+     * 円弧のパスを設定
+     */
+    arc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      this.context.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+      return this;
+    },
+    
+    /**
+     * 塗りつぶし円弧を描画
+     */
+    fillArc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      return this.beginPath().arc(x, y, radius, startAngle, endAngle, anticlockwise).fill();
+    },
+    
+    /**
+     * ストローク円弧を描画
+     */
+    strokeArc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      return this.beginPath().arc(x, y, radius, startAngle, endAngle, anticlockwise).stroke();
+    },
+
+
+    pie: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      var context = this.context;
+      context.beginPath();
+      context.moveTo(0, 0);
+      context.arc(x, y, radius, startAngle-Math.PI/2, endAngle-Math.PI/2, anticlockwise);
+      context.closePath();
+      return this;
+    },
+    fillPie: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      return this.beginPath().pie(x, y, radius, startAngle, endAngle, anticlockwise).fill();
+    },
+    strokePie: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+      return this.beginPath().pie(x, y, radius, startAngle, endAngle, anticlockwise).stroke();
+    },
+
     
     /**
      * ポリゴンパス
