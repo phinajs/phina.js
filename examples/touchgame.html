@@ -161,33 +161,12 @@ phina.define('Piece', {
 });
 
 window.onload = function() {
-  var app = CanvasApp({
+  var app = GameApp({
     query: '#world',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    startLabel: 'title',
   });
-
-  var scene = ManagerScene({
-    scenes: [
-      {
-        className: 'TitleScene',
-        label: 'title',
-        nextLabel: 'main',
-      },
-      {
-        className: 'MainScene',
-        label: 'main',
-        nextLabel: 'result',
-      },
-      {
-        className: 'ResultScene',
-        label: 'result',
-        nextLabel: 'title',
-      },
-    ]
-  });
-
-  app.replaceScene(scene);
 
   app.enableStats();
 
