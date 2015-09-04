@@ -92,11 +92,30 @@ phina.namespace(function() {
       return scene;
     },
 
+    enableStats: function() {
+      if (phina.global.Stats) {
+        this.stats = new Stats();
+        document.body.appendChild(this.stats.domElement);
+      }
+      else {
+        // console.warn("not defined stats.");
+        var STATS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r14/Stats.js';
+        var script = document.createElement('script');
+        script.src = STATS_URL;
+        document.body.appendChild(script);
+        script.onload = function() {
+          this.enableStats();
+        }.bind(this);
+      }
+    },
+
     _loop: function() {
       this._update();
       this._draw();
-    },
 
+      // stats update
+      if (this.stats) this.stats.update();
+    },
 
     _update: function() {
       if (this.awake) {
