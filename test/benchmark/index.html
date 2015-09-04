@@ -23,10 +23,6 @@ var CHILD_RADIUS = 50;
 var MAX_NUM = 128;
 var IMAGE = '../../assets/images/tomapiko_min.png';
 
-// Stats
-stats = new Stats();
-document.body.appendChild(stats.domElement);
-
 
 phina.define("MainScene", {
   superClass: 'CanvasScene',
@@ -42,15 +38,13 @@ phina.define("MainScene", {
     var texture = Texture();
     texture.load(IMAGE).then(function(texture) {
       AssetManager.set('image', 'image', texture);
-
-      self.update = this._update;
       MAX_NUM.times(function() {
         self.create();
       });
     });
   },
 
-  _update: function() {
+  update: function() {
     stats.end();
     stats.begin();
   },
@@ -84,17 +78,27 @@ phina.define("MainScene", {
 });
 
 
-var app = CanvasApp({
-  query: '#world',
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-});
 
-app.replaceScene(MainScene());
+// Stats
+var stats = null;
 
-app.ticker.fps = 60;
+window.onload = function() {
+  stats = new Stats();
+  document.body.appendChild(stats.domElement);
 
-app.run();
+  var app = CanvasApp({
+    query: '#world',
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  });
+
+  app.replaceScene(MainScene());
+
+  app.ticker.fps = 60;
+
+  app.run();
+};
+
 
 
 </script>
