@@ -8,7 +8,14 @@ phina.namespace(function() {
     superClass: 'phina.display.CanvasElement',
 
     init: function(params) {
+      this.superInit();
       this.canvas = phina.graphics.Canvas();
+      params = (params || {}).$safe({
+        width: 640,
+        height: 960,
+      });
+      this.canvas.width  = params.width;
+      this.canvas.height = params.height;
     },
 
     draw: function(canvas) {
@@ -58,3 +65,4 @@ phina.namespace(function() {
     },
   });
 });
+

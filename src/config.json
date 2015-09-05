@@ -53,6 +53,8 @@
     "display/domapp.js",
     "display/canvasapp.js",
 
+    "display/box2dlayer.js",
+
     "effect/wave.js",
 
     "ui/button.js",
