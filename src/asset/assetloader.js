@@ -30,9 +30,9 @@ phina.namespace(function() {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
           var flow = func(value);
-          flow.then(function(texture) {
+          flow.then(function(asset) {
             if (self.cache) {
-              phina.asset.AssetManager.set(type, key, texture);
+              phina.asset.AssetManager.set(type, key, asset);
             }
           });
           flows.push(flow);
@@ -51,8 +51,13 @@ phina.namespace(function() {
           return flow;
         },
         sound: function(path) {
-          var audio = phina.asset.Sound();
+          var sound = phina.asset.Sound();
           var flow = audio.load(path);
+          return flow;
+        },
+        spritesheet: function(path) {
+          var ss = phina.asset.SpriteSheet();
+          var flow = ss.load(path);
           return flow;
         },
       }

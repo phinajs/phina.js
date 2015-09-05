@@ -131,42 +131,10 @@ th.describe("accessory.Draggable", function() {
 th.describe("accessory.FrameAnimation", function() {
 
   th.it('init', function() {
-    var fa = phina.accessory.FrameAnimation({
-      frame: {
-        width: 64,
-        height: 64,
-        rows: 3, // 行
-        cols: 6, // 列
-      },
-      animations: {
-        fly: {
-          frames: [1, 2, 3],
-          next: 'fly',
-          frequency: 4,
-        },
-        front: {
-          frames: [6, 7, 8, 7],
-          next: 'front',
-          frequency: 4,
-        },
-        back: {
-          frames: [9, 10, 11, 10],
-          next: 'back',
-          frequency: 4,
-        },
-        left: {
-          frames: [12, 13, 14, 13],
-          next: 'left',
-          frequency: 4,
-        },
-      },
-    });
-
     var loader = phina.asset.AssetLoader();
-
     var flow = loader.load({
       image: {
-        'ss': '../../assets/images/tomapiko_ss.png',
+        'tomapiko': '../../assets/images/tomapiko_ss.png',
       },
       spritesheet: {
         'tomapiko': '../../assets/tmss/tomapiko.tmss',
@@ -174,14 +142,36 @@ th.describe("accessory.FrameAnimation", function() {
     });
 
     flow.then(function() {
-      var sprite = phina.display.Sprite('ss').addChildTo(this);
-      sprite.x = 320;
-      sprite.y = 480;
-
-      sprite.scale.set(2, 2);
-
-      fa.attachTo(sprite);
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(4), this.gridY.span(4)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
+      fa.gotoAndPlay('stand');
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(8), this.gridY.span(4)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('fly');
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(12), this.gridY.span(4)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
+      fa.gotoAndPlay('front');
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(4), this.gridY.span(8)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
+      fa.gotoAndPlay('back');
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(8), this.gridY.span(8)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
+      fa.gotoAndPlay('left');
+      // 
+      var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
+      sprite.setPosition(this.gridX.span(12), this.gridY.span(8)).setScale(2);
+      var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
+      fa.gotoAndPlay('right');
     }.bind(this));
   });
 

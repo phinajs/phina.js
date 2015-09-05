@@ -24,6 +24,7 @@
     "asset/assetloader.js",
     "asset/texture.js",
     "asset/sound.js",
+    "asset/spritesheet.js",
 
     "input/input.js",
     "input/mouse.js",

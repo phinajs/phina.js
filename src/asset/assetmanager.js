@@ -10,6 +10,7 @@ phina.namespace(function() {
       assets: {
         image: {},
         sound: {},
+        spritesheet: {},
       },
       
       get: function(type, key) {
