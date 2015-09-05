@@ -4272,9 +4272,11 @@ phina.namespace(function() {
       this.superInit();
 
       this.ss = phina.asset.AssetManager.get('spritesheet', ss);
+      this.paused = true;
     },
 
     update: function() {
+      if (!this.paused) return ;
       if (!this.currentAnimation) return ;
 
       ++this.frame;
@@ -4286,11 +4288,22 @@ phina.namespace(function() {
 
     gotoAndPlay: function(name) {
       this.frame = 0;
-      this.currentFrame = 0;
       this.currentFrameIndex = 0;
       this.currentAnimation = this.ss.getAnimation(name);
-
       this._updateFrame();
+
+      this.paused = false;
+
+      return this;
+    },
+
+    gotoAndStop: function(name) {
+      this.frame = 0;
+      this.currentFrameIndex = 0;
+      this.currentAnimation = this.ss.getAnimation(name);
+      this._updateFrame();
+
+      this.paused = true;
 
       return this;
     },
