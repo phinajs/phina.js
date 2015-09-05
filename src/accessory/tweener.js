@@ -135,7 +135,6 @@ phina.namespace(function() {
         if (task.type === 'tween') {
 
         }
-        console.log(task);
       });
       this.play();
 
