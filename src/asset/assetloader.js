@@ -1,0 +1,64 @@
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.AssetManager
+   * 
+   */
+  phina.define('phina.asset.AssetLoader', {
+    superClass: "phina.util.EventDispatcher",
+
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit();
+
+      params = (params || {}).$safe({
+        cache: true,
+      });
+
+      this.assets = {};
+      this.cache = params.cache;
+    },
+
+    load: function(params) {
+      var self = this;
+      var flows = [];
+
+      params.forIn(function(type, assets) {
+        assets.forIn(function(key, value) {
+          var func = phina.asset.AssetLoader.assetLoadFunctions[type];
+          var flow = func(value);
+          flow.then(function(texture) {
+            if (self.cache) {
+              phina.asset.AssetManager.set(type, key, texture);
+            }
+          });
+          flows.push(flow);
+        });
+      });
+
+      return phina.util.Flow.all(flows).then(function(args) {
+      });
+    },
+
+    _static: {
+      assetLoadFunctions: {
+        image: function(path) {
+          var texture = phina.asset.Texture();
+          var flow = texture.load(path);
+          return flow;
+        },
+        sound: function(path) {
+          var audio = phina.asset.Sound();
+          var flow = audio.load(path);
+          return flow;
+        },
+      }
+    }
+
+  });
+
+});
+
