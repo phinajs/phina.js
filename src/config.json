@@ -39,6 +39,7 @@
     "accessory/accessory.js",
     "accessory/tweener.js",
     "accessory/draggable.js",
+    "accessory/frameanimation.js",
 
     "dom/event.js",
 
