@@ -28,17 +28,38 @@ phina.namespace(function() {
     },
 
     play: function() {
-      var context = this.context;
       // play
-      this.source.start(context.currentTime);
+      this.source.start();
 
       // cache play end
-      var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
-      window.setTimeout(function(self) {
-        self.flare('ended');
-      }, time, this);
+      if (this.source.buffer) {
+        var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
+        window.setTimeout(function(self) {
+          self.flare('ended');
+        }, time, this);
+      }
 
       return this;
+    },
+
+    // 試してみるなう
+    _oscillator: function(type) {
+      var context = this.context;
+
+      var oscillator = context.createOscillator();
+
+      // Sine wave is type = “sine”
+      // Square wave is type = “square”
+      // Sawtooth wave is type = “saw”
+      // Triangle wave is type = “triangle”
+      // Custom wave is type = “custom” 
+      oscillator.type = type || 'sine';
+
+      this.source = oscillator;
+      // connect
+      this.source.connect(context.destination);
+
+      this
     },
 
     loadFromBuffer: function(buffer) {
@@ -96,15 +117,16 @@ phina.namespace(function() {
       audioContext: (function() {
         if (phina.isNode()) return null;
 
+        var g = phina.global;
         var context = null;
 
-        if (phina.global.AudioContext) {
+        if (g.AudioContext) {
             context = new AudioContext();
         }
-        else if (phina.global.webkitAudioContext) {
+        else if (g.webkitAudioContext) {
             context = new webkitAudioContext();
         }
-        else if (phina.global.mozAudioContext) {
+        else if (g.mozAudioContext) {
             context = new mozAudioContext();
         }
 

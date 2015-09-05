@@ -1,3 +1,23 @@
+th.describe("asset.Sound", function() {
+  th.it('init', function() {
+    var sound = phina.asset.Sound();
+    sound.loadFromBuffer();
+    sound.play();
+  });
+  th.it('sound', function() {
+    var path = '../../assets/sounds/correct.mp3';
+    phina.asset.Sound().load(path).then(function(s) {
+      s.clone().play();
+    });
+  });
+
+  th.it('oscillator', function() {
+    var sound = phina.asset.Sound();
+    sound._oscillator();
+    sound.play();
+  });
+});
+
 th.describe("asset.AssetLoader", function() {
 
   th.it('load', function() {
@@ -29,15 +49,5 @@ th.describe("asset.AssetLoader", function() {
       };
     }.bind(this));
   });
-
-  th.it('sound', function() {
-    var path = '../../assets/sounds/correct.mp3';
-    var sound = phina.asset.Sound();
-    var f = sound.load(path);
-    f.then(function(s) {
-      s.clone().play();
-    });
-  });
-
 
 });
