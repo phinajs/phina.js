@@ -2,6 +2,7 @@
 
 phina.namespace(function() {
 
+  var b2 = phina.box2d.b2;
 
   /**
    * @class
