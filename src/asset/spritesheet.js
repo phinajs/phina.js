@@ -25,22 +25,29 @@ phina.namespace(function() {
 
       var self = this;
 
-      var xml = new XMLHttpRequest();
-      xml.open('GET', this.src);
-      xml.onreadystatechange = function() {
-        if (xml.readyState === 4) {
-          if ([200, 201, 0].indexOf(xml.status) !== -1) {
-            var data = xml.responseText;
-            var json = JSON.parse(data);
+      if (typeof this.src === 'string') {
+        var xml = new XMLHttpRequest();
+        xml.open('GET', this.src);
+        xml.onreadystatechange = function() {
+          if (xml.readyState === 4) {
+            if ([200, 201, 0].indexOf(xml.status) !== -1) {
+              var data = xml.responseText;
+              var json = JSON.parse(data);
 
-            self.setup(json);
+              self.setup(json);
 
-            resolve(self);
+              resolve(self);
+            }
           }
-        }
-      };
+        };
 
-      xml.send(null);
+        xml.send(null);
+      }
+      else {
+        this.setup(this.src);
+        resolve(self);
+      }
+
     },
 
     _setupFrame: function(frame) {

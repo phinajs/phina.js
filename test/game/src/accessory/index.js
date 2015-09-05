@@ -138,6 +138,21 @@ th.describe("accessory.FrameAnimation", function() {
       },
       spritesheet: {
         'tomapiko': '../../assets/tmss/tomapiko.tmss',
+        // 'tomapiko': {
+        //   "frame": {
+        //     "width": 64,
+        //     "height": 65,
+        //     "rows": 3,
+        //     "cols": 6
+        //   },
+        //   "animations": {
+        //     "fly": {
+        //       "frames": [1, 2, 3],
+        //       "next": "fly",
+        //       "frequency": 4
+        //     },
+        //   },
+        // },
       },
     });
 
