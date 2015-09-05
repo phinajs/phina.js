@@ -1,0 +1,20 @@
+{
+    "image": "hiyocos",
+    "frame": {
+        "width": 32,
+        "height": 32,
+        "count": 64
+    },
+    "animations": {
+        "walk": {
+            "frames": [0, 1, 2, 3, 4],
+            "next": "walk",
+            "frequency": 4
+        },
+        "appear": {
+            "frames": [20, 21, 22, 23, 24],
+            "next": "walk",
+            "frequency": 4
+        }
+    }
+}
