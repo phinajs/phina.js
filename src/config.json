@@ -22,6 +22,7 @@
     "asset/asset.js",
     "asset/assetmanager.js",
     "asset/assetloader.js",
+    "asset/file.js",
     "asset/texture.js",
     "asset/sound.js",
     "asset/spritesheet.js",

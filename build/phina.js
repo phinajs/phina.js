@@ -2398,6 +2398,39 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
+   * @class phina.asset.File
+   * 
+   */
+  phina.define('phina.asset.File', {
+    superClass: "phina.asset.Asset",
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+    },
+
+    _load: function(resolve) {
+      // this.domElement = new Image();
+      // this.domElement.src = this.src;
+
+      // var self = this;
+      // this.domElement.onload = function() {
+      //   self.loaded = true;
+      //   resolve(self);
+      // };
+    },
+
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
    * @class phina.asset.Texture
    * 
    */
@@ -2595,22 +2628,29 @@ phina.namespace(function() {
 
       var self = this;
 
-      var xml = new XMLHttpRequest();
-      xml.open('GET', this.src);
-      xml.onreadystatechange = function() {
-        if (xml.readyState === 4) {
-          if ([200, 201, 0].indexOf(xml.status) !== -1) {
-            var data = xml.responseText;
-            var json = JSON.parse(data);
+      if (typeof this.src === 'string') {
+        var xml = new XMLHttpRequest();
+        xml.open('GET', this.src);
+        xml.onreadystatechange = function() {
+          if (xml.readyState === 4) {
+            if ([200, 201, 0].indexOf(xml.status) !== -1) {
+              var data = xml.responseText;
+              var json = JSON.parse(data);
 
-            self.setup(json);
+              self.setup(json);
 
-            resolve(self);
+              resolve(self);
+            }
           }
-        }
-      };
+        };
 
-      xml.send(null);
+        xml.send(null);
+      }
+      else {
+        this.setup(this.src);
+        resolve(self);
+      }
+
     },
 
     _setupFrame: function(frame) {
@@ -6188,6 +6228,10 @@ phina.namespace(function() {
 
 
 phina.namespace(function() {
+  
+  if (!phina.global.Box2D) {
+    return ;
+  }
 
   var b2 = phina.box2d.b2;
 

@@ -1,6 +1,10 @@
 
 
 phina.namespace(function() {
+  
+  if (!phina.global.Box2D) {
+    return ;
+  }
 
   var b2 = phina.box2d.b2;
 
