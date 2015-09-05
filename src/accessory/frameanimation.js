@@ -19,7 +19,7 @@ phina.namespace(function() {
     },
 
     update: function() {
-      if (!this.paused) return ;
+      if (this.paused) return ;
       if (!this.currentAnimation) return ;
 
       ++this.frame;
