@@ -2305,6 +2305,7 @@ phina.namespace(function() {
       assets: {
         image: {},
         sound: {},
+        spritesheet: {},
       },
       
       get: function(type, key) {
@@ -2355,9 +2356,9 @@ phina.namespace(function() {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
           var flow = func(value);
-          flow.then(function(texture) {
+          flow.then(function(asset) {
             if (self.cache) {
-              phina.asset.AssetManager.set(type, key, texture);
+              phina.asset.AssetManager.set(type, key, asset);
             }
           });
           flows.push(flow);
@@ -2376,8 +2377,13 @@ phina.namespace(function() {
           return flow;
         },
         sound: function(path) {
-          var audio = phina.asset.Sound();
+          var sound = phina.asset.Sound();
           var flow = audio.load(path);
+          return flow;
+        },
+        spritesheet: function(path) {
+          var ss = phina.asset.SpriteSheet();
+          var flow = ss.load(path);
           return flow;
         },
       }
@@ -2451,17 +2457,38 @@ phina.namespace(function() {
     },
 
     play: function() {
-      var context = this.context;
       // play
-      this.source.start(context.currentTime);
+      this.source.start(0);
 
       // cache play end
-      var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
-      window.setTimeout(function(self) {
-        self.flare('ended');
-      }, time, this);
+      if (this.source.buffer) {
+        var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
+        window.setTimeout(function(self) {
+          self.flare('ended');
+        }, time, this);
+      }
 
       return this;
+    },
+
+    // 試してみるなう
+    _oscillator: function(type) {
+      var context = this.context;
+
+      var oscillator = context.createOscillator();
+
+      // Sine wave is type = “sine”
+      // Square wave is type = “square”
+      // Sawtooth wave is type = “saw”
+      // Triangle wave is type = “triangle”
+      // Custom wave is type = “custom” 
+      oscillator.type = type || 'sine';
+
+      this.source = oscillator;
+      // connect
+      this.source.connect(context.destination);
+
+      this
     },
 
     loadFromBuffer: function(buffer) {
@@ -2519,20 +2546,135 @@ phina.namespace(function() {
       audioContext: (function() {
         if (phina.isNode()) return null;
 
+        var g = phina.global;
         var context = null;
 
-        if (phina.global.AudioContext) {
+        if (g.AudioContext) {
             context = new AudioContext();
         }
-        else if (phina.global.webkitAudioContext) {
+        else if (g.webkitAudioContext) {
             context = new webkitAudioContext();
         }
-        else if (phina.global.mozAudioContext) {
+        else if (g.mozAudioContext) {
             context = new mozAudioContext();
         }
 
         return context;
       })(),
+    },
+
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.SpriteSheet
+   * 
+   */
+  phina.define('phina.asset.SpriteSheet', {
+    superClass: "phina.asset.Asset",
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+    },
+
+    setup: function(params) {
+      this._setupFrame(params.frame);
+      this._setupAnim(params.animations);
+      return this;
+    },
+
+    _load: function(resolve) {
+
+      var self = this;
+
+      var xml = new XMLHttpRequest();
+      xml.open('GET', this.src);
+      xml.onreadystatechange = function() {
+        if (xml.readyState === 4) {
+          if ([200, 201, 0].indexOf(xml.status) !== -1) {
+            var data = xml.responseText;
+            var json = JSON.parse(data);
+
+            self.setup(json);
+
+            resolve(self);
+          }
+        }
+      };
+
+      xml.send(null);
+    },
+
+    _setupFrame: function(frame) {
+      var frames = this.frames = [];
+      var unitWidth = frame.width;
+      var unitHeight = frame.height;
+
+      var count = frame.rows * frame.cols;
+      this.frame = count;
+
+      (count).times(function(i) {
+        var xIndex = i%frame.cols;
+        var yIndex = (i/frame.cols)|0;
+
+        frames.push({
+          x: xIndex*unitWidth,
+          y: yIndex*unitHeight,
+          width: unitWidth,
+          height: unitHeight,
+        });
+      });
+    },
+
+    _setupAnim: function(animations) {
+      this.animations = {};
+
+      // デフォルトアニメーション
+      this.animations["default"] = {
+          frames: [].range(0, this.frame),
+          next: "default",
+          frequency: 1,
+      };
+
+      animations.forIn(function(key, value) {
+        var anim = value;
+
+        if (anim instanceof Array) {
+          this.animations[key] = {
+            frames: [].range(anim[0], anim[1]),
+            next: anim[2],
+            frequency: anim[3] || 1,
+          };
+        }
+        else {
+          this.animations[key] = {
+            frames: anim.frames,
+            next: anim.next,
+            frequency: anim.frequency || 1
+          };
+        }
+
+      }, this);
+    },
+
+    /**
+     * フレームを取得
+     */
+    getFrame: function(index) {
+      return this.frames[index];
+    },
+
+    getAnimation: function(name) {
+      name = (name !== undefined) ? name : "default";
+      return this.animations[name];
     },
 
   });
@@ -3935,7 +4077,6 @@ phina.namespace(function() {
         if (task.type === 'tween') {
 
         }
-        console.log(task);
       });
       this.play();
 
@@ -4113,6 +4254,73 @@ phina.namespace(function() {
     return this._draggable;
   });
   
+});
+/*
+ * frameanimation.js
+ */
+
+
+phina.namespace(function() {
+
+  phina.define('phina.accessory.FrameAnimation', {
+    superClass: 'phina.accessory.Accessory',
+
+    /**
+     * @constructor
+     */
+    init: function(ss) {
+      this.superInit();
+
+      this.ss = phina.asset.AssetManager.get('spritesheet', ss);
+    },
+
+    update: function() {
+      if (!this.currentAnimation) return ;
+
+      ++this.frame;
+      if (this.frame%this.currentAnimation.frequency === 0) {
+        ++this.currentFrameIndex;
+        this._updateFrame();
+      }
+    },
+
+    gotoAndPlay: function(name) {
+      this.frame = 0;
+      this.currentFrame = 0;
+      this.currentFrameIndex = 0;
+      this.currentAnimation = this.ss.getAnimation(name);
+
+      this._updateFrame();
+
+      return this;
+    },
+
+    _updateFrame: function() {
+      var anim = this.currentAnimation;
+      if (anim) {
+        if (this.currentFrameIndex >= anim.frames.length) {
+          if (anim.next) {
+            this.gotoAndPlay(anim.next);
+            return ;
+          }
+          else {
+            // TODO: 
+          }
+        }
+      }
+
+      var index = anim.frames[this.currentFrameIndex];
+      var frame = this.ss.getFrame(index);
+      var target = this.target;
+
+      target.srcRect.x = frame.x;
+      target.srcRect.y = frame.y;
+      target.srcRect.width = frame.width;
+      target.srcRect.height = frame.height;
+      target.width = frame.width;
+      target.height = frame.height;
+    },
+  });
 });
 
 
@@ -4997,14 +5205,28 @@ phina.namespace(function() {
       this.image = phina.asset.AssetManager.get('image', image);
       this.width = this.image.domElement.width;
       this.height = this.image.domElement.height;
+
+      this.srcRect = {
+        x: 0,
+        y: 0,
+        width: this.width,
+        height: this.height,
+      };
     },
 
     draw: function(canvas) {
       var image = this.image.domElement;
-      // canvas.context.drawImage(this.image, 0, 0, this.image.width, this.image.height);
+
+
+      // canvas.context.drawImage(image,
+      //   0, 0, image.width, image.height,
+      //   -this.width*this.origin.x, -this.height*this.origin.y, this.width, this.height
+      //   );
+
+      var srcRect = this.srcRect;
       canvas.context.drawImage(image,
-        0, 0, image.width, image.height,
-        -this.width*this.origin.x, -this.height*this.origin.y, this.width, this.height
+        srcRect.x, srcRect.y, srcRect.width, srcRect.height,
+        -this.width*this.originX, -this.height*this.originY, this.width, this.height
         );
     },
   });
@@ -5143,6 +5365,8 @@ phina.namespace(function() {
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
       this.backgroundColor = 'white';
+      this.gridX = phina.util.Grid(params.width, 16);
+      this.gridY = phina.util.Grid(params.height, 16);
 
       // TODO: 一旦むりやり対応
       this.interactive = true;
