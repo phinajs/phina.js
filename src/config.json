@@ -53,7 +53,6 @@
     "display/domapp.js",
     "display/canvasapp.js",
 
-    "display/box2dlayer.js",
 
     "effect/wave.js",
 
@@ -61,6 +60,9 @@
 
     "game/managerscene.js",
     "game/gameapp.js",
-    "game/pietimer.js"
+    "game/pietimer.js",
+
+    "box2d/box2dlayer.js",
+    "box2d/box2dbody.js"
   ]
 }

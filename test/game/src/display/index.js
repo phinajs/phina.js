@@ -159,7 +159,7 @@ th.describe("display.Box2dLayer", function() {
   th.it('sample', function() {
     var SCREEN_WIDTH = 640;
     var SCREEN_HEIGHT = 960;
-    var layer = phina.display.Box2dLayer({
+    var layer = phina.box2d.Box2dLayer({
       width: SCREEN_WIDTH,
       height: SCREEN_HEIGHT,
     }).addChildTo(this);
