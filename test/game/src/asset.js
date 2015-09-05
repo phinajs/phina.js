@@ -16,6 +16,22 @@ th.describe("asset.Sound", function() {
     sound._oscillator();
     sound.play();
   });
+
+  th.it('fromAudio', function() {
+    var path = 'https://mdn.github.io/media-source-buffer/viper.mp3';
+    var path = '../../assets/sounds/lo_002.mp3';
+    var sound = phina.asset.Sound();
+
+    var audio = new Audio();
+    audio.addEventListener('loadstart', function() {
+      // var source = sound.context.createMediaElementSource(audio);
+      // source.connect(sound.context.destination);
+      // source.start(0);
+      audio.play();
+    });
+
+    audio.src = path;
+  })
 });
 
 th.describe("asset.AssetLoader", function() {

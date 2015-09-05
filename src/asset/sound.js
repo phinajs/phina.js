@@ -29,7 +29,7 @@ phina.namespace(function() {
 
     play: function() {
       // play
-      this.source.start();
+      this.source.start(0);
 
       // cache play end
       if (this.source.buffer) {
