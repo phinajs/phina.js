@@ -52,6 +52,18 @@ phina.namespace(function() {
       return ( left < p.x && p.x < right ) && ( top  < p.y && p.y < bottom );
     },
 
+    /**
+     * 要素と衝突しているかを判定
+     * @param {Object} elm
+     */
+    hitTestElement: function(elm) {
+      var rect0 = this;
+      var rect1 = elm;
+      return (rect0.left < rect1.right) && (rect0.right > rect1.left) &&
+             (rect0.top < rect1.bottom) && (rect0.bottom > rect1.top);
+    },
+
+
     globalToLocal: function(p) {
       var matrix = this._worldMatrix.clone();
       matrix.invert();

@@ -92,6 +92,24 @@ phina.namespace(function() {
       return scene;
     },
 
+    /**
+     * シーンのupdateを実行するようにする
+     */
+    start: function() {
+      this.awake = true;
+
+      return this;
+    },
+    
+    /**
+     * シーンのupdateを実行しないようにする
+     */
+    stop: function() {
+      this.awake = false;
+
+      return this;
+    },
+
     enableStats: function() {
       if (phina.global.Stats) {
         this.stats = new Stats();
