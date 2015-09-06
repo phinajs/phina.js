@@ -1141,8 +1141,16 @@ phina.namespace(function() {
 
   phina.method('globalize', function() {
     phina.forIn(function(key, value) {
+      var ns = key;
 
       value.forIn(function(key, value) {
+        // if (phina.global[key]) {
+        //   console.log(ns, key);
+        //   phina.global['_' + key] = value;
+        // }
+        // else {
+        //   phina.global[key] = value;
+        // }
         phina.global[key] = value;
       });
     });
@@ -2309,9 +2317,12 @@ phina.namespace(function() {
       },
       
       get: function(type, key) {
-        return this.assets[type][key];
+        return this.assets[type] && this.assets[type][key];
       },
       set: function(type, key, asset) {
+        if (!this.assets[type]) {
+          this.assets[type] = {};
+        }
         this.assets[type][key] = asset;
       },
       contains: function(type, key) {
@@ -2386,6 +2397,10 @@ phina.namespace(function() {
           var flow = ss.load(path);
           return flow;
         },
+        script: function(path) {
+          var script = phina.asset.Script();
+          return script.load(path);
+        },
       }
     }
 
@@ -2412,6 +2427,43 @@ phina.namespace(function() {
     },
 
     _load: function(resolve) {
+
+      var params = {};
+
+      if (typeof this.src === 'string') {
+        params.$extend({
+          path: this.src,
+        });
+      }
+      else if (typeof this.src === 'object') {
+        params.$extend(this.src);
+      }
+
+      params.$safe({
+        path: '',
+        dataType: 'text',
+      });
+
+      // load
+      var self = this;
+      var xml = new XMLHttpRequest();
+      xml.open('GET', params.path);
+      xml.onreadystatechange = function() {
+        if (xml.readyState === 4) {
+          if ([200, 201, 0].indexOf(xml.status) !== -1) {
+            var data = xml.responseText;
+
+            if (params.dataType === 'json') {
+              data = JSON.parse(data);
+            }
+
+            self.data = data;
+            resolve(self);
+          }
+        }
+      };
+
+      xml.send(null);
       // this.domElement = new Image();
       // this.domElement.src = this.src;
 
@@ -2420,6 +2472,39 @@ phina.namespace(function() {
       //   self.loaded = true;
       //   resolve(self);
       // };
+    },
+
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.Script
+   * 
+   */
+  phina.define('phina.asset.Script', {
+    superClass: "phina.asset.Asset",
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+    },
+
+    _load: function(resolve) {
+      this.domElement = document.createElement('script');
+      this.domElement.src = this.src;
+
+      this.domElement.onload = function() {
+        resolve(self);
+      }.bind(this);
+
+      document.body.appendChild(this.domElement);
     },
 
   });
