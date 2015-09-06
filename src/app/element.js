@@ -102,9 +102,12 @@ phina.namespace(function() {
         var _class = phina.using(data.className);
         // 
         var element = _class.apply(null, args);
+        
+        element.name = name;
+        this[name] = element;
+
         element.fromJSON(data);
         element.addChildTo(this)
-        this[name] = element;
       }.bind(this);
 
       json.forIn(function(key, value) {
@@ -119,8 +122,43 @@ phina.namespace(function() {
           }
         }
       }, this);
-      
+
       return this;
+    },
+
+    toJSON: function() {
+      var json = {};
+
+      // this.forIn(function(key, value) {
+      //   if (key[0] === '_') return ;
+      //   json[key] = value;
+      // });
+
+      var keys = [
+        'x', 'y',
+        'rotation',
+        'scaleX', 'scaleY',
+        'originX', 'originY',
+        'className',
+        'name',
+      ];
+
+      keys.each(function(key) {
+        json[key] = this[key];
+      }, this);
+
+      var children = this.children.map(function(child) {
+        return child.toJSON();
+      });
+
+      if (children.length) {
+        json.children = {};
+        children.each(function(child) {
+          json.children[child.name] = child;
+        });
+      }
+
+      return json;
     },
   });
   
