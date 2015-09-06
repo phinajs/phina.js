@@ -159,32 +159,32 @@ th.describe("accessory.FrameAnimation", function() {
     flow.then(function() {
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(4), this.gridY.span(4)).setScale(2);
+      sprite.setPosition(this.gridX.span(3), this.gridY.span(4)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('stand');
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(8), this.gridY.span(4)).setScale(2);
+      sprite.setPosition(this.gridX.span(8), this.gridY.span(4)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('fly');
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(12), this.gridY.span(4)).setScale(2);
+      sprite.setPosition(this.gridX.span(13), this.gridY.span(4)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('front');
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(4), this.gridY.span(8)).setScale(2);
+      sprite.setPosition(this.gridX.span(3), this.gridY.span(11)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('back');
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(8), this.gridY.span(8)).setScale(2);
+      sprite.setPosition(this.gridX.span(8), this.gridY.span(11)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('left');
       // 
       var sprite = phina.display.Sprite('tomapiko').addChildTo(this);
-      sprite.setPosition(this.gridX.span(12), this.gridY.span(8)).setScale(2);
+      sprite.setPosition(this.gridX.span(13), this.gridY.span(11)).setScale(4);
       var fa = phina.accessory.FrameAnimation('tomapiko').attachTo(sprite);
       fa.gotoAndPlay('right');
     }.bind(this));
