@@ -14,9 +14,12 @@ phina.namespace(function() {
       },
       
       get: function(type, key) {
-        return this.assets[type][key];
+        return this.assets[type] && this.assets[type][key];
       },
       set: function(type, key, asset) {
+        if (!this.assets[type]) {
+          this.assets[type] = {};
+        }
         this.assets[type][key] = asset;
       },
       contains: function(type, key) {

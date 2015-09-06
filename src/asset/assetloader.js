@@ -60,6 +60,10 @@ phina.namespace(function() {
           var flow = ss.load(path);
           return flow;
         },
+        script: function(path) {
+          var script = phina.asset.Script();
+          return script.load(path);
+        },
       }
     }
 

@@ -159,6 +159,10 @@ phina.namespace(function() {
       value.forIn(function(key, value) {
         // if (phina.global[key]) {
         //   console.log(ns, key);
+        //   phina.global['_' + key] = value;
+        // }
+        // else {
+        //   phina.global[key] = value;
         // }
         phina.global[key] = value;
       });
