@@ -91,6 +91,37 @@ phina.namespace(function() {
       
       return this;
     },
+
+    fromJSON: function(json) {
+
+      var createChildren = function(name, data) {
+        // 
+        var args = data.arguments;
+        args = (args instanceof Array) ? args : [args];
+        // 
+        var _class = phina.using(data.className);
+        // 
+        var element = _class.apply(null, args);
+        element.fromJSON(data);
+        element.addChildTo(this)
+        this[name] = element;
+      }.bind(this);
+
+      json.forIn(function(key, value) {
+        if (key === 'children') {
+          value.forIn(function(name, data) {
+            createChildren(name, data);
+          });
+        }
+        else {
+          if (key !== 'type') {
+            this[key] = value;
+          }
+        }
+      }, this);
+      
+      return this;
+    },
   });
   
 });
