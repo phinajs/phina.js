@@ -1,0 +1,15 @@
+{
+  "frame": {
+    "width": 64,
+    "height": 64,
+    "rows": 1,
+    "cols": 3
+  },
+  "animations": {
+    "fly": {
+      "frames": [0, 1, 2],
+      "next": "fly",
+      "frequency": 4
+    }
+  }
+}
