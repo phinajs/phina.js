@@ -1,3 +1,15 @@
+th.describe('asset.File', function() {
+  th.it('load(object)', function() {
+    var file = phina.asset.File();
+    file.load({
+      path: '../../assets/tmss/tomapiko.tmss',
+      dataType: 'json',
+    }).then(function() {
+      console.log(file);
+    });
+  });
+});
+
 th.describe("asset.Sound", function() {
   th.it('init', function() {
     var sound = phina.asset.Sound();

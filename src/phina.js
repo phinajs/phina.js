@@ -154,8 +154,12 @@ phina.namespace(function() {
 
   phina.method('globalize', function() {
     phina.forIn(function(key, value) {
+      var ns = key;
 
       value.forIn(function(key, value) {
+        // if (phina.global[key]) {
+        //   console.log(ns, key);
+        // }
         phina.global[key] = value;
       });
     });
