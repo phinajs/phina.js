@@ -1,0 +1,127 @@
+<!doctype html>
+
+<html>
+  <head>
+  </head>
+  <body>
+    <canvas id='world'></canvas>
+  </body>
+</html>
+
+<script src='../build/phina.js'></script>
+<script>
+
+phina.globalize();
+
+var ASSETS = {
+  image: {
+    'tomapiko': '../assets/images/tomapiko_ss.png',
+    'karasu': '../assets/images/karasu_ss.png',
+  },
+  spritesheet: {
+    'tomapiko': '../assets/tmss/tomapiko.tmss',
+    'karasu': '../assets/tmss/karasu.tmss',
+  },
+};
+var SCREEN_WIDTH = 960;
+var SCREEN_HEIGHT = 640;
+
+phina.define("MainScene", {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    this.backgroundColor = 'hsl(200, 80%, 70%)';
+
+    this.player = Player().addChildTo(this);
+    this.player.setPosition(this.gridX.span(2), this.gridY.span(8));
+
+    this.enemyGroup = CanvasElement().addChildTo(this);
+
+    this.onpointstart = function() {
+      this.player.fly();
+    };
+  },
+
+  update: function(app) {
+    if (app.ticker.frame % 30 === 0) {
+      var enemy = Enemy().addChildTo(this.enemyGroup);
+      var yIndex = Math.rand(0, 16);
+      enemy.setPosition(this.gridX.span(18), this.gridY.span(yIndex));
+    }
+
+    this.enemyGroup.children.each(function(enemy) {
+      if (this.player.hitTestElement(enemy)) {
+        alert('game over');
+        this.app.stop();
+      }
+    }, this);
+  },
+});
+
+phina.define('Player', {
+  superClass: 'Sprite',
+
+  init: function(index) {
+    this.superInit('tomapiko');
+    this.scaleX = -1;
+    this.anim = FrameAnimation('tomapiko').attachTo(this);
+    this.anim.gotoAndPlay('fly');
+
+    this.vy = 0;
+    this.ay = 0.5;
+  },
+  update: function() {
+    this.vy += this.ay;
+    this.y += this.vy;
+  },
+
+  fly: function() {
+    this.vy = -10;
+  },
+});
+
+phina.define('Enemy', {
+  superClass: 'Sprite',
+
+  init: function(index) {
+    this.superInit('karasu');
+    this.anim = FrameAnimation('karasu').attachTo(this);
+    this.anim.gotoAndPlay('fly');
+
+    this.vx = -10;
+  },
+  update: function() {
+    this.x += this.vx;
+
+    if (this.x < -100) {
+      this.remove();
+    }
+  },
+});
+
+window.onload = function() {
+  var loader = AssetLoader();
+
+  loader.load(ASSETS).then(function() {
+    var app = CanvasApp({
+      query: '#world',
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    app.replaceScene(MainScene());
+
+    app.enableStats();
+
+    app.run();
+  });
+};
+
+
+
+</script>
