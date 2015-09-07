@@ -51,6 +51,8 @@ phina.namespace(function() {
         text: 'Hello',
         color: 'white',
         backgroundColor: 'hsl(200, 80%, 60%)',
+        cornerRadius: 8,
+        fontSize: 32,
       });
 
       this.setInteractive(true, 'rect');
@@ -61,13 +63,14 @@ phina.namespace(function() {
       this.bg = phina.display.RectangleShape({
         width: this.width,
         height: this.height,
-        cornerRadius: 8,
+        cornerRadius: params.cornerRadius,
         color: params.backgroundColor,
         stroke: false,
       }).addChildTo(this);
       this.label = phina.display.Label(params.text, {
         color: params.color,
         stroke: false,
+        fontSize: params.fontSize,
       }).addChildTo(this);
     },
   });
