@@ -10,6 +10,9 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit();
 
+      params = (params || {}).$safe(phina.display.CanvasScene.default);
+
+
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
@@ -36,6 +39,13 @@ phina.namespace(function() {
     _render: function() {
       this.renderer.render(this);
     },
+
+    _static: {
+      default: {
+        width: 640,
+        height: 960,
+      },
+    }
 
   });
 
