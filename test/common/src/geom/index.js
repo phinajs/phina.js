@@ -3,8 +3,6 @@
 
 describe('#geom', function() {
 
-  var indentity 
-
   describe('Vector2', function() {
     it('init', function() {
       var a = phina.geom.Vector2(1, 2);
@@ -65,6 +63,15 @@ describe('#geom', function() {
     });
   });
 
+
+  describe('Rect', function() {
+    it('init', function() {
+      var r = phina.geom.Rect(8, 16, 32, 64);
+
+      assert.equal(r.x, 8);
+      assert.equal(r.y, 16);
+    });
+  });
 
 });
 
