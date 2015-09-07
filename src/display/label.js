@@ -27,6 +27,7 @@ phina.namespace(function() {
 
         align: 'center',
         baseline: 'middle',
+        lineHeight: 1.2,
 
         backgroundColor: 'transparent',
       });
@@ -50,7 +51,7 @@ phina.namespace(function() {
     calcHeight: function() {
       var height = this.style.fontSize * this._lines.length;
       if (this.style.baseline !== 'middle') height*=2;
-      return height;
+      return height*this.style.lineHeight;
     },
 
     _render: function() {
@@ -78,19 +79,21 @@ phina.namespace(function() {
 
       context.lineJoin = "round";
 
-      var offset = -Math.floor(lines.length/2)*fontSize;
+      var lineSize = fontSize*style.lineHeight;
+      var offset = -Math.floor(lines.length/2)*lineSize;
+      offset += ((lines.length+1)%2) * (lineSize/2);
 
       if (this.style.stroke) {
         context.shadowBlur = 0;
         lines.forEach(function(line, i) {
-          context.strokeText(line, 0, i*fontSize+offset);
+          context.strokeText(line, 0, i*lineSize+offset);
         }, this);
       }
 
       context.shadowBlur = this.style.shadowBlur;
       context.shadowColor = this.style.shadowColor;
       lines.forEach(function(line, i) {
-        context.fillText(line, 0, i*fontSize+offset);
+        context.fillText(line, 0, i*lineSize+offset);
       }, this);
     },
 
