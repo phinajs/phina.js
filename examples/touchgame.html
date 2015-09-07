@@ -22,7 +22,12 @@ phina.globalize();
 var SCREEN_WIDTH    = 640;
 var SCREEN_HEIGHT   = 960;
 var MAX_PER_LINE    = 5;                            // ピースの横に並ぶ最大数
+var PIECE_SIZE      = 100;
+var BOARD_PADDING   = 40;
+
 var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
+var BOARD_SIZE      = SCREEN_WIDTH - BOARD_PADDING*2;
+var BOARD_OFFSET_X  = BOARD_PADDING+PIECE_SIZE/2;
 
 
 
@@ -39,8 +44,8 @@ phina.define("MainScene", {
 
     this.group = CanvasElement().addChildTo(this);
 
-    var gridX = Grid(SCREEN_WIDTH, 6);
-    var gridY = Grid(SCREEN_WIDTH, 6);
+    var gridX = Grid(BOARD_SIZE, 5);
+    var gridY = Grid(BOARD_SIZE, 5);
 
     var self = this;
 
@@ -52,7 +57,7 @@ phina.define("MainScene", {
       var yIndex = Math.floor(i/MAX_PER_LINE);
       var p = Piece(index).addChildTo(self.group);
 
-      p.x = gridX.span(xIndex+1);
+      p.x = gridX.span(xIndex)+BOARD_OFFSET_X;
       p.y = gridY.span(yIndex+1)+150;
 
       p.onpointstart = function() {
@@ -110,8 +115,8 @@ phina.define('Piece', {
 
   init: function(index) {
     this.superInit({
-      width: 100,
-      height: 100,
+      width: PIECE_SIZE,
+      height: PIECE_SIZE,
       text: index+'',
     });
 
