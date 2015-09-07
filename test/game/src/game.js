@@ -22,6 +22,31 @@ th.describe('game.TitleScene', function() {
 
 });
 
+th.describe('game.ResultScene', function() {
+
+  th.it('default', function() {
+    phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
+
+    this.onenter = function() {
+      this.app.pushScene(phina.game.ResultScene());
+    };
+  });
+
+  th.it('option', function() {
+    phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
+
+    this.onenter = function() {
+      this.app.pushScene(phina.game.TitleScene({
+        title: 'タイトルだよー♪',
+        fontColor: 'black',
+        backgroundColor: 'red',
+      }));
+    };
+  });
+
+});
+
+
 th.describe('game.PieTimer', function() {
 
   th.it('default', function() {
