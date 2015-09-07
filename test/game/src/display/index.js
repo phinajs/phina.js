@@ -101,6 +101,26 @@ th.describe("display.Label", function() {
     label.position.set(480, 960/2);
   });
 
+  th.it('lineHeight', function() {
+    var text = 'hoge\nfoo\nbar';
+    var label = phina.display.Label(text).addChildTo(this);
+    label.style.backgroundColor = '#aaa';
+    label.position.set(this.gridX.span(4), this.gridX.span(8));
+    // 
+    var label = phina.display.Label(text).addChildTo(this);
+    label.style.backgroundColor = '#aaa';
+    label.position.set(this.gridX.span(12), this.gridX.span(8));
+
+    var text = 'hoge\nfoo\nbar\nbaz';
+    var label = phina.display.Label(text).addChildTo(this);
+    label.style.backgroundColor = '#aaa';
+    label.position.set(this.gridX.span(4), this.gridX.span(12));
+    // 
+    var label = phina.display.Label(text).addChildTo(this);
+    label.style.backgroundColor = '#aaa';
+    label.position.set(this.gridX.span(12), this.gridX.span(12));
+  });
+
 });
 
 
