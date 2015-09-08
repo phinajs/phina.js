@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+ 
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <title>phina.js</title>
+    <meta name="description" content="phina.js is javascript library.
+" />
+    
+    <style>body {
+  background-color: hsl(0, 0%, 96%);
+}
+
+h1 {
+  color: #444;
+  font-size: 23px;
+  font-family: 'Lucida Grande','Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+}</style>
+    
+    <script src='http://cdn.rawgit.com/jnordberg/gif.js/v0.1.6/dist/gif.js'></script>
+    <script src='../../build/phina.js'></script>
+    <script>/*
+ * runstant lite
+ */
+
+phina.globalize();
+
+var SCREEN_WIDTH = 640;
+var SCREEN_HEIGHT = 960;
+
+/*
+ * main
+ */
+phina.define('MainScene', {
+  superClass: 'CanvasScene',
+  
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    var circle = CircleShape().addChildTo(this);
+
+    circle.tweener
+      .to({x:500, y:500})
+      .to({x:320, y:480, scaleX: 4, scaleY: 4})
+  },
+
+  onenter: function() {
+    // レコーダー生成
+    var r = CanvasRecorder(this.app.canvas);
+
+    // レコード完了後コールバック
+    r.onfinished = function() {
+      var button = document.createElement('button');
+      button.innerHTML = 'download gif';
+      document.body.appendChild(button);
+
+      button.onclick = function() {
+        // ファイルを開く
+        r.open();
+      };
+    };
+
+    // 録画開始
+    r.start();
+  },
+});
+
+/*
+ * init
+ */
+window.onload = function() {
+  var app = GameApp({
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    query: '#world',
+    startLabel: 'main',
+  });
+  
+  app.run();
+};
+</script>
+  </head>
+  <body>
+    <canvas id='world'></canvas>
+  </body>
+</html>
