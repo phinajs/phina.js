@@ -17,7 +17,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
-      params = (params || {}).$safe(phina.game.ResultScene.default);
+      params = (params || {}).$safe(phina.game.ResultScene.defaults);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -95,7 +95,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      default: {
+      defaults: {
         score: 16,
 
         message: 'this is phina.js project.\nHello, world!',
