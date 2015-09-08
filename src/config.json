@@ -49,6 +49,7 @@
     "dom/event.js",
 
     "graphics/canvas.js",
+    "graphics/canvasrecorder.js",
 
     "display/canvaselement.js",
     "display/shape.js",
