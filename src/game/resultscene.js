@@ -80,7 +80,7 @@ phina.namespace(function() {
             y: this.gridY.span(11),
 
             interactive: true,
-            onpointend: function() {
+            onpush: function() {
               this.exit();
             }.bind(this),
           },
@@ -92,15 +92,23 @@ phina.namespace(function() {
           this.exit();
         });
       }
+
+      this.shareButton.onclick = function() {
+        var url = phina.social.Twitter.createURL({
+          text: params.message,
+          hashtags: params.hashtags,
+        });
+        window.open(url);
+      };
     },
 
     _static: {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\nHello, world!',
-        hashtags: 'phina game javascript',
-        url: 'http://phinajs.com',
+        message: 'this is phina.js project.\n',
+        hashtags: 'phina,game,javascript',
+        url: location.href,
 
         width: 640,
         height: 960,

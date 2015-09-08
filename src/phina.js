@@ -30,6 +30,16 @@ var phina = phina || {};
     },
   });
 
+  /**
+   * mobile かどうかをチェック
+   */
+  phina.method('isMobile', function() {
+    if (!phina.global.navigator) return false;
+    var ua = phina.global.navigator.userAgent;
+    return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
+  });
+
+
   // support node.js
   if (phina.isNode()) {
     module.exports = phina;

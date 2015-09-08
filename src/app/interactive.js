@@ -71,6 +71,8 @@ phina.namespace(function() {
           obj.flare('pointstart', {
             pointer: p,
           });
+          // クリックフラグを立てる
+          obj._clicked = true;
         }
       }
 

@@ -4,7 +4,6 @@
 
 
 phina.namespace(function() {
-  alert();
 
   /**
    * @class phina.graphics.CanvasRecorder

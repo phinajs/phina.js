@@ -72,6 +72,9 @@
     "game/gameapp.js",
     "game/pietimer.js",
 
+    "social/twitter.js",
+
+
     "box2d/box2dlayer.js",
     "box2d/box2dbody.js"
   ]

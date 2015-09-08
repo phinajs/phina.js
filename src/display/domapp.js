@@ -35,6 +35,10 @@ phina.namespace(function() {
         this.pointers = [this.mouse];
       }.bind(this));
 
+      // click 対応
+      var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
+      this.domElement.addEventListener(eventName, this._checkClick.bind(this));
+
       // 決定時の処理をオフにする(iPhone 時のちらつき対策)
       this.domElement.addEventListener("touchstart", function(e) { e.stop(); });
       this.domElement.addEventListener("touchmove", function(e) { e.stop(); });
@@ -44,6 +48,22 @@ phina.namespace(function() {
       this.mouse.update();
       this.touch.update();
       this.touchList.update();
+    },
+
+    _checkClick: function(e) {
+      var _check = function(element) {
+        if (element.children.length > 0) {
+          element.children.each(function(child) {
+            _check(child);
+          });
+        }
+        if (element._clicked && element.has('click')) {
+          element.flare('click');
+        }
+        element._clicked = false;
+      };
+
+      _check(this.currentScene);
     },
 
   });
