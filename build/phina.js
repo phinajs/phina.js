@@ -1017,6 +1017,16 @@ var phina = phina || {};
     },
   });
 
+  /**
+   * mobile かどうかをチェック
+   */
+  phina.method('isMobile', function() {
+    if (!phina.global.navigator) return false;
+    var ua = phina.global.navigator.userAgent;
+    return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
+  });
+
+
   // support node.js
   if (phina.isNode()) {
     module.exports = phina;
@@ -3626,6 +3636,8 @@ phina.namespace(function() {
           obj.flare('pointstart', {
             pointer: p,
           });
+          // クリックフラグを立てる
+          obj._clicked = true;
         }
       }
 
@@ -5562,43 +5574,30 @@ phina.namespace(function() {
         width: canvas.width,
         height: canvas.height,
       });
-
-      this.gif.on('finished', function(blob) {
-        this.objectURL = URL.createObjectURL(blob);
-        this.flare('finished');
-      }.bind(this));
     },
 
     start: function() {
       var frameTime = 33;
       var time = 0;
       var id = setInterval(function() {
-
-        var ctx = this.canvas.context;
-        this.gif.addFrame(ctx, {
-          copy: true,
-          delay: frameTime,
-        });
-
         time+=frameTime;
 
-        if (time > 2000) {
-          clearInterval(id);
+        console.log(time);
 
-          // レンダリング
-          this.gif.render();
+        if (time > 3000) {
+          clearInterval(id);
         }
-      }.bind(this), frameTime);
+      }, frameTime);
 
       return this;
     },
 
     stop: function() {
-      // TODO: 
+
     },
 
     open: function() {
-      window.open(this.objectURL);
+
     },
   });
 
@@ -6178,6 +6177,10 @@ phina.namespace(function() {
         this.pointers = [this.mouse];
       }.bind(this));
 
+      // click 対応
+      var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
+      this.domElement.addEventListener(eventName, this._checkClick.bind(this));
+
       // 決定時の処理をオフにする(iPhone 時のちらつき対策)
       this.domElement.addEventListener("touchstart", function(e) { e.stop(); });
       this.domElement.addEventListener("touchmove", function(e) { e.stop(); });
@@ -6187,6 +6190,22 @@ phina.namespace(function() {
       this.mouse.update();
       this.touch.update();
       this.touchList.update();
+    },
+
+    _checkClick: function(e) {
+      var _check = function(element) {
+        if (element.children.length > 0) {
+          element.children.each(function(child) {
+            _check(child);
+          });
+        }
+        if (element._clicked && element.has('click')) {
+          element.flare('click');
+        }
+        element._clicked = false;
+      };
+
+      _check(this.currentScene);
     },
 
   });
@@ -6708,7 +6727,7 @@ phina.namespace(function() {
             y: this.gridY.span(11),
 
             interactive: true,
-            onpointend: function() {
+            onpush: function() {
               this.exit();
             }.bind(this),
           },
@@ -6720,15 +6739,23 @@ phina.namespace(function() {
           this.exit();
         });
       }
+
+      this.shareButton.onclick = function() {
+        var url = phina.social.Twitter.createURL({
+          text: params.message,
+          hashtags: params.hashtags,
+        });
+        window.open(url);
+      };
     },
 
     _static: {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\nHello, world!',
-        hashtags: 'phina game javascript',
-        url: 'http://phinajs.com',
+        message: 'this is phina.js project.\n',
+        hashtags: 'phina,game,javascript',
+        url: location.href,
 
         width: 640,
         height: 960,
@@ -6882,6 +6909,70 @@ phina.namespace(function() {
           this._render();
         },
       }
+    }
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  var BASE_URL = 'http://'
+
+  /**
+   * @class phina.social.Twitter
+   * 
+   */
+  phina.define('phina.social.Twitter', {
+    superClass: 'phina.display.CircleShape',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit({
+        color: 'white',
+        stroke: false,
+      });
+
+      var tweener = phina.accessory.Tweener().attachTo(this);
+      tweener
+        .to({scaleX:2, scaleY:2, alpha:0}, 500)
+        .call(function() {
+          this.remove();
+        }, this);
+    },
+
+    _static: {
+      baseURL: 'http://twitter.com/intent',
+      defaults: {
+        // type: 'tweet',
+        text: 'Hello, world!',
+        screen_name: 'phi_jp',
+        hashtags: 'javascript,phina',
+        // url: 'http://github.com/phi-jp/phina.js',
+        url: location.href,
+        via: 'phi_jp',
+      },
+
+      createURL: function(options) {
+        options = (options || {}).$safe(this.defaults);
+
+        var queries = [];
+        var euc = encodeURIComponent;
+        options.forIn(function(key, value) {
+          var str = key + '=' + euc(value);
+          queries.push(str);
+        });
+
+        var url = '{baseURL}/{type}?{query}'.format({
+          baseURL: this.baseURL,
+          // type: options.type,
+          type: 'tweet',
+          query: queries.join('&'),
+        });
+
+        return url;
+      },
     }
   });
 
