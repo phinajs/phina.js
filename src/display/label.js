@@ -10,7 +10,7 @@ phina.namespace(function() {
 
     init: function(text, style) {
 
-      this.text = text || 'hoge\nfoo\nbar';
+      this.text = text || 'hoge';
       style = (style || {}).$safe({
         color: 'black',
 
@@ -61,7 +61,7 @@ phina.namespace(function() {
 
       var fontSize = this.style.fontSize;
       var font = "{fontWeight} {fontSize}px {fontFamily}".format(this.style);
-      var lines = this.text.split('\n');
+      var lines = this._lines;
       canvas.context.font = font;
 
       canvas.width = this.calcWidth() + style.padding*2;
@@ -104,7 +104,7 @@ phina.namespace(function() {
         },
         set: function(v) {
           this._text = v;
-          this._lines = v.split('\n');
+          this._lines = (v+'').split('\n');
           if (this.canvas) {
             this._render();
           }

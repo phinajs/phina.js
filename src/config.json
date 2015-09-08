@@ -69,6 +69,7 @@
     "game/managerscene.js",
     "game/titlescene.js",
     "game/resultscene.js",
+    "game/countscene.js",
     "game/gameapp.js",
     "game/pietimer.js",
 
