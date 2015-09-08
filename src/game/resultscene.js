@@ -98,7 +98,7 @@ phina.namespace(function() {
           text: params.message,
           hashtags: params.hashtags,
         });
-        window.open(url);
+        window.open(url, 'share window', 'width=480, height=320');
       };
     },
 
