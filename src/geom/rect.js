@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Rect
-   * ベクトルクラス
+   * 
    */
   phina.define('phina.geom.Rect', {
 
@@ -81,7 +81,7 @@ phina.namespace(function() {
     },
 
     toCircle: function() {
-      var radius = ((this.width < this.height) ? this.width : this.height);
+      var radius = ((this.width < this.height) ? this.width : this.height)/2;
       return phina.geom.Circle(this.centerX, this.centerY, radius);
     },
 
