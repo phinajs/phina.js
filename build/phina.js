@@ -1499,7 +1499,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Rect
-   * ベクトルクラス
+   * 
    */
   phina.define('phina.geom.Rect', {
 
@@ -1525,32 +1525,247 @@ phina.namespace(function() {
       return this;
     },
 
+    moveTo: function(x, y) {
+      this.x = x;
+      this.y = y;
+      return this;
+    },
+
+    moveBy: function(x, y) {
+      this.x += x;
+      this.y += y;
+      return this;
+    },
+
+    setSize: function(w, h) {
+      this.width = w;
+      this.height = h;
+      return this;
+    },
+
+    padding: function(top, right, bottom, left) {
+      // css の padding に合わせて時計回りにパラメータ調整
+      switch (arguments.length) {
+        case 1:
+          top = right = bottom = left = arguments[0];
+          break;
+        case 2:
+          top     = bottom = arguments[0];
+          right   = left   = arguments[1];
+          break;
+        case 3:
+          top     = arguments[0];
+          right   = left = arguments[1];
+          bottom  = arguments[2];
+          break;
+      }
+      
+      this.x += left;
+      this.y += top;
+      this.width -= left+right;
+      this.height-= top +bottom;
+      
+      return this;
+    },
+
+    contains: function(x, y) {
+      return this.left <= x && x <= this.right && this.top <= y && y <= this.bottom;
+    },
+
     clone: function() {
       return phina.geom.Rect(this.x, this.y, this.width, this.height);
     },
 
     toCircle: function() {
-      return phina.geom.Circle()
+      var radius = ((this.width < this.height) ? this.width : this.height)/2;
+      return phina.geom.Circle(this.centerX, this.centerY, radius);
+    },
+
+    /**
+     * 配列に変換
+     */
+    toArray: function() {
+      return [this.x, this.y, this.width, this.height];
     },
 
     _accessor: {
       
       /**
-       * @property  width
-       * width
+       * @property  left
+       * left
        */
-      width: {
-          "get": function()   { return this._width; },
-          "set": function(v)  { this._width = v; }
+      left: {
+        "get": function()   { return this.x; },
+        "set": function(v)  { this.width -= v-this.x; this.x = v; }
+      },
+      /**
+       * @property  top
+       * top
+       */
+      top: {
+        "get": function()   { return this.y; },
+        "set": function(v)  { this.height -= v-this.y; this.y = v; }
+      },
+      /**
+       * @property  right
+       * right
+       */
+      right: {
+        "get": function()   { return this.x + this.width; },
+        "set": function(v)  { this.width += v-this.right; },
+      },
+      /**
+       * @property  bottom
+       * bottom
+       */
+      bottom: {
+        "get": function()   { return this.y + this.height; },
+        "set": function(v)  { this.height += v-this.bottom; },
       },
       
       /**
-       * @property  height
-       * height
+       * @property  centerX
+       * centerX
        */
-      height: {
-          "get": function()   { return this._height; },
-          "set": function(v)  { this._height = v; }
+      centerX: {
+        "get": function()   { return this.x + this.width/2; },
+        "set": function(v)  {
+          // TODO: 検討中
+        },
+      },
+      
+      /**
+       * @property  centerY
+       * centerY
+       */
+      centerY: {
+        "get": function()   { return this.y + this.height/2; },
+        "set": function(v)  {
+          // TODO: 検討中
+        },
+      },
+    }
+
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Circle
+   * 
+   */
+  phina.define('phina.geom.Circle', {
+
+    /** x */
+    x: 0,
+    /** y */
+    y: 0,
+    /** 半径 */
+    radius: 32,
+
+    init: function(x, y, radius) {
+      this.set(x, y, radius);
+    },
+
+    set: function(x, y, radius) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+
+      return this;
+    },
+
+    moveTo: function(x, y) {
+      this.x = x;
+      this.y = y;
+      return this;
+    },
+
+    moveBy: function(x, y) {
+      this.x += x;
+      this.y += y;
+      return this;
+    },
+
+    contains: function(x, y) {
+      var lenX = this.x-x;
+      var lenY = this.y-y;
+      var lenSquared = (lenX*lenX)+(lenY*lenY);
+
+      return lenSquared <= this.radius*this.radius;
+    },
+
+    clone: function() {
+      return phina.geom.Circle(this.x, this.y, this.radius);
+    },
+
+    toRect: function() {
+      var size = this.size;
+      return phina.geom.Rect(this.x - this.radius, this.y - this.radius, size, size);
+    },
+
+    /**
+     * 配列に変換
+     */
+    toArray: function() {
+      return [this.x, this.y, this.radius];
+    },
+
+    _accessor: {
+      
+      /**
+       * @property  left
+       * left
+       */
+      left: {
+        "get": function()   { return this.x - this.radius; },
+        "set": function(v)  {
+          // TODO: 
+        }
+      },
+      /**
+       * @property  top
+       * top
+       */
+      top: {
+        "get": function()   { return this.y - this.radius; },
+        "set": function(v)  {
+          // TODO: 
+        }
+      },
+      /**
+       * @property  right
+       * right
+       */
+      right: {
+        "get": function()   { return this.x + this.radius; },
+        "set": function(v)  {
+          // TODO: 
+        }
+      },
+      /**
+       * @property  bottom
+       * bottom
+       */
+      bottom: {
+        "get": function()   { return this.y + this.radius; },
+        "set": function(v)  {
+          // TODO: 
+        }
+      },
+      
+      /**
+       * @property  size
+       * size
+       */
+      size: {
+        "get": function()   { return this.radius*2; },
+        "set": function(v)  {
+          // TODO: 検討中
+        },
       },
     }
 
@@ -5321,6 +5536,74 @@ phina.namespace(function() {
   });
 });
 
+/*
+ *
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.graphics.CanvasRecorder
+   * 
+   */
+  phina.define('phina.graphics.CanvasRecorder', {
+
+    superClass: 'phina.util.EventDispatcher',
+
+    init: function(canvas) {
+      this.superInit();
+
+      this.canvas = canvas;
+
+      this.gif = new GIF({
+        workers: 4,
+        quality: 10,
+        width: canvas.width,
+        height: canvas.height,
+      });
+
+      this.gif.on('finished', function(blob) {
+        this.objectURL = URL.createObjectURL(blob);
+        this.flare('finished');
+      }.bind(this));
+    },
+
+    start: function() {
+      var frameTime = 33;
+      var time = 0;
+      var id = setInterval(function() {
+
+        var ctx = this.canvas.context;
+        this.gif.addFrame(ctx, {
+          copy: true,
+          delay: frameTime,
+        });
+
+        time+=frameTime;
+
+        if (time > 2000) {
+          clearInterval(id);
+
+          // レンダリング
+          this.gif.render();
+        }
+      }.bind(this), frameTime);
+
+      return this;
+    },
+
+    stop: function() {
+      // TODO: 
+    },
+
+    open: function() {
+      window.open(this.objectURL);
+    },
+  });
+
+});
+
 
 phina.namespace(function() {
 
@@ -6282,7 +6565,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
-      params = (params || {}).$safe(phina.game.TitleScene.default);
+      params = (params || {}).$safe(phina.game.TitleScene.defaults);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -6325,7 +6608,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      default: {
+      defaults: {
         title: 'phina.js games',
         message: '',
         width: 640,
@@ -6362,7 +6645,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
-      params = (params || {}).$safe(phina.game.ResultScene.default);
+      params = (params || {}).$safe(phina.game.ResultScene.defaults);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -6440,7 +6723,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      default: {
+      defaults: {
         score: 16,
 
         message: 'this is phina.js project.\nHello, world!',
