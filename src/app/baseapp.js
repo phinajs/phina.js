@@ -125,6 +125,7 @@ phina.namespace(function() {
           this.enableStats();
         }.bind(this);
       }
+      return this;
     },
 
     _loop: function() {
