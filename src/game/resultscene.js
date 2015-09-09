@@ -108,7 +108,7 @@ phina.namespace(function() {
 
         message: 'this is phina.js project.\n',
         hashtags: 'phina,game,javascript',
-        url: location.href,
+        url: phina.global.location && phina.global.location.href,
 
         width: 640,
         height: 960,

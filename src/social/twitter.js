@@ -34,7 +34,7 @@ phina.namespace(function() {
         screen_name: 'phi_jp',
         hashtags: 'javascript,phina',
         // url: 'http://github.com/phi-jp/phina.js',
-        url: location.href,
+        url: phina.global.location && phina.global.location.href,
         via: 'phi_jp',
       },
 
