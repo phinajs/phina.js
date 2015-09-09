@@ -132,6 +132,8 @@ phina.namespace(function() {
 
     return _class;
   });
+  
+  var _classDefinedCallback = {};
 
   /**
    * @member phina
@@ -142,7 +144,22 @@ phina.namespace(function() {
   phina.method('define', function(path, params) {
     if (params.superClass) {
       if (typeof params.superClass === 'string') {
-        params.superClass = phina.using(params.superClass);
+        var _superClass = phina.using(params.superClass);
+        if (_superClass == null) {
+
+          var superDefine = phina.util.Flow(null, true);
+
+          _classDefinedCallback[params.superClass] = superDefine;
+
+          superDefine.then(function() {
+            phina.define(path, params);
+          });
+
+          return ;
+        }
+        else {
+          params.superClass = _superClass;
+        }
       }
       else {
         params.superClass = params.superClass;
@@ -157,6 +174,10 @@ phina.namespace(function() {
     });
 
     phina.register(path, _class);
+    
+    if (_classDefinedCallback[path]) {
+      _classDefinedCallback[path].resolve();
+    }
 
     return _class;
   });
