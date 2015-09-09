@@ -43,7 +43,11 @@ phina.namespace(function() {
     },
 
     _draw: function() {
-      this.canvas.clearColor(this.backgroundColor);
+      if (this.backgroundColor) {
+        this.canvas.clearColor(this.backgroundColor);
+      } else {
+        this.canvas.clear();
+      }
 
       if (this.currentScene.canvas) {
         this.currentScene._render();
