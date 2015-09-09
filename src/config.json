@@ -51,6 +51,7 @@
 
     "graphics/canvas.js",
     "graphics/canvasrecorder.js",
+    "graphics/color.js",
 
     "display/canvaselement.js",
     "display/shape.js",
