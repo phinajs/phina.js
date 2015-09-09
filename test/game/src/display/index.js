@@ -171,4 +171,27 @@ th.describe("display.ThreeLayer", function() {
 
 });
 
+th.describe("display.CanvasApp", function() {
+  // TODO: 
+  
+  th.it('retina', function() {
+    var shape = phina.display.CircleShape({radius:256,strokeWidth:20,padding:20}).addChildTo(this);
+    shape.position.set(this.gridX.center(), this.gridY.center());
+
+    // this.onenter = function() {
+    //   this.app.retina();
+    // };
+
+    var b = phina.ui.Button({
+      text: 'on',
+    }).addChildTo(this);
+
+    b.setPosition(100, 100);
+
+    b.onpush = function() {
+      this.app.retina(true);
+    }.bind(this);
+  });
+
+});
 

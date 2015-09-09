@@ -20,6 +20,9 @@ phina.namespace(function() {
         columns: 12,
       });
 
+      this.width = params.width;
+      this.height = params.height;
+
       this.gridX = phina.util.Grid({
         width: params.width,
         columns: params.columns,
@@ -33,6 +36,7 @@ phina.namespace(function() {
       this.canvas.setSize(params.width, params.height);
 
       this.backgroundColor = 'white';
+      this.ratio = 1.0;
 
       this.replaceScene(phina.display.CanvasScene({
         width: params.width,
@@ -42,9 +46,22 @@ phina.namespace(function() {
       this.fitScreen();
     },
 
+    retina: function(flag) {
+      if (flag) {
+        this.ratio = 2.0;
+      }
+      else {
+        this.ratio = 1.0;
+      }
+
+      this.canvas.domElement.width  = this.width*this.ratio;
+      this.canvas.domElement.height = this.height*this.ratio;
+    },
+
     _draw: function() {
       this.canvas.clearColor(this.backgroundColor);
-
+      this.canvas.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
+      
       if (this.currentScene.canvas) {
         this.currentScene._render();
 
