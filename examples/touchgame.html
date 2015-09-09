@@ -28,7 +28,13 @@ var BOARD_PADDING   = 40;
 var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
 var BOARD_SIZE      = SCREEN_WIDTH - BOARD_PADDING*2;
 var BOARD_OFFSET_X  = BOARD_PADDING+PIECE_SIZE/2;
-
+var PIECE_APPEAR_ANIMATION = {
+  // loop: true,
+  tweens: [
+    ['to', {rotation:360}, 500],
+    ['set', {rotation:0}],
+  ]
+};
 
 
 phina.define("MainScene", {
@@ -63,6 +69,7 @@ phina.define("MainScene", {
       p.onpointstart = function() {
         self.check(this);
       };
+      p.appear();
     });
 
     // タイマーラベルを生成
@@ -121,6 +128,12 @@ phina.define('Piece', {
     });
 
     this.index = index;
+  },
+
+  appear: function() {
+    this.tweener
+      .clear()
+      .fromJSON(PIECE_APPEAR_ANIMATION);
   },
 });
 

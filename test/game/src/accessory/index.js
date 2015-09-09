@@ -101,6 +101,18 @@ th.describe("accessory.Tweener", function() {
       .to({x:320, y:480}, 1000)
   });
 
+  th.it('fromJSON', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.accessory.Tweener().attachTo(shape);
+    tweener.fromJSON({
+      loop: true,
+      tweens: [
+        ['set', {x:100, y:100}],
+        ['to', {x:200, y:200}],
+      ]
+    });
+  });
+
 
 });
 
