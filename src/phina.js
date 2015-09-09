@@ -145,13 +145,11 @@ phina.namespace(function() {
     if (params.superClass) {
       if (typeof params.superClass === 'string') {
         var _superClass = phina.using(params.superClass);
-        if (_superClass == null) {
-
-          var superDefine = phina.util.Flow(null, true);
-
-          _classDefinedCallback[params.superClass] = superDefine;
-
-          superDefine.then(function() {
+        if (typeof _superClass != 'function') {
+          if (_classDefinedCallback[params.superClass] == null) {
+            _classDefinedCallback[params.superClass] = [];
+          }
+          _classDefinedCallback[params.superClass].push(function() {
             phina.define(path, params);
           });
 
@@ -176,7 +174,10 @@ phina.namespace(function() {
     phina.register(path, _class);
     
     if (_classDefinedCallback[path]) {
-      _classDefinedCallback[path].resolve();
+      _classDefinedCallback[path].forEach(function(callback) {
+        callback();
+      });
+      _classDefinedCallback[path] = null;
     }
 
     return _class;
