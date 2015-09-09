@@ -4622,6 +4622,20 @@ phina.namespace(function() {
       return this;
     },
 
+    fromJSON: function(json) {
+      if (json.loop !== undefined) {
+        this.setLoop(json.loop);
+      }
+
+      json.tweens.each(function(t) {
+        var t = t.clone();
+        var method = t.shift();
+        this[method].apply(this, t);
+      }, this);
+
+      return this;
+    },
+
     _add: function(params) {
       this._tasks.push(params);
     },
