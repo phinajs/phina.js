@@ -22,27 +22,36 @@ phina.namespace(function() {
             format = "woff"; break;
         case "woff2":
             format = "woff2"; break;
+        default:
+            console.warn("サポートしていないフォント形式です。(" + path + ")");
       }
+      this.format = format;
 
-      var text = "@font-face { font-family: '{0}'; src: url({1}) format('{2}'); }".format(key, path, format);
-      var e = document.querySelector("head");
-      var fontFaceStyleElement = document.createElement("style");
-      if (fontFaceStyleElement.innerText) {
-        fontFaceStyleElement.innerText = text;
-      } else {
-        fontFaceStyleElement.textContent = text;
+      if (format !== "unknown") {
+        var text = "@font-face { font-family: '{0}'; src: url({1}) format('{2}'); }".format(key, path, format);
+        var e = document.querySelector("head");
+        var fontFaceStyleElement = document.createElement("style");
+        if (fontFaceStyleElement.innerText) {
+          fontFaceStyleElement.innerText = text;
+        } else {
+          fontFaceStyleElement.textContent = text;
+        }
+        e.appendChild(fontFaceStyleElement);
       }
-      e.appendChild(fontFaceStyleElement);
 
       return phina.util.Flow(this._load.bind(this));
     },
 
     _load: function(resolve) {
-      var self = this;
-      this.checkLoaded(this.key, function() {
-        self.loaded = true;
-        resolve(self);
-      }.bind(this));
+      if (this.format !== "unknown") {
+        this.checkLoaded(this.key, function() {
+          this.loaded = true;
+          resolve(this);
+        }.bind(this));
+      } else {
+        this.loaded = true;
+        resolve(this);
+      }
     },
 
     checkLoaded: function (font, callback) {
