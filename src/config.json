@@ -29,6 +29,7 @@
     "asset/texture.js",
     "asset/sound.js",
     "asset/spritesheet.js",
+    "asset/font.js",
 
     "input/input.js",
     "input/mouse.js",
