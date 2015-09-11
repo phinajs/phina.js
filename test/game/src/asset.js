@@ -46,6 +46,25 @@ th.describe("asset.Sound", function() {
   })
 });
 
+th.describe('asset.MapSheet', function() {
+  th.it('load(object)', function() {
+    var file = phina.asset.MapSheet();
+    file.load('../../assets/tmx/testmap.tmx').then(function(mapsheet) {
+
+      var elm = phina.display.CanvasElement().addChildTo(this);
+      elm.x = 10;
+      elm.y = 10;
+      elm.scale.set(0.5, 0.5);
+
+      var texture = phina.asset.Texture();
+      texture.load('../../assets/tmx/mapImage.png').then(function(){
+        phina.accessory.TileMap(mapsheet, texture).attachTo(elm);
+      });
+    }.bind(this));
+  });
+});
+
+
 th.describe("asset.AssetLoader", function() {
 
   th.it('load', function() {

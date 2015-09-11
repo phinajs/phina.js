@@ -29,6 +29,7 @@
     "asset/texture.js",
     "asset/sound.js",
     "asset/spritesheet.js",
+    "asset/mapsheet.js",
 
     "input/input.js",
     "input/mouse.js",
@@ -45,6 +46,7 @@
     "accessory/tweener.js",
     "accessory/draggable.js",
     "accessory/frameanimation.js",
+    "accessory/tilemap.js",
 
     "dom/event.js",
 
