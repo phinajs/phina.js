@@ -60,10 +60,16 @@ th.describe("asset.AssetLoader", function() {
       },
     });
 
+    var logLabel = phina.display.Label('# Loaded\n', {
+      align: 'left',
+    }).addChildTo(this);
+    logLabel.x = 100;
+    logLabel.y = 200;
+
     flow.then(function() {
       var elm = phina.display.Sprite('tomapiko').addChildTo(this);
-      elm.x = 100;
-      elm.y = 100;
+      elm.x = 320;
+      elm.y = 480;
 
       var sound = phina.asset.AssetManager.get('sound', 'correct');
       var temp = sound.clone();
@@ -76,6 +82,11 @@ th.describe("asset.AssetLoader", function() {
         elm.y = app.pointer.y;
       };
     }.bind(this));
+
+    loader.onprogress = function(e) {
+      logLabel.text += '- ' + e.key + '\n';
+      console.log(e);
+    };
   });
 
 });

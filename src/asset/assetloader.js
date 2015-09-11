@@ -26,11 +26,18 @@ phina.namespace(function() {
       var self = this;
       var flows = [];
 
+      var counter = 0;
+
       params.forIn(function(type, assets) {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
           var flow = func(value);
           flow.then(function(asset) {
+            self.flare('progress', {
+              key: key,
+              asset: asset,
+              progress: (++counter/flows.length),
+            });
             if (self.cache) {
               phina.asset.AssetManager.set(type, key, asset);
             }
@@ -40,6 +47,7 @@ phina.namespace(function() {
       });
 
       return phina.util.Flow.all(flows).then(function(args) {
+        self.flare('load');
       });
     },
 
