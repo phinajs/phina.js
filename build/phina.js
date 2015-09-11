@@ -2700,7 +2700,7 @@ phina.namespace(function() {
         },
         sound: function(path) {
           var sound = phina.asset.Sound();
-          var flow = audio.load(path);
+          var flow = sound.load(path);
           return flow;
         },
         spritesheet: function(path) {
@@ -5828,8 +5828,11 @@ phina.namespace(function() {
     init: function(image) {
       this.superInit();
 
-      // this.image = image;
-      this.image = phina.asset.AssetManager.get('image', image);
+      if (typeof image === 'string') {
+        image = phina.asset.AssetManager.get('image', image);
+      }
+      
+      this.image = image;
       this.width = this.image.domElement.width;
       this.height = this.image.domElement.height;
 
@@ -6602,6 +6605,59 @@ phina.namespace(function() {
       }
     },
 
+  });
+
+});
+
+/*
+ *
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.game.SplashScene
+   * 
+   */
+  phina.define('phina.game.SplashScene', {
+    superClass: 'phina.display.CanvasScene',
+
+    init: function(options) {
+      this.superInit(options);
+
+      var defaults = phina.game.SplashScene.defaults;
+
+      var texture = phina.asset.Texture();
+      texture.load(defaults.imageURL).then(function() {
+        this._init();
+      }.bind(this));
+      this.texture = texture;
+    },
+
+    _init: function() {
+      this.sprite = phina.display.Sprite(this.texture).addChildTo(this);
+
+      this.sprite.setPosition(this.gridX.center(), this.gridY.center());
+      this.sprite.alpha = 0;
+
+      this.sprite.tweener
+        .clear()
+        .to({alpha:1}, 500, 'easeOutCubic')
+        .wait(1000)
+        .to({alpha:0}, 500, 'easeOutCubic')
+        .wait(250)
+        .call(function() {
+          this.exit();
+        }, this)
+        ;
+    },
+
+    _static: {
+      defaults: {
+        imageURL: 'http://cdn.rawgit.com/phi-jp/phina.js/develop/logo.png',
+      },
+    },
   });
 
 });
