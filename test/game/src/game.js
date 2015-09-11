@@ -1,3 +1,15 @@
+th.describe('game.SplashScene', function() {
+
+  th.it('default', function() {
+    phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
+
+    this.onenter = function() {
+      this.app.pushScene(phina.game.SplashScene());
+    };
+  });
+});
+
+
 th.describe('game.TitleScene', function() {
 
   th.it('default', function() {

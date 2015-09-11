@@ -11,8 +11,11 @@ phina.namespace(function() {
     init: function(image) {
       this.superInit();
 
-      // this.image = image;
-      this.image = phina.asset.AssetManager.get('image', image);
+      if (typeof image === 'string') {
+        image = phina.asset.AssetManager.get('image', image);
+      }
+      
+      this.image = image;
       this.width = this.image.domElement.width;
       this.height = this.image.domElement.height;
 
