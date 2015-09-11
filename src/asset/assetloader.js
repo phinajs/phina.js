@@ -52,7 +52,7 @@ phina.namespace(function() {
         },
         sound: function(path) {
           var sound = phina.asset.Sound();
-          var flow = audio.load(path);
+          var flow = sound.load(path);
           return flow;
         },
         spritesheet: function(path) {
