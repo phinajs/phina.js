@@ -60,6 +60,7 @@
     "display/canvasrenderer.js",
     "display/domapp.js",
     "display/canvasapp.js",
+    "display/afterimagelayer.js",
 
 
     "effect/wave.js",
