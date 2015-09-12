@@ -16,11 +16,18 @@ phina.namespace(function() {
 
       this.ss = phina.asset.AssetManager.get('spritesheet', ss);
       this.paused = true;
+      this.finished = false;
     },
 
     update: function() {
       if (this.paused) return ;
       if (!this.currentAnimation) return ;
+
+      if (this.finished) {
+        this.finished = false;
+        this.currentFrameIndex = 0;
+        return ;
+      }
 
       ++this.frame;
       if (this.frame%this.currentAnimation.frequency === 0) {
@@ -61,6 +68,7 @@ phina.namespace(function() {
           }
           else {
             this.pause = true;
+            this.finished = true;
             return ;
           }
         }
