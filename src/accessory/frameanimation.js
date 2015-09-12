@@ -60,7 +60,8 @@ phina.namespace(function() {
             return ;
           }
           else {
-            // TODO: 
+            this.pause = true;
+            return ;
           }
         }
       }
