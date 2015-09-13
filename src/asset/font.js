@@ -52,7 +52,7 @@ phina.namespace(function() {
 
     _load: function(resolve) {
       if (this.format !== "unknown") {
-        this.checkLoaded(this.key, function() {
+        this._checkLoaded(this.key, function() {
           this.loaded = true;
           resolve(this);
         }.bind(this));
@@ -62,7 +62,7 @@ phina.namespace(function() {
       }
     },
 
-    checkLoaded: function (font, callback) {
+    _checkLoaded: function (font, callback) {
       var canvas = phina.graphics.Canvas();
       var DEFAULT_FONT = canvas.context.font.split(' ')[1];
       canvas.context.font = '40px ' + DEFAULT_FONT;
