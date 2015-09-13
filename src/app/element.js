@@ -14,6 +14,9 @@ phina.namespace(function() {
     /// 子供
     children: null,
 
+    /// 子供を CanvasRenderer で描画するか
+    childrenVisible: true,
+
     /**
      * @constructor
      */
