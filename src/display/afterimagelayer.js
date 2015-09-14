@@ -7,7 +7,7 @@ phina.namespace(function () {
   phina.define('phina.display.AfterimageLayer', {
     superClass: 'phina.display.Layer',
 
-    // c‘œ‚ª•`‰æ‚³‚ê‚é
+    // æ®‹åƒãŒæç”»ã•ã‚Œã‚‹
     afterimage: null,
 
     _dummyCanvas: null,
@@ -15,13 +15,16 @@ phina.namespace(function () {
     _dummyElement: null,
 
     /**
-     * 1ƒtƒŒ[ƒ€‚Å‚Ç‚Ì‚®‚ç‚¢”–‚­‚·‚é‚©
-     * 0.499 ˆÈã‚É‚·‚é‚Æ‰i‹v‚É rate ‚É‰‚¶‚½•s“§–¾“x‚Åc‚è‘±‚¯‚é
-     * 0.9 ˆÈ‰º‚È‚ç‚»‚±‚Ü‚Å‰i‹v‚Éc‚éc‘œ‚Í–Ú—§‚½‚È‚¢
+     * 1ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã©ã®ãã‚‰ã„è–„ãã™ã‚‹ã‹
+     * 0.499 ä»¥ä¸Šã«ã™ã‚‹ã¨æ°¸ä¹…ã« rate ã«å¿œã˜ãŸä¸é€æ˜åº¦ã§æ®‹ã‚Šç¶šã‘ã‚‹
+     * 0.9 ä»¥ä¸‹ãªã‚‰ãã“ã¾ã§æ°¸ä¹…ã«æ®‹ã‚‹æ®‹åƒã¯ç›®ç«‹ãŸãªã„
      */
     rate: 0.8,
 
-    // scene‚É•`‰æ‚·‚é‚©
+    // ç”»è³ª(0.01 ~ 1.0)ä¸‹ã’ã‚‹ã¨è»½ããªã‚‹ã¯ãš
+    _quality: 1.0,
+
+    // sceneã«æç”»ã™ã‚‹ã‹
     isDrawing: true,
 
     childrenVisible: false,
@@ -70,11 +73,45 @@ phina.namespace(function () {
       if (this.isDrawing) canvas.context.drawImage(element, 0, 0, w, h, 0, 0, w, h);
     },
 
+    _drawByQuality: function (canvas) {
+      var after = this.afterimage;
+      var element = after.canvas;
+      var w = after.width, h = after.height;
+      var c = after.context;
+      var dummy = this._dummyCanvas;
+      var dw = this.width;
+      var dh = this.height;
+      var dummyContext = dummy.context;
+
+
+      dummyContext.clearRect(0, 0, dw, dh);
+
+      dummyContext.save();
+      dummyContext.globalAlpha = this.rate;
+      dummyContext.drawImage(element, 0, 0, w, h, 0, 0, dw, dh);
+      
+      this._renderer.renderObject(this._dummyElement);
+      dummyContext.restore();
+
+
+      c.clearRect(0, 0, w, h);
+      c.drawImage(dummy.canvas, 0, 0, dw, dh, 0, 0, w, h);
+      if (this.isDrawing) canvas.context.drawImage(element, 0, 0, w, h, 0, 0, dw, dh);
+    },
+
+    setQuality: function (q) {
+      this.quality = q;
+      return this;
+    },
+
+    getQuality: function () {
+      return this._quality;
+    },
 
     /**
-     * c‘œ‚ğƒNƒŠƒA
+     * æ®‹åƒã‚’ã‚¯ãƒªã‚¢
      */
-    clear: function () {
+    clearImage: function () {
       this.afterimage.clear();
       return this;
     },
@@ -85,14 +122,53 @@ phina.namespace(function () {
     },
 
     /**
-     * Œ»“_‚Å‚Ìc‘œ‚ğƒRƒs[‚µ‚½‰æ‘œ‚ğ•Ô‚·
+     * ç¾æ™‚ç‚¹ã§ã®æ®‹åƒã‚’ã‚³ãƒ”ãƒ¼ã—ãŸç”»åƒã‚’è¿”ã™
      */
     getImage: function () {
       var image = phina.graphics.Canvas();
       var w = image.width = this.width;
       var h = image.height = this.height;
-      image.context.drawImage(this.afterimage.canvas, 0, 0, w, h, 0, 0, w, h);
+      var after = this.afterimage;
+      image.context.drawImage(after.canvas, 0, 0, after.width, after.height, 0, 0, w, h);
       return image;
+    },
+
+    /**
+     * æ®‹åƒã®ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’æç”»ã™ã‚‹ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+     * copy 
+     *   true ã§ã‚³ãƒ”ãƒ¼ã—ãŸæ®‹åƒ
+     *   false,æœªæŒ‡å®šã§æç”»ä¸­ã®æ®‹åƒã¨åŒã˜ã‚‚ã®  
+     */
+    getSprite: function (copy) {
+      if (copy) {
+        return phina.display.Sprite(this.getImage());
+      } else {
+        var sprite = phina.display.Sprite(this.afterimage);
+        sprite.width = this.width;
+        sprite.height = this.height;
+        return sprite;
+      }
+    },
+
+    _accessor: {
+      quality: {
+        get: function () {
+          return this._quality;
+        },
+        set: function (q) {
+          this._quality = q;
+          var after = this.afterimage;
+          if (q === 1) {
+            this.draw = phina.display.AfterimageLayer.prototype.draw;
+            after.width = this.width;
+            after.height = this.height;
+          } else {
+            this.draw = this._drawByQuality;
+            after.width = q * this.width;
+            after.height = q * this.height;
+          }
+        }
+      }
     }
 
   });
