@@ -12,13 +12,14 @@ phina.namespace(function() {
      */
     init: function() {
       this.superInit();
+      this.fontName = null;
     },
 
-    load: function(key, path) {
+    load: function(path) {
       this.src = path;
-      this.key = key;
 
       var reg = /(.*)(?:\.([^.]+$))/;
+      var key = this.fontName || path.match(reg)[1];    //フォント名指定が無い場合はpathの拡張子前を使用
       var type = path.match(reg)[2];
       var format = "unknown";
       switch (type) {
@@ -34,6 +35,7 @@ phina.namespace(function() {
             console.warn("サポートしていないフォント形式です。(" + path + ")");
       }
       this.format = format;
+      this.fontName = key;
 
       if (format !== "unknown") {
         var text = "@font-face { font-family: '{0}'; src: url({1}) format('{2}'); }".format(key, path, format);
@@ -52,7 +54,7 @@ phina.namespace(function() {
 
     _load: function(resolve) {
       if (this.format !== "unknown") {
-        this._checkLoaded(this.key, function() {
+        this._checkLoaded(this.fontName, function() {
           this.loaded = true;
           resolve(this);
         }.bind(this));
@@ -81,5 +83,19 @@ phina.namespace(function() {
       };
       setTimeout(checkLoadFont, 100);
     },
+
+    setFontName: function(name) {
+        if (this.loaded) {
+            console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
+            return this;
+        }
+        this.fontName = name;
+        return this;
+    },
+
+    getFontName: function() {
+        return this.fontName;
+    },
+
   });
 });

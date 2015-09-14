@@ -66,7 +66,8 @@ phina.namespace(function() {
         },
         font: function(key, path) {
           var font = phina.asset.Font();
-          return font.load(key, path);
+          font.setFontName(key);
+          return font.load(path);
         },
       }
     }
