@@ -7,6 +7,7 @@ phina.namespace(function() {
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.CanvasElement',
 
+
     init: function(params) {
       this.superInit();
       this.canvas = phina.graphics.Canvas();
@@ -16,11 +17,18 @@ phina.namespace(function() {
       });
       this.canvas.width  = params.width;
       this.canvas.height = params.height;
+
+      this.renderer = phina.display.CanvasRenderer(this.canvas);
     },
 
     draw: function(canvas) {
-      var c = this.currentScene.canvas;
-      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+      this.renderer.render(this);
+
+      var image = this.canvas.domElement;
+      canvas.context.drawImage(image,
+        0, 0, image.width, image.height,
+        -this.width*this.originX, -this.height*this.originY, this.width, this.height
+        );
     },
   });
 });
