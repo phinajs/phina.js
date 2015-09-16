@@ -17,9 +17,20 @@ phina.namespace(function() {
       }
       
       this._context.save();
-      this.renderObject(scene);
+      this.renderChildren(scene);
       this._context.restore();
     },
+    
+    renderChildren: function(obj) {
+      // 子供たちも実行
+      if (obj.children.length > 0) {
+        var tempChildren = obj.children.slice();
+        for (var i=0,len=tempChildren.length; i<len; ++i) {
+          this.renderObject(tempChildren[i]);
+        }
+      }
+    },
+
     renderObject: function(obj) {
       if (obj.visible === false) return ;
 
@@ -60,15 +71,15 @@ phina.namespace(function() {
 
         // 子供たちも実行
         if (obj.childrenVisible && obj.children.length > 0) {
-            var tempChildren = obj.children.slice();
-            for (var i=0,len=tempChildren.length; i<len; ++i) {
-                this.renderObject(tempChildren[i]);
-            }
+          var tempChildren = obj.children.slice();
+          for (var i=0,len=tempChildren.length; i<len; ++i) {
+            this.renderObject(tempChildren[i]);
+          }
         }
 
       }
-      
     },
+
   });
 
 });
