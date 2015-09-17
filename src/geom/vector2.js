@@ -23,6 +23,7 @@ phina.namespace(function() {
     set: function(x, y) {
       this.x = x;
       this.y = y;
+      return this;
     },
 
     /**
@@ -31,6 +32,7 @@ phina.namespace(function() {
     add: function(v) {
       this.x += v.x;
       this.y += v.y;
+      return this;
     },
 
     /**
@@ -39,6 +41,7 @@ phina.namespace(function() {
     sub: function(v) {
       this.x -= v.x;
       this.y -= v.y;
+      return this;
     },
 
     /**
@@ -47,16 +50,18 @@ phina.namespace(function() {
     mul: function(n) {
       this.x *= n;
       this.y *= n;
+      return this;
     },
 
     /**
      * 除算
      */
-    div: function(v) {
+    div: function(n) {
       //console.assert(n != 0, "0 division!!");
       n = n || 0.01;
       this.x /= n;
       this.y /= n;
+      return this;
     },
 
     /**
@@ -129,6 +134,13 @@ phina.namespace(function() {
       this.y = Math.sin(rad);
 
       return this;
+    },
+    
+    /**
+     * 正規化
+     */
+    normalize: function() {
+      return this.div(this.length());
     },
 
     _accessor: {
