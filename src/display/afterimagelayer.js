@@ -38,7 +38,7 @@ phina.namespace(function () {
       var after = this.afterimage = this.canvas;
       var dummy = this._dummyCanvas = phina.graphics.Canvas();
 
-      this.width = dummy.width = after.width
+      this.width = dummy.width = after.width;
       this.height = dummy.height = after.height;
 
       this._renderer = phina.display.CanvasRenderer(dummy);
