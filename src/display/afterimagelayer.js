@@ -12,7 +12,6 @@ phina.namespace(function () {
 
     _dummyCanvas: null,
     _renderer: null,
-    _dummyElement: null,
 
     /**
      * 1フレームでどのぐらい薄くするか
