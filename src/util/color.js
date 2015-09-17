@@ -5,10 +5,10 @@
 phina.namespace(function() {
 
   /**
-   * @class phina.graphics.Color
+   * @class phina.util.Color
    * カラークラス
    */
-  phina.define("phina.graphics.Color", {
+  phina.define("phina.util.Color", {
     /** R値 */
     r: 255,
     /** G値 */
@@ -65,7 +65,7 @@ phina.namespace(function() {
      * 文字列によるセッター
      */
     setFromString: function(str) {
-      var color = phina.graphics.Color.stringToNumber(str);
+      var color = phina.util.Color.stringToNumber(str);
       return this.set(color[0], color[1], color[2], color[3]);
     },
 
@@ -176,7 +176,7 @@ phina.namespace(function() {
 
       /**
        * @static
-       * @member phina.graphics.Color
+       * @member phina.util.Color
        * @method strToNum
        */
       strToNum: function(str) {
@@ -198,8 +198,8 @@ phina.namespace(function() {
           var match_set = MATCH_SET_LIST[type];
           var m = str.match(match_set.reg);
           value = match_set.exec(m);
-        } else if (phina.graphics.Color.COLOR_LIST[str]) {
-          value = phina.graphics.Color.COLOR_LIST[str];
+        } else if (phina.util.Color.COLOR_LIST[str]) {
+          value = phina.util.Color.COLOR_LIST[str];
         }
 
         return value;
@@ -273,7 +273,7 @@ phina.namespace(function() {
        * hsla を rgba に変換
        */
       HSLAtoRGBA: function(h, s, l, a) {
-        var temp = phina.graphics.Color.HSLtoRGB(h, s, l);
+        var temp = phina.util.Color.HSLtoRGB(h, s, l);
         temp[3] = a;
         return rgb;
       },
@@ -362,13 +362,13 @@ phina.namespace(function() {
     "hsl": {
       reg: /^hsl\((\d{1,3}),\s*(\d{1,3})%,\s*(\d{1,3})%\)$/,
       exec: function(m) {
-        return phina.graphics.Color.HSLtoRGB(m[1], m[2], m[3]);
+        return phina.util.Color.HSLtoRGB(m[1], m[2], m[3]);
       }
     },
     "hsla": {
       reg: /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1}(\.{1}\d+)?)\)$/,
       exec: function(m) {
-        return phina.graphics.Color.HSLAtoRGBA(m[1], m[2], m[3], m[4]);
+        return phina.util.Color.HSLAtoRGBA(m[1], m[2], m[3], m[4]);
       },
     }
   };
