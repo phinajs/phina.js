@@ -131,14 +131,17 @@ th.describe("display.Layer", function() {
     var SCREEN_WIDTH = 640;
     var SCREEN_HEIGHT = 960;
     var layer = phina.display.Layer({
-      width: 300,
-      height: 300,
+      width: 400,
+      height: 400,
     }).addChildTo(this);
 
-    layer.x = 128;
-    layer.y = 128;
+    layer.x = 320;
+    layer.y = 480;
+    layer.backgroundColor = 'blue';
 
-    var circle = phina.display.CircleShape().addChildTo(layer);
+    var circle = phina.display.CircleShape({
+      radius: 150,
+    }).addChildTo(layer);
   });
 });
 

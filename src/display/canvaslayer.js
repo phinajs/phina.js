@@ -7,22 +7,27 @@ phina.namespace(function() {
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.CanvasElement',
 
+    /** 子供を CanvasRenderer で描画するか */
+    childrenVisible: false,
 
     init: function(params) {
-      this.superInit();
+      this.superInit(params);
       this.canvas = phina.graphics.Canvas();
       params = (params || {}).$safe({
         width: 640,
         height: 960,
       });
-      this.canvas.width  = params.width;
-      this.canvas.height = params.height;
+      this.width = this.canvas.width  = params.width;
+      this.height = this.canvas.height = params.height;
 
       this.renderer = phina.display.CanvasRenderer(this.canvas);
     },
 
     draw: function(canvas) {
+      var temp = this._worldMatrix;
+      this._worldMatrix = null;
       this.renderer.render(this);
+      this._worldMatrix = temp;
 
       var image = this.canvas.domElement;
       canvas.context.drawImage(image,
@@ -45,6 +50,9 @@ phina.namespace(function() {
     camera: null,
     light: null,
     renderer: null,
+
+    /** 子供を CanvasRenderer で描画するか */
+    childrenVisible: false,
 
     init: function(params) {
       this.superInit();
