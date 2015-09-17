@@ -126,6 +126,25 @@ th.describe("display.Label", function() {
 
 
 
+th.describe("display.Layer", function() {
+  th.it('sample', function() {
+    var SCREEN_WIDTH = 640;
+    var SCREEN_HEIGHT = 960;
+    var layer = phina.display.Layer({
+      width: 300,
+      height: 300,
+    }).addChildTo(this);
+
+    layer.x = 128;
+    layer.y = 128;
+
+    var circle = phina.display.CircleShape().addChildTo(layer);
+  });
+});
+
+
+
+
 th.describe("display.ThreeLayer", function() {
   th.it('sample', function() {
     var SCREEN_WIDTH = 640;

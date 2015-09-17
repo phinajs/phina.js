@@ -2674,11 +2674,18 @@ phina.namespace(function() {
       var self = this;
       var flows = [];
 
+      var counter = 0;
+
       params.forIn(function(type, assets) {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
-          var flow = func(value);
+          var flow = func(key, value);
           flow.then(function(asset) {
+            self.flare('progress', {
+              key: key,
+              asset: asset,
+              progress: (++counter/flows.length),
+            });
             if (self.cache) {
               phina.asset.AssetManager.set(type, key, asset);
             }
@@ -2688,29 +2695,35 @@ phina.namespace(function() {
       });
 
       return phina.util.Flow.all(flows).then(function(args) {
+        self.flare('load');
       });
     },
 
     _static: {
       assetLoadFunctions: {
-        image: function(path) {
+        image: function(key, path) {
           var texture = phina.asset.Texture();
           var flow = texture.load(path);
           return flow;
         },
-        sound: function(path) {
+        sound: function(key, path) {
           var sound = phina.asset.Sound();
           var flow = sound.load(path);
           return flow;
         },
-        spritesheet: function(path) {
+        spritesheet: function(key, path) {
           var ss = phina.asset.SpriteSheet();
           var flow = ss.load(path);
           return flow;
         },
-        script: function(path) {
+        script: function(key, path) {
           var script = phina.asset.Script();
           return script.load(path);
+        },
+        font: function(key, path) {
+          var font = phina.asset.Font();
+          font.setFontName(key);
+          return font.load(path);
         },
       }
     }
@@ -3124,6 +3137,108 @@ phina.namespace(function() {
 
 });
 
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.Font
+   * 
+   */
+  phina.define("phina.asset.Font", {
+    superClass: "phina.asset.Asset",
+
+    /**
+     * @constructor
+     */
+    init: function() {
+      this.superInit();
+      this.fontName = null;
+    },
+
+    load: function(path) {
+      this.src = path;
+
+      var reg = /(.*)(?:\.([^.]+$))/;
+      var key = this.fontName || path.match(reg)[1];    //フォント名指定が無い場合はpathの拡張子前を使用
+      var type = path.match(reg)[2];
+      var format = "unknown";
+      switch (type) {
+        case "ttf":
+            format = "truetype"; break;
+        case "otf":
+            format = "opentype"; break;
+        case "woff":
+            format = "woff"; break;
+        case "woff2":
+            format = "woff2"; break;
+        default:
+            console.warn("サポートしていないフォント形式です。(" + path + ")");
+      }
+      this.format = format;
+      this.fontName = key;
+
+      if (format !== "unknown") {
+        var text = "@font-face { font-family: '{0}'; src: url({1}) format('{2}'); }".format(key, path, format);
+        var e = document.querySelector("head");
+        var fontFaceStyleElement = document.createElement("style");
+        if (fontFaceStyleElement.innerText) {
+          fontFaceStyleElement.innerText = text;
+        } else {
+          fontFaceStyleElement.textContent = text;
+        }
+        e.appendChild(fontFaceStyleElement);
+      }
+
+      return phina.util.Flow(this._load.bind(this));
+    },
+
+    _load: function(resolve) {
+      if (this.format !== "unknown") {
+        this._checkLoaded(this.fontName, function() {
+          this.loaded = true;
+          resolve(this);
+        }.bind(this));
+      } else {
+        this.loaded = true;
+        resolve(this);
+      }
+    },
+
+    _checkLoaded: function (font, callback) {
+      var canvas = phina.graphics.Canvas();
+      var DEFAULT_FONT = canvas.context.font.split(' ')[1];
+      canvas.context.font = '40px ' + DEFAULT_FONT;
+
+      var checkText = "1234567890-^\\qwertyuiop@[asdfghjkl;:]zxcvbnm,./\!\"#$%&'()=~|QWERTYUIOP`{ASDFGHJKL+*}ZXCVBNM<>?_１２３４５６７８９０－＾￥ｑｗｅｒｔｙｕｉｏｐａｓｄｆｇｈｊｋｌｚｘｃｖｂｎｍ，．あいうかさたなをん時は金なり";
+
+      var before = canvas.context.measureText(checkText).width;
+      canvas.context.font = '40px ' + font + ', ' + DEFAULT_FONT;
+
+      var checkLoadFont = function () {
+        if (canvas.context.measureText(checkText).width !== before) {
+          callback && callback();
+        } else {
+          setTimeout(checkLoadFont, 100);
+        }
+      };
+      setTimeout(checkLoadFont, 100);
+    },
+
+    setFontName: function(name) {
+        if (this.loaded) {
+            console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
+            return this;
+        }
+        this.fontName = name;
+        return this;
+    },
+
+    getFontName: function() {
+        return this.fontName;
+    },
+
+  });
+});
 
 
 ;(function() {
@@ -5650,14 +5765,45 @@ phina.namespace(function() {
   phina.define('phina.display.CanvasElement', {
     superClass: 'phina.app.Object2D',
 
+    /** 表示フラグ */
+    visible: true,
+
+    /** 子供を CanvasRenderer で描画するか */
+    childrenVisible: true,
+
     init: function() {
       this.superInit();
 
+      this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
 
       this.width = 64;
       this.height = 64;
+    },
+
+    /**
+     * 表示/非表示をセット
+     */
+    setVisible: function(flag) {
+      this.visible = flag;
+      return this;
+    },
+
+    /**
+     * 表示
+     */
+    show: function() {
+      this.visible = true;
+      return this;
+    },
+
+    /**
+     * 非表示
+     */
+    hide: function() {
+      this.visible = false;
+      return this;
     },
 
     /**
@@ -6045,6 +6191,7 @@ phina.namespace(function() {
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.CanvasElement',
 
+
     init: function(params) {
       this.superInit();
       this.canvas = phina.graphics.Canvas();
@@ -6054,11 +6201,18 @@ phina.namespace(function() {
       });
       this.canvas.width  = params.width;
       this.canvas.height = params.height;
+
+      this.renderer = phina.display.CanvasRenderer(this.canvas);
     },
 
     draw: function(canvas) {
-      var c = this.currentScene.canvas;
-      this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+      this.renderer.render(this);
+
+      var image = this.canvas.domElement;
+      canvas.context.drawImage(image,
+        0, 0, image.width, image.height,
+        -this.width*this.originX, -this.height*this.originY, this.width, this.height
+        );
     },
   });
 });
@@ -6124,9 +6278,20 @@ phina.namespace(function() {
       }
       
       this._context.save();
-      this.renderObject(scene);
+      this.renderChildren(scene);
       this._context.restore();
     },
+    
+    renderChildren: function(obj) {
+      // 子供たちも実行
+      if (obj.children.length > 0) {
+        var tempChildren = obj.children.slice();
+        for (var i=0,len=tempChildren.length; i<len; ++i) {
+          this.renderObject(tempChildren[i]);
+        }
+      }
+    },
+
     renderObject: function(obj) {
       if (obj.visible === false) return ;
 
@@ -6153,7 +6318,7 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.children.length > 0) {
+        if (obj.childrenVisible && obj.children.length > 0) {
             var tempChildren = obj.children.slice();
             for (var i=0,len=tempChildren.length; i<len; ++i) {
                 this.renderObject(tempChildren[i]);
@@ -6166,16 +6331,16 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.children.length > 0) {
-            var tempChildren = obj.children.slice();
-            for (var i=0,len=tempChildren.length; i<len; ++i) {
-                this.renderObject(tempChildren[i]);
-            }
+        if (obj.childrenVisible && obj.children.length > 0) {
+          var tempChildren = obj.children.slice();
+          for (var i=0,len=tempChildren.length; i<len; ++i) {
+            this.renderObject(tempChildren[i]);
+          }
         }
 
       }
-      
     },
+
   });
 
 });
