@@ -43,8 +43,7 @@ phina.namespace(function () {
       this.height = dummy.height = after.height;
 
       this._renderer = phina.display.CanvasRenderer(dummy);
-      this._dummyElement = phina.display.CanvasElement();
-      this._dummyElement.children = this.children;
+
 
     },
 
@@ -63,7 +62,7 @@ phina.namespace(function () {
       dummyContext.drawImage(element, 0, 0, w, h, 0, 0, w, h);
 
       dummyContext.save();
-      this._renderer.renderObject(this._dummyElement);
+      this._renderer.renderChildren(this);
       dummyContext.restore();
 
 
@@ -90,7 +89,7 @@ phina.namespace(function () {
       dummyContext.globalAlpha = this.rate;
       dummyContext.drawImage(element, 0, 0, w, h, 0, 0, dw, dh);
       
-      this._renderer.renderObject(this._dummyElement);
+      this._renderer.renderChildren(this);
       dummyContext.restore();
 
 
