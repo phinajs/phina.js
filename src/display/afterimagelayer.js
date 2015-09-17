@@ -9,9 +9,8 @@ phina.namespace(function () {
 
     // 残像が描画される
     afterimage: null,
-
     _dummyCanvas: null,
-    _renderer: null,
+    renderer: null,
 
     /**
      * 1フレームでどのぐらい薄くするか
@@ -41,7 +40,7 @@ phina.namespace(function () {
       this.width = dummy.width = after.width;
       this.height = dummy.height = after.height;
 
-      this._renderer = phina.display.CanvasRenderer(dummy);
+      this.renderer.init(dummy);
 
 
     },
@@ -61,7 +60,7 @@ phina.namespace(function () {
       dummyContext.drawImage(element, 0, 0, w, h, 0, 0, w, h);
 
       dummyContext.save();
-      this._renderer.renderChildren(this);
+      this.renderer.renderChildren(this);
       dummyContext.restore();
 
 
@@ -88,7 +87,7 @@ phina.namespace(function () {
       dummyContext.globalAlpha = this.rate;
       dummyContext.drawImage(element, 0, 0, w, h, 0, 0, dw, dh);
       
-      this._renderer.renderChildren(this);
+      this.renderer.renderChildren(this);
       dummyContext.restore();
 
 
