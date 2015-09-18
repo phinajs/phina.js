@@ -129,6 +129,17 @@ phina.namespace(function() {
       this.canvas.context.fillStyle = style.color;
       this.canvas.fillCircle(0, 0, style.radius);
     },
+
+    _accessor: {
+      radius: {
+        get: function() {
+          return this.style.radius;
+        },
+        set: function(v) {
+          this.style.radius = v;
+        },
+      }
+    },
   });
 
 });
