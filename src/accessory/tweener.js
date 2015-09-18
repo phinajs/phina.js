@@ -95,6 +95,18 @@ phina.namespace(function() {
       return this;
     },
 
+    fade: function(value, duration, easing) {
+      return this.to({alpha:value}, duration, easing);
+    },
+
+    fadeOut: function(duration, easing) {
+      return this.fade(0.0, duration, easing)
+    },
+
+    fadeIn: function(duration, easing) {
+      return this.fade(1.0, duration, easing)
+    },
+
     /**
      * アニメーション開始
      */
