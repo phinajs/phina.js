@@ -4475,18 +4475,18 @@ phina.namespace(function() {
       // 更新するかを判定
       if (element.awake === false) return ;
 
-      // 更新
-      if (element.update) element.update(app);
-
-      // タッチ判定
-      // this._checkPoint(element);
-
       // エンターフレームイベント
       if (element.has('enterframe')) {
         element.flare('enterframe', {
           app: this.app,
         });
       }
+
+      // 更新
+      if (element.update) element.update(app);
+
+      // タッチ判定
+      // this._checkPoint(element);
 
       // 子供を更新
       var len = element.children.length;
@@ -5548,6 +5548,18 @@ phina.namespace(function() {
       });
 
       return this;
+    },
+
+    fade: function(value, duration, easing) {
+      return this.to({alpha:value}, duration, easing);
+    },
+
+    fadeOut: function(duration, easing) {
+      return this.fade(0.0, duration, easing)
+    },
+
+    fadeIn: function(duration, easing) {
+      return this.fade(1.0, duration, easing)
     },
 
     /**
@@ -6808,6 +6820,17 @@ phina.namespace(function() {
 
       this.canvas.context.fillStyle = style.color;
       this.canvas.fillCircle(0, 0, style.radius);
+    },
+
+    _accessor: {
+      radius: {
+        get: function() {
+          return this.style.radius;
+        },
+        set: function(v) {
+          this.style.radius = v;
+        },
+      }
     },
   });
 
