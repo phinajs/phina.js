@@ -20,6 +20,7 @@
     "util/grid.js",
     "util/changedispatcher.js",
     "util/flow.js",
+    "util/color.js",
 
     "asset/asset.js",
     "asset/assetmanager.js",
@@ -34,6 +35,7 @@
     "input/input.js",
     "input/mouse.js",
     "input/touch.js",
+    "input/gamepad.js",
 
     "app/updater.js",
     "app/interactive.js",
