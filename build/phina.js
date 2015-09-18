@@ -935,6 +935,12 @@
   Math.RAD_TO_DEG = 180/Math.PI;
   
   /**
+   * @property    PHI
+   * golden ratio
+   */
+  Math.PHI = (1 + Math.sqrt(5)) / 2;
+  
+  /**
    * @method
    * Degree を Radian に変換
    */
@@ -1222,6 +1228,7 @@ phina.namespace(function() {
     set: function(x, y) {
       this.x = x;
       this.y = y;
+      return this;
     },
 
     /**
@@ -1230,6 +1237,7 @@ phina.namespace(function() {
     add: function(v) {
       this.x += v.x;
       this.y += v.y;
+      return this;
     },
 
     /**
@@ -1238,6 +1246,7 @@ phina.namespace(function() {
     sub: function(v) {
       this.x -= v.x;
       this.y -= v.y;
+      return this;
     },
 
     /**
@@ -1246,16 +1255,18 @@ phina.namespace(function() {
     mul: function(n) {
       this.x *= n;
       this.y *= n;
+      return this;
     },
 
     /**
      * 除算
      */
-    div: function(v) {
+    div: function(n) {
       //console.assert(n != 0, "0 division!!");
       n = n || 0.01;
       this.x /= n;
       this.y /= n;
+      return this;
     },
 
     /**
@@ -1328,6 +1339,13 @@ phina.namespace(function() {
       this.y = Math.sin(rad);
 
       return this;
+    },
+    
+    /**
+     * 正規化
+     */
+    normalize: function() {
+      return this.div(this.length());
     },
 
     _accessor: {
@@ -2571,6 +2589,383 @@ phina.namespace(function() {
   });
 
 })();
+/*
+ * color.js
+ */
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.util.Color
+   * カラークラス
+   */
+  phina.define("phina.util.Color", {
+    /** R値 */
+    r: 255,
+    /** G値 */
+    g: 255,
+    /** B値 */
+    b: 255,
+    /** A値 */
+    a: 1.0,
+
+    /**
+     * 初期化
+     */
+    init: function(r, g, b, a) {
+      this.set.apply(this, arguments);
+    },
+
+    /**
+     * セッター.
+     */
+    set: function(r, g, b, a) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.a = (a !== undefined) ? a : 1.0;
+      return this;
+    },
+
+    /**
+     * 数値によるセッター.
+     */
+    setFromNumber: function(r, g, b, a) {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.a = (a !== undefined) ? a : 1.0;
+      return this;
+    },
+
+    /**
+     * 配列によるセッター
+     */
+    setFromArray: function(arr) {
+      return this.set.apply(this, arr);
+    },
+
+    /**
+     * オブジェクトによるセッター
+     */
+    setFromObject: function(obj) {
+      return this.set(obj.r, obj.g, obj.b, obj.a);
+    },
+
+    /**
+     * 文字列によるセッター
+     */
+    setFromString: function(str) {
+      var color = phina.util.Color.stringToNumber(str);
+      return this.set(color[0], color[1], color[2], color[3]);
+    },
+
+    /**
+     * 賢いセッター
+     */
+    setSmart: function() {
+      var arg = arguments[0];
+      if (arguments.length >= 3) {
+        this.set(arguments.r, arguments.g, arguments.b, arguments.a);
+      } else if (arg instanceof Array) {
+        this.setFromArray(arg);
+      } else if (arg instanceof Object) {
+        this.setFromObject(arg);
+      } else if (typeof(arg) == "string") {
+        this.setFromString(arg);
+      }
+      return this;
+    },
+
+    /**
+     * CSS 用 16進数文字列に変換
+     */
+    toStyleAsHex: function() {
+      return "#{0}{1}{2}".format(
+        this.r.toString(16).padding(2, '0'),
+        this.g.toString(16).padding(2, '0'),
+        this.b.toString(16).padding(2, '0')
+      );
+    },
+
+    /**
+     * CSS 用 RGB文字列に変換
+     */
+    toStyleAsRGB: function() {
+      return "rgb({r},{g},{b})".format({
+        r: ~~this.r,
+        g: ~~this.g,
+        b: ~~this.b
+      });
+    },
+
+
+    /**
+     * CSS 用 RGBA文字列に変換
+     */
+    toStyleAsRGBA: function() {
+      return "rgba({r},{g},{b},{a})".format({
+        r: ~~this.r,
+        g: ~~this.g,
+        b: ~~this.b,
+        a: this.a
+      });
+    },
+
+    /**
+     * CSS 用 RGBA 文字列に変換
+     */
+    toStyle: function() {
+      return "rgba({r},{g},{b},{a})".format({
+        r: ~~this.r,
+        g: ~~this.g,
+        b: ~~this.b,
+        a: this.a
+      });
+    },
+
+    _static: {
+
+      /**
+       * @static
+       * カラーリスト
+       */
+      COLOR_LIST: {
+        /** @property black */
+        "black": [0x00, 0x00, 0x00],
+        /** @property silver */
+        "silver": [0xc0, 0xc0, 0xc0],
+        /** @property gray */
+        "gray": [0x80, 0x80, 0x80],
+        /** @property white */
+        "white": [0xff, 0xff, 0xff],
+        /** @property maroon */
+        "maroon": [0x80, 0x00, 0x00],
+        /** @property red */
+        "red": [0xff, 0x00, 0x00],
+        /** @property purple */
+        "purple": [0x80, 0x00, 0x80],
+        /** @property fuchsia */
+        "fuchsia": [0xff, 0x00, 0xff],
+        /** @property green */
+        "green": [0x00, 0x80, 0x00],
+        /** @property lime */
+        "lime": [0x00, 0xff, 0x00],
+        /** @property olive */
+        "olive": [0x80, 0x80, 0x00],
+        /** @property yellow */
+        "yellow": [0xff, 0xff, 0x00],
+        /** @property navy */
+        "navy": [0x00, 0x00, 0x80],
+        /** @property blue */
+        "blue": [0x00, 0x00, 0xff],
+        /** @property teal */
+        "teal": [0x00, 0x80, 0x80],
+        /** @property aqua */
+        "aqua": [0x00, 0xff, 0xff],
+      },
+
+      /**
+       * @static
+       * @member phina.util.Color
+       * @method strToNum
+       */
+      strToNum: function(str) {
+        return this.stringToNumber(str);
+      },
+      stringToNumber: function(str) {
+        var vlaue = null;
+        var type = null;
+
+        if (str[0] === '#') {
+          type = (str.length == 4) ? "hex111" : "hex222";
+        } else if (str[0] === 'r' && str[1] === 'g' && str[2] === 'b') {
+          type = (str[3] == 'a') ? "rgba" : "rgb";
+        } else if (str[0] === 'h' && str[1] === 's' && str[2] === 'l') {
+          type = (str[3] == 'a') ? "hsla" : "hsl";
+        }
+
+        if (type) {
+          var match_set = MATCH_SET_LIST[type];
+          var m = str.match(match_set.reg);
+          value = match_set.exec(m);
+        } else if (phina.util.Color.COLOR_LIST[str]) {
+          value = phina.util.Color.COLOR_LIST[str];
+        }
+
+        return value;
+      },
+
+      /**
+       * @static
+       * @method
+       * hsl を rgb に変換
+       */
+      HSLtoRGB: function(h, s, l) {
+        var r, g, b;
+
+        h %= 360;
+        h += 360;
+        h %= 360;
+        s *= 0.01;
+        l *= 0.01;
+
+        if (s == 0) {
+          var l = Math.round(l * 255);
+          return [l, l, l];
+        }
+        var m2 = (l < 0.5) ? l * (1 + s) : l + s - l * s;
+        var m1 = l * 2 - m2;
+
+        // red
+        var temp = (h + 120) % 360;
+        if (temp < 60) {
+          r = m1 + (m2 - m1) * temp / 60;
+        } else if (temp < 180) {
+          r = m2;
+        } else {
+          r = m1;
+        }
+
+        // green
+        temp = h;
+        if (temp < 60) {
+          g = m1 + (m2 - m1) * temp / 60;
+        } else if (temp < 180) {
+          g = m2;
+        } else if (temp < 240) {
+          g = m1 + (m2 - m1) * (240 - temp) / 60;
+        } else {
+          g = m1;
+        }
+
+        // blue
+        temp = ((h - 120) + 360) % 360;
+        if (temp < 60) {
+          b = m1 + (m2 - m1) * temp / 60;
+        } else if (temp < 180) {
+          b = m2;
+        } else if (temp < 240) {
+          b = m1 + (m2 - m1) * (240 - temp) / 60;
+        } else {
+          b = m1;
+        }
+
+        return [
+          parseInt(r * 255),
+          parseInt(g * 255),
+          parseInt(b * 255)
+        ];
+      },
+
+      /**
+       * @static
+       * @method
+       * hsla を rgba に変換
+       */
+      HSLAtoRGBA: function(h, s, l, a) {
+        var temp = phina.util.Color.HSLtoRGB(h, s, l);
+        temp[3] = a;
+        return rgb;
+      },
+
+      /**
+       * @static
+       * @method
+       * rgb 値を作成
+       */
+      createStyleRGB: function(r, g, b) {
+        return "rgba(" + r + "," + g + "," + b + ")";
+      },
+
+      /**
+       * @static
+       * @method
+       * rgba 値を作成
+       */
+      createStyleRGBA: function(r, g, b, a) {
+        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+      },
+
+      /**
+       * @static
+       * @method
+       * hsl 値を作成
+       */
+      createStyleHSL: function(h, s, l) {
+        return "hsl(" + h + "," + s + "%," + l + "%)";
+      },
+
+      /**
+       * @static
+       * @method
+       * hsla 値を作成
+       */
+      createStyleHSLA: function(h, s, l, a) {
+        return "hsla(" + h + "," + s + "%," + l + "%," + a + ")";
+      },
+    }
+  });
+
+
+  var MATCH_SET_LIST = {
+    "hex111": {
+      reg: /^#(\w{1})(\w{1})(\w{1})$/,
+      exec: function(m) {
+        return [
+          parseInt(m[1] + m[1], 16),
+          parseInt(m[2] + m[2], 16),
+          parseInt(m[3] + m[3], 16)
+        ];
+      }
+    },
+    "hex222": {
+      reg: /^#(\w{2})(\w{2})(\w{2})$/,
+      exec: function(m) {
+        return [
+          parseInt(m[1], 16),
+          parseInt(m[2], 16),
+          parseInt(m[3], 16)
+        ];
+      }
+    },
+    "rgb": {
+      reg: /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
+      exec: function(m) {
+        return [
+          parseInt(m[1]),
+          parseInt(m[2]),
+          parseInt(m[3])
+        ];
+      }
+    },
+    "rgba": {
+      reg: /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1}(\.{1}\d+)?)\)$/,
+      exec: function(m) {
+        return [
+          parseInt(m[1]),
+          parseInt(m[2]),
+          parseInt(m[3]),
+          parseFloat(m[4])
+        ];
+      }
+    },
+    "hsl": {
+      reg: /^hsl\((\d{1,3}),\s*(\d{1,3})%,\s*(\d{1,3})%\)$/,
+      exec: function(m) {
+        return phina.util.Color.HSLtoRGB(m[1], m[2], m[3]);
+      }
+    },
+    "hsla": {
+      reg: /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1}(\.{1}\d+)?)\)$/,
+      exec: function(m) {
+        return phina.util.Color.HSLAtoRGBA(m[1], m[2], m[3], m[4]);
+      },
+    }
+  };
+
+});
+
 
 phina.namespace(function() {
 
@@ -3210,6 +3605,9 @@ phina.namespace(function() {
       canvas.context.font = '40px ' + DEFAULT_FONT;
 
       var checkText = "1234567890-^\\qwertyuiop@[asdfghjkl;:]zxcvbnm,./\!\"#$%&'()=~|QWERTYUIOP`{ASDFGHJKL+*}ZXCVBNM<>?_１２３４５６７８９０－＾￥ｑｗｅｒｔｙｕｉｏｐａｓｄｆｇｈｊｋｌｚｘｃｖｂｎｍ，．あいうかさたなをん時は金なり";
+      // 特殊文字対応
+      checkText += String.fromCharCode("0xf04b");
+
 
       var before = canvas.context.measureText(checkText).width;
       canvas.context.font = '40px ' + font + ', ' + DEFAULT_FONT;
@@ -3603,6 +4001,461 @@ phina.namespace(function() {
   })
 
 })();
+phina.namespace(function() {
+
+  /**
+   * ゲームパッドマネージャー.
+   *
+   * ゲームパッド接続状況の監視、個々のゲームパッドの入力状態の更新を行う.
+   */
+  phina.define('phina.input.GamepadManager', {
+    superClass: 'phina.util.EventDispatcher',
+
+    /**
+     * 作成済みphina.input.Gamepadオブジェクトのリスト
+     *
+     * @type {Object.<number, phina.input.Gamepad>}
+     */
+    gamepads: null,
+
+    /**
+     * 作成済みゲームパッドのindexのリスト
+     *
+     * @type {number[]}
+     * @private
+     */
+    _created: null,
+
+    /**
+     * ラップ前Gamepadのリスト
+     * @type {Gamepad[]}
+     * @private
+     */
+    _rawgamepads: null,
+
+    init: function() {
+      this.superInit();
+
+      this.gamepads = {};
+      this._created = [];
+      this._rawgamepads = [];
+
+      this._prevTimestamps = {};
+
+      this._getGamepads = null;
+      var navigator = phina.global.navigator;
+      if (navigator && navigator.getGamepads) {
+        this._getGamepads = navigator.getGamepads.bind(navigator);
+      } else if (navigator && navigator.webkitGetGamepads) {
+        this._getGamepads = navigator.webkitGetGamepads.bind(navigator);
+      } else {
+        this._getGamepads = function() {};
+      }
+
+      phina.global.addEventListener('gamepadconnected', function(e) {
+        var gamepad = this.get(e.gamepad.index);
+        gamepad.connected = true;
+        this.flare('connected', {
+          gamepad: gamepad,
+        });
+      }.bind(this));
+
+      phina.global.addEventListener('gamepaddisconnected', function(e) {
+        var gamepad = this.get(e.gamepad.index);
+        gamepad.connected = false;
+        this.flare('disconnected', {
+          gamepad: gamepad,
+        });
+      }.bind(this));
+    },
+
+    /**
+     * 情報更新処理
+     * マイフレーム呼んで下さい.
+     */
+    update: function() {
+      this._poll();
+
+      for (var i = 0, end = this._created.length; i < end; i++) {
+        var index = this._created[i];
+        var rawgamepad = this._rawgamepads[index];
+
+        if (!rawgamepad) {
+          continue;
+        }
+
+        if (rawgamepad.timestamp && (rawgamepad.timestamp === this._prevTimestamps[i])) {
+          this.gamepads[index]._updateStateEmpty();
+          continue;
+        }
+
+        this._prevTimestamps[i] = rawgamepad.timestamp;
+        this.gamepads[index]._updateState(rawgamepad);
+      }
+    },
+
+    /**
+     * 指定されたindexのGamepadオブジェクトを返す.
+     *
+     * 未作成の場合は作成して返す.
+     */
+    get: function(index) {
+      index = index || 0;
+
+      if (!this.gamepads[index]) {
+        this._created.push(index);
+        this.gamepads[index] = phina.input.Gamepad(index);
+      }
+
+      return this.gamepads[index];
+    },
+
+    /**
+     * 指定されたindexのGamepadオブジェクトを破棄する.
+     * 破棄されたGamepadオブジェクトは以降更新されない.
+     */
+    dispose: function(index) {
+      if (this._created.contains(index)) {
+        var gamepad = this.get(index);
+        delete this.gamepad[gamepad];
+        this._created.erase(index);
+
+        gamepad.connected = false;
+      }
+    },
+
+    /**
+     * 指定されたindexのゲームパッドが接続中かどうかを返す.
+     *
+     * Gamepadオブジェクトが未作成の場合でも動作する.
+     */
+    isConnected: function(index) {
+      index = index || 0;
+
+      return this._rawgamepads[index] && this._rawgamepads[index].connected;
+    },
+
+    /**
+     * @private
+     */
+    _poll: function() {
+      var rawGamepads = this._getGamepads();
+      if (rawGamepads) {
+        this._rawgamepads.clear();
+
+        for (var i = 0, end = rawGamepads.length; i < end; i++) {
+          if (rawGamepads[i]) {
+            this._rawgamepads.push(rawGamepads[i]);
+          }
+        }
+      }
+    },
+
+    _static: {
+      /** ブラウザがGamepad APIに対応しているか. */
+      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+    },
+
+  });
+
+  /**
+   * ゲームパッド
+   *
+   * 直接インスタンス化せず、phina.input.GamepadManagerオブジェクトから取得して使用する.
+   */
+  phina.define("phina.input.Gamepad", {
+
+    index: null,
+    buttons: null,
+    /** @type {Array.<phina.geom.Vector2>} */
+    sticks: null,
+
+    id: null,
+    connected: false,
+    mapping: null,
+    timestamp: null,
+
+    init: function(index) {
+      this.index = index || 0;
+
+      this.buttons = Array.range(0, 16).map(function() {
+        return {
+          value: 0,
+          pressed: false,
+          last: false,
+          down: false,
+          up: false,
+        };
+      });
+      this.sticks = Array.range(0, 2).map(function() {
+        return phina.geom.Vector2(0, 0);
+      });
+    },
+
+    /**
+     * ボタンが押されているか.
+     */
+    getKey: function(button) {
+      if (typeof(button) === 'string') {
+        button = phina.input.Gamepad.BUTTON_CODE[button];
+      }
+      if (this.buttons[button]) {
+        return this.buttons[button].pressed;
+      } else {
+        return false;
+      }
+    },
+
+    /**
+     * ボタンを押した.
+     */
+    getKeyDown: function(button) {
+      if (typeof(button) === 'string') {
+        button = phina.input.Gamepad.BUTTON_CODE[button];
+      }
+      if (this.buttons[button]) {
+        return this.buttons[button].down;
+      } else {
+        return false;
+      }
+    },
+
+    /**
+     * ボタンを離した.
+     */
+    getKeyUp: function(button) {
+      if (typeof(button) === 'string') {
+        button = phina.input.Gamepad.BUTTON_CODE[button];
+      }
+      if (this.buttons[button]) {
+        return this.buttons[button].up
+      } else {
+        return false;
+      }
+    },
+
+    /**
+     * 十字キーの入力されている方向.
+     */
+    getKeyAngle: function() {
+      var angle = null;
+      var arrowBit =
+        (this.getKey('left') << 3) | // 1000
+        (this.getKey('up') << 2) | // 0100
+        (this.getKey('right') << 1) | // 0010
+        (this.getKey('down')); // 0001
+
+      if (arrowBit != 0 && ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
+        angle = ARROW_BIT_TO_ANGLE_TABLE[arrowBit];
+      }
+
+      return angle;
+    },
+
+    /**
+     * 十字キーの入力されている方向をベクトルで.
+     * 正規化されている.
+     */
+    getKeyDirection: function() {
+      var direction = phina.geom.Vector2(0, 0);
+
+      if (this.getKey('left')) {
+        direction.x = -1;
+      } else if (this.getKey('right')) {
+        direction.x = 1;
+      }
+      if (this.getKey('up')) {
+        direction.y = -1;
+      } else if (this.getKey('down')) {
+        direction.y = 1;
+      }
+
+      if (direction.x && direction.y) {
+        direction.div(Math.SQRT2);
+      }
+
+      return direction;
+    },
+
+    /**
+     * スティックの入力されている方向.
+     */
+    getStickAngle: function(stickId) {
+      stickId = stickId || 0;
+      var stick = this.sticks[stickId];
+      return stick ? Math.atan2(-stick.y, stick.x) : null;
+    },
+
+    /**
+     * スティックの入力されている方向をベクトルで.
+     */
+    getStickDirection: function(stickId) {
+      stickId = stickId || 0;
+      return this.sticks ? this.sticks[stickId].clone() : phina.geom.Vector2(0, 0);
+    },
+
+    /**
+     * @private
+     */
+    _updateState: function(gamepad) {
+      this.id = gamepad.id;
+      this.connected = gamepad.connected;
+      this.mapping = gamepad.mapping;
+      this.timestamp = gamepad.timestamp;
+
+      for (var i = 0, iend = gamepad.buttons.length; i < iend; i++) {
+        this._updateButton(gamepad.buttons[i], i);
+      }
+
+      for (var j = 0, jend = gamepad.axes.length; j < jend; j += 2) {
+        this._updateStick(gamepad.axes[j + 0], j / 2, 'x');
+        this._updateStick(gamepad.axes[j + 1], j / 2, 'y');
+      }
+    },
+
+    /**
+     * @private
+     */
+    _updateStateEmpty: function() {
+      for (var i = 0, iend = this.buttons.length; i < iend; i++) {
+        this.buttons[i].down = false;
+        this.buttons[i].up = false;
+      }
+    },
+
+    /**
+     * @private
+     */
+    _updateButton: function(value, buttonId) {
+      if (this.buttons[buttonId] === undefined) {
+        this.buttons[buttonId] = {
+          value: 0,
+          pressed: false,
+          last: false,
+          down: false,
+          up: false,
+        };
+      }
+      
+      var button = this.buttons[buttonId];
+
+      button.last = button.pressed;
+
+      if (typeof value === 'object') {
+        button.value = value.value;
+        button.pressed = value.pressed;
+      } else {
+        button.value = value;
+        button.pressed = value > phina.input.Gamepad.ANALOGUE_BUTTON_THRESHOLD;
+      }
+
+      button.down = (button.pressed ^ button.last) & button.pressed;
+      button.up = (button.pressed ^ button.last) & button.last;
+    },
+
+    /**
+     * @private
+     */
+    _updateStick: function(value, stickId, axisName) {
+      if (this.sticks[stickId] === undefined) {
+        this.sticks[stickId] = phina.geom.Vector2(0, 0);
+      }
+      this.sticks[stickId][axisName] = value;
+    },
+
+    _static: {
+      /** ブラウザがGamepad APIに対応しているか. */
+      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+
+      /** アナログ入力対応のボタンの場合、どの程度まで押し込むとonになるかを表すしきい値. */
+      ANALOGUE_BUTTON_THRESHOLD: 0.5,
+
+      /** ボタン名とボタンIDのマップ. */
+      BUTTON_CODE: {
+        'a': 0,
+        'b': 1,
+        'x': 2,
+        'y': 3,
+
+        'l1': 4,
+        'r1': 5,
+        'l2': 6,
+        'r2': 7,
+
+        'select': 8,
+        'start': 9,
+
+        'l3': 10,
+        'r3': 11,
+
+        'up': 12,
+        'down': 13,
+        'left': 14,
+        'right': 15,
+
+        'special': 16,
+
+        'A': 0,
+        'B': 1,
+        'X': 2,
+        'Y': 3,
+
+        'L1': 4,
+        'R1': 5,
+        'L2': 6,
+        'R2': 7,
+
+        'SELECT': 8,
+        'START': 9,
+
+        'L3': 10,
+        'R3': 11,
+
+        'UP': 12,
+        'DOWN': 13,
+        'LEFT': 14,
+        'RIGHT': 15,
+
+        'SPECIAL': 16,
+      },
+    },
+  });
+
+  var ARROW_BIT_TO_ANGLE_TABLE = {
+    0x00: null,
+
+    /* @property 下 */
+    0x01: 270,
+    /* @property 右 */
+    0x02: 0,
+    /* @property 上 */
+    0x04: 90,
+    /* @property 左 */
+    0x08: 180,
+
+    /* @property 右上 */
+    0x06: 45,
+    /* @property 右下 */
+    0x03: 315,
+    /* @property 左上 */
+    0x0c: 135,
+    /* @property 左下 */
+    0x09: 225,
+
+    // 三方向同時押し対応
+    // 想定外の操作だが対応しといたほうが無難
+    /* @property 右上左 */
+    0x0e: 90,
+    /* @property 上左下 */
+    0x0d: 180,
+    /* @property 左下右 */
+    0x0b: 270,
+    /* @property 下右上 */
+    0x07: 0,
+  };
+
+});
+
 phina.namespace(function() {
 
 
