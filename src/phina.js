@@ -201,6 +201,34 @@ phina.namespace(function() {
     });
   });
 
+  phina._mainListeners = [];
+  phina._mainLoaded = false;
+  phina.method('main', function(func) {
+    if (phina._mainLoaded) {
+      func();
+    }
+    else {
+      phina._mainListeners.push(func);
+    }
+  });
+
+  if (phina.global.addEventListener) {
+    phina.global.addEventListener('load', function() {
+
+      phina._mainListeners.each(function(func) {
+        func();
+      });
+      phina._mainListeners.clear();
+
+      phina._mainLoaded = true;
+    });
+  }
+  else {
+    phina._mainLoaded = true;
+  }
+
+
+
 });
 
 
