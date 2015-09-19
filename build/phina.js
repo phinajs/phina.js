@@ -7018,11 +7018,11 @@ phina.namespace(function() {
 
       params = (params || {}).$safe(phina.display.CanvasScene.default);
 
-
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
-      this.backgroundColor = 'white';
+      this.backgroundColor = null;
+      
       this.gridX = phina.util.Grid(params.width, 16);
       this.gridY = phina.util.Grid(params.height, 16);
 
@@ -7243,11 +7243,20 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(query) {
-      this.superInit();
+    init: function(options) {
+      this.superInit(options);
 
-      this.domElement = document.querySelector(query);
-      // this.domElement = domElement;
+      if (options.domElement) {
+        this.domElement = options.domElement;
+      }
+      else {
+        if (options.query) {
+          this.domElement = document.querySelector(options.query);
+        }
+        else {
+          console.assert('error');
+        }
+      }
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
@@ -7316,7 +7325,10 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params.query);
+      if (!params.query && !params.domElement) {
+        params.domElement = document.createElement('canvas');
+      }
+      this.superInit(params);
 
       params.$safe({
         width: 640,
