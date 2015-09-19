@@ -56,12 +56,16 @@ phina.namespace(function() {
     },
 
     pushScene: function(scene) {
+      this.flare('push');
+
       this.currentScene.flare('pause', {
         app: this,
       });
       
       this._scenes.push(scene);
       ++this._sceneIndex;
+
+      this.flare('pushed');
       
       scene.app = this;
       scene.flare('enter', {
@@ -75,6 +79,8 @@ phina.namespace(function() {
      * シーンをポップする(ポーズやオブション画面などで使用)
      */
     popScene: function() {
+      this.flare('pop');
+
       var scene = this._scenes.pop();
       --this._sceneIndex;
 
@@ -82,6 +88,8 @@ phina.namespace(function() {
         app: this,
       });
       scene.app = null;
+
+      this.flare('poped');
       
       // 
       this.currentScene.flare('resume', {
