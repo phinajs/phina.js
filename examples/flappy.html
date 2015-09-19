@@ -4,7 +4,6 @@
   <head>
   </head>
   <body>
-    <canvas id='world'></canvas>
   </body>
 </html>
 
@@ -104,15 +103,17 @@ phina.define('Enemy', {
   },
 });
 
-window.onload = function() {
+
+
+phina.main(function() {
   var loader = AssetLoader();
 
   loader.load(ASSETS).then(function() {
     var app = CanvasApp({
-      query: '#world',
       width: SCREEN_WIDTH,
       height: SCREEN_HEIGHT,
     });
+    document.body.appendChild( app.domElement );
 
     app.replaceScene(MainScene());
 
@@ -120,7 +121,7 @@ window.onload = function() {
 
     app.run();
   });
-};
+});
 
 
 

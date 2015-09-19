@@ -136,7 +136,8 @@ phina.define('Piece', {
   },
 });
 
-window.onload = function() {
+
+phina.main(function() {
   var app = GameApp({
     startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
@@ -148,7 +149,7 @@ window.onload = function() {
   app.enableStats();
 
   app.run();
-};
+});
 
 
 
