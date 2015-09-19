@@ -12,7 +12,10 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params.query);
+      if (!params.query && !params.domElement) {
+        params.domElement = document.createElement('canvas');
+      }
+      this.superInit(params);
 
       params.$safe({
         width: 640,

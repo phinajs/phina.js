@@ -4,12 +4,11 @@
   <head>
   </head>
   <body>
-    <canvas id='world'></canvas>
   </body>
 </html>
 
 <style>
-#world {
+canvas {
   box-shadow: 0px 0px 4px 0px #aaa;
 }
 </style>
@@ -139,11 +138,12 @@ phina.define('Piece', {
 
 window.onload = function() {
   var app = GameApp({
-    query: '#world',
+    startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     startLabel: 'title',
   });
+  document.body.appendChild( app.domElement );
 
   app.enableStats();
 

@@ -12,11 +12,20 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(query) {
-      this.superInit();
+    init: function(options) {
+      this.superInit(options);
 
-      this.domElement = document.querySelector(query);
-      // this.domElement = domElement;
+      if (options.domElement) {
+        this.domElement = options.domElement;
+      }
+      else {
+        if (options.query) {
+          this.domElement = document.querySelector(options.query);
+        }
+        else {
+          console.assert('error');
+        }
+      }
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
