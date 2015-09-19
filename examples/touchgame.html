@@ -92,6 +92,15 @@ phina.define("MainScene", {
     };
   },
 
+  onenter: function() {
+    var scene = CountScene({
+      backgroundColor: 'rgba(100, 100, 100, 0.5)',
+      count: ['Ready'],
+      fontSize: 100,
+    });
+    this.app.pushScene(scene);
+  },
+
   update: function(app) {
     // タイマーを更新
     this.time += app.ticker.deltaTime;

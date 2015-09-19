@@ -4741,12 +4741,16 @@ phina.namespace(function() {
     },
 
     pushScene: function(scene) {
+      this.flare('push');
+
       this.currentScene.flare('pause', {
         app: this,
       });
       
       this._scenes.push(scene);
       ++this._sceneIndex;
+
+      this.flare('pushed');
       
       scene.app = this;
       scene.flare('enter', {
@@ -4760,6 +4764,8 @@ phina.namespace(function() {
      * シーンをポップする(ポーズやオブション画面などで使用)
      */
     popScene: function() {
+      this.flare('pop');
+
       var scene = this._scenes.pop();
       --this._sceneIndex;
 
@@ -4767,6 +4773,8 @@ phina.namespace(function() {
         app: this,
       });
       scene.app = null;
+
+      this.flare('poped');
       
       // 
       this.currentScene.flare('resume', {
@@ -7384,6 +7392,12 @@ phina.namespace(function() {
       }));
 
       this.fitScreen();
+
+      // pushScene, popScene 対策
+      this.on('push', function() {
+        // onenter 対策で描画しておく
+        this._draw();
+      });
     },
 
     _draw: function() {
@@ -7396,8 +7410,12 @@ phina.namespace(function() {
       if (this.currentScene.canvas) {
         this.currentScene._render();
 
-        var c = this.currentScene.canvas;
-        this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+        this._scenes.each(function(scene) {
+          var c = scene.canvas;
+          if (c) {
+            this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+          }
+        }, this);
       }
     },
 
@@ -7986,6 +8004,7 @@ phina.namespace(function() {
             arguments: ['', {
               color: 'white',
               fontSize: options.fontSize,
+              stroke: false,
             }],
             x: this.gridX.center(),
             y: this.gridY.center(),
@@ -8048,7 +8067,7 @@ phina.namespace(function() {
 
         fontColor: 'white',
         fontSize: 192,
-        backgroundColor: '#444',
+        backgroundColor: null,
 
         exitType: 'auto',
       },
