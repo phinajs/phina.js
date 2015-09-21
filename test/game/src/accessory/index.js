@@ -15,6 +15,15 @@ th.describe("accessory.Tweener", function() {
       .to({scaleX:4,scaleY:4, rotation:360}, 1000)
   });
 
+  th.it('by', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.accessory.Tweener().attachTo(shape);
+    tweener
+      .to({x:320, y:480}, 1000)
+      .by({x:100, y:100}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000)
+  });
+
   th.it('from', function() {
     var shape = phina.display.RectangleShape().addChildTo(this);
     shape.position.set(320, 480);
