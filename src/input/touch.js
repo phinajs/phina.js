@@ -12,21 +12,22 @@
     /**
      * @constructor
      */
-    init: function(domElement) {
+    init: function(domElement, isMulti) {
       this.superInit(domElement);
 
       this.id = null;
 
-      return ;
+      if (isMulti === true) {
+        return ;
+      }
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
-        self._move(e.pointX, e.pointY, true);
-        self.flags = 1;
+        self._start(e.pointX, e.pointY, true);
       });
 
       this.domElement.addEventListener('touchend', function(e) {
-        self.flags = 0;
+        self._end();
       });
       this.domElement.addEventListener('touchmove', function(e) {
         self._move(e.pointX, e.pointY);
@@ -88,7 +89,7 @@
       this.stockes = [];
 
       (length).times(function() {
-        var touch = phina.input.Touch(domElement);
+        var touch = phina.input.Touch(domElement, true);
         touch.id = null;
         this.stockes.push(touch);
       }, this);
