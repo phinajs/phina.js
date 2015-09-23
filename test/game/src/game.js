@@ -60,6 +60,35 @@ th.describe('game.ResultScene', function() {
 
 
 /*
+ * LoadingScene
+ */
+
+th.describe('game.LoadingScene', function() {
+
+  th.it('default', function() {
+    phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
+
+    this.onenter = function() {
+      var scene = phina.game.LoadingScene({
+        assets: {
+          image: {
+            a1: 'http://dummyimage.com/600x400/000/fff&text=1',
+            a2: 'http://dummyimage.com/600x400/000/fff&text=2',
+            a3: 'http://dummyimage.com/600x400/000/fff&text=3',
+            a4: 'http://dummyimage.com/600x400/000/fff&text=4',
+            a5: 'http://dummyimage.com/600x400/000/fff&text=5',
+            a6: 'http://dummyimage.com/600x400/000/fff&text=6',
+          },
+        },
+      });
+      this.app.pushScene(scene);
+    };
+  });
+
+});
+
+
+/*
  * CountScene
  */
 

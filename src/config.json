@@ -73,6 +73,7 @@
     "game/splashscene.js",
     "game/titlescene.js",
     "game/resultscene.js",
+    "game/loadingscene.js",
     "game/countscene.js",
     "game/gameapp.js",
     "game/pietimer.js",
