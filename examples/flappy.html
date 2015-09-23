@@ -106,21 +106,16 @@ phina.define('Enemy', {
 
 
 phina.main(function() {
-  var loader = AssetLoader();
-
-  loader.load(ASSETS).then(function() {
-    var app = CanvasApp({
-      width: SCREEN_WIDTH,
-      height: SCREEN_HEIGHT,
-    });
-    document.body.appendChild( app.domElement );
-
-    app.replaceScene(MainScene());
-
-    app.enableStats();
-
-    app.run();
+  var app = GameApp({
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    // assets: ASSETS,
+    startLabel: 'title',
   });
+  document.body.appendChild( app.domElement );
+
+  app.enableStats();
+  app.run();
 });
 
 
