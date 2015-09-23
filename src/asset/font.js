@@ -24,15 +24,15 @@ phina.namespace(function() {
       var format = "unknown";
       switch (type) {
         case "ttf":
-            format = "truetype"; break;
+          format = "truetype"; break;
         case "otf":
-            format = "opentype"; break;
+          format = "opentype"; break;
         case "woff":
-            format = "woff"; break;
+          format = "woff"; break;
         case "woff2":
-            format = "woff2"; break;
+          format = "woff2"; break;
         default:
-            console.warn("サポートしていないフォント形式です。(" + path + ")");
+          console.warn("サポートしていないフォント形式です。(" + path + ")");
       }
       this.format = format;
       this.fontName = key;
@@ -73,18 +73,24 @@ phina.namespace(function() {
       // 特殊文字対応
       checkText += String.fromCharCode("0xf04b");
 
-
       var before = canvas.context.measureText(checkText).width;
       canvas.context.font = '40px ' + font + ', ' + DEFAULT_FONT;
 
+      var timeoutCount = 30;
       var checkLoadFont = function () {
         if (canvas.context.measureText(checkText).width !== before) {
           callback && callback();
         } else {
-          setTimeout(checkLoadFont, 100);
+          if (--timeoutCount > 0) {
+            setTimeout(checkLoadFont, 100);
+          }
+          else {
+            callback && callback();
+            console.warn("timeout font loading");
+          }
         }
       };
-      setTimeout(checkLoadFont, 100);
+      checkLoadFont();
     },
 
     setFontName: function(name) {
