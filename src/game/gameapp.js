@@ -18,60 +18,40 @@ phina.namespace(function() {
         scenes: [
           {
             className: 'LoadingScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-              assets: options.assets,
-            },
+            arguments: options,
             label: 'loading',
             nextLabel: options.startLabel,
           },
 
           {
             className: 'SplashScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-            },
+            arguments: options,
             label: 'splash',
             nextLabel: 'title',
           },
 
           {
             className: 'TitleScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-              title: options.title,
-            },
+            arguments: options,
             label: 'title',
             nextLabel: 'main',
           },
           {
             className: 'MainScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-            },
+            arguments: options,
             label: 'main',
             nextLabel: 'result',
           },
           {
             className: 'ResultScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-            },
+            arguments: options,
             label: 'result',
             nextLabel: 'title',
           },
 
           {
             className: 'PauseScene',
-            arguments: {
-              width: options.width,
-              height: options.height,
-            },
+            arguments: options,
             label: 'pause',
           },
 
