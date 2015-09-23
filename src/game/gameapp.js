@@ -7,10 +7,10 @@ phina.namespace(function() {
   phina.define('phina.game.GameApp', {
     superClass: 'phina.display.CanvasApp',
 
-    init: function(params) {
-      this.superInit(params);
+    init: function(options) {
+      this.superInit(options);
 
-      var startLabel = (params.assets) ? 'loading' : params.startLabel;
+      var startLabel = (options.assets) ? 'loading' : options.startLabel;
 
       var scene = ManagerScene({
         startLabel: startLabel,
@@ -19,19 +19,19 @@ phina.namespace(function() {
           {
             className: 'LoadingScene',
             arguments: {
-              width: params.width,
-              height: params.height,
-              assets: params.assets,
+              width: options.width,
+              height: options.height,
+              assets: options.assets,
             },
             label: 'loading',
-            nextLabel: params.startLabel,
+            nextLabel: options.startLabel,
           },
 
           {
             className: 'SplashScene',
             arguments: {
-              width: params.width,
-              height: params.height,
+              width: options.width,
+              height: options.height,
             },
             label: 'splash',
             nextLabel: 'title',
@@ -40,8 +40,9 @@ phina.namespace(function() {
           {
             className: 'TitleScene',
             arguments: {
-              width: params.width,
-              height: params.height,
+              width: options.width,
+              height: options.height,
+              title: options.title,
             },
             label: 'title',
             nextLabel: 'main',
@@ -49,8 +50,8 @@ phina.namespace(function() {
           {
             className: 'MainScene',
             arguments: {
-              width: params.width,
-              height: params.height,
+              width: options.width,
+              height: options.height,
             },
             label: 'main',
             nextLabel: 'result',
@@ -58,8 +59,8 @@ phina.namespace(function() {
           {
             className: 'ResultScene',
             arguments: {
-              width: params.width,
-              height: params.height,
+              width: options.width,
+              height: options.height,
             },
             label: 'result',
             nextLabel: 'title',
@@ -68,8 +69,8 @@ phina.namespace(function() {
           {
             className: 'PauseScene',
             arguments: {
-              width: params.width,
-              height: params.height,
+              width: options.width,
+              height: options.height,
             },
             label: 'pause',
           },
