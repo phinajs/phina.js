@@ -78,8 +78,11 @@ phina.namespace(function() {
 
       var timeoutCount = 30;
       var checkLoadFont = function () {
-        if (canvas.context.measureText(checkText).width !== before) {
-          callback && callback();
+        var after = canvas.context.measureText(checkText).width;
+        if (after !== before) {
+          setTimeout(function() {
+            callback && callback();
+          }, 100);
         } else {
           if (--timeoutCount > 0) {
             setTimeout(checkLoadFont, 100);
@@ -94,16 +97,17 @@ phina.namespace(function() {
     },
 
     setFontName: function(name) {
-        if (this.loaded) {
-            console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
-            return this;
-        }
-        this.fontName = name;
+      if (this.loaded) {
+        console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
         return this;
+      }
+      this.fontName = name;
+      
+      return this;
     },
 
     getFontName: function() {
-        return this.fontName;
+      return this.fontName;
     },
 
   });
