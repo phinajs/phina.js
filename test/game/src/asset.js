@@ -10,6 +10,23 @@ th.describe('asset.File', function() {
   });
 });
 
+
+th.describe('asset.Font', function() {
+  th.it('init', function() {
+    var font = phina.asset.Font();
+    font.load('../../assets/fonts/kaushan-script/KaushanScript-Regular.otf').then(function() {
+      var label = phina.display.Label({
+        text: 'Hello, world!\nloaded',
+        fontSize: 100,
+        fontFamily: 'KaushanScript-Regular',
+        padding: 24,
+      }).addChildTo(this);
+      label.x = this.gridX.center();
+      label.y = this.gridY.center();
+    }.bind(this));
+  });
+});
+
 th.describe("asset.Sound", function() {
   th.it('init', function() {
     var sound = phina.asset.Sound();
