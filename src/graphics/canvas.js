@@ -538,7 +538,7 @@ phina.namespace(function() {
      * 画像として保存
      */
     saveAsImage: function(mime_type) {
-      mime_type = mime_type || tm.graphics.Canvas.MIME_TYPE_PNG;
+      mime_type = mime_type || "image/png";
       var data_url = this.canvas.toDataURL(mime_type);
       // data_url = data_url.replace(mime_type, "image/octet-stream");
       window.open(data_url, "save");
