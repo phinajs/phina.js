@@ -54,7 +54,7 @@ gulp.task('webserver', function() {
       // livereload: true,
       // port: 9000,
       directoryListing: true,
-      // open: true,
+      open: true,
     }));
 });
 

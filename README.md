@@ -34,3 +34,9 @@ $gulp
 ```
 $gulp watch
 ```
+
+### launch
+
+```
+$gulp webserver
+```
