@@ -64,7 +64,7 @@ phina.namespace(function() {
       return this;
     },
 
-    _access: {
+    _accessor: {
       frameIndex: {
         get: function() {return this._frameIndex;},
         set: function(idx) {
