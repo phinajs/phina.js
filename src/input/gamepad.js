@@ -150,7 +150,12 @@ phina.namespace(function() {
 
     _static: {
       /** ブラウザがGamepad APIに対応しているか. */
-      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+      isAvailable: (function() {
+        var nav = phina.global.navigator;
+        if (!nav) return false;
+
+        return (!!nav.getGamepads) || (!!nav.webkitGetGamepads);
+      })(),
     },
 
   });
@@ -362,7 +367,12 @@ phina.namespace(function() {
 
     _static: {
       /** ブラウザがGamepad APIに対応しているか. */
-      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+      isAvailable: (function() {
+        var nav = phina.global.navigator;
+        if (!nav) return false;
+
+        return (!!nav.getGamepads) || (!!nav.webkitGetGamepads);
+      })(),
 
       /** アナログ入力対応のボタンの場合、どの程度まで押し込むとonになるかを表すしきい値. */
       ANALOGUE_BUTTON_THRESHOLD: 0.5,
