@@ -6612,6 +6612,20 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * 画像として保存
+     */
+    saveAsImage: function(mime_type) {
+      mime_type = mime_type || tm.graphics.Canvas.MIME_TYPE_PNG;
+      var data_url = this.canvas.toDataURL(mime_type);
+      // data_url = data_url.replace(mime_type, "image/octet-stream");
+      window.open(data_url, "save");
+      
+      // toDataURL を使えば下記のようなツールが作れるかも!!
+      // TODO: プログラムで絵をかいて保存できるツール
+    },
+
+
     _accessor: {
       /**
        * 幅
