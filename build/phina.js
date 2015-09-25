@@ -6770,15 +6770,15 @@ phina.namespace(function() {
     /** 子供を CanvasRenderer で描画するか */
     childrenVisible: true,
 
-    init: function() {
+    init: function(options) {
       this.superInit();
 
       this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
 
-      this.width = 64;
-      this.height = 64;
+      this.width = options.width || 64;
+      this.height = options.height || 64;
     },
 
     /**
@@ -6835,18 +6835,18 @@ phina.namespace(function() {
     superClass: 'phina.display.CanvasElement',
 
     init: function(style) {
-      this.superInit();
-
       style = (style || {}).$safe({
         width: 64,
         height: 64,
         padding: 8,
         backgroundColor: '#aaa',
       });
-
-      this.canvas = phina.graphics.Canvas();
       this.style = phina.util.ChangeDispatcher();
       this.style.register(style);
+
+      this.superInit(style);
+
+      this.canvas = phina.graphics.Canvas();
       this.style.onchange = function() {
         this._render();
       }.bind(this);
@@ -6870,6 +6870,27 @@ phina.namespace(function() {
         0, 0, w, h,
         -w*this.origin.x, -h*this.origin.y, w, h
         );
+    },
+
+    _accessor: {
+      width: {
+        get: function() {
+          return this._width;
+        },
+        set: function(v) {
+          this._width = v;
+          this.style.width = v;
+        },
+      },
+      height: {
+        get: function() {
+          return this._height;
+        },
+        set: function(v) {
+          this._height = v;
+          this.style.height = v;
+        },
+      },
     },
   });
 

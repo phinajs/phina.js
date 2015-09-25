@@ -7,7 +7,14 @@ th.describe("display.Shape", function() {
 
   th.it('RectangleShape', function() {
     var shape = phina.display.RectangleShape().addChildTo(this);
-    shape.position.set(100, 100);
+    shape.position.set(this.gridX.center(), this.gridY.span(4));
+
+    var shape = phina.display.RectangleShape({
+      width: 128,
+      height: 32,
+      color: 'green',
+    }).addChildTo(this);
+    shape.position.set(this.gridX.center(), this.gridY.span(6));
   });
 });
 
