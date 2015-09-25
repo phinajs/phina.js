@@ -14,15 +14,15 @@ phina.namespace(function() {
     /** 子供を CanvasRenderer で描画するか */
     childrenVisible: true,
 
-    init: function() {
+    init: function(options) {
       this.superInit();
 
       this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
 
-      this.width = 64;
-      this.height = 64;
+      this.width = options.width || 64;
+      this.height = options.height || 64;
     },
 
     /**
