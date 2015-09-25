@@ -4875,6 +4875,32 @@ phina.namespace(function() {
         "get": function()   { return this._scenes[this._sceneIndex]; },
         "set": function(v)  { this._scenes[this._sceneIndex] = v; },
       },
+
+      frame: {
+        "get": function () { return this.ticker.frame; },
+        "set": function (v) { this.ticker.frame = v; },
+      },
+
+      fps: {
+        "get": function () { return this.ticker.fps; },
+        "set": function (v) { this.ticker.fps = v; },
+      },
+
+      deltaTime: {
+        "get": function () { return this.ticker.deltaTime; },
+      },
+
+      elapsedTime: {
+        "get": function () { return this.ticker.elapsedTime; },
+      },
+
+      currentTime: {
+        "get": function () { return this.ticker.currentTime; },
+      },
+
+      startTime: {
+        "get": function () { return this.ticker.startTime; },
+      },
     },
 
   });
@@ -6955,7 +6981,7 @@ phina.namespace(function() {
   phina.define('phina.display.Sprite', {
     superClass: 'phina.display.CanvasElement',
 
-    init: function(image) {
+    init: function(image, width, height) {
       this.superInit();
 
       if (typeof image === 'string') {
@@ -6963,8 +6989,9 @@ phina.namespace(function() {
       }
       
       this.image = image;
-      this.width = this.image.domElement.width;
-      this.height = this.image.domElement.height;
+      this.width = width || this.image.domElement.width;
+      this.height = height || this.image.domElement.height;
+      this._frameIndex = 0;
 
       this.srcRect = {
         x: 0,
@@ -6988,6 +7015,36 @@ phina.namespace(function() {
         srcRect.x, srcRect.y, srcRect.width, srcRect.height,
         -this.width*this.originX, -this.height*this.originY, this.width, this.height
         );
+    },
+
+    setFrameIndex: function(index, width, height) {
+      var tw  = width || this.width;      // tw
+      var th  = height || this.height;    // th
+      var row = ~~(this.image.domElement.width / tw);
+      var col = ~~(this.image.domElement.height / th);
+      var maxIndex = row*col;
+      index = index%maxIndex;
+      
+      var x   = index%row;
+      var y   = ~~(index/row);
+      this.srcRect.x = x*tw;
+      this.srcRect.y = y*th;
+      this.srcRect.width  = tw;
+      this.srcRect.height = th;
+
+      this._frameIndex = index;
+
+      return this;
+    },
+
+    _accessor: {
+      frameIndex: {
+        get: function() {return this._frameIndex;},
+        set: function(idx) {
+          this.setFrameIndex(idx);
+          return this;
+        }
+      },
     },
   });
 
