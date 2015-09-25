@@ -6772,6 +6772,8 @@ phina.namespace(function() {
     childrenVisible: true,
 
     init: function(options) {
+      options = (options || {});
+      
       this.superInit();
 
       this.visible = true;
