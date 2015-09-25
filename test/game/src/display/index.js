@@ -11,6 +11,47 @@ th.describe("display.Shape", function() {
   });
 });
 
+
+
+
+th.describe("display.Sprite", function() {
+
+  th.it('Sample', function() {
+    var path = '../../assets/images/hiyocos.png';
+    phina.asset.Texture().load(path).then(function(tex) {
+      var that = this;
+
+      var addHiyoko = function(x, y) {
+        var sprite = phina.display.Sprite(tex, 32, 32).addChildTo(that);
+        sprite.setFrameIndex(0);
+        sprite.position.set(x, y);
+        sprite.setScale(2);
+        sprite.vx = 5;
+        sprite.vy = 5;
+        sprite.vr = ~~(Math.random()*10)-5;
+        sprite.on('enterframe', function(e) {
+            if (e.app.ticker.frame % 3 == 0) this.frameIndex = (this.frameIndex+1)%4;
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > 640) this.vx *= -1;
+            if (this.y < 0 || this.y > 960) this.vy *= -1;
+            this.rotation += this.vr;
+        });
+      }
+
+      for (var i = 0; i < 20; i++) {
+        var x = ~~(Math.random()*600)+20;
+        var y = ~~(Math.random()*900)+30;
+        addHiyoko(x, y);
+      }
+    }.bind(this));
+  });
+
+});
+
+
+
+
 th.describe("display.Label", function() {
 
   th.it('init', function() {
