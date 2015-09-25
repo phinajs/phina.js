@@ -2427,8 +2427,9 @@ phina.namespace(function() {
       return this.unitWidth;
     },
 
-    center: function() {
-      return this.width/2;
+    center: function(offset) {
+      var index = offset || 0;
+      return (this.width/2) + (this.unitWidth * index);
     },
 
   });
