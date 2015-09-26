@@ -77,6 +77,7 @@
     "game/countscene.js",
     "game/gameapp.js",
     "game/pietimer.js",
+    "game/gauge.js",
 
     "social/twitter.js",
 
