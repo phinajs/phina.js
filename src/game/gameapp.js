@@ -8,6 +8,10 @@ phina.namespace(function() {
     superClass: 'phina.display.CanvasApp',
 
     init: function(options) {
+
+      options = (options || {}).$safe({
+        startLabel: 'title',
+      });
       this.superInit(options);
 
       var startLabel = (options.assets) ? 'loading' : options.startLabel;
