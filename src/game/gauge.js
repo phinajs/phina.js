@@ -9,6 +9,10 @@ phina.namespace(function() {
 
     init: function(style) {
       style = (style || {}).$safe({
+        value: 100,
+        maxValue: 100,
+        gaugeColor: '#44f',
+
         width: 256,
         height: 32,
 
@@ -20,16 +24,29 @@ phina.namespace(function() {
         strokeColor: '#aaa',
 
         cornerRadius: 4,
-        gaugeColor: '#44f',
 
         backgroundColor: 'transparent',
       });
-      this._reset();
 
       this.superInit(style);
 
+      this.visualValue = this.value;
       this.animation = true;
       this.animationTime = 1*1000;
+    },
+
+    /**
+     * 満タンかをチェック
+     */
+    isFull: function() {
+      return this.value === this.maxValue;
+    },
+
+    /**
+     * 空っぽかをチェック
+     */
+    isEmpty: function() {
+      return this.value == 0;
     },
 
     setValue: function(value) {
@@ -38,30 +55,36 @@ phina.namespace(function() {
       this._realValue = value;
 
       // end when now value equal value of argument
-      if (this._value === value) return ;
+      if (this.value === value) return ;
 
       // fire value change event
       this.flare('change');
 
+
       if (this.animation) {
-        var time = (Math.abs(this._value-value)/this._maxValue)*this.animationTime;
-        console.log(time);
+        var time = (Math.abs(this.value-value)/this.maxValue)*this.animationTime;
+        this.tweener.ontween = function() {
+          this.target._render();
+        };
         this.tweener
           .clear()
-          .to({'_value': value}, time)
+          .to({'visualValue': value}, time)
           .call(function() {
-            // TODO
+            // TODO: 
           });
       }
-    },
+      else {
+        this.visualValue = value;
+        this.flare('changed');
+        if (this.isEmpty()) {
+          this.flare('empty');
+        }
+        else if (this.isFull()) {
+          this.flare('full');
+        }
+      }
 
-    update: function() {
-      this._render();
-    },
-
-    _reset: function() {
-      this._value = 100;
-      this._value = this._maxValue = 100;
+      this.style.value = value;
     },
 
     _render: function() {
@@ -73,7 +96,7 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
-      var rate = this._value/this._maxValue;
+      var rate = this.visualValue/this.maxValue;
 
       // draw color
       this.canvas.context.fillStyle = style.color;
@@ -92,21 +115,20 @@ phina.namespace(function() {
     _accessor: {
       value: {
         get: function() {
-          return this._value;
+          return this.style.value;
         },
         set: function(v) {
           this.setValue(v);
         },
       },
-      // time: {
-      //   get: function() {
-      //     return this._time;
-      //   },
-      //   set: function(time) {
-      //     this._time = time;
-      //     this._render();
-      //   },
-      // }
+      maxValue: {
+        get: function() {
+          return this.style.maxValue;
+        },
+        set: function(v) {
+          this.style.maxValue = v;
+        },
+      },
     }
   });
 

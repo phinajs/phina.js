@@ -272,6 +272,8 @@ phina.namespace(function() {
       }
       else {
         tween.forward(time);
+
+        this.flare('tween');
       }
     },
 

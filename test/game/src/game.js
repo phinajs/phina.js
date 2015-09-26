@@ -145,3 +145,37 @@ th.describe('game.PieTimer', function() {
   });
 
 });
+
+
+
+
+th.describe('game.Gauge', function() {
+
+  th.it('default', function() {
+    var gauge = phina.game.Gauge().addChildTo(this);
+    gauge.position.set(this.gridX.center(), this.gridY.center(-2));
+    gauge.setValue(50);
+    this.onpointstart = function() {
+      gauge.value -= 10;
+    }
+  });
+
+  th.it('style', function() {
+    var gauge = phina.game.Gauge({
+      backgroundColor: 'red',
+      color: 'white',
+      gaugeColor: 'blue',
+    }).addChildTo(this);
+    gauge.position.set(this.gridX.center(), this.gridY.center(-2));
+    gauge.setValue(50);
+    this.onpointstart = function() {
+      gauge.value -= 10;
+    }
+  });
+
+});
+
+
+
+
+
