@@ -173,16 +173,26 @@ th.describe('game.Gauge', function() {
   });
 
   th.it('style', function() {
-    var gauge = phina.game.Gauge({
+    var gauge1 = phina.game.Gauge({
       backgroundColor: 'red',
       color: 'white',
       gaugeColor: 'blue',
     }).addChildTo(this);
-    gauge.position.set(this.gridX.center(), this.gridY.center(-2));
-    gauge.setValue(50);
+    gauge1.position.set(this.gridX.center(), this.gridY.center(-2));
+    gauge1.setValue(50);
+
+    var gauge2 = phina.game.Gauge({
+      stroke: false,
+      color: '#aaa',
+      gaugeColor: 'green',
+    }).addChildTo(this);
+    gauge2.position.set(this.gridX.center(), this.gridY.center());
+    gauge2.setValue(50);
+
     this.onpointstart = function() {
-      gauge.value -= 10;
-    }
+      gauge1.value -= 10;
+      gauge2.value -= 10;
+    };
   });
 
 });
