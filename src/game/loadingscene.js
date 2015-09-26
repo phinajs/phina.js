@@ -21,30 +21,42 @@ phina.namespace(function() {
 
       this.fromJSON({
         children: {
-          bar: {
-            className: 'phina.display.Shape',
+          gauge: {
+            className: 'phina.game.Gauge',
             arguments: {
+              value: 0,
               width: this.width,
-              height: 6,
-              backgroundColor: 'hsla(200, 100%, 80%, 0.8)',
+              height: 12,
+              color: '#aaa',
+              stroke: false,
+              gaugeColor: 'hsla(200, 100%, 80%, 0.8)',
+              padding: 0,
             },
-            originX: 0,
-            originY: 0,
-            x: 0,
+            x: this.gridX.center(),
             y: 0,
-          },
+            originY: 0,
+          }
         }
       });
 
-
       var loader = phina.asset.AssetLoader();
-      
-      this.bar.scaleX = 0;
-      loader.onprogress = function(e) {
-        this.bar.scaleX = e.progress;
-      }.bind(this);
-      
-      loader.onload = function() {
+
+      if (options.lie) {
+        this.gauge.animationTime = 10*1000;
+        this.gauge.value = 90;
+
+        loader.onload = function() {
+          this.gauge.animationTime = 1*1000;
+          this.gauge.value = 100;
+        }.bind(this);
+      }
+      else {
+        loader.onprogress = function(e) {
+          this.gauge.value = e.progress*100;
+        }.bind(this);
+      }
+
+      this.gauge.onfull = function() {
         if (options.exitType === 'auto') {
           this.app.popScene();
         }
@@ -59,6 +71,8 @@ phina.namespace(function() {
         height: 960,
 
         exitType: 'auto',
+
+        lie: true,
       },
     },
 
