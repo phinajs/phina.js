@@ -6852,9 +6852,17 @@ phina.namespace(function() {
       this.superInit(style);
 
       this.canvas = phina.graphics.Canvas();
+      this._dirtyDraw = true;
       this.style.onchange = function() {
-        this._render();
+        this._dirtyDraw = true;
       }.bind(this);
+
+      this.on('enterframe', function() {
+        if (this._dirtyDraw === true) {
+          this._render();
+          this._dirtyDraw = false;
+        }
+      });
 
       this._render();
     },
@@ -8493,10 +8501,10 @@ phina.namespace(function() {
 
         backgroundColor: 'transparent',
       });
-      this.visualValue = style.value;
 
       this.superInit(style);
 
+      this.visualValue = style.value;
       this.animation = true;
       this.animationTime = 1*1000;
     },
