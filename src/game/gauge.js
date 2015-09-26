@@ -52,8 +52,6 @@ phina.namespace(function() {
     setValue: function(value) {
       value = Math.clamp(value, 0, this._maxValue);
 
-      this._realValue = value;
-
       // end when now value equal value of argument
       if (this.value === value) return ;
 
@@ -61,10 +59,12 @@ phina.namespace(function() {
       this.flare('change');
 
       if (this.animation) {
-        var time = (Math.abs(this.value-value)/this.maxValue)*this.animationTime;
+        var range = Math.abs(this.visualValue-value);
+        var time = (range/this.maxValue)*this.animationTime;
+
         this.tweener.ontween = function() {
-          this.target._render();
-        };
+          this._dirtyDraw = true;
+        }.bind(this);
         this.tweener
           .clear()
           .to({'visualValue': value}, time)
