@@ -27,10 +27,10 @@ phina.namespace(function() {
 
         backgroundColor: 'transparent',
       });
+      this.visualValue = style.value;
 
       this.superInit(style);
 
-      this.visualValue = this.value;
       this.animation = true;
       this.animationTime = 1*1000;
     },
@@ -60,7 +60,6 @@ phina.namespace(function() {
       // fire value change event
       this.flare('change');
 
-
       if (this.animation) {
         var time = (Math.abs(this.value-value)/this.maxValue)*this.animationTime;
         this.tweener.ontween = function() {
@@ -70,8 +69,14 @@ phina.namespace(function() {
           .clear()
           .to({'visualValue': value}, time)
           .call(function() {
-            // TODO: 
-          });
+            this.flare('changed');
+            if (this.isEmpty()) {
+              this.flare('empty');
+            }
+            else if (this.isFull()) {
+              this.flare('full');
+            }
+          }, this);
       }
       else {
         this.visualValue = value;
