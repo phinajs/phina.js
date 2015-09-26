@@ -152,11 +152,23 @@ th.describe('game.PieTimer', function() {
 th.describe('game.Gauge', function() {
 
   th.it('default', function() {
+    var label = phina.display.Label('full').addChildTo(this);
+    label.setPosition(this.gridX.center(), this.gridY.center(-2));
+
     var gauge = phina.game.Gauge().addChildTo(this);
-    gauge.position.set(this.gridX.center(), this.gridY.center(-2));
-    gauge.setValue(50);
+    gauge.position.set(this.gridX.center(), this.gridY.center());
     this.onpointstart = function() {
       gauge.value -= 10;
+    };
+
+    gauge.onchange = function() {
+      label.text = 'change';
+    };
+    gauge.onchanged = function() {
+      label.text = 'changed';
+    };
+    gauge.onempty = function() {
+      label.text = 'empty';
     }
   });
 
