@@ -21,9 +21,17 @@ phina.namespace(function() {
       this.superInit(style);
 
       this.canvas = phina.graphics.Canvas();
+      this._dirtyDraw = true;
       this.style.onchange = function() {
-        this._render();
+        this._dirtyDraw = true;
       }.bind(this);
+
+      this.on('enterframe', function() {
+        if (this._dirtyDraw === true) {
+          this._render();
+          this._dirtyDraw = false;
+        }
+      });
 
       this._render();
     },

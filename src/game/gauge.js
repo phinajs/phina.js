@@ -27,10 +27,10 @@ phina.namespace(function() {
 
         backgroundColor: 'transparent',
       });
-      this.visualValue = style.value;
 
       this.superInit(style);
 
+      this.visualValue = style.value;
       this.animation = true;
       this.animationTime = 1*1000;
     },
