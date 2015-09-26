@@ -42,7 +42,7 @@ phina.namespace(function() {
         height: params.height,
       }));
 
-      this.fitScreen();
+      if (params.fit || params.fit === undefined) this.fitScreen();
 
       // pushScene, popScene 対策
       this.on('push', function() {
