@@ -7533,38 +7533,42 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(params) {
-      if (!params.query && !params.domElement) {
-        params.domElement = document.createElement('canvas');
-      }
-      this.superInit(params);
-
-      params.$safe({
+    init: function(options) {
+      options.$safe({
         width: 640,
         height: 960,
         columns: 12,
+        fit: true,
       });
+      
+      if (!options.query && !options.domElement) {
+        options.domElement = document.createElement('canvas');
+      }
+      this.superInit(options);
+
 
       this.gridX = phina.util.Grid({
-        width: params.width,
-        columns: params.columns,
+        width: options.width,
+        columns: options.columns,
       });
       this.gridY = phina.util.Grid({
-        width: params.height,
-        columns: params.columns,
+        width: options.height,
+        columns: options.columns,
       });
 
       this.canvas = phina.graphics.Canvas(this.domElement);
-      this.canvas.setSize(params.width, params.height);
+      this.canvas.setSize(options.width, options.height);
 
       this.backgroundColor = 'white';
 
       this.replaceScene(phina.display.CanvasScene({
-        width: params.width,
-        height: params.height,
+        width: options.width,
+        height: options.height,
       }));
 
-      this.fitScreen();
+      if (options.fit) {
+        this.fitScreen();
+      }
 
       // pushScene, popScene 対策
       this.on('push', function() {

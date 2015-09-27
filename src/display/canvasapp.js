@@ -12,17 +12,18 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      if (!options.query && !options.domElement) {
-        options.domElement = document.createElement('canvas');
-      }
-      this.superInit(options);
-
       options.$safe({
         width: 640,
         height: 960,
         columns: 12,
         fit: true,
       });
+      
+      if (!options.query && !options.domElement) {
+        options.domElement = document.createElement('canvas');
+      }
+      this.superInit(options);
+
 
       this.gridX = phina.util.Grid({
         width: options.width,
