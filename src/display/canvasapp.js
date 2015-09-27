@@ -21,6 +21,7 @@ phina.namespace(function() {
         width: 640,
         height: 960,
         columns: 12,
+        fit: true,
       });
 
       this.gridX = phina.util.Grid({
@@ -42,7 +43,9 @@ phina.namespace(function() {
         height: params.height,
       }));
 
-      if (params.fit || params.fit === undefined) this.fitScreen();
+      if (params.fit) {
+        this.fitScreen();
+      }
 
       // pushScene, popScene 対策
       this.on('push', function() {
