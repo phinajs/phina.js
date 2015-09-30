@@ -35,6 +35,7 @@
     "input/input.js",
     "input/mouse.js",
     "input/touch.js",
+    "input/keyboard.js",
     "input/gamepad.js",
 
     "app/updater.js",

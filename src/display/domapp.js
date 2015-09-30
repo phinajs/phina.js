@@ -30,6 +30,7 @@ phina.namespace(function() {
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 5);
+      this.keyboard = phina.input.Keyboard(document);
 
       // ポインタをセット(PC では Mouse, Mobile では Touch)
       this.pointer = this.touch;
@@ -42,6 +43,23 @@ phina.namespace(function() {
       this.domElement.addEventListener("mousedown", function () {
         this.pointer = this.mouse;
         this.pointers = [this.mouse];
+      }.bind(this));
+
+      // keyboard event
+      this.keyboard.on('keydown', function(e) {
+        this.currentScene && this.currentScene.flare('keydown', {
+          keyCode: e.keyCode,
+        });
+      }.bind(this));
+      this.keyboard.on('keyup', function(e) {
+        this.currentScene && this.currentScene.flare('keyup', {
+          keyCode: e.keyCode,
+        });
+      }.bind(this));
+      this.keyboard.on('keypress', function(e) {
+        this.currentScene && this.currentScene.flare('keypress', {
+          keyCode: e.keyCode,
+        });
       }.bind(this));
 
       // click 対応
@@ -57,6 +75,7 @@ phina.namespace(function() {
       this.mouse.update();
       this.touch.update();
       this.touchList.update();
+      this.keyboard.update();
     },
 
     _checkClick: function(e) {
