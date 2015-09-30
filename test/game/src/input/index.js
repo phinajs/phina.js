@@ -1,3 +1,26 @@
+th.describe("input.Keyboard", function() {
+
+  th.it('init', function() {
+
+    this.onkeydown = function(e) {
+      if (e.keyCode == 97) {
+        debugger;
+      }
+      console.log(e.type, e.keyCode);
+    };
+
+    // this.update = function(app) {
+    //   var keyboard = app.keyboard;
+
+    //   if (keyboard.getKey('A')) {
+    //     console.log('A');
+    //   }
+    // };
+  });
+
+});
+
+
 th.describe("input.Touches", function() {
 
   th.it('init', function() {
