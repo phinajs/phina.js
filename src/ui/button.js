@@ -75,15 +75,15 @@ phina.namespace(function() {
         "set": function(v)  { this.label.text = v; },
       },
 
-      textSize: {
+      fontSize: {
         "set": function(v)  { this.label.style.fontSize = v; },
       },
 
-      textColor: {
+      fontColor: {
         "set": function (v) { this.label.style.color = v; },
       },
 
-      bgColor: {
+      backgroundColor: {
         "set": function (v) { this.bg.style.color = v; },
       },
     },
@@ -128,15 +128,15 @@ phina.namespace(function() {
         "set": function(v)  { this.label.text = v; },
       },
 
-      textSize: {
+      fontSize: {
         "set": function(v)  { this.label.style.fontSize = v; },
       },
 
-      textColor: {
+      fontColor: {
         "set": function (v) { this.label.style.color = v; },
       },
 
-      bgColor: {
+      backgroundColor: {
         "set": function (v) { this.bg.style.color = v; },
       },
     },
