@@ -8,6 +8,22 @@ th.describe("ui.Button", function() {
     };
   });
 
+  th.it('style', function() {
+    var button = phina.ui.Button({
+      text: 'Hello, world!',
+      width: 440,
+      height: 120,
+      fill: 'red',
+      fontColor: 'blue',
+      fontSize: 64,
+      fontFamily: 'Helvetica',
+    }).addChildTo(this);
+    button.position.set(320, 480);
+    button.onpush = function() {
+      console.log('pushed');
+    };
+  });
+
 });
 
 th.describe('ui.Gauge', function() {
