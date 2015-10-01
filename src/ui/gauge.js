@@ -91,6 +91,11 @@ phina.namespace(function() {
       this._value = value;
     },
 
+    getRate: function() {
+      var rate = this.visualValue/this.maxValue;
+      return rate;
+    },
+
     _render: function() {
       this.canvas.width = this.width + this.padding*2;
       this.canvas.height= this.height + this.padding*2;
@@ -100,7 +105,7 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
-      var rate = this.visualValue/this.maxValue;
+      var rate = this.getRate();
 
       // draw color
       if (this.fill) {
@@ -156,3 +161,70 @@ phina.namespace(function() {
   });
 
 });
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.ui.CircleGauge
+   * 
+   */
+  phina.define('phina.ui.CircleGauge', {
+    superClass: 'phina.ui.Gauge',
+
+    init: function(options) {
+      options = (options || {}).$safe({
+        backgroundColor: 'transparent',
+        fill: '#aaa',
+        stroke: '#222',
+
+        radius: 64,
+        anticlockwise: true,
+        showPercentage: false, // TODO
+      });
+
+      this.superInit(options);
+
+      this.radius = options.radius;
+      this.anticlockwise = options.anticlockwise;
+      this.showPercentage = options.showPercentage;
+    },
+
+    _render: function() {
+      var canvas = this.canvas;
+
+      this.canvas.width = this.radius*2 + this.padding*2;
+      this.canvas.height= this.radius*2 + this.padding*2;
+      this.canvas.clearColor(this.backgroundColor);
+      this.canvas.transformCenter();
+      this.canvas.rotate(-Math.PI*0.5);
+      this.canvas.scale(1, -1);
+
+      var rate = this.getRate();
+      var end = (Math.PI*2)*rate;
+      var startAngle = 0;
+      var endAngle = end;
+
+      if (this.stroke) {
+        this.canvas.context.lineWidth = this.strokeWidth;
+        this.canvas.strokeStyle = this.stroke;
+
+        this.canvas.strokeArc(0, 0, this.radius, startAngle, endAngle);
+      }
+
+      canvas.context.fillStyle = this.fill;
+      canvas.fillPie(0, 0, this.radius, startAngle, endAngle);
+
+      // if (this.showPercentage) {
+      //   // TODO:
+      //   var left = Math.max(0, this.limit-this.time);
+      //   this.label.text = Math.ceil(left/1000)+'';
+      // }
+    },
+
+  });
+
+
+
+});
+
