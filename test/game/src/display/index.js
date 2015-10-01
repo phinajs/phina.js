@@ -1,8 +1,18 @@
 th.describe("display.Shape", function() {
 
+  th.it('Shape', function() {
+    var shape = phina.display.Shape().addChildTo(this);
+    shape.position.set(100, 100);
+  });
+
   th.it('CircleShape', function() {
     var shape = phina.display.CircleShape().addChildTo(this);
-    shape.position.set(100, 100);
+    shape.position.set(this.gridX.center(), this.gridY.center());
+
+    setTimeout(function() {
+      shape.radius = 200;
+      shape.stroke = false;
+    }, 2000);
   });
 
   th.it('RectangleShape', function() {
@@ -12,7 +22,9 @@ th.describe("display.Shape", function() {
     var shape = phina.display.RectangleShape({
       width: 128,
       height: 32,
-      color: 'green',
+      fill: 'green',
+      stroke: false,
+      cornerRadius: 8,
     }).addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(6));
   });
@@ -64,13 +76,11 @@ th.describe("display.Label", function() {
   th.it('init', function() {
     var label = phina.display.Label('text only').addChildTo(this);
     label.position.set(this.gridX.center(), this.gridY.span(6));
-    var label = phina.display.Label('text and style', {
-      color: 'red',
-    }).addChildTo(this);
-    label.position.set(this.gridX.center(), this.gridY.span(8));
     var label = phina.display.Label({
       text: 'object only',
-      color: 'blue',
+      fill: 'blue',
+      shadow: 'red',
+      shadowBlur: 4,
     }).addChildTo(this);
     label.position.set(this.gridX.center(), this.gridY.span(10));
   });
@@ -79,99 +89,95 @@ th.describe("display.Label", function() {
     var center = 640/2;
     var gridY = phina.util.Grid(960, 14);
     // 
-    var label = phina.display.Label('color="red"').addChildTo(this);
-    label.style.color = 'red';
+    var label = phina.display.Label('fill="red"').addChildTo(this);
+    label.fill = 'red';
     label.position.set(center, gridY.span(1));
     // 
-    var label = phina.display.Label('stroke=false').addChildTo(this);
-    label.style.stroke = false;
+    var label = phina.display.Label('stroke="blue"').addChildTo(this);
+    label.stroke = 'blue';
     label.position.set(center, gridY.span(2));
     // 
-    var label = phina.display.Label('strokeColor="green"').addChildTo(this);
-    label.style.color = 'white';
-    label.style.strokeColor = 'green';
+    var label = phina.display.Label('strokeWidth=8').addChildTo(this);
+    label.fill = 'white';
+    label.strokeWidth = 8;
     label.position.set(center, gridY.span(3));
     // 
-    var label = phina.display.Label('strokeWidth=8').addChildTo(this);
-    label.style.color = 'white';
-    label.style.strokeWidth = 8;
+    var label = phina.display.Label('fontSize(16)').addChildTo(this);
+    label.fontSize = 16;
     label.position.set(center, gridY.span(4));
     // 
-    var label = phina.display.Label('fontSize(16)').addChildTo(this);
-    label.style.fontSize = 16;
+    var label = phina.display.Label('fontWeight="bold"').addChildTo(this);
+    label.fontWeight = 'bold';
     label.position.set(center, gridY.span(5));
     // 
-    var label = phina.display.Label('fontWeight="bold"').addChildTo(this);
-    label.style.fontWeight = 'bold';
+    var label = phina.display.Label('fontFamily="ゴシック"').addChildTo(this);
+    label.fontFamily = 'ゴシック';
     label.position.set(center, gridY.span(6));
     // 
-    var label = phina.display.Label('fontFamily="ゴシック"').addChildTo(this);
-    label.style.fontFamily = 'ゴシック';
+    var label = phina.display.Label('shadow="gold"').addChildTo(this);
+    label.fill = 'white';
+    label.shadow = 'gold';
     label.position.set(center, gridY.span(7));
     // 
-    var label = phina.display.Label('shadowBlur=6').addChildTo(this);
-    label.style.shadowBlur = 6;
+    var label = phina.display.Label('shadowBlur=16').addChildTo(this);
+    label.shadow = 'pink';
+    label.shadowBlur = 16;
     label.position.set(center, gridY.span(8));
-    // 
-    var label = phina.display.Label('shadowColor="blue"').addChildTo(this);
-    label.style.shadowBlur = 6;
-    label.style.shadowColor = "blue";
-    label.position.set(center, gridY.span(9));
   });
 
   th.it('align', function() {
     // 
     var label = phina.display.Label('left').addChildTo(this);
-    label.style.align = 'left';
-    label.style.backgroundColor = '#aaa';
+    label.align = 'left';
+    label.backgroundColor = '#aaa';
     label.position.set(640/2, 150);
     // 
     var label = phina.display.Label('center').addChildTo(this);
-    label.style.align = 'center';
-    label.style.backgroundColor = '#aaa';
+    label.align = 'center';
+    label.backgroundColor = '#aaa';
     label.position.set(640/2, 250);
     // 
     var label = phina.display.Label('right').addChildTo(this);
-    label.style.align = 'right';
-    label.style.backgroundColor = '#aaa';
+    label.align = 'right';
+    label.backgroundColor = '#aaa';
     label.position.set(640/2, 350);
   });
 
   th.it('baseline', function() {
     // 
     var label = phina.display.Label('top').addChildTo(this);
-    label.style.baseline = 'top';
-    label.style.backgroundColor = '#aaa';
+    label.baseline = 'top';
+    label.backgroundColor = '#aaa';
     label.position.set(160, 960/2);
     // 
     var label = phina.display.Label('middle').addChildTo(this);
-    label.style.baseline = 'middle';
-    label.style.backgroundColor = '#aaa';
+    label.baseline = 'middle';
+    label.backgroundColor = '#aaa';
     label.position.set(320, 960/2);
     // 
     var label = phina.display.Label('bottom').addChildTo(this);
-    label.style.baseline = 'bottom';
-    label.style.backgroundColor = '#aaa';
+    label.baseline = 'bottom';
+    label.backgroundColor = '#aaa';
     label.position.set(480, 960/2);
   });
 
   th.it('lineHeight', function() {
     var text = 'hoge\nfoo\nbar';
     var label = phina.display.Label(text).addChildTo(this);
-    label.style.backgroundColor = '#aaa';
+    label.backgroundColor = '#aaa';
     label.position.set(this.gridX.span(4), this.gridX.span(8));
     // 
     var label = phina.display.Label(text).addChildTo(this);
-    label.style.backgroundColor = '#aaa';
+    label.backgroundColor = '#aaa';
     label.position.set(this.gridX.span(12), this.gridX.span(8));
 
     var text = 'hoge\nfoo\nbar\nbaz';
     var label = phina.display.Label(text).addChildTo(this);
-    label.style.backgroundColor = '#aaa';
+    label.backgroundColor = '#aaa';
     label.position.set(this.gridX.span(4), this.gridX.span(12));
     // 
     var label = phina.display.Label(text).addChildTo(this);
-    label.style.backgroundColor = '#aaa';
+    label.backgroundColor = '#aaa';
     label.position.set(this.gridX.span(12), this.gridX.span(12));
   });
 

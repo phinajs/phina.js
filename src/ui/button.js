@@ -49,7 +49,7 @@ phina.namespace(function() {
 
       params = (params || {}).$safe({
         text: 'Hello',
-        color: 'white',
+        fontColor: 'white',
         backgroundColor: 'hsl(200, 80%, 60%)',
         cornerRadius: 8,
         fontSize: 32,
@@ -59,11 +59,12 @@ phina.namespace(function() {
         width: this.width,
         height: this.height,
         cornerRadius: params.cornerRadius,
-        color: params.backgroundColor,
+        fill: params.backgroundColor,
         stroke: false,
       }).addChildTo(this);
-      this.label = phina.display.Label(params.text, {
-        color: params.color,
+      this.label = phina.display.Label({
+        text: params.text,
+        fill: params.fontColor,
         stroke: false,
         fontSize: params.fontSize,
       }).addChildTo(this);
@@ -76,15 +77,15 @@ phina.namespace(function() {
       },
 
       fontSize: {
-        "set": function(v)  { this.label.style.fontSize = v; },
+        "set": function(v)  { this.label.fontSize = v; },
       },
 
       fontColor: {
-        "set": function (v) { this.label.style.color = v; },
+        "set": function (v) { this.label.color = v; },
       },
 
       backgroundColor: {
-        "set": function (v) { this.bg.style.color = v; },
+        "set": function (v) { this.bg.color = v; },
       },
     },
   });
@@ -116,7 +117,7 @@ phina.namespace(function() {
       this.height = params.height;
 
       this.bg = phina.display.RectangleShape().addChildTo(this);
-      this.bg.style.$extend({
+      this.bg.$extend({
         width: params.width,
         height: params.height,
       });
@@ -129,15 +130,15 @@ phina.namespace(function() {
       },
 
       fontSize: {
-        "set": function(v)  { this.label.style.fontSize = v; },
+        "set": function(v)  { this.label.fontSize = v; },
       },
 
       fontColor: {
-        "set": function (v) { this.label.style.color = v; },
+        "set": function (v) { this.label.color = v; },
       },
 
       backgroundColor: {
-        "set": function (v) { this.bg.style.color = v; },
+        "set": function (v) { this.bg.color = v; },
       },
     },
   });

@@ -8,23 +8,34 @@ phina.namespace(function() {
   phina.define('phina.display.Shape', {
     superClass: 'phina.display.CanvasElement',
 
-    init: function(style) {
-      style = (style || {}).$safe({
+    init: function(options) {
+      options = (options || {}).$safe({
         width: 64,
         height: 64,
         padding: 8,
-        backgroundColor: '#aaa',
-      });
-      this.style = phina.util.ChangeDispatcher();
-      this.style.register(style);
 
-      this.superInit(style);
+        backgroundColor: '#aaa',
+        fill: '#00a',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        shadow: false,
+        shadowBlur: 4,
+      });
+      this.superInit(options);
+
+      this.padding = options.padding;
+
+      this.backgroundColor = options.backgroundColor;
+      this.fill = options.fill;
+      this.stroke = options.stroke;
+      this.strokeWidth = options.strokeWidth;
+      
+      this.shadow = options.shadow;
+      this.shadowBlur = options.shadowBlur;
 
       this.canvas = phina.graphics.Canvas();
       this._dirtyDraw = true;
-      this.style.onchange = function() {
-        this._dirtyDraw = true;
-      }.bind(this);
 
       this.on('enterframe', function() {
         if (this._dirtyDraw === true) {
@@ -32,16 +43,13 @@ phina.namespace(function() {
           this._dirtyDraw = false;
         }
       });
-
-      this._render();
     },
 
     _render: function() {
-      var style = this.style;
-      this.canvas.width = style.width + style.padding*2;
-      this.canvas.height= style.height + style.padding*2;
+      this.canvas.width = this.width + this.padding*2;
+      this.canvas.height= this.height + this.padding*2;
 
-      this.canvas.clearColor(style.backgroundColor);
+      this.canvas.clearColor(this.backgroundColor);
     },
 
     draw: function(canvas) {
@@ -60,8 +68,7 @@ phina.namespace(function() {
           return this._width;
         },
         set: function(v) {
-          this._width = v;
-          this.style.width = v;
+          this._dirtyDraw = true; this._width = v;
         },
       },
       height: {
@@ -69,8 +76,69 @@ phina.namespace(function() {
           return this._height;
         },
         set: function(v) {
-          this._height = v;
-          this.style.height = v;
+          this._dirtyDraw = true; this._height = v;
+        },
+      },
+      padding: {
+        get: function() {
+          return this._padding;
+        },
+        set: function(v) {
+          this._dirtyDraw = true; this._padding = v;
+        },
+      },
+      backgroundColor: {
+        get: function() {
+          return this._backgroundColor;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._backgroundColor = v;
+        },
+      },
+      fill: {
+        get: function() {
+          return this._fill;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._fill = v;
+        },
+      },
+      stroke: {
+        get: function() {
+          return this._stroke;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._stroke = v;
+        },
+      },
+      strokeWidth: {
+        get: function() {
+          return this._strokeWidth;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._strokeWidth = v;
+        },
+      },
+      shadow: {
+        get: function() {
+          return this._shadow;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._shadow = v;
+        },
+      },
+      shadowBlur: {
+        get: function() {
+          return this._shadowBlur;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._shadowBlur = v;
         },
       },
     },
@@ -82,40 +150,49 @@ phina.namespace(function() {
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
-    init: function(style) {
+    init: function(options) {
 
-      style = (style || {}).$safe({
-        color: 'blue',
-
-        stroke: true,
+      options = (options || {}).$safe({
+        backgroundColor: 'transparent',
+        fill: 'blue',
+        stroke: '#aaa',
         strokeWidth: 4,
-        strokeColor: '#aaa',
 
         cornerRadius: 0,
-
-        backgroundColor: 'transparent',
       });
+      this.superInit(options);
 
-      this.superInit(style);
+      this.cornerRadius = options.cornerRadius;
     },
 
     _render: function() {
-      var style = this.style;
-      this.canvas.width = style.width + style.padding*2;
-      this.canvas.height= style.height + style.padding*2;
-      this.canvas.clearColor(style.backgroundColor);
+      this.canvas.width = this.width + this.padding*2;
+      this.canvas.height= this.height + this.padding*2;
+      this.canvas.clearColor(this.backgroundColor);
 
       this.canvas.transformCenter();
 
-      if (style.stroke) {
-        this.canvas.context.lineWidth = style.strokeWidth;
-        this.canvas.strokeStyle = style.strokeColor;
-        this.canvas.strokeRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
+      if (this.stroke) {
+        this.canvas.context.lineWidth = this.strokeWidth;
+        this.canvas.strokeStyle = this.stroke;
+        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.fillRoundRect(-style.width/2, -style.height/2, style.width, style.height, style.cornerRadius);
+      this.canvas.context.fillStyle = this.fill;
+      this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
     },
+
+    _accessor: {
+      cornerRadius: {
+        get: function() {
+          return this._cornerRadius;
+        },
+        set: function(v) {
+          this._dirtyDraw = true; this._cornerRadius = v;
+        },
+      }
+    },
+
   });
 
   /**
@@ -124,48 +201,44 @@ phina.namespace(function() {
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
-    init: function(style) {
-      style = (style || {}).$safe({
-        color: 'red',
-        radius: 32,
-
-        stroke: true,
-        strokeWidth: 4,
-        strokeColor: '#aaa',
-
-        cornerRadius: 0,
-
+    init: function(options) {
+      options = (options || {}).$safe({
         backgroundColor: 'transparent',
-      });
+        fill: 'red',
+        stroke: '#aaa',
+        strokeWidth: 4,
 
-      this.superInit(style);
+        radius: 32,
+      });
+      this.superInit(options);
+
+      this.radius = options.radius;
     },
 
     _render: function() {
-      var style = this.style;
-      this.canvas.width = style.radius*2 + style.padding*2;
-      this.canvas.height= style.radius*2 + style.padding*2;
-      this.canvas.clearColor(style.backgroundColor);
+      this.canvas.width = this.radius*2 + this.padding*2;
+      this.canvas.height= this.radius*2 + this.padding*2;
+      this.canvas.clearColor(this.backgroundColor);
 
       this.canvas.transformCenter();
 
-      if (style.stroke) {
-        this.canvas.context.lineWidth = style.strokeWidth;
-        this.canvas.strokeStyle = style.strokeColor;
-        this.canvas.strokeCircle(0, 0, style.radius);
+      if (this.stroke) {
+        this.canvas.context.lineWidth = this.strokeWidth;
+        this.canvas.strokeStyle = this.stroke;
+        this.canvas.strokeCircle(0, 0, this.radius);
       }
 
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.fillCircle(0, 0, style.radius);
+      this.canvas.context.fillStyle = this.fill;
+      this.canvas.fillCircle(0, 0, this.radius);
     },
 
     _accessor: {
       radius: {
         get: function() {
-          return this.style.radius;
+          return this._radius;
         },
         set: function(v) {
-          this.style.radius = v;
+          this._dirtyDraw = true; this._radius = v;
         },
       }
     },
