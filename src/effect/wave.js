@@ -12,7 +12,7 @@ phina.namespace(function() {
      */
     init: function(params) {
       this.superInit({
-      	color: 'white',
+      	fill: 'white',
       	stroke: false,
       });
 

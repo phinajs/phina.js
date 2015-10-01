@@ -25,11 +25,12 @@ phina.namespace(function() {
         children: {
           titleLabel: {
             className: 'phina.display.Label',
-            arguments: [params.title, {
-              color: params.fontColor,
+            arguments: {
+              text: params.title,
+              fill: params.fontColor,
               stroke: false,
               fontSize: 64,
-            }],
+            },
             x: this.gridX.center(),
             y: this.gridY.span(4),
           }
@@ -41,12 +42,12 @@ phina.namespace(function() {
           children: {
             touchLabel: {
               className: 'phina.display.Label',
-              arguments: ["TOUCH START", {
-                color: 'white',
-                color: params.fontColor,
+              arguments: {
+                text: "TOUCH START",
+                fill: params.fontColor,
                 stroke: false,
                 fontSize: 32,
-              }],
+              },
               x: this.gridX.center(),
               y: this.gridY.span(12),
             },
