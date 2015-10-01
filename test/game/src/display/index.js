@@ -7,7 +7,12 @@ th.describe("display.Shape", function() {
 
   th.it('CircleShape', function() {
     var shape = phina.display.CircleShape().addChildTo(this);
-    shape.position.set(100, 100);
+    shape.position.set(this.gridX.center(), this.gridY.center());
+
+    setTimeout(function() {
+      shape.radius = 200;
+      shape.stroke = false;
+    }, 2000);
   });
 
   th.it('RectangleShape', function() {
