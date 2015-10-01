@@ -1,10 +1,10 @@
 phina.namespace(function() {
 
   /**
-   * @class phina.game.Gauge
+   * @class phina.ui.Gauge
    * 
    */
-  phina.define('phina.game.Gauge', {
+  phina.define('phina.ui.Gauge', {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
