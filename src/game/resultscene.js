@@ -25,32 +25,35 @@ phina.namespace(function() {
         children: {
           scoreText: {
             className: 'phina.display.Label',
-            arguments: ['score', {
-              color: params.fontColor,
+            arguments: {
+              text: 'score',
+              fill: params.fontColor,
               stroke: false,
               fontSize: 48,
-            }],
+            },
             x: this.gridX.span(8),
             y: this.gridY.span(4),
           },
           scoreLabel: {
             className: 'phina.display.Label',
-            arguments: [params.score+'', {
-              color: params.fontColor,
+            arguments: {
+              text: params.score+'',
+              fill: params.fontColor,
               stroke: false,
               fontSize: 80,
-            }],
+            },
             x: this.gridX.span(8),
             y: this.gridY.span(6),
           },
 
           messageLabel: {
             className: 'phina.display.Label',
-            arguments: [params.message, {
-              color: params.fontColor,
+            arguments: {
+              text: params.message,
+              fill: params.fontColor,
               stroke: false,
               fontSize: 32,
-            }],
+            },
             x: this.gridX.span(8),
             y: this.gridY.span(8),
           },
