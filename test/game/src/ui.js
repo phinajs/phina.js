@@ -56,6 +56,25 @@ th.describe('ui.Gauge', function() {
     };
   });
 
+  th.it('timer', function() {
+    var label = phina.display.Label('full').addChildTo(this);
+    label.setPosition(this.gridX.center(), this.gridY.center(-2));
+
+    var gauge = phina.ui.Gauge({
+      value: 1000*4,
+      maxValue: 1000*4,
+    }).addChildTo(this);
+    gauge.position.set(this.gridX.center(), this.gridY.center());
+
+    this.update = function(app) {
+      gauge.value -= app.deltaTime;
+    };
+
+    gauge.onempty = function() {
+      label.text = 'empty';
+    }
+  });
+
 });
 
 
