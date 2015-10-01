@@ -12,6 +12,7 @@ var config = require('./src/config.json');
 var ip = require('ip');
 
 gulp.task('default', ['uglify']);
+gulp.task('dev', ['watch', 'webserver']);
 
 gulp.task('concat', function() {
   var scripts = config.files.map(function(f) {
