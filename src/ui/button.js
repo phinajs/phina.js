@@ -23,9 +23,9 @@ phina.namespace(function() {
       this.width = params.width;
       this.height = params.height;
 
-      this.setInteractive(true, 'rect');
+      this.setInteractive(true);
 
-      this.on('pointingend', function() {
+      this.on('pointend', function() {
         this.flare('push');
       });
     },
@@ -36,7 +36,7 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.geom.Button
+   * @class phina.ui.Button
    * Button
    */
   phina.define('phina.ui.Button', {
@@ -55,11 +55,6 @@ phina.namespace(function() {
         fontSize: 32,
       });
 
-      this.setInteractive(true, 'rect');
-      this.on('pointend', function() {
-        this.flare('push');
-      });
-
       this.bg = phina.display.RectangleShape({
         width: this.width,
         height: this.height,
@@ -73,6 +68,25 @@ phina.namespace(function() {
         fontSize: params.fontSize,
       }).addChildTo(this);
     },
+
+    _accessor: {
+      text: {
+        "get": function()   { return this.label.text; },
+        "set": function(v)  { this.label.text = v; },
+      },
+
+      fontSize: {
+        "set": function(v)  { this.label.style.fontSize = v; },
+      },
+
+      fontColor: {
+        "set": function (v) { this.label.style.color = v; },
+      },
+
+      backgroundColor: {
+        "set": function (v) { this.bg.style.color = v; },
+      },
+    },
   });
 
 });
@@ -81,11 +95,11 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.geom.Button
+   * @class phina.ui.FlatButton
    * Button
    */
   phina.define('phina.ui.FlatButton', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.ui.BaseButton',
     /**
      * @constructor
      */
@@ -107,10 +121,25 @@ phina.namespace(function() {
         height: params.height,
       });
       this.label = phina.display.Label('hoge').addChildTo(this);
-      
-      this.setInteractive(true, 'rect');
+    },
+    _accessor: {
+      text: {
+        "get": function()   { return this.label.text; },
+        "set": function(v)  { this.label.text = v; },
+      },
+
+      fontSize: {
+        "set": function(v)  { this.label.style.fontSize = v; },
+      },
+
+      fontColor: {
+        "set": function (v) { this.label.style.color = v; },
+      },
+
+      backgroundColor: {
+        "set": function (v) { this.bg.style.color = v; },
+      },
     },
   });
 
 });
-
