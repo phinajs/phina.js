@@ -7,30 +7,29 @@ phina.namespace(function() {
   phina.define('phina.game.Gauge', {
     superClass: 'phina.display.Shape',
 
-    init: function(style) {
-      style = (style || {}).$safe({
+    init: function(options) {
+      options = (options || {}).$safe({
+        width: 256,
+        height: 32,
+        backgroundColor: 'transparent',
+        fill: 'white',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
         value: 100,
         maxValue: 100,
         gaugeColor: '#44f',
-
-        width: 256,
-        height: 32,
-
-        color: 'white',
-        radius: 64,
-
-        stroke: true,
-        strokeWidth: 4,
-        strokeColor: '#aaa',
-
         cornerRadius: 4,
-
-        backgroundColor: 'transparent',
       });
 
-      this.superInit(style);
+      this.superInit(options);
 
-      this.visualValue = style.value;
+      this._value = options.value;
+      this.maxValue = options.maxValue;
+      this.gaugeColor = options.gaugeColor;
+      this.cornerRadius = options.cornerRadius;
+
+      this.visualValue = options.value;
       this.animation = true;
       this.animationTime = 1*1000;
     },
@@ -89,49 +88,68 @@ phina.namespace(function() {
         }
       }
 
-      this.style.value = value;
+      this._value = value;
     },
 
     _render: function() {
-      var style = this.style;
-      this.canvas.width = style.width + style.padding*2;
-      this.canvas.height= style.height + style.padding*2;
+      this.canvas.width = this.width + this.padding*2;
+      this.canvas.height= this.height + this.padding*2;
       // 
-      this.canvas.clearColor(style.backgroundColor);
+      this.canvas.clearColor(this.backgroundColor);
+
 
       this.canvas.transformCenter();
 
       var rate = this.visualValue/this.maxValue;
 
       // draw color
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.fillRect(-style.width/2, -style.height/2, style.width, style.height);
+      if (this.fill) {
+        this.canvas.context.fillStyle = this.fill;
+        this.canvas.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+      }
       // draw gauge
-      this.canvas.context.fillStyle = style.gaugeColor;
-      this.canvas.fillRect(-style.width/2, -style.height/2, style.width*rate, style.height);
+      this.canvas.context.fillStyle = this.gaugeColor;
+      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
       // draw stroke
-      if (style.stroke) {
-        this.canvas.context.lineWidth = style.strokeWidth;
-        this.canvas.strokeStyle = style.strokeColor;
-        this.canvas.strokeRect(-style.width/2, -style.height/2, style.width, style.height);
+      if (this.stroke) {
+        this.canvas.context.lineWidth = this.strokeWidth;
+        this.canvas.strokeStyle = this.stroke;
+        this.canvas.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
       }
     },
 
     _accessor: {
       value: {
         get: function() {
-          return this.style.value;
+          return this._value;
         },
         set: function(v) {
+          this._dirtyDraw = true;
           this.setValue(v);
         },
       },
       maxValue: {
         get: function() {
-          return this.style.maxValue;
+          return this._maxValue;
         },
         set: function(v) {
-          this.style.maxValue = v;
+          this._dirtyDraw = true; this._maxValue = v;
+        },
+      },
+      gaugeColor: {
+        get: function() {
+          return this._gaugeColor;
+        },
+        set: function(v) {
+          this._dirtyDraw = true; this._gaugeColor = v;
+        },
+      },
+      cornerRadius: {
+        get: function() {
+          return this._cornerRadius;
+        },
+        set: function(v) {
+          this._dirtyDraw = true; this._cornerRadius = v;
         },
       },
     }
