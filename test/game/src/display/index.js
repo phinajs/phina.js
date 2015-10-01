@@ -1,5 +1,10 @@
 th.describe("display.Shape", function() {
 
+  th.it('Shape', function() {
+    var shape = phina.display.Shape().addChildTo(this);
+    shape.position.set(100, 100);
+  });
+
   th.it('CircleShape', function() {
     var shape = phina.display.CircleShape().addChildTo(this);
     shape.position.set(100, 100);
@@ -12,7 +17,9 @@ th.describe("display.Shape", function() {
     var shape = phina.display.RectangleShape({
       width: 128,
       height: 32,
-      color: 'green',
+      fill: 'green',
+      stroke: false,
+      cornerRadius: 8,
     }).addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(6));
   });
