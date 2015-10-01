@@ -18,6 +18,9 @@ phina.namespace(function() {
         fill: '#00a',
         stroke: '#aaa',
         strokeWidth: 4,
+
+        shadow: false,
+        shadowBlur: 4,
       });
       this.superInit(options);
 
@@ -27,6 +30,9 @@ phina.namespace(function() {
       this.fill = options.fill;
       this.stroke = options.stroke;
       this.strokeWidth = options.strokeWidth;
+      
+      this.shadow = options.shadow;
+      this.shadowBlur = options.shadowBlur;
 
       this.canvas = phina.graphics.Canvas();
       this._dirtyDraw = true;
@@ -115,6 +121,24 @@ phina.namespace(function() {
         set: function(v) {
           this._dirtyDraw = true;
           this._strokeWidth = v;
+        },
+      },
+      shadow: {
+        get: function() {
+          return this._shadow;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._shadow = v;
+        },
+      },
+      shadowBlur: {
+        get: function() {
+          return this._shadowBlur;
+        },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._shadowBlur = v;
         },
       },
     },
