@@ -175,7 +175,7 @@ phina.namespace(function() {
       if (this.fill) {
         this.canvas.context.fillStyle = this.fill;
         this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      ｝
+      }
 
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
@@ -194,11 +194,10 @@ phina.namespace(function() {
         },
       }
     },
-
   });
 
   /**
-   * @class phina.display.Shape
+   * @class phina.display.CircleShape
    *
    */
   phina.define('phina.display.CircleShape', {
