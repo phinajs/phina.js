@@ -224,15 +224,15 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
+      if (this.fill) {
+        this.canvas.context.fillStyle = this.fill;
+        this.canvas.fillCircle(0, 0, this.radius);
+      }
+
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
         this.canvas.strokeCircle(0, 0, this.radius);
-      }
-
-      if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillCircle(0, 0, this.radius);
       }
     },
 
