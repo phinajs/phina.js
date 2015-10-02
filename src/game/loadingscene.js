@@ -22,7 +22,7 @@ phina.namespace(function() {
       this.fromJSON({
         children: {
           gauge: {
-            className: 'phina.game.Gauge',
+            className: 'phina.ui.Gauge',
             arguments: {
               value: 0,
               width: this.width,
