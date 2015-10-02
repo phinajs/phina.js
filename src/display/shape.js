@@ -173,8 +173,8 @@ phina.namespace(function() {
       this.canvas.transformCenter();
 
       if (this.fill) {
-      　this.canvas.context.fillStyle = this.fill;
-      　this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        this.canvas.context.fillStyle = this.fill;
+        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       ｝
 
       if (this.stroke) {
