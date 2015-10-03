@@ -102,12 +102,15 @@ th.describe("accessory.Tweener", function() {
   });
 
   th.it('loop', function() {
-    var shape = phina.display.RectangleShape().addChildTo(this);
-    var tweener = phina.accessory.Tweener().attachTo(shape);
-    tweener.setLoop(true);
+    var label = phina.display.Label('Hello, runstant!').addChildTo(this);
+    label.setPosition(320, 480);
+
+    var tweener = phina.accessory.Tweener().attachTo(label);
     tweener
-      .set({x:0, y:0})
-      .to({x:320, y:480}, 1000)
+      .setLoop(true)
+      .set({rotation: 0})
+      .to({rotation: 360}, 1000)
+      ;
   });
 
   th.it('fromJSON', function() {
