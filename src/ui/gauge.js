@@ -189,9 +189,9 @@ phina.namespace(function() {
     _render: function() {
       var canvas = this.canvas;
 
-      this.canvas.width = this.radius*2 + this.padding*2;
-      this.canvas.height= this.radius*2 + this.padding*2;
-      this.canvas.clearColor(this.backgroundColor);
+      var size = this.radius*2 + this.padding*2;
+      this._renderBackground(size, size);
+
       this.canvas.transformCenter();
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
@@ -204,7 +204,6 @@ phina.namespace(function() {
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
-
         this.canvas.strokeArc(0, 0, this.radius, startAngle, endAngle);
       }
 
