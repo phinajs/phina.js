@@ -28,6 +28,11 @@ th.describe("display.Shape", function() {
     }).addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(6));
   });
+
+  th.it('TriangleShape', function() {
+    var shape = phina.display.TriangleShape().addChildTo(this);
+    shape.position.set(this.gridX.center(), this.gridY.span(4));
+  });
 });
 
 
