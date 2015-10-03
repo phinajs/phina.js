@@ -437,3 +437,61 @@ phina.namespace(function() {
 
 });
 
+
+phina.namespace(function() {
+  /**
+   * @class phina.display.HeartShape
+   *
+   */
+  phina.define('phina.display.HeartShape', {
+    superClass: 'phina.display.Shape',
+    init: function(options) {
+      options = (options || {}).$safe({
+        backgroundColor: 'transparent',
+        fill: 'pink',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        cornerAngle: 45,
+      });
+      this.superInit(options);
+
+      this.radius = options.radius;
+      this.cornerAngle = options.cornerAngle;
+    },
+
+    _render: function() {
+      var size = this.radius*2 + this.padding*2;
+      this._renderBackground(size, size);
+
+      var canvas = this.canvas;
+
+      canvas.transformCenter();
+
+      if (this.fill) {
+        canvas.context.fillStyle = this.fill;
+        canvas.fillHeart(0, 0, this.radius, this.cornerAngle);
+      }
+
+      if (this.stroke) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeHeart(0, 0, this.radius, this.cornerAngle);
+      }
+    },
+
+    _accessor: {
+      radius: {
+        get: function() { return this._radius; },
+        set: function(v) { this._dirtyDraw = true; this._radius = v; },
+      },
+      cornerAngle: {
+        get: function() { return this._cornerAngle; },
+        set: function(v) { this._dirtyDraw = true; this._cornerAngle = v; },
+      },
+    },
+  });
+
+});
+

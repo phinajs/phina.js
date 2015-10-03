@@ -43,6 +43,11 @@ th.describe("display.Shape", function() {
     var shape = phina.display.PolygonShape().addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(4));
   });
+
+  th.it('HeartShape', function() {
+    var shape = phina.display.HeartShape().addChildTo(this);
+    shape.position.set(this.gridX.center(), this.gridY.span(4));
+  });
 });
 
 

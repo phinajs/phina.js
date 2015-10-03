@@ -487,6 +487,49 @@ phina.namespace(function() {
       return this;
     },
 
+    /*
+     * heart
+     */
+    heart: function(x, y, radius, angle) {
+      var half_radius = radius*0.5;
+      var rad = (angle === undefined) ? Math.PI/4 : Math.degToRad(angle);
+
+      // 半径 half_radius の角度 angle 上の点との接線を求める
+      var p = Math.cos(rad)*half_radius;
+      var q = Math.sin(rad)*half_radius;
+
+      // 円の接線の方程式 px + qy = r^2 より y = (r^2-px)/q
+      var x2 = -half_radius;
+      var y2 = (half_radius*half_radius-p*x2)/q;
+
+      // 中心位置調整
+      var height = y2 + half_radius;
+      var offsetY = half_radius-height/2;
+
+      // パスをセット
+      this.moveTo(0+x, y2+y+offsetY);
+
+      this.arc(-half_radius+x, 0+y+offsetY, half_radius, Math.PI-rad, Math.PI*2);
+      this.arc(half_radius+x, 0+y+offsetY, half_radius, Math.PI, rad);
+      this.closePath();
+
+      return this;
+    },
+
+    /*
+     * fill heart
+     */
+    fillHeart: function(x, y, radius, angle) {
+      return this.beginPath().heart(x, y, radius, angle).fill();
+    },
+
+    /*
+     * stroke heart
+     */
+    strokeHeart: function(x, y, radius, angle) {
+      return this.beginPath().heart(x, y, radius, angle).stroke();
+    },
+
     /**
      * 行列をセット
      */
