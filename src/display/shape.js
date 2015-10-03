@@ -317,3 +317,64 @@ phina.namespace(function() {
 
 });
 
+phina.namespace(function() {
+  /**
+   * @class phina.display.StarShape
+   *
+   */
+  phina.define('phina.display.StarShape', {
+    superClass: 'phina.display.Shape',
+    init: function(options) {
+      options = (options || {}).$safe({
+        backgroundColor: 'transparent',
+        fill: 'yellow',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        sides: 5,
+        sideIndent: 0.38,
+      });
+      this.superInit(options);
+
+      this.radius = options.radius;
+    },
+
+    _render: function() {
+      var size = this.radius*2 + this.padding*2;
+      this._renderBackground(size, size);
+
+      var canvas = this.canvas;
+
+      canvas.transformCenter();
+
+      if (this.fill) {
+        canvas.context.fillStyle = this.fill;
+        canvas.fillStar(0, 0, this.radius, this.sides, this.sideIndent);
+      }
+
+      if (this.stroke) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeStar(0, 0, this.radius, this.sides, this.sideIndent);
+      }
+    },
+
+    _accessor: {
+      radius: {
+        get: function() { return this._radius; },
+        set: function(v) { this._dirtyDraw = true; this._radius = v; },
+      },
+      sides: {
+        get: function() { return this._sides; },
+        set: function(v) { this._dirtyDraw = true; this._sides = v; },
+      },
+      sideIndent: {
+        get: function() { return this._sideIndent; },
+        set: function(v) { this._dirtyDraw = true; this._sideIndent = v; },
+      },
+    },
+  });
+
+});
+
