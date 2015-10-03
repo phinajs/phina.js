@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Shape
-   * 
+   *
    */
   phina.define('phina.display.Shape', {
     superClass: 'phina.display.CanvasElement',
@@ -30,7 +30,7 @@ phina.namespace(function() {
       this.fill = options.fill;
       this.stroke = options.stroke;
       this.strokeWidth = options.strokeWidth;
-      
+
       this.shadow = options.shadow;
       this.shadowBlur = options.shadowBlur;
 
@@ -146,7 +146,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.RectangleShape
-   * 
+   *
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
@@ -172,14 +172,16 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
+      if (this.fill) {
+        this.canvas.context.fillStyle = this.fill;
+        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+      }
+
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
         this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
-
-      this.canvas.context.fillStyle = this.fill;
-      this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
     },
 
     _accessor: {
@@ -192,12 +194,11 @@ phina.namespace(function() {
         },
       }
     },
-
   });
 
   /**
-   * @class phina.display.Shape
-   * 
+   * @class phina.display.CircleShape
+   *
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
@@ -222,14 +223,16 @@ phina.namespace(function() {
 
       this.canvas.transformCenter();
 
+      if (this.fill) {
+        this.canvas.context.fillStyle = this.fill;
+        this.canvas.fillCircle(0, 0, this.radius);
+      }
+
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
         this.canvas.strokeCircle(0, 0, this.radius);
       }
-
-      this.canvas.context.fillStyle = this.fill;
-      this.canvas.fillCircle(0, 0, this.radius);
     },
 
     _accessor: {
@@ -245,4 +248,3 @@ phina.namespace(function() {
   });
 
 });
-
