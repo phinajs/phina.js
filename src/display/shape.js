@@ -338,6 +338,8 @@ phina.namespace(function() {
       this.superInit(options);
 
       this.radius = options.radius;
+      this.sides = options.sides;
+      this.sideIndent = options.sideIndent;
     },
 
     _render: function() {
@@ -372,6 +374,63 @@ phina.namespace(function() {
       sideIndent: {
         get: function() { return this._sideIndent; },
         set: function(v) { this._dirtyDraw = true; this._sideIndent = v; },
+      },
+    },
+  });
+
+});
+
+phina.namespace(function() {
+  /**
+   * @class phina.display.PolygonShape
+   *
+   */
+  phina.define('phina.display.PolygonShape', {
+    superClass: 'phina.display.Shape',
+    init: function(options) {
+      options = (options || {}).$safe({
+        backgroundColor: 'transparent',
+        fill: 'cyan',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        sides: 5,
+      });
+      this.superInit(options);
+
+      this.radius = options.radius;
+      this.sides = options.sides;
+    },
+
+    _render: function() {
+      var size = this.radius*2 + this.padding*2;
+      this._renderBackground(size, size);
+
+      var canvas = this.canvas;
+
+      canvas.transformCenter();
+
+      if (this.fill) {
+        canvas.context.fillStyle = this.fill;
+        canvas.fillPolygon(0, 0, this.radius, this.sides);
+      }
+
+      if (this.stroke) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokePolygon(0, 0, this.radius, this.sides);
+      }
+    },
+
+    _accessor: {
+      radius: {
+        get: function() { return this._radius; },
+        set: function(v) { this._dirtyDraw = true; this._radius = v; },
+      },
+      sides: {
+        get: function() { return this._sides; },
+        set: function(v) { this._dirtyDraw = true; this._sides = v; },
       },
     },
   });
