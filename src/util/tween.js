@@ -121,7 +121,7 @@
 
 
   /**
-   * @class tm.anim.easing
+   * @class phina.util.Tween.EASING
    * イージング
    * ### Reference
    * - <http://coderepos.org/share/wiki/JSTweener>
@@ -170,8 +170,8 @@
     },
     /** easeOutInCubic */
     easeOutInCubic: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutCubic(t*2, b, c/2, d);
-      return tm.anim.easing.easeInCubic((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutCubic(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInCubic((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInQuart */
     easeInQuart: function(t, b, c, d) {
@@ -188,8 +188,8 @@
     },
     /** easeOutInQuart */
     easeOutInQuart: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutQuart(t*2, b, c/2, d);
-      return tm.anim.easing.easeInQuart((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutQuart(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInQuart((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInQuint */
     easeInQuint: function(t, b, c, d) {
@@ -206,8 +206,8 @@
     },
     /** easeOutInQuint */
     easeOutInQuint: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutQuint(t*2, b, c/2, d);
-      return tm.anim.easing.easeInQuint((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutQuint(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInQuint((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInSine */
     easeInSine: function(t, b, c, d) {
@@ -223,8 +223,8 @@
     },
     /** easeOutInSine */
     easeOutInSine: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutSine(t*2, b, c/2, d);
-      return tm.anim.easing.easeInSine((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutSine(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInSine((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInExpo */
     easeInExpo: function(t, b, c, d) {
@@ -243,8 +243,8 @@
     },
     /** easeOutInExpo */
     easeOutInExpo: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutExpo(t*2, b, c/2, d);
-      return tm.anim.easing.easeInExpo((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutExpo(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInExpo((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInCirc */
     easeInCirc: function(t, b, c, d) {
@@ -261,8 +261,8 @@
     },
     /** easeOutInCirc */
     easeOutInCirc: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutCirc(t*2, b, c/2, d);
-      return tm.anim.easing.easeInCirc((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutCirc(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInCirc((t*2)-d, b+c/2, c/2, d);
     },
     /** easeInElastic */
     easeInElastic: function(t, b, c, d, a, p) {
@@ -288,8 +288,8 @@
     },
     /** easeOutInElastic */
     easeOutInElastic: function(t, b, c, d, a, p) {
-      if(t < d/2) return tm.anim.easing.easeOutElastic(t*2, b, c/2, d, a, p);
-      return tm.anim.easing.easeInElastic((t*2)-d, b+c/2, c/2, d, a, p);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutElastic(t*2, b, c/2, d, a, p);
+      return phina.util.Tween.EASING.easeInElastic((t*2)-d, b+c/2, c/2, d, a, p);
     },
     /** easeInBack */
     easeInBack: function(t, b, c, d, s) {
@@ -309,12 +309,12 @@
     },
     /** easeOutInBack */
     easeOutInBack: function(t, b, c, d, s) {
-      if(t < d/2) return tm.anim.easing.easeOutBack(t*2, b, c/2, d, s);
-      return tm.anim.easing.easeInBack((t*2)-d, b+c/2, c/2, d, s);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutBack(t*2, b, c/2, d, s);
+      return phina.util.Tween.EASING.easeInBack((t*2)-d, b+c/2, c/2, d, s);
     },
     /** easeInBounce */
     easeInBounce: function(t, b, c, d) {
-      return c - tm.anim.easing.easeOutBounce(d-t, 0, c, d) + b;
+      return c - phina.util.Tween.EASING.easeOutBounce(d-t, 0, c, d) + b;
     },
     /** easeOutBounce */
     easeOutBounce: function(t, b, c, d) {
@@ -330,13 +330,13 @@
     },
     /** easeInOutBounce */
     easeInOutBounce: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeInBounce(t*2, 0, c, d) * .5 + b;
-      else return tm.anim.easing.easeOutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
+      if(t < d/2) return phina.util.Tween.EASING.easeInBounce(t*2, 0, c, d) * .5 + b;
+      else return phina.util.Tween.EASING.easeOutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
     },
     /** easeOutInBounce */
     easeOutInBounce: function(t, b, c, d) {
-      if(t < d/2) return tm.anim.easing.easeOutBounce(t*2, b, c/2, d);
-      return tm.anim.easing.easeInBounce((t*2)-d, b+c/2, c/2, d);
+      if(t < d/2) return phina.util.Tween.EASING.easeOutBounce(t*2, b, c/2, d);
+      return phina.util.Tween.EASING.easeInBounce((t*2)-d, b+c/2, c/2, d);
     }
   };
 
