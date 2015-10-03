@@ -43,9 +43,7 @@ phina.namespace(function() {
       var canvas = this.canvas;
       var context = canvas.context;
 
-      canvas.width = this.width + this.padding*2;
-      canvas.height= this.height + this.padding*2;
-      canvas.clearColor(this.backgroundColor);
+      this._renderBackground();
 
       canvas.transformCenter();
 

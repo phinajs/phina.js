@@ -46,10 +46,21 @@ phina.namespace(function() {
     },
 
     _render: function() {
-      this.canvas.width = this.width + this.padding*2;
-      this.canvas.height= this.height + this.padding*2;
+      this._renderBackground();
 
-      this.canvas.clearColor(this.backgroundColor);
+      return this;
+    },
+
+    _renderBackground: function(width, height, color) {
+      width = width || (this.width + this.padding*2);
+      height = height || (this.height + this.padding*2);
+      color = color || this.backgroundColor;
+
+      this.canvas.width = width;
+      this.canvas.height= height;
+      this.canvas.clearColor(color);
+
+      return this;
     },
 
     draw: function(canvas) {
@@ -166,9 +177,7 @@ phina.namespace(function() {
     },
 
     _render: function() {
-      this.canvas.width = this.width + this.padding*2;
-      this.canvas.height= this.height + this.padding*2;
-      this.canvas.clearColor(this.backgroundColor);
+      this._renderBackground();
 
       this.canvas.transformCenter();
 
@@ -217,9 +226,8 @@ phina.namespace(function() {
     },
 
     _render: function() {
-      this.canvas.width = this.radius*2 + this.padding*2;
-      this.canvas.height= this.radius*2 + this.padding*2;
-      this.canvas.clearColor(this.backgroundColor);
+      var size = this.radius*2 + this.padding*2;
+      this._renderBackground(size, size);
 
       this.canvas.transformCenter();
 
