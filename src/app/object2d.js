@@ -32,7 +32,7 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
-      this.boundingType = "rect";
+      this.boundingType = 'rect';
     },
 
     /**
@@ -44,6 +44,15 @@ phina.namespace(function() {
     //   return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
     // },
     hitTest: function(x, y) {
+      if (this.boundingType === 'rect') {
+        return this.hitTestRect(x, y);
+      }
+      else {
+        return this.hitTestCircle(x, y);
+      }
+    },
+
+    hitTestRect: function(x, y) {
       var p = this.globalToLocal(phina.geom.Vector2(x, y));
 
       var left   = -this.width*this.originX;
@@ -52,6 +61,15 @@ phina.namespace(function() {
       var bottom = +this.height*(1-this.originY);
 
       return ( left < p.x && p.x < right ) && ( top  < p.y && p.y < bottom );
+    },
+
+    hitTestCircle: function(x, y) {
+      // 円判定
+      var p = this.globalToLocal(phina.geom.Vector2(x, y));
+      if (((p.x)*(p.x)+(p.y)*(p.y)) < (this.radius*this.radius)) {
+          return true;
+      }
+      return false;
     },
 
     /**
@@ -178,6 +196,10 @@ phina.namespace(function() {
       return this;
     },
 
+    setBoundingType: function(type) {
+      this.boundingType = type;
+      return this;
+    },
 
     _calcWorldMatrix: function() {
       if (!this.parent) return ;
