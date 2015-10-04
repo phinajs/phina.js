@@ -13,6 +13,7 @@
     "geom/matrix33.js",
     "geom/rect.js",
     "geom/circle.js",
+    "geom/collision.js",
 
     "util/eventdispatcher.js",
     "util/tween.js",
