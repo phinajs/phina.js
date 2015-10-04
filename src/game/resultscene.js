@@ -7,7 +7,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.ResultScene
-   * 
+   *
    */
   phina.define('phina.game.ResultScene', {
     superClass: 'phina.display.CanvasScene',
@@ -28,7 +28,7 @@ phina.namespace(function() {
             arguments: {
               text: 'score',
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 48,
             },
             x: this.gridX.span(8),
@@ -39,7 +39,7 @@ phina.namespace(function() {
             arguments: {
               text: params.score+'',
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 80,
             },
             x: this.gridX.span(8),
@@ -51,7 +51,7 @@ phina.namespace(function() {
             arguments: {
               text: params.message,
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 32,
             },
             x: this.gridX.span(8),
@@ -110,7 +110,7 @@ phina.namespace(function() {
         score: 16,
 
         message: 'this is phina.js project.\n',
-        hashtags: 'phina,game,javascript',
+        hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
         width: 640,
