@@ -6040,21 +6040,17 @@ phina.namespace(function() {
       this.superInit();
     },
 
-    exit: function(param) {
+    exit: function(params) {
       if (!this.app) return ;
 
-      if (typeof param !== 'object') {
+      if (typeof params !== 'object') {
         var temp = {};
         temp.nextLabel = arguments[0];
         temp.nextArguments = arguments[1];
-        param = temp;
+        params = temp;
       }
-
-      if (param.nextLabel) {
-        this.nextLabel = param.nextLabel;
-      }
-      if (param.nextArguments) {
-        this.nextArguments = param.nextArguments;
+      else if (params) {
+        this.nextArguments = params;
       }
 
       this.app.popScene();
@@ -8536,10 +8532,14 @@ phina.namespace(function() {
         height: 960,
         columns: 12,
         fit: true,
+        append: true,
       });
       
       if (!options.query && !options.domElement) {
         options.domElement = document.createElement('canvas');
+        if (options.append) {
+          document.body.appendChild(options.domElement);
+        }
       }
       this.superInit(options);
 

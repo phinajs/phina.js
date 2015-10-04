@@ -17,10 +17,14 @@ phina.namespace(function() {
         height: 960,
         columns: 12,
         fit: true,
+        append: true,
       });
       
       if (!options.query && !options.domElement) {
         options.domElement = document.createElement('canvas');
+        if (options.append) {
+          document.body.appendChild(options.domElement);
+        }
       }
       this.superInit(options);
 
