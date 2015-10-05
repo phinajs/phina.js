@@ -224,6 +224,96 @@
    */
 
   /**
+   * @method  round
+   * 四捨五入
+   * 桁数指定版
+   */
+  Number.prototype.method("round", function(figure) {
+    figure = figure || 0;
+    var base = Math.pow(10, figure);
+    var temp = this * base;
+    temp = Math.round(temp);
+    return temp/base;
+  });
+  
+  /**
+   * @method  ceil
+   * 切り上げ.
+   * 桁数指定版
+   */
+  Number.prototype.method("ceil",  function(figure) {
+    figure = figure || 0;
+    var base = Math.pow(10, figure);
+    var temp = this * base;
+    temp = Math.ceil(temp);
+    return temp/base;
+  });
+  /**
+   * @method  floor
+   * 切り捨て
+   * 桁数指定版
+   */
+  Number.prototype.method("floor",  function(figure) {
+    figure = figure || 0;
+    var base = Math.pow(10, figure);
+    var temp = this * base;
+    temp = Math.floor(temp);
+    
+    // ~~this
+    // this|0
+    
+    return temp/base;
+  });
+  
+  /**
+   * @method  toInt
+   * integer 型に変換する
+   */
+  Number.prototype.method("toInt",  function() {
+    return (this | 0);
+  });
+  
+  /**
+   * @method  toHex
+   * 16進数化
+   */
+  Number.prototype.method("toHex",  function() {
+    return this.toString(16);
+  });
+  
+  /**
+   * @method  toBin
+   * 2進数化
+   */
+  Number.prototype.method("toBin",  function() {
+    return this.toString(2);
+  });
+  
+  
+  /**
+   * @method  toUnsigned
+   * unsigned 型に変換する
+   */
+  Number.prototype.method("toUnsigned",  function() {
+    return this >>> 0;
+  });
+  
+  /**
+   * @method  padding
+   * 文字埋め
+   */
+  Number.prototype.method("padding",  function(n, ch) {
+    var str = this+'';
+    n  = n-str.length;
+    ch = ch || '0';
+    
+    while(n-- > 0) { str = ch + str; }
+    
+    return str;
+  });
+
+
+  /**
    * @method  times
    * 数値分繰り返す
    */
@@ -234,6 +324,135 @@
     }
     return this;
   });
+
+  /**
+   * @method  upto
+   * インクリメント繰り返し
+   */
+  Number.prototype.method("upto",  function(t, fn, self) {
+    self = self || this;
+    for (var i=+this; i<=t; ++i) {
+      fn.call(self, i);
+    }
+    return this;
+  });
+  
+  /**
+   * @method  downto
+   * デクリメント繰り返し
+   */
+  Number.prototype.method("downto",  function(t, fn, self) {
+    self = self || this;
+    for (var i=+this; i>=t; --i) {
+      fn.call(self, i);
+    }
+    return this;
+  });
+
+  /**
+   * @method step
+   * ステップ繰り返し(float対応)
+   */
+  Number.prototype.method("step",  function(limit, step, fn, self) {
+    self = self || this;
+    for (var i=+this; i<=limit; i+=step) {
+      fn.call(self, i);
+    }
+    return this;
+  });
+
+  /**
+   * @method  map
+   * 数値分繰り返す
+   */
+  Number.prototype.method("map",  function(fn, self) {
+    self = self || this;
+
+    var results = [];
+    for (var i=0; i<this; ++i) {
+      var r = fn.call(self, i);
+      results.push(r);
+    }
+    return results;
+  });
+
+  /**
+   * @method abs
+   * 絶対値
+   */
+  Number.prototype.method("abs", function() { return Math.abs(this) });
+
+  /**
+   * @method acos
+   * アークコサイン
+   */
+  Number.prototype.method("acos", function() { return Math.acos(this) });
+
+  /**
+   * @method asin
+   * アークサイン
+   */
+  Number.prototype.method("asin", function() { return Math.asin(this) });
+
+  /**
+   * @method atan
+   * アークタンジェント
+   */
+  Number.prototype.method("atan", function() { return Math.atan(this) });
+
+  /**
+   * @method cos
+   * コサイン
+   */
+  Number.prototype.method("cos", function() { return Math.cos(this) });
+
+  /**
+   * @method exp
+   * E^num
+   */
+  Number.prototype.method("exp", function() { return Math.exp(this) });
+
+  /**
+   * @method log
+   * 自然対数
+   */
+  Number.prototype.method("log", function() { return Math.log(this) });
+
+  /**
+   * @method max
+   * max
+   */
+  Number.prototype.method("max", function(value) { return Math.max(this, value) });
+
+  /**
+   * @method min
+   * min
+   */
+  Number.prototype.method("min", function(value) { return Math.min(this, value) });
+
+  /**
+   * @method pow
+   * 乗数
+   */
+  Number.prototype.method("pow", function(exponent) { return Math.pow(this, exponent) });
+
+  /**
+   * @method sin
+   * サイン
+   */
+  Number.prototype.method("sin", function() { return Math.sin(this) });
+
+  /**
+   * @method sqrt
+   * 平方根
+   */
+  Number.prototype.method("sqrt", function() { return Math.sqrt(this) });
+
+  /**
+   * @method tan
+   * タンジェント
+   */
+  Number.prototype.method("tan", function() { return Math.tan(this) });
 
 })();
 
@@ -662,7 +881,7 @@
   Array.prototype.method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ phina.util.Random.randint(min, max) ];
   });
   
   /**
@@ -672,7 +891,7 @@
   Array.prototype.method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ phina.util.Random.randint(min, max) ];
   });
   
   /**
@@ -682,7 +901,7 @@
   Array.prototype.method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ phina.util.Random.randint(min, max) ];
   });
   
   /**
@@ -796,7 +1015,7 @@
    */
   Array.prototype.method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
-      var j = Math.rand(0, len-1);
+      var j = phina.util.Random.randint(0, len-1);
       
       if (i != j) {
         this.swap(i, j);
@@ -1384,7 +1603,7 @@ phina.namespace(function() {
      * ランダムベクトルをセット
      */
     random: function(min, max) {
-      var degree = Math.randf(min || 0, max || 360);
+      var degree = phina.util.Random.randfloat(min || 0, max || 360);
       var rad = degree*Math.DEG_TO_RAD;
 
       this.x = Math.cos(rad);
@@ -3080,6 +3299,92 @@ phina.namespace(function() {
       },
     }
   };
+
+});
+
+/*
+ * random.js
+ */
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.util.Random
+   * ランダムクラス
+   */
+  phina.define("phina.util.Random", {
+
+    seed: 1,
+
+    init: function(seed) {
+      this.seed = seed || (Date.now());
+    },
+
+    random: function() {
+      var seed = this.seed;
+      seed = seed ^ (seed << 13);
+      seed = seed ^ (seed >>> 17);
+      seed = (seed ^ (seed << 5));
+
+      this.seed = seed;
+
+      return (seed >>> 0) / phina.util.Random.MAX;
+    },
+
+    randint: function(min, max) {
+      return Math.floor( this.random()*(max-min+1) ) + min;
+    },
+    randfloat: function(min, max) {
+      return this.random()*(max-min)+min;
+    },
+    randbool: function() {
+      return this.randint(0, 1) === 1;
+    },
+
+    _accessor: {
+      seed: {
+        get: function() { return this._seed; },
+        set: function (v) { this._seed = v; },
+      },
+    },
+
+    _static: {
+      MAX: 4294967295,
+
+      seed: (Date.now()),
+
+      setSeed: function(seed) {
+        this.seed = seed;
+        return this;
+      },
+      getSeed: function() {
+        return this.seed;
+      },
+
+      random: function() {
+        this.seed = this.xor32(this.seed);
+        return (this.seed >>> 0) / phina.util.Random.MAX;
+      },
+
+      randint: function(min, max) {
+        return window.Math.floor( this.random()*(max-min+1) ) + min;
+      },
+      randfloat: function(min, max) {
+        return this.random()*(max-min)+min;
+      },
+      randbool: function() {
+        return this.randint(0, 1) === 1;
+      },
+
+      xor32: function(seed) {
+        seed = seed ^ (seed << 13);
+        seed = seed ^ (seed >>> 17);
+        seed = (seed ^ (seed << 5));
+
+        return seed;
+      },
+    },
+  });
 
 });
 
@@ -9240,7 +9545,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.ResultScene
-   * 
+   *
    */
   phina.define('phina.game.ResultScene', {
     superClass: 'phina.display.CanvasScene',
@@ -9261,7 +9566,7 @@ phina.namespace(function() {
             arguments: {
               text: 'score',
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 48,
             },
             x: this.gridX.span(8),
@@ -9272,7 +9577,7 @@ phina.namespace(function() {
             arguments: {
               text: params.score+'',
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 80,
             },
             x: this.gridX.span(8),
@@ -9284,7 +9589,7 @@ phina.namespace(function() {
             arguments: {
               text: params.message,
               fill: params.fontColor,
-              stroke: false,
+              stroke: null,
               fontSize: 32,
             },
             x: this.gridX.span(8),
@@ -9343,7 +9648,7 @@ phina.namespace(function() {
         score: 16,
 
         message: 'this is phina.js project.\n',
-        hashtags: 'phina,game,javascript',
+        hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
         width: 640,
