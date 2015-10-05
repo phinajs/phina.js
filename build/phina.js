@@ -3344,7 +3344,7 @@ phina.namespace(function() {
     _accessor: {
       seed: {
         get: function() { return this._seed; },
-        set: function (v) { this._seed = v; },
+        set: function (v) { this._seed = v || 1; },
       },
     },
 
@@ -3353,12 +3353,12 @@ phina.namespace(function() {
 
       seed: (Date.now()),
 
-      setSeed: function(seed) {
-        this.seed = seed;
-        return this;
-      },
       getSeed: function() {
         return this.seed;
+      },
+      setSeed: function(seed) {
+        this.seed = seed || 1;
+        return this;
       },
 
       random: function() {
