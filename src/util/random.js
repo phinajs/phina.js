@@ -40,7 +40,7 @@ phina.namespace(function() {
     _accessor: {
       seed: {
         get: function() { return this._seed; },
-        set: function (v) { this._seed = v || 1; },
+        set: function (v) { this._seed = (v >>> 0) || 1; },
       },
     },
 
@@ -53,7 +53,7 @@ phina.namespace(function() {
         return this.seed;
       },
       setSeed: function(seed) {
-        this.seed = seed || 1;
+        this.seed = (seed >>> 0) || 1;
         return this;
       },
 
