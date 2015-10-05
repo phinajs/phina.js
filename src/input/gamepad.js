@@ -1,8 +1,8 @@
 phina.namespace(function() {
 
   /**
+   * @class phina.input.GamepadManager
    * ゲームパッドマネージャー.
-   *
    * ゲームパッド接続状況の監視、個々のゲームパッドの入力状態の更新を行う.
    */
   phina.define('phina.input.GamepadManager', {
@@ -25,11 +25,14 @@ phina.namespace(function() {
 
     /**
      * ラップ前Gamepadのリスト
-     * @type {Gamepad[]}
+     * @type {phina.input.Gamepad[]}
      * @private
      */
     _rawgamepads: null,
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
 
@@ -161,6 +164,7 @@ phina.namespace(function() {
   });
 
   /**
+   * @class phina.input.Gamepad
    * ゲームパッド
    *
    * 直接インスタンス化せず、phina.input.GamepadManagerオブジェクトから取得して使用する.
