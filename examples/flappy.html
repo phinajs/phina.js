@@ -110,7 +110,7 @@ phina.main(function() {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     assets: ASSETS,
-    startLabel: 'title',
+    startLabel: location.search.substr(1).toObject().scene || 'title',
   });
 
   app.enableStats();

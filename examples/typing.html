@@ -24,6 +24,13 @@ var SCREEN_HEIGHT   = 960;
 var PIECE_SIZE      = 80;
 var PIECE_SIZE_HALF = PIECE_SIZE/2;
 
+var ASSETS = {
+  sound: {
+    'correct': '../assets/sounds/correct.mp3',
+  },
+};
+
+
 phina.define("MainScene", {
   superClass: 'CanvasScene',
 
@@ -54,7 +61,6 @@ phina.define("MainScene", {
 
   onkeydown: function(e) {
     var ch = String.fromCharCode(e.keyCode)
-    console.log(ch);
     var wordGroup = this.wordGroup;
     var result = wordGroup.children.some(function(word) {
       if (word.enable && word.text === ch) {
@@ -67,6 +73,8 @@ phina.define("MainScene", {
     if (result) {
       this.score += 1;
       this.scoreLabel.text = this.score + '';
+
+      AssetManager.get('sound', 'correct').play();
     }
   },
 
@@ -135,10 +143,10 @@ phina.define('Word', {
 phina.main(function() {
   var app = GameApp({
     title: 'typing game',
-    startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    startLabel: 'main',
+    assets: ASSETS,
+    startLabel: location.search.substr(1).toObject().scene || 'title',
   });
 
   app.enableStats();
