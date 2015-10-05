@@ -41,6 +41,14 @@ $gulp watch
 $gulp webserver
 ```
 
+### develop
+
+watch and launch
+
+```
+$gulp dev
+```
+
 
 ### runstant
 
