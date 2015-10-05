@@ -8,6 +8,9 @@ phina.namespace(function() {
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
 
+    /**
+     * @constructor
+     */
     init: function(options) {
       if (typeof arguments[0] === 'string') {
         options = { text: arguments[0], };
@@ -111,30 +114,51 @@ phina.namespace(function() {
     },
 
     _accessor: {
+      /**
+       * text
+       */
       text: {
         get: function() { return this._text; },
         set: function(v) { this._dirtyDraw = true; this._text = v; },
       },
+      /**
+       * font size
+       */
       fontSize: {
         get: function() { return this._fontSize; },
         set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
       },
+      /**
+       * font weight
+       */
       fontWeight: {
         get: function() { return this._fontWeight; },
         set: function(v) { this._dirtyDraw = true; this._fontWeight = v; },
       },
+      /**
+       * font family
+       */
       fontFamily: {
         get: function() { return this._fontFamily; },
         set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
       },
+      /**
+       * align
+       */
       align: {
         get: function() { return this._align; },
         set: function(v) { this._dirtyDraw = true; this._align = v; },
       },
+      /**
+       * baseline
+       */
       baseline: {
         get: function() { return this._baseline; },
         set: function(v) { this._dirtyDraw = true; this._baseline = v; },
       },
+      /**
+       * line height
+       */
       lineHeight: {
         get: function() { return this._lineHeight; },
         set: function(v) { this._dirtyDraw = true; this._lineHeight = v; },

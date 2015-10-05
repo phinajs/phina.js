@@ -8375,6 +8375,9 @@ phina.namespace(function() {
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
 
+    /**
+     * @constructor
+     */
     init: function(options) {
       if (typeof arguments[0] === 'string') {
         options = { text: arguments[0], };
