@@ -53,6 +53,7 @@
       set: fn,
       enumerable: false,
       configurable: true,
+      writable: true,
     });
   });
 
@@ -65,6 +66,7 @@
       get: fn,
       enumerable: false,
       configurable: true,
+      writable: true,
     });
   });
 
@@ -78,6 +80,7 @@
       get: param["get"],
       enumerable: false,
       configurable: true,
+      writable: true,
     });
   });
 
