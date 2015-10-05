@@ -710,7 +710,13 @@
 ;(function() {
 
   /**
-   * @property    first
+   * @class global.Array
+   * Array の拡張
+   */
+
+
+  /**
+   * @property  first
    * 最初の要素
    */
   Array.prototype.accessor("first", {
@@ -895,7 +901,7 @@
   });
   
   /**
-   * @method  pickup
+   * @method  lot
    * 要素の中からランダムで取り出す
    */
   Array.prototype.method("lot", function(min, max) {
@@ -1091,8 +1097,6 @@
   /**
    * @method of
    * of関数 可変長引数をとってArrayにして返す
-   * @example:
-   * Array.of('a', 'b', 'c'); // ['a', 'b', 'c']
    * ES6準拠
    */
   Array.method("of", function() {
@@ -1102,19 +1106,6 @@
   /**
    * @method from
    * from関数 Array like objectに対してArrayのメソッドを追加する
-   * @example:
-   *
-   * 1.
-   * function array () {
-   *   return Array.from(arguments);
-   * }
-   *
-   * array(1,2,3); // [1, 2, 3];
-   *
-   * 2.
-   * Array.from(document.body).forEach(function(item) {
-   *    return item;
-   * });
    *
    * ES6準拠
    */
@@ -1241,11 +1232,21 @@
 
 
 /*
- * tm namespace
+ * phina.js namespace
  */
 var phina = phina || {};
 
 ;(function() {
+
+  /**
+   * @class phina
+   * phina.js namespace
+   */
+
+  /**
+   * バージョン
+   */
+  phina.VERSION = '0.0.1';
 
   phina.method('isNode', function() {
     return (typeof module !== 'undefined');
@@ -1257,7 +1258,8 @@ var phina = phina || {};
 
   var ns = phina.isNode() ? global : window;
 
-  /*
+  /**
+   * @method global
    * global
    */
   phina.accessor('global', {
@@ -1267,6 +1269,7 @@ var phina = phina || {};
   });
 
   /**
+   * @method isMobile
    * mobile かどうかをチェック
    */
   phina.method('isMobile', function() {
@@ -4920,8 +4923,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
+   * @class phina.input.GamepadManager
    * ゲームパッドマネージャー.
-   *
    * ゲームパッド接続状況の監視、個々のゲームパッドの入力状態の更新を行う.
    */
   phina.define('phina.input.GamepadManager', {
@@ -4944,11 +4947,14 @@ phina.namespace(function() {
 
     /**
      * ラップ前Gamepadのリスト
-     * @type {Gamepad[]}
+     * @type {phina.input.Gamepad[]}
      * @private
      */
     _rawgamepads: null,
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
 
@@ -5080,6 +5086,7 @@ phina.namespace(function() {
   });
 
   /**
+   * @class phina.input.Gamepad
    * ゲームパッド
    *
    * 直接インスタンス化せず、phina.input.GamepadManagerオブジェクトから取得して使用する.
@@ -5965,6 +5972,9 @@ phina.namespace(function() {
     origin: null,
 
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
       
@@ -5987,9 +5997,6 @@ phina.namespace(function() {
      * @param {Number} x
      * @param {Number} y
      */
-    // hitTest: function(x, y) {
-    //   return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
-    // },
     hitTest: function(x, y) {
       if (this.boundingType === 'rect') {
         return this.hitTestRect(x, y);
@@ -6442,6 +6449,10 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.accessory.Tweener
+   * Tweener
+   */
   phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
@@ -6741,6 +6752,10 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.accessory.Draggable
+   * Draggable
+   */
   phina.define('phina.accessory.Draggable', {
     superClass: 'phina.accessory.Accessory',
 
@@ -6808,6 +6823,10 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.accessory.FrameAnimation
+   * FrameAnimation
+   */
   phina.define('phina.accessory.FrameAnimation', {
     superClass: 'phina.accessory.Accessory',
 
@@ -8550,7 +8569,7 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class
+   * @class phina.display.Layer
    */
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.CanvasElement',
