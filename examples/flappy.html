@@ -109,10 +109,9 @@ phina.main(function() {
   var app = GameApp({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    // assets: ASSETS,
+    assets: ASSETS,
     startLabel: 'title',
   });
-  document.body.appendChild( app.domElement );
 
   app.enableStats();
   app.run();
