@@ -127,7 +127,7 @@ phina.namespace(function() {
      * ランダムベクトルをセット
      */
     random: function(min, max) {
-      var degree = Math.randf(min || 0, max || 360);
+      var degree = phina.util.Random.randfloat(min || 0, max || 360);
       var rad = degree*Math.DEG_TO_RAD;
 
       this.x = Math.cos(rad);

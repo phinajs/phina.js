@@ -22,6 +22,7 @@
     "util/changedispatcher.js",
     "util/flow.js",
     "util/color.js",
+    "util/random.js",
 
     "asset/asset.js",
     "asset/assetmanager.js",
