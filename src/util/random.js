@@ -13,7 +13,7 @@ phina.namespace(function() {
     seed: 1,
 
     init: function(seed) {
-      this.seed = seed || (Date.now());
+      this.seed = seed || (Date.now()) || 1;
     },
 
     random: function() {
