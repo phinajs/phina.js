@@ -7728,8 +7728,8 @@ phina.namespace(function() {
     /** 表示フラグ */
     visible: true,
 
-    /** 子供を CanvasRenderer で描画するか */
-    childrenVisible: true,
+    /** 子供を 自分のCanvasRenderer で描画するか */
+    renderChildBySelf: false,
 
     init: function(options) {
       options = (options || {});
@@ -8601,8 +8601,8 @@ phina.namespace(function() {
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.CanvasElement',
 
-    /** 子供を CanvasRenderer で描画するか */
-    childrenVisible: false,
+    /** 子供を 自分のCanvasRenderer で描画するか */
+    renderChildBySelf: false,
 
     init: function(params) {
       this.superInit(params);
@@ -8645,8 +8645,8 @@ phina.namespace(function() {
     light: null,
     renderer: null,
 
-    /** 子供を CanvasRenderer で描画するか */
-    childrenVisible: false,
+    /** 子供を 自分のCanvasRenderer で描画するか */
+    renderChildBySelf: false,
 
     init: function(params) {
       this.superInit();
@@ -8736,7 +8736,7 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.childrenVisible && obj.children.length > 0) {
+        if (obj.renderChildBySelf === false && obj.children.length > 0) {
             var tempChildren = obj.children.slice();
             for (var i=0,len=tempChildren.length; i<len; ++i) {
                 this.renderObject(tempChildren[i]);
@@ -8749,7 +8749,7 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.childrenVisible && obj.children.length > 0) {
+        if (obj.renderChildBySelf === false && obj.children.length > 0) {
           var tempChildren = obj.children.slice();
           for (var i=0,len=tempChildren.length; i<len; ++i) {
             this.renderObject(tempChildren[i]);
