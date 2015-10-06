@@ -19,6 +19,8 @@ phina.namespace(function() {
 
       params = (params || {}).$safe(phina.game.ResultScene.defaults);
 
+      var message = params.message.format(params);
+
       this.backgroundColor = params.backgroundColor;
 
       this.fromJSON({
@@ -49,7 +51,7 @@ phina.namespace(function() {
           messageLabel: {
             className: 'phina.display.Label',
             arguments: {
-              text: params.message,
+              text: message,
               fill: params.fontColor,
               stroke: null,
               fontSize: 32,
@@ -98,7 +100,7 @@ phina.namespace(function() {
 
       this.shareButton.onclick = function() {
         var url = phina.social.Twitter.createURL({
-          text: params.message,
+          text: message,
           hashtags: params.hashtags,
         });
         window.open(url, 'share window', 'width=480, height=320');
@@ -109,7 +111,7 @@ phina.namespace(function() {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\n',
+        message: 'this is phina.js project.\nscore: {score}\n',
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
