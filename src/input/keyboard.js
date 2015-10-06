@@ -124,7 +124,7 @@ phina.namespace(function() {
      * 正規化されている
      */
     getKeyDirection: function() {
-      var direction = tm.geom.Vector2(0, 0);
+      var direction = phina.geom.Vector2(0, 0);
 
       if (this.getKey("left")) {
         direction.x = -1;
@@ -151,7 +151,7 @@ phina.namespace(function() {
      */
     setKey: function(key, flag) {
       if (typeof(key) == "string") {
-        key = KEY_CODE[key];
+        key = phina.input.Keyboard.KEY_CODE[key];
       }
       this.key[key] = flag;
       
