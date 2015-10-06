@@ -4576,7 +4576,7 @@ phina.namespace(function() {
      * 正規化されている
      */
     getKeyDirection: function() {
-      var direction = tm.geom.Vector2(0, 0);
+      var direction = phina.geom.Vector2(0, 0);
 
       if (this.getKey("left")) {
         direction.x = -1;
@@ -4603,7 +4603,7 @@ phina.namespace(function() {
      */
     setKey: function(key, flag) {
       if (typeof(key) == "string") {
-        key = KEY_CODE[key];
+        key = phina.input.Keyboard.KEY_CODE[key];
       }
       this.key[key] = flag;
       
@@ -8481,30 +8481,51 @@ phina.namespace(function() {
     },
 
     _accessor: {
+      /**
+       * text
+       */
       text: {
         get: function() { return this._text; },
         set: function(v) { this._dirtyDraw = true; this._text = v; },
       },
+      /**
+       * font size
+       */
       fontSize: {
         get: function() { return this._fontSize; },
         set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
       },
+      /**
+       * font weight
+       */
       fontWeight: {
         get: function() { return this._fontWeight; },
         set: function(v) { this._dirtyDraw = true; this._fontWeight = v; },
       },
+      /**
+       * font family
+       */
       fontFamily: {
         get: function() { return this._fontFamily; },
         set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
       },
+      /**
+       * align
+       */
       align: {
         get: function() { return this._align; },
         set: function(v) { this._dirtyDraw = true; this._align = v; },
       },
+      /**
+       * baseline
+       */
       baseline: {
         get: function() { return this._baseline; },
         set: function(v) { this._dirtyDraw = true; this._baseline = v; },
       },
+      /**
+       * line height
+       */
       lineHeight: {
         get: function() { return this._lineHeight; },
         set: function(v) { this._dirtyDraw = true; this._lineHeight = v; },
@@ -9582,6 +9603,8 @@ phina.namespace(function() {
 
       params = (params || {}).$safe(phina.game.ResultScene.defaults);
 
+      var message = params.message.format(params);
+
       this.backgroundColor = params.backgroundColor;
 
       this.fromJSON({
@@ -9612,7 +9635,7 @@ phina.namespace(function() {
           messageLabel: {
             className: 'phina.display.Label',
             arguments: {
-              text: params.message,
+              text: message,
               fill: params.fontColor,
               stroke: null,
               fontSize: 32,
@@ -9661,7 +9684,7 @@ phina.namespace(function() {
 
       this.shareButton.onclick = function() {
         var url = phina.social.Twitter.createURL({
-          text: params.message,
+          text: message,
           hashtags: params.hashtags,
         });
         window.open(url, 'share window', 'width=480, height=320');
@@ -9672,7 +9695,7 @@ phina.namespace(function() {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\n',
+        message: 'this is phina.js project.\nscore: {score}\n',
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
