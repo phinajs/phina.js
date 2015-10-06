@@ -81,7 +81,7 @@
   /**
    * @method randf
    * ランダムな値を指定された範囲内で生成
-   * 非推奨 -> randint をお使いください
+   * 非推奨 -> randfloat をお使いください
    */
   Math.method("randf", function(min, max) {
     return window.Math.random()*(max-min)+min;
