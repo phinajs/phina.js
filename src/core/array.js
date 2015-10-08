@@ -179,7 +179,7 @@
   Array.prototype.method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -189,7 +189,7 @@
   Array.prototype.method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -199,7 +199,7 @@
   Array.prototype.method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -313,7 +313,7 @@
    */
   Array.prototype.method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
-      var j = phina.util.Random.randint(0, len-1);
+      var j = Math.randint(0, len-1);
       
       if (i != j) {
         this.swap(i, j);

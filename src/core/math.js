@@ -63,35 +63,19 @@
   });
   
   /**
-   * @method rand
-   * ランダムな値を指定された範囲内で生成
-   * 非推奨 -> randint をお使いください
-   */
-  Math.method("rand", function(min, max) {
-    return window.Math.floor( Math.random()*(max-min+1) ) + min;
-  });
-  /**
    * @method randint
    * ランダムな値を指定された範囲内で生成
    */
   Math.method("randint", function(min, max) {
-    return window.Math.floor( Math.random()*(max-min+1) ) + min;
+    return Math.floor( Math.random()*(max-min+1) ) + min;
   });
   
-  /**
-   * @method randf
-   * ランダムな値を指定された範囲内で生成
-   * 非推奨 -> randint をお使いください
-   */
-  Math.method("randf", function(min, max) {
-    return window.Math.random()*(max-min)+min;
-  });
   /**
    * @method randfloat
    * ランダムな値を指定された範囲内で生成
    */
   Math.method("randfloat", function(min, max) {
-    return window.Math.random()*(max-min)+min;
+    return Math.random()*(max-min)+min;
   });
   
   /**
