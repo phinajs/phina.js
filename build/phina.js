@@ -887,7 +887,7 @@
   Array.prototype.method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -897,7 +897,7 @@
   Array.prototype.method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -907,7 +907,7 @@
   Array.prototype.method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ phina.util.Random.randint(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -1021,7 +1021,7 @@
    */
   Array.prototype.method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
-      var j = phina.util.Random.randint(0, len-1);
+      var j = Math.randint(0, len-1);
       
       if (i != j) {
         this.swap(i, j);
@@ -1185,35 +1185,19 @@
   });
   
   /**
-   * @method rand
-   * ランダムな値を指定された範囲内で生成
-   * 非推奨 -> randint をお使いください
-   */
-  Math.method("rand", function(min, max) {
-    return window.Math.floor( Math.random()*(max-min+1) ) + min;
-  });
-  /**
    * @method randint
    * ランダムな値を指定された範囲内で生成
    */
   Math.method("randint", function(min, max) {
-    return window.Math.floor( Math.random()*(max-min+1) ) + min;
+    return Math.floor( Math.random()*(max-min+1) ) + min;
   });
   
-  /**
-   * @method randf
-   * ランダムな値を指定された範囲内で生成
-   * 非推奨 -> randint をお使いください
-   */
-  Math.method("randf", function(min, max) {
-    return window.Math.random()*(max-min)+min;
-  });
   /**
    * @method randfloat
    * ランダムな値を指定された範囲内で生成
    */
   Math.method("randfloat", function(min, max) {
-    return window.Math.random()*(max-min)+min;
+    return Math.random()*(max-min)+min;
   });
   
   /**
@@ -3390,6 +3374,13 @@ phina.namespace(function() {
         return seed;
       },
     },
+  });
+
+  Math.method("randint", function(min, max) {
+    return phina.util.Random.randint(min, max);
+  });
+  Math.method("randfloat", function(min, max) {
+    return phina.util.Random.randfloat(min, max);
   });
 
 });
