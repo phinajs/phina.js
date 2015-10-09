@@ -48,6 +48,18 @@ th.describe("display.Shape", function() {
     var shape = phina.display.HeartShape().addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(4));
   });
+
+  th.it('origin', function() {
+    var shape = phina.display.CircleShape({
+      // radius: 64,
+    }).addChildTo(this);
+    shape.setPosition(this.gridX.center(), this.gridY.center());
+    var shape = phina.display.RectangleShape({
+      padding: 36,
+    }).addChildTo(this);
+    shape.setPosition(this.gridX.center(), this.gridY.center());
+    shape.origin.set(0, 0);
+  });
 });
 
 

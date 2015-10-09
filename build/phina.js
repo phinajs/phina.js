@@ -7845,11 +7845,16 @@ phina.namespace(function() {
 
     draw: function(canvas) {
       var image = this.canvas.domElement;
+      // var x = -this.width*this.originX - this.padding;
+      // var y = -this.height*this.originY - this.padding;
+      var x = -w*this.origin.x;
+      var y = -h*this.origin.y;
+
       var w = image.width;
       var h = image.height;
       canvas.context.drawImage(image,
         0, 0, w, h,
-        -w*this.origin.x, -h*this.origin.y, w, h
+        x, y, w, h
         );
     },
 
