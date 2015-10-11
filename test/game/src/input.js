@@ -43,6 +43,22 @@ th.describe("input.Touches", function() {
     };
   });
 
+  th.it('getPointing', function() {
+    var label = phina.display.Label().addChildTo(this);
+    label.setPosition(320, 480);
+
+    this.update = function(app) {
+      var mouse = app.mouse;
+      
+      if (mouse.getPointing()) {
+        label.text = 'getPointing: true';
+      }
+      else {
+        label.text = 'getPointing: false';
+      }
+    }
+  });
+
 });
 
 th.describe('input.Gamepad', function() {
