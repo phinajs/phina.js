@@ -10,6 +10,10 @@ phina.namespace(function() {
 
     /** 表示フラグ */
     visible: true,
+    /** アルファ */
+    alpha: 1.0,
+    /** ブレンドモード */
+    blendMode: "source-over",
 
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,

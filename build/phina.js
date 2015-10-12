@@ -7718,6 +7718,10 @@ phina.namespace(function() {
 
     /** 表示フラグ */
     visible: true,
+    /** アルファ */
+    alpha: 1.0,
+    /** ブレンドモード */
+    blendMode: "source-over",
 
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,
@@ -8715,6 +8719,7 @@ phina.namespace(function() {
       var context = this.canvas.context;
 
       context.globalAlpha = obj._worldAlpha;
+      context.globalCompositeOperation = obj.blendMode;
 
       if (obj._worldMatrix) {
         // 行列をセット
