@@ -4321,7 +4321,7 @@ phina.namespace(function() {
      * タッチしているかを判定
      */
     getTouch: function() {
-      return this.touched != 0;
+      return this.now != 0;
     },
     
     /**
