@@ -265,6 +265,7 @@ phina.namespace(function() {
           this._radius = v;
           this._width = this._radius*2;
           this._height = this._radius*2;
+        },
       }
     },
   });

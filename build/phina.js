@@ -7851,7 +7851,7 @@ phina.namespace(function() {
       var image = this.canvas.domElement;
       var w = image.width;
       var h = image.height;
-      
+
       // var x = -this.width*this.originX - this.padding;
       // var y = -this.height*this.originY - this.padding;
       var x = -w*this.origin.x;
@@ -8045,7 +8045,10 @@ phina.namespace(function() {
           return this._radius;
         },
         set: function(v) {
-          this._dirtyDraw = true; this._radius = v;
+          this._dirtyDraw = true;
+          this._radius = v;
+          this._width = this._radius*2;
+          this._height = this._radius*2;
         },
       }
     },

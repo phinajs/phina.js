@@ -1,6 +1,6 @@
 {
   "name": "phina.js",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "description": "phina.js is a JavaScript library",
   "main": "build/phina.js",
   "scripts": {
