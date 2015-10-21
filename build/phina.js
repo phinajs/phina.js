@@ -8382,7 +8382,7 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      if (typeof arguments[0] === 'string') {
+      if (typeof arguments[0] !== 'object') {
         options = { text: arguments[0], };
       }
       else {
@@ -8444,7 +8444,8 @@ phina.namespace(function() {
 
       var fontSize = this.fontSize;
       var font = "{fontWeight} {fontSize}px {fontFamily}".format(this);
-      var lines = this._lines = this.text.split('\n');
+      var text = this.text + '';
+      var lines = this._lines = text.split('\n');
       canvas.context.font = font;
 
       var w = this.calcWidth() + this.padding*2;
