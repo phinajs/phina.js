@@ -149,7 +149,7 @@
 
   /**
    * @method  map
-   * 数値分繰り返す
+   * return で返された値の配列を作る
    */
   Number.prototype.method("map",  function(fn, self) {
     self = self || this;
