@@ -49,7 +49,7 @@ phina.define("MainScene", {
   update: function(app) {
     if (app.ticker.frame % 30 === 0) {
       var enemy = Enemy().addChildTo(this.enemyGroup);
-      var yIndex = Math.random(0, 16);
+      var yIndex = Math.randint(0, 16);
       enemy.setPosition(this.gridX.span(18), this.gridY.span(yIndex));
     }
 
