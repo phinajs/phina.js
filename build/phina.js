@@ -5488,6 +5488,7 @@ phina.namespace(function() {
     init: function(app) {
       this.app = app;
       this._enable = true;
+      this.cursor = 'pointer';
     },
 
     enable: function() {
@@ -5542,9 +5543,13 @@ phina.namespace(function() {
         obj.flare('pointover', {
           pointer: p,
         });
+
+        this.app.domElement.style.cursor = this.cursor;
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout');
+
+        this.app.domElement.style.cursor = '';
       }
 
       if (overFlag) {
