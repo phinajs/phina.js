@@ -5983,6 +5983,9 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
+      this.width = 64;
+      this.height = 64;
+      this.radius = 32;
       this.boundingType = 'rect';
     },
 
@@ -6262,7 +6265,10 @@ phina.namespace(function() {
        * width
        */
       width: {
-        "get": function()   { return this._width; },
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._width : this._diameter;
+        },
         "set": function(v)  { this._width = v; }
       },
       /**
@@ -6270,7 +6276,10 @@ phina.namespace(function() {
        * height
        */
       height: {
-        "get": function()   { return this._height; },
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._height : this._diameter;
+        },
         "set": function(v)  { this._height = v; }
       },
 
@@ -6280,9 +6289,13 @@ phina.namespace(function() {
        */
       radius: {
         "get": function()   {
-          return (this._radius !== undefined) ? this._radius : (this.width+this.height)/4;
+          return (this.boundingType === 'rect') ?
+            (this.width+this.height)/4 : this._radius;
         },
-        "set": function(v)  { this._radius = v; }
+        "set": function(v)  {
+          this._radius = v;
+          this._diameter = v*2;
+        },
       },
       
       /**
@@ -6924,6 +6937,8 @@ phina.namespace(function() {
 
   /**
    * @class phina.accessory.Physical
+   * 本物ではないので名前変えるかも*
+   * FakePhysical or MarioPhysical or LiePhysical
    */
   phina.define('phina.accessory.Physical', {
     superClass: 'phina.accessory.Accessory',
@@ -7803,6 +7818,7 @@ phina.namespace(function() {
 
       this.width = options.width || 64;
       this.height = options.height || 64;
+      this.radius = options.radius || 32;
     },
 
     /**
@@ -8079,12 +8095,11 @@ phina.namespace(function() {
         fill: 'red',
         stroke: '#aaa',
         strokeWidth: 4,
-
         radius: 32,
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
     },
 
     _render: function() {
@@ -8107,14 +8122,10 @@ phina.namespace(function() {
 
     _accessor: {
       radius: {
-        get: function() {
-          return this._radius;
-        },
+        get: function() { return this._radius; },
         set: function(v) {
-          this._dirtyDraw = true;
           this._radius = v;
-          this._width = this._radius*2;
-          this._height = this._radius*2;
+          this._dirtyDraw = true;
         },
       }
     },
@@ -8139,7 +8150,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
     },
 
     _render: function() {
@@ -8164,9 +8175,7 @@ phina.namespace(function() {
 
     _accessor: {
       radius: {
-        get: function() {
-          return this._radius;
-        },
+        get: function() { return this._radius; },
         set: function(v) {
           this._dirtyDraw = true; this._radius = v;
         },
@@ -8196,7 +8205,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.sides = options.sides;
       this.sideIndent = options.sideIndent;
     },
@@ -8258,7 +8267,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.sides = options.sides;
     },
 
@@ -8316,7 +8325,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.cornerAngle = options.cornerAngle;
     },
 
