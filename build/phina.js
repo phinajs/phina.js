@@ -5544,7 +5544,9 @@ phina.namespace(function() {
           pointer: p,
         });
 
-        this.app.domElement.style.cursor = this.cursor;
+        if (obj.boundingType) {
+          this.app.domElement.style.cursor = this.cursor;
+        }
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout');
