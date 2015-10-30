@@ -155,5 +155,54 @@ describe('#util', function() {
       })
     });
   });
+  describe('Random', function() {
+    it('random', function() {
+      var answer = [0, 0.12, 0.64, 0.55, 0.04];
+      var random = phina.util.Random(8);
+      (5).times(function(i) {
+        assert.equal(random.random().floor(2), answer[i]);
+      });
+    });
+
+    it('randint', function() {
+      var answer = [0, 1, 7, 6, 0];
+      var random = phina.util.Random(8);
+      (5).times(function(i) {
+        assert.equal(random.randint(0, 10), answer[i]);
+      });
+    });
+
+    it('randfloat', function() {
+      var answer = [false, false, true, true, false];
+      var random = phina.util.Random(8);
+      (5).times(function(i) {
+        assert.equal(random.randbool(), answer[i]);
+      });
+    });
+
+    it('static.random', function() {
+      var answer = [0, 0.12, 0.64, 0.55, 0.04];
+      phina.util.Random.setSeed(8);
+      (5).times(function(i) {
+        assert.equal(phina.util.Random.random().floor(2), answer[i]);
+      });
+    });
+
+    it('static.randint', function() {
+      var answer = [0, 1, 7, 6, 0];
+      phina.util.Random.setSeed(8);
+      (5).times(function(i) {
+        assert.equal(phina.util.Random.randint(0, 10), answer[i]);
+      });
+    });
+
+    it('static.randfloat', function() {
+      var answer = [false, false, true, true, false];
+      phina.util.Random.setSeed(8);
+      (5).times(function(i) {
+        assert.equal(phina.util.Random.randbool(), answer[i]);
+      });
+    });
+  });
 
 });

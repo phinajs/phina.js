@@ -25,10 +25,11 @@ phina.namespace(function() {
         children: {
           label: {
             className: 'phina.display.Label',
-            arguments: ['', {
-              color: 'white',
+            arguments: {
+              fill: 'white',
               fontSize: options.fontSize,
-            }],
+              stroke: false,
+            },
             x: this.gridX.center(),
             y: this.gridY.center(),
           },
@@ -90,7 +91,7 @@ phina.namespace(function() {
 
         fontColor: 'white',
         fontSize: 192,
-        backgroundColor: '#444',
+        backgroundColor: null,
 
         exitType: 'auto',
       },

@@ -17,18 +17,18 @@ phina.namespace(function() {
       // 更新するかを判定
       if (element.awake === false) return ;
 
-      // 更新
-      if (element.update) element.update(app);
-
-      // タッチ判定
-      // this._checkPoint(element);
-
       // エンターフレームイベント
       if (element.has('enterframe')) {
         element.flare('enterframe', {
           app: this.app,
         });
       }
+
+      // 更新
+      if (element.update) element.update(app);
+
+      // タッチ判定
+      // this._checkPoint(element);
 
       // 子供を更新
       var len = element.children.length;

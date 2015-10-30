@@ -13,6 +13,7 @@
     "geom/matrix33.js",
     "geom/rect.js",
     "geom/circle.js",
+    "geom/collision.js",
 
     "util/eventdispatcher.js",
     "util/tween.js",
@@ -20,6 +21,8 @@
     "util/grid.js",
     "util/changedispatcher.js",
     "util/flow.js",
+    "util/color.js",
+    "util/random.js",
 
     "asset/asset.js",
     "asset/assetmanager.js",
@@ -30,10 +33,13 @@
     "asset/sound.js",
     "asset/spritesheet.js",
     "asset/mapsheet.js",
+    "asset/font.js",
 
     "input/input.js",
     "input/mouse.js",
     "input/touch.js",
+    "input/keyboard.js",
+    "input/gamepad.js",
 
     "app/updater.js",
     "app/interactive.js",
@@ -47,6 +53,7 @@
     "accessory/draggable.js",
     "accessory/frameanimation.js",
     "accessory/tilemap.js",
+    "accessory/physical.js",
 
     "dom/event.js",
 
@@ -67,11 +74,13 @@
     "effect/wave.js",
 
     "ui/button.js",
+    "ui/gauge.js",
 
     "game/managerscene.js",
     "game/splashscene.js",
     "game/titlescene.js",
     "game/resultscene.js",
+    "game/loadingscene.js",
     "game/countscene.js",
     "game/gameapp.js",
     "game/pietimer.js",

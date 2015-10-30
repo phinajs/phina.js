@@ -8,14 +8,52 @@ phina.namespace(function() {
   phina.define('phina.display.CanvasElement', {
     superClass: 'phina.app.Object2D',
 
-    init: function() {
+    /** 表示フラグ */
+    visible: true,
+    /** アルファ */
+    alpha: 1.0,
+    /** ブレンドモード */
+    blendMode: "source-over",
+
+    /** 子供を 自分のCanvasRenderer で描画するか */
+    renderChildBySelf: false,
+
+    init: function(options) {
+      options = (options || {});
+      
       this.superInit();
 
+      this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
 
-      this.width = 64;
-      this.height = 64;
+      this.width = options.width || 64;
+      this.height = options.height || 64;
+      this.radius = options.radius || 32;
+    },
+
+    /**
+     * 表示/非表示をセット
+     */
+    setVisible: function(flag) {
+      this.visible = flag;
+      return this;
+    },
+
+    /**
+     * 表示
+     */
+    show: function() {
+      this.visible = true;
+      return this;
+    },
+
+    /**
+     * 非表示
+     */
+    hide: function() {
+      this.visible = false;
+      return this;
     },
 
     /**

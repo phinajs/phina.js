@@ -3,6 +3,10 @@
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.accessory.Draggable
+   * Draggable
+   */
   phina.define('phina.accessory.Draggable', {
     superClass: 'phina.accessory.Accessory',
 

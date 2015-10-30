@@ -11,35 +11,52 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(params) {
-      this.superInit(params.query);
-
-      params.$safe({
+    init: function(options) {
+      options.$safe({
         width: 640,
         height: 960,
         columns: 12,
+        fit: true,
+        append: true,
       });
+      
+      if (!options.query && !options.domElement) {
+        options.domElement = document.createElement('canvas');
+        if (options.append) {
+          document.body.appendChild(options.domElement);
+        }
+      }
+      this.superInit(options);
+
 
       this.gridX = phina.util.Grid({
-        width: params.width,
-        columns: params.columns,
+        width: options.width,
+        columns: options.columns,
       });
       this.gridY = phina.util.Grid({
-        width: params.height,
-        columns: params.columns,
+        width: options.height,
+        columns: options.columns,
       });
 
       this.canvas = phina.graphics.Canvas(this.domElement);
-      this.canvas.setSize(params.width, params.height);
+      this.canvas.setSize(options.width, options.height);
 
       this.backgroundColor = 'white';
 
       this.replaceScene(phina.display.CanvasScene({
-        width: params.width,
-        height: params.height,
+        width: options.width,
+        height: options.height,
       }));
 
-      this.fitScreen();
+      if (options.fit) {
+        this.fitScreen();
+      }
+
+      // pushScene, popScene 対策
+      this.on('push', function() {
+        // onenter 対策で描画しておく
+        this._draw();
+      });
     },
 
     _draw: function() {
@@ -52,8 +69,12 @@ phina.namespace(function() {
       if (this.currentScene.canvas) {
         this.currentScene._render();
 
-        var c = this.currentScene.canvas;
-        this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+        this._scenes.each(function(scene) {
+          var c = scene.canvas;
+          if (c) {
+            this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+          }
+        }, this);
       }
     },
 

@@ -10,17 +10,52 @@ th.describe('asset.File', function() {
   });
 });
 
+
+th.describe('asset.Font', function() {
+  th.it('init', function() {
+    var font = phina.asset.Font();
+    font.load('../../assets/fonts/kaushan-script/KaushanScript-Regular.otf').then(function() {
+      var label = phina.display.Label({
+        text: 'Hello, world!\nloaded',
+        fontSize: 100,
+        fontFamily: 'KaushanScript-Regular',
+        padding: 24,
+      }).addChildTo(this);
+      label.x = this.gridX.center();
+      label.y = this.gridY.center();
+    }.bind(this));
+  });
+});
+
 th.describe("asset.Sound", function() {
   th.it('init', function() {
     var sound = phina.asset.Sound();
     sound.loadFromBuffer();
     sound.play();
+
+    this.onpointstart = function() {
+      sound.play();
+    }
   });
-  th.it('sound', function() {
+  th.it('play', function() {
     var path = '../../assets/sounds/correct.mp3';
     phina.asset.Sound().load(path).then(function(s) {
-      s.clone().play();
-    });
+      s.play();
+
+      this.onpointstart = function() {
+        s.play();
+      }
+    }.bind(this));
+  });
+  th.it('stop', function() {
+    var path = '../../assets/sounds/lo_002.mp3';
+    phina.asset.Sound().load(path).then(function(s) {
+      s.play();
+
+      this.onpointstart = function() {
+        s.stop();
+      }
+    }.bind(this));
   });
 
   th.it('oscillator', function() {

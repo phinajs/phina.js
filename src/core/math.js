@@ -23,6 +23,12 @@
   Math.RAD_TO_DEG = 180/Math.PI;
   
   /**
+   * @property    PHI
+   * golden ratio
+   */
+  Math.PHI = (1 + Math.sqrt(5)) / 2;
+  
+  /**
    * @method
    * Degree を Radian に変換
    */
@@ -57,19 +63,27 @@
   });
   
   /**
-   * @method rand
+   * @method randint
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("rand", function(min, max) {
-    return window.Math.floor( Math.random()*(max-min+1) ) + min;
+  Math.method("randint", function(min, max) {
+    return Math.floor( Math.random()*(max-min+1) ) + min;
   });
   
   /**
-   * @method randf
+   * @method randfloat
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randf", function(min, max) {
-    return window.Math.random()*(max-min)+min;
+  Math.method("randfloat", function(min, max) {
+    return Math.random()*(max-min)+min;
+  });
+  
+  /**
+   * @method randbool
+   * ランダムな値を指定された範囲内で生成
+   */
+  Math.method("randbool", function() {
+    return Math.randint(0, 1) === 1;
   });
     
 })();

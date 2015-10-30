@@ -56,12 +56,16 @@ phina.namespace(function() {
     },
 
     pushScene: function(scene) {
+      this.flare('push');
+
       this.currentScene.flare('pause', {
         app: this,
       });
       
       this._scenes.push(scene);
       ++this._sceneIndex;
+
+      this.flare('pushed');
       
       scene.app = this;
       scene.flare('enter', {
@@ -75,6 +79,8 @@ phina.namespace(function() {
      * シーンをポップする(ポーズやオブション画面などで使用)
      */
     popScene: function() {
+      this.flare('pop');
+
       var scene = this._scenes.pop();
       --this._sceneIndex;
 
@@ -82,6 +88,8 @@ phina.namespace(function() {
         app: this,
       });
       scene.app = null;
+
+      this.flare('poped');
       
       // 
       this.currentScene.flare('resume', {
@@ -154,6 +162,32 @@ phina.namespace(function() {
       currentScene: {
         "get": function()   { return this._scenes[this._sceneIndex]; },
         "set": function(v)  { this._scenes[this._sceneIndex] = v; },
+      },
+
+      frame: {
+        "get": function () { return this.ticker.frame; },
+        "set": function (v) { this.ticker.frame = v; },
+      },
+
+      fps: {
+        "get": function () { return this.ticker.fps; },
+        "set": function (v) { this.ticker.fps = v; },
+      },
+
+      deltaTime: {
+        "get": function () { return this.ticker.deltaTime; },
+      },
+
+      elapsedTime: {
+        "get": function () { return this.ticker.elapsedTime; },
+      },
+
+      currentTime: {
+        "get": function () { return this.ticker.currentTime; },
+      },
+
+      startTime: {
+        "get": function () { return this.ticker.startTime; },
       },
     },
 

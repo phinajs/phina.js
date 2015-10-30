@@ -4,7 +4,6 @@
   <head>
   </head>
   <body>
-    <canvas id='world'></canvas>
   </body>
 </html>
 
@@ -50,7 +49,7 @@ phina.define("MainScene", {
   update: function(app) {
     if (app.ticker.frame % 30 === 0) {
       var enemy = Enemy().addChildTo(this.enemyGroup);
-      var yIndex = Math.rand(0, 16);
+      var yIndex = Math.randint(0, 16);
       enemy.setPosition(this.gridX.span(18), this.gridY.span(yIndex));
     }
 
@@ -72,16 +71,11 @@ phina.define('Player', {
     this.anim = FrameAnimation('tomapiko').attachTo(this);
     this.anim.gotoAndPlay('fly');
 
-    this.vy = 0;
-    this.ay = 0.5;
-  },
-  update: function() {
-    this.vy += this.ay;
-    this.y += this.vy;
+    this.physical.gravity.set(0, 0.5);
   },
 
   fly: function() {
-    this.vy = -10;
+    this.physical.force(0, -10);
   },
 });
 
@@ -104,23 +98,19 @@ phina.define('Enemy', {
   },
 });
 
-window.onload = function() {
-  var loader = AssetLoader();
 
-  loader.load(ASSETS).then(function() {
-    var app = CanvasApp({
-      query: '#world',
-      width: SCREEN_WIDTH,
-      height: SCREEN_HEIGHT,
-    });
 
-    app.replaceScene(MainScene());
-
-    app.enableStats();
-
-    app.run();
+phina.main(function() {
+  var app = GameApp({
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    assets: ASSETS,
+    startLabel: location.search.substr(1).toObject().scene || 'title',
   });
-};
+
+  app.enableStats();
+  app.run();
+});
 
 
 

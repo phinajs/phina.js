@@ -34,3 +34,22 @@ $gulp
 ```
 $gulp watch
 ```
+
+### launch
+
+```
+$gulp webserver
+```
+
+### develop
+
+watch and launch
+
+```
+$gulp dev
+```
+
+
+### runstant
+
+http://goo.gl/0ATWNv

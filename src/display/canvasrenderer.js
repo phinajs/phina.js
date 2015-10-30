@@ -17,9 +17,20 @@ phina.namespace(function() {
       }
       
       this._context.save();
-      this.renderObject(scene);
+      this.renderChildren(scene);
       this._context.restore();
     },
+    
+    renderChildren: function(obj) {
+      // 子供たちも実行
+      if (obj.children.length > 0) {
+        var tempChildren = obj.children.slice();
+        for (var i=0,len=tempChildren.length; i<len; ++i) {
+          this.renderObject(tempChildren[i]);
+        }
+      }
+    },
+
     renderObject: function(obj) {
       if (obj.visible === false) return ;
 
@@ -29,6 +40,7 @@ phina.namespace(function() {
       var context = this.canvas.context;
 
       context.globalAlpha = obj._worldAlpha;
+      context.globalCompositeOperation = obj.blendMode;
 
       if (obj._worldMatrix) {
         // 行列をセット
@@ -46,7 +58,7 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.children.length > 0) {
+        if (obj.renderChildBySelf === false && obj.children.length > 0) {
             var tempChildren = obj.children.slice();
             for (var i=0,len=tempChildren.length; i<len; ++i) {
                 this.renderObject(tempChildren[i]);
@@ -59,16 +71,16 @@ phina.namespace(function() {
         if (obj.draw) obj.draw(this.canvas);
 
         // 子供たちも実行
-        if (obj.children.length > 0) {
-            var tempChildren = obj.children.slice();
-            for (var i=0,len=tempChildren.length; i<len; ++i) {
-                this.renderObject(tempChildren[i]);
-            }
+        if (obj.renderChildBySelf === false && obj.children.length > 0) {
+          var tempChildren = obj.children.slice();
+          for (var i=0,len=tempChildren.length; i<len; ++i) {
+            this.renderObject(tempChildren[i]);
+          }
         }
 
       }
-      
     },
+
   });
 
 });

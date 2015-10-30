@@ -6,6 +6,8 @@
    */
   phina.define('phina.input.Input', {
 
+    superClass: 'phina.util.EventDispatcher',
+
     /** domElement */
     domElement: null,
 
@@ -13,6 +15,8 @@
      * @constructor
      */
     init: function(domElement) {
+      this.superInit();
+      
       this.domElement = domElement || window.document;
 
       this.position = phina.geom.Vector2(0, 0);

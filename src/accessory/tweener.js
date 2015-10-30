@@ -3,6 +3,10 @@
 
 phina.namespace(function() {
 
+  /**
+   * @class phina.accessory.Tweener
+   * Tweener
+   */
   phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
@@ -35,6 +39,18 @@ phina.namespace(function() {
         duration: duration,
         easing: easing,
       });
+      return this;
+    },
+
+    by: function(props, duration, easing) {
+      this._add({
+        type: 'tween',
+        mode: 'by',
+        props: props,
+        duration: duration,
+        easing: easing,
+      });
+
       return this;
     },
 
@@ -93,6 +109,25 @@ phina.namespace(function() {
       });
 
       return this;
+    },
+
+    moveTo: function(x, y, duration, easing) {
+      return this.to({x:x,y:y}, duration, easing);
+    },
+    moveBy: function(x, y, duration, easing) {
+      return this.by({x:x,y:y}, duration, easing);
+    },
+
+    fade: function(value, duration, easing) {
+      return this.to({alpha:value}, duration, easing);
+    },
+
+    fadeOut: function(duration, easing) {
+      return this.fade(0.0, duration, easing)
+    },
+
+    fadeIn: function(duration, easing) {
+      return this.fade(1.0, duration, easing)
     },
 
     /**
@@ -183,6 +218,7 @@ phina.namespace(function() {
       if (!task) {
         if (this._loop) {
           this.rewind();
+          this._update(app);
         }
         else {
           this.playing = false;
@@ -198,6 +234,9 @@ phina.namespace(function() {
 
         if (task.mode === 'to') {
           this._tween.to(this.target, task.props, task.duration, task.easing);
+        }
+        else if (task.mode === 'by') {
+          this._tween.by(this.target, task.props, task.duration, task.easing);
         }
         else {
           this._tween.from(this.target, task.props, task.duration, task.easing);
@@ -228,16 +267,16 @@ phina.namespace(function() {
 
     _updateTween: function(app) {
       var tween = this._tween;
-      var time = app.ticker.deltaTime;
-      // var time = 1000/app.fps;
+      // var time = app.ticker.deltaTime;
+      var time = 1000/app.fps;
+
+      tween.forward(time);
+      this.flare('tween');
 
       if (tween.time >= tween.duration) {
         delete this._tween;
         this._tween = null;
         this._update = this._updateTask;
-      }
-      else {
-        tween.forward(time);
       }
     },
 

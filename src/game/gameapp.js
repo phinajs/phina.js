@@ -7,42 +7,56 @@ phina.namespace(function() {
   phina.define('phina.game.GameApp', {
     superClass: 'phina.display.CanvasApp',
 
-    init: function(params) {
-      this.superInit(params);
+    init: function(options) {
+
+      options = (options || {}).$safe({
+        startLabel: 'title',
+      });
+      this.superInit(options);
+
+      var startLabel = (options.assets) ? 'loading' : options.startLabel;
 
       var scene = ManagerScene({
-        startLabel: params.startLabel,
+        startLabel: startLabel,
 
         scenes: [
           {
-            className: "SplashScene",
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
-            label: "splash",
-            nextLabel: "title",
+            className: 'LoadingScene',
+            arguments: options,
+            label: 'loading',
+            nextLabel: options.startLabel,
           },
-          
+
+          {
+            className: 'SplashScene',
+            arguments: options,
+            label: 'splash',
+            nextLabel: 'title',
+          },
+
           {
             className: 'TitleScene',
+            arguments: options,
             label: 'title',
             nextLabel: 'main',
           },
           {
             className: 'MainScene',
+            arguments: options,
             label: 'main',
             nextLabel: 'result',
           },
           {
             className: 'ResultScene',
+            arguments: options,
             label: 'result',
             nextLabel: 'title',
           },
 
           {
-            className: "PauseScene",
-            label: "pause",
+            className: 'PauseScene',
+            arguments: options,
+            label: 'pause',
           },
 
         ]

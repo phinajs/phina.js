@@ -2,7 +2,13 @@
 ;(function() {
 
   /**
-   * @property    first
+   * @class global.Array
+   * Array の拡張
+   */
+
+
+  /**
+   * @property  first
    * 最初の要素
    */
   Array.prototype.accessor("first", {
@@ -173,7 +179,7 @@
   Array.prototype.method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -183,17 +189,17 @@
   Array.prototype.method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
-   * @method  pickup
+   * @method  lot
    * 要素の中からランダムで取り出す
    */
   Array.prototype.method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
-    return this[ Math.rand(min, max) ];
+    return this[ Math.randint(min, max) ];
   });
   
   /**
@@ -307,7 +313,7 @@
    */
   Array.prototype.method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
-      var j = Math.rand(0, len-1);
+      var j = Math.randint(0, len-1);
       
       if (i != j) {
         this.swap(i, j);
@@ -383,8 +389,6 @@
   /**
    * @method of
    * of関数 可変長引数をとってArrayにして返す
-   * @example:
-   * Array.of('a', 'b', 'c'); // ['a', 'b', 'c']
    * ES6準拠
    */
   Array.method("of", function() {
@@ -394,19 +398,6 @@
   /**
    * @method from
    * from関数 Array like objectに対してArrayのメソッドを追加する
-   * @example:
-   *
-   * 1.
-   * function array () {
-   *   return Array.from(arguments);
-   * }
-   *
-   * array(1,2,3); // [1, 2, 3];
-   *
-   * 2.
-   * Array.from(document.body).forEach(function(item) {
-   *    return item;
-   * });
    *
    * ES6準拠
    */

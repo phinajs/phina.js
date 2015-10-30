@@ -4,12 +4,11 @@
   <head>
   </head>
   <body>
-    <canvas id='world'></canvas>
   </body>
 </html>
 
 <style>
-#world {
+canvas {
   box-shadow: 0px 0px 4px 0px #aaa;
 }
 </style>
@@ -77,8 +76,8 @@ phina.define("MainScene", {
     timerLabel.origin.x = 1;
     timerLabel.x = 580;
     timerLabel.y = 130;
-    timerLabel.style.color = '#444';
-    timerLabel.style.fontSize = 100;
+    timerLabel.fill = '#444';
+    timerLabel.fontSize = 100;
     // timerLabel.align = 'right';
     timerLabel.baseline = 'bottom';
     this.timerLabel = timerLabel;
@@ -91,6 +90,15 @@ phina.define("MainScene", {
       wave.x = p.x;
       wave.y = p.y;
     };
+  },
+
+  onenter: function() {
+    var scene = CountScene({
+      backgroundColor: 'rgba(100, 100, 100, 1)',
+      count: ['Ready'],
+      fontSize: 100,
+    });
+    this.app.pushScene(scene);
   },
 
   update: function(app) {
@@ -137,18 +145,20 @@ phina.define('Piece', {
   },
 });
 
-window.onload = function() {
+
+phina.main(function() {
   var app = GameApp({
-    query: '#world',
+    startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     startLabel: 'title',
   });
+  document.body.appendChild( app.domElement );
 
   app.enableStats();
 
   app.run();
-};
+});
 
 
 

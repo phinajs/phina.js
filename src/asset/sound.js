@@ -22,16 +22,24 @@ phina.namespace(function() {
      */
     clone: function() {
       var sound = phina.asset.Sound();
-      sound.loadFromBuffer(this.source.buffer);
+      sound.loadFromBuffer(this.buffer);
       sound.volume = this.volume;
       return sound;
     },
 
     play: function() {
+      if (this.source) {
+        // TODO: キャッシュする？
+      }
+
+      this.source = this.context.createBufferSource();
+      this.source.buffer = this.buffer;
+      // connect
+      this.source.connect(this.context.destination);
       // play
       this.source.start(0);
 
-      // cache play end
+      // check play end
       if (this.source.buffer) {
         var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
         window.setTimeout(function(self) {
@@ -39,6 +47,11 @@ phina.namespace(function() {
         }, time, this);
       }
 
+      return this;
+    },
+
+    stop: function() {
+      this.source.stop();
       return this;
     },
 
@@ -58,8 +71,6 @@ phina.namespace(function() {
       this.source = oscillator;
       // connect
       this.source.connect(context.destination);
-
-      this
     },
 
     loadFromBuffer: function(buffer) {
@@ -77,12 +88,7 @@ phina.namespace(function() {
       }
 
       // source
-      var source = context.createBufferSource();
-      source.buffer = buffer;
-      this.source = source;
-
-      // connect
-      this.source.connect(context.destination);
+      this.buffer = buffer;
     },
 
     _load: function(r) {

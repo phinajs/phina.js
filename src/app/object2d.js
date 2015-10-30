@@ -18,6 +18,9 @@ phina.namespace(function() {
     origin: null,
 
 
+    /**
+     * @constructor
+     */
     init: function() {
       this.superInit();
       
@@ -31,6 +34,11 @@ phina.namespace(function() {
       this.interactive = false;
       this._overFlags = {};
       this._touchFlags = {};
+
+      this.width = 64;
+      this.height = 64;
+      this.radius = 32;
+      this.boundingType = 'rect';
     },
 
     /**
@@ -38,10 +46,16 @@ phina.namespace(function() {
      * @param {Number} x
      * @param {Number} y
      */
-    // hitTest: function(x, y) {
-    //   return (this.left < x && x < this.right) && (this.top < y && y < this.bottom);
-    // },
     hitTest: function(x, y) {
+      if (this.boundingType === 'rect') {
+        return this.hitTestRect(x, y);
+      }
+      else {
+        return this.hitTestCircle(x, y);
+      }
+    },
+
+    hitTestRect: function(x, y) {
       var p = this.globalToLocal(phina.geom.Vector2(x, y));
 
       var left   = -this.width*this.originX;
@@ -50,6 +64,15 @@ phina.namespace(function() {
       var bottom = +this.height*(1-this.originY);
 
       return ( left < p.x && p.x < right ) && ( top  < p.y && p.y < bottom );
+    },
+
+    hitTestCircle: function(x, y) {
+      // 円判定
+      var p = this.globalToLocal(phina.geom.Vector2(x, y));
+      if (((p.x)*(p.x)+(p.y)*(p.y)) < (this.radius*this.radius)) {
+          return true;
+      }
+      return false;
     },
 
     /**
@@ -74,8 +97,12 @@ phina.namespace(function() {
       return temp;
     },
 
-    setInteractive: function(flag) {
+    setInteractive: function(flag, type) {
       this.interactive = flag;
+      if (type) {
+        this.boundingType = type;
+      }
+
       return this;
     },
 
@@ -172,6 +199,22 @@ phina.namespace(function() {
       return this;
     },
 
+    setBoundingType: function(type) {
+      this.boundingType = type;
+      return this;
+    },
+
+    moveTo: function(x, y) {
+      this.position.x = x;
+      this.position.y = y;
+      return this;
+    },
+
+    moveBy: function(x, y) {
+      this.position.x += x;
+      this.position.y += y;
+      return this;
+    },
 
     _calcWorldMatrix: function() {
       if (!this.parent) return ;
@@ -221,16 +264,16 @@ phina.namespace(function() {
        * x座標値
        */
       x: {
-          "get": function()   { return this.position.x; },
-          "set": function(v)  { this.position.x = v; }
+        "get": function()   { return this.position.x; },
+        "set": function(v)  { this.position.x = v; }
       },
       /**
        * @property    y
        * y座標値
        */
       y: {
-          "get": function()   { return this.position.y; },
-          "set": function(v)  { this.position.y = v; }
+        "get": function()   { return this.position.y; },
+        "set": function(v)  { this.position.y = v; }
       },
 
       /**
@@ -238,8 +281,8 @@ phina.namespace(function() {
        * x座標値
        */
       originX: {
-          "get": function()   { return this.origin.x; },
-          "set": function(v)  { this.origin.x = v; }
+        "get": function()   { return this.origin.x; },
+        "set": function(v)  { this.origin.x = v; }
       },
       
       /**
@@ -247,8 +290,8 @@ phina.namespace(function() {
        * y座標値
        */
       originY: {
-          "get": function()   { return this.origin.y; },
-          "set": function(v)  { this.origin.y = v; }
+        "get": function()   { return this.origin.y; },
+        "set": function(v)  { this.origin.y = v; }
       },
       
       /**
@@ -256,8 +299,8 @@ phina.namespace(function() {
        * スケールX値
        */
       scaleX: {
-          "get": function()   { return this.scale.x; },
-          "set": function(v)  { this.scale.x = v; }
+        "get": function()   { return this.scale.x; },
+        "set": function(v)  { this.scale.x = v; }
       },
       
       /**
@@ -265,8 +308,8 @@ phina.namespace(function() {
        * スケールY値
        */
       scaleY: {
-          "get": function()   { return this.scale.y; },
-          "set": function(v)  { this.scale.y = v; }
+        "get": function()   { return this.scale.y; },
+        "set": function(v)  { this.scale.y = v; }
       },
       
       /**
@@ -274,16 +317,22 @@ phina.namespace(function() {
        * width
        */
       width: {
-          "get": function()   { return this._width; },
-          "set": function(v)  { this._width = v; }
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._width : this._diameter;
+        },
+        "set": function(v)  { this._width = v; }
       },
       /**
        * @property    height
        * height
        */
       height: {
-          "get": function()   { return this._height; },
-          "set": function(v)  { this._height = v; }
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._height : this._diameter;
+        },
+        "set": function(v)  { this._height = v; }
       },
 
       /**
@@ -291,10 +340,14 @@ phina.namespace(function() {
        * 半径
        */
       radius: {
-          "get": function()   {
-              return (this._radius !== undefined) ? this._radius : (this.width+this.height)/4;
-          },
-          "set": function(v)  { this._radius = v; }
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            (this.width+this.height)/4 : this._radius;
+        },
+        "set": function(v)  {
+          this._radius = v;
+          this._diameter = v*2;
+        },
       },
       
       /**
@@ -302,8 +355,8 @@ phina.namespace(function() {
        * 左
        */
       top: {
-          "get": function()   { return this.y - this.height*this.originY; },
-          "set": function(v)  { this.y = v + this.height*this.originY; },
+        "get": function()   { return this.y - this.height*this.originY; },
+        "set": function(v)  { this.y = v + this.height*this.originY; },
       },
    
       /**
@@ -311,8 +364,8 @@ phina.namespace(function() {
        * 左
        */
       right: {
-          "get": function()   { return this.x + this.width*(1-this.originX); },
-          "set": function(v)  { this.x = v - this.width*(1-this.originX); },
+        "get": function()   { return this.x + this.width*(1-this.originX); },
+        "set": function(v)  { this.x = v - this.width*(1-this.originX); },
       },
    
       /**
@@ -320,8 +373,8 @@ phina.namespace(function() {
        * 左
        */
       bottom: {
-          "get": function()   { return this.y + this.height*(1-this.originY); },
-          "set": function(v)  { this.y = v - this.height*(1-this.originY); },
+        "get": function()   { return this.y + this.height*(1-this.originY); },
+        "set": function(v)  { this.y = v - this.height*(1-this.originY); },
       },
    
       /**
