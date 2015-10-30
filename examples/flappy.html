@@ -71,16 +71,11 @@ phina.define('Player', {
     this.anim = FrameAnimation('tomapiko').attachTo(this);
     this.anim.gotoAndPlay('fly');
 
-    this.vy = 0;
-    this.ay = 0.5;
-  },
-  update: function() {
-    this.vy += this.ay;
-    this.y += this.vy;
+    this.physical.gravity.set(0, 0.5);
   },
 
   fly: function() {
-    this.vy = -10;
+    this.physical.force(0, -10);
   },
 });
 

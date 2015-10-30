@@ -51,6 +51,7 @@
     "accessory/tweener.js",
     "accessory/draggable.js",
     "accessory/frameanimation.js",
+    "accessory/physical.js",
 
     "dom/event.js",
 
