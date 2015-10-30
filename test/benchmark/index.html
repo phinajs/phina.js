@@ -58,6 +58,7 @@ phina.define("MainScene", {
     var self = this;
     CHILD_NUM.times(function(i) {
       var child = Sprite('image').addChildTo(group);
+
       var deg = i/CHILD_NUM * 360;
       child.x = CHILD_RADIUS * Math.cos(deg * Math.PI/180);
       child.y = CHILD_RADIUS * Math.sin(deg * Math.PI/180);
@@ -94,7 +95,7 @@ window.onload = function() {
 
   app.replaceScene(MainScene());
 
-  app.ticker.fps = 60;
+  app.ticker.fps = 120;
 
   app.run();
 };

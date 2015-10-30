@@ -225,7 +225,7 @@
 
   riot.route.start();
 
-  riot.route(function(path, query) {
+  var run = function(path) {
     var p = path.join('/');
     var code = (function() {
       var code = th.code(p);
@@ -242,10 +242,16 @@
       var html = res.replace('{{code}}', code);
       preview.load(html);
     });
+  };
+
+  riot.route(function(path, query) {
+    run(path);
   });
 
   var hash = location.hash.replace('#', '');
-  riot.route(hash || '');
+  if (hash) {
+    run(hash.split('/'));
+  }
 
   $(".button-collapse").sideNav();
 

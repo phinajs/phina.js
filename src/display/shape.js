@@ -229,12 +229,11 @@ phina.namespace(function() {
         fill: 'red',
         stroke: '#aaa',
         strokeWidth: 4,
-
         radius: 32,
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
     },
 
     _render: function() {
@@ -257,14 +256,10 @@ phina.namespace(function() {
 
     _accessor: {
       radius: {
-        get: function() {
-          return this._radius;
-        },
+        get: function() { return this._radius; },
         set: function(v) {
-          this._dirtyDraw = true;
           this._radius = v;
-          this._width = this._radius*2;
-          this._height = this._radius*2;
+          this._dirtyDraw = true;
         },
       }
     },
@@ -289,7 +284,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
     },
 
     _render: function() {
@@ -314,9 +309,7 @@ phina.namespace(function() {
 
     _accessor: {
       radius: {
-        get: function() {
-          return this._radius;
-        },
+        get: function() { return this._radius; },
         set: function(v) {
           this._dirtyDraw = true; this._radius = v;
         },
@@ -346,7 +339,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.sides = options.sides;
       this.sideIndent = options.sideIndent;
     },
@@ -408,7 +401,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.sides = options.sides;
     },
 
@@ -466,7 +459,7 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      this.radius = options.radius;
+      this.setBoundingType('circle');
       this.cornerAngle = options.cornerAngle;
     },
 

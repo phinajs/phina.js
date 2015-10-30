@@ -35,6 +35,9 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
+      this.width = 64;
+      this.height = 64;
+      this.radius = 32;
       this.boundingType = 'rect';
     },
 
@@ -314,7 +317,10 @@ phina.namespace(function() {
        * width
        */
       width: {
-        "get": function()   { return this._width; },
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._width : this._diameter;
+        },
         "set": function(v)  { this._width = v; }
       },
       /**
@@ -322,7 +328,10 @@ phina.namespace(function() {
        * height
        */
       height: {
-        "get": function()   { return this._height; },
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            this._height : this._diameter;
+        },
         "set": function(v)  { this._height = v; }
       },
 
@@ -332,9 +341,13 @@ phina.namespace(function() {
        */
       radius: {
         "get": function()   {
-          return (this._radius !== undefined) ? this._radius : (this.width+this.height)/4;
+          return (this.boundingType === 'rect') ?
+            (this.width+this.height)/4 : this._radius;
         },
-        "set": function(v)  { this._radius = v; }
+        "set": function(v)  {
+          this._radius = v;
+          this._diameter = v*2;
+        },
       },
       
       /**

@@ -29,6 +29,7 @@ phina.namespace(function() {
 
       this.width = options.width || 64;
       this.height = options.height || 64;
+      this.radius = options.radius || 32;
     },
 
     /**
