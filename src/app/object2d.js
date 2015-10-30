@@ -201,6 +201,18 @@ phina.namespace(function() {
       return this;
     },
 
+    moveTo: function(x, y) {
+      this.position.x = x;
+      this.position.y = y;
+      return this;
+    },
+
+    moveBy: function(x, y) {
+      this.position.x += x;
+      this.position.y += y;
+      return this;
+    },
+
     _calcWorldMatrix: function() {
       if (!this.parent) return ;
 
