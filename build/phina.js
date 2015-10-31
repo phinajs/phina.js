@@ -6952,6 +6952,7 @@ phina.namespace(function() {
    * @class phina.accessory.Physical
    * 本物ではないので名前変えるかも*
    * FakePhysical or MarioPhysical or LiePhysical
+   * RetroPysical or PysicaLike
    */
   phina.define('phina.accessory.Physical', {
     superClass: 'phina.accessory.Accessory',
