@@ -17,13 +17,12 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(element) {
+    init: function() {
       this.superInit();
       this._scenes = [phina.app.Scene()];
       this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
-      this.interactive = phina.app.Interactive(this);
 
       this.awake = true;
       this.ticker = phina.util.Ticker();

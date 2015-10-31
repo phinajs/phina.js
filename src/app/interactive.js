@@ -6,7 +6,14 @@ phina.namespace(function() {
     init: function(app) {
       this.app = app;
       this._enable = true;
-      this.cursor = 'pointer';
+      this.cursor = {
+        normal: '',
+        hover: 'pointer',
+      };
+
+      this.app.domElement.addEventListener('mouseover', function() {
+        this.app.domElement.style.cursor = this.cursor.normal;
+      }.bind(this), false);
     },
 
     enable: function() {
@@ -63,13 +70,13 @@ phina.namespace(function() {
         });
 
         if (obj.boundingType) {
-          this.app.domElement.style.cursor = this.cursor;
+          this.app.domElement.style.cursor = this.cursor.hover;
         }
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout');
 
-        this.app.domElement.style.cursor = '';
+        this.app.domElement.style.cursor = this.cursor.normal;
       }
 
       if (overFlag) {

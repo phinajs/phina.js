@@ -40,7 +40,7 @@ phina.namespace(function() {
         this.pointer = this.touch;
         this.pointers = this.touchList.touches;
       }.bind(this));
-      this.domElement.addEventListener("mousedown", function () {
+      this.domElement.addEventListener("mouseover", function () {
         this.pointer = this.mouse;
         this.pointers = [this.mouse];
       }.bind(this));
@@ -61,6 +61,9 @@ phina.namespace(function() {
           keyCode: e.keyCode,
         });
       }.bind(this));
+
+      // interactive
+      this.interactive = phina.app.Interactive(this);
 
       // click 対応
       var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
