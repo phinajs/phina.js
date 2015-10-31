@@ -7955,7 +7955,8 @@ phina.namespace(function() {
     _accessor: {
       width: {
         get: function() {
-          return this._width;
+          return (this.boundingType === 'rect') ?
+            this._width : this._diameter;
         },
         set: function(v) {
           this._dirtyDraw = true; this._width = v;
@@ -7963,10 +7964,22 @@ phina.namespace(function() {
       },
       height: {
         get: function() {
-          return this._height;
+          return (this.boundingType === 'rect') ?
+            this._height : this._diameter;
         },
         set: function(v) {
           this._dirtyDraw = true; this._height = v;
+        },
+      },
+      radius: {
+        "get": function()   {
+          return (this.boundingType === 'rect') ?
+            (this.width+this.height)/4 : this._radius;
+        },
+        "set": function(v)  {
+          this._dirtyDraw = true;
+          this._radius = v;
+          this._diameter = v*2;
         },
       },
       padding: {
@@ -8126,16 +8139,6 @@ phina.namespace(function() {
         this.canvas.strokeCircle(0, 0, this.radius);
       }
     },
-
-    _accessor: {
-      radius: {
-        get: function() { return this._radius; },
-        set: function(v) {
-          this._radius = v;
-          this._dirtyDraw = true;
-        },
-      }
-    },
   });
 });
 
@@ -8177,15 +8180,6 @@ phina.namespace(function() {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokePolygon(0, 0, this.radius, 3);
-      }
-    },
-
-    _accessor: {
-      radius: {
-        get: function() { return this._radius; },
-        set: function(v) {
-          this._dirtyDraw = true; this._radius = v;
-        },
       }
     },
   });
@@ -8238,10 +8232,6 @@ phina.namespace(function() {
     },
 
     _accessor: {
-      radius: {
-        get: function() { return this._radius; },
-        set: function(v) { this._dirtyDraw = true; this._radius = v; },
-      },
       sides: {
         get: function() { return this._sides; },
         set: function(v) { this._dirtyDraw = true; this._sides = v; },
@@ -8299,10 +8289,6 @@ phina.namespace(function() {
     },
 
     _accessor: {
-      radius: {
-        get: function() { return this._radius; },
-        set: function(v) { this._dirtyDraw = true; this._radius = v; },
-      },
       sides: {
         get: function() { return this._sides; },
         set: function(v) { this._dirtyDraw = true; this._sides = v; },
@@ -8357,10 +8343,6 @@ phina.namespace(function() {
     },
 
     _accessor: {
-      radius: {
-        get: function() { return this._radius; },
-        set: function(v) { this._dirtyDraw = true; this._radius = v; },
-      },
       cornerAngle: {
         get: function() { return this._cornerAngle; },
         set: function(v) { this._dirtyDraw = true; this._cornerAngle = v; },
