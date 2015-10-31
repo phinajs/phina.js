@@ -5488,7 +5488,14 @@ phina.namespace(function() {
     init: function(app) {
       this.app = app;
       this._enable = true;
-      this.cursor = 'pointer';
+      this.cursor = {
+        normal: '',
+        hover: 'pointer',
+      };
+
+      this.app.domElement.addEventListener('mouseover', function() {
+        this.app.domElement.style.cursor = this.cursor.normal;
+      }.bind(this), false);
     },
 
     enable: function() {
@@ -5545,13 +5552,13 @@ phina.namespace(function() {
         });
 
         if (obj.boundingType) {
-          this.app.domElement.style.cursor = this.cursor;
+          this.app.domElement.style.cursor = this.cursor.hover;
         }
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout');
 
-        this.app.domElement.style.cursor = '';
+        this.app.domElement.style.cursor = this.cursor.normal;
       }
 
       if (overFlag) {
@@ -5608,13 +5615,12 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(element) {
+    init: function() {
       this.superInit();
       this._scenes = [phina.app.Scene()];
       this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
-      this.interactive = phina.app.Interactive(this);
 
       this.awake = true;
       this.ticker = phina.util.Ticker();
@@ -8874,7 +8880,7 @@ phina.namespace(function() {
         this.pointer = this.touch;
         this.pointers = this.touchList.touches;
       }.bind(this));
-      this.domElement.addEventListener("mousedown", function () {
+      this.domElement.addEventListener("mouseover", function () {
         this.pointer = this.mouse;
         this.pointers = [this.mouse];
       }.bind(this));
@@ -8895,6 +8901,9 @@ phina.namespace(function() {
           keyCode: e.keyCode,
         });
       }.bind(this));
+
+      // interactive
+      this.interactive = phina.app.Interactive(this);
 
       // click 対応
       var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
