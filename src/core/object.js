@@ -16,15 +16,15 @@
    * @param   {String} key name
    * @param   {Object} param
    */
-  Object.defineProperty(Object.prototype, "property", {
-    value: function(name, val) {
-      Object.defineProperty(this, name, {
-        value: val,
-        enumerable: true,
-        writable: true
-      });
-    }
-  });
+  // Object.defineProperty(Object.prototype, "property", {
+  //   value: function(name, val) {
+  //     Object.defineProperty(this, name, {
+  //       value: val,
+  //       enumerable: true,
+  //       writable: true
+  //     });
+  //   }
+  // });
 
   /**
    * @method method
