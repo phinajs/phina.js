@@ -98,6 +98,55 @@ th.describe("display.Sprite", function() {
     }.bind(this));
   });
 
+  th.it('boundingType = "circle"', function() {
+    var path = '../../assets/images/hiyocos.png';
+    phina.asset.Texture().load(path).then(function(tex) {
+      var that = this;
+      
+      var point = phina.display.CircleShape({
+        radius: 1,
+      }).addChildTo(that);
+      point.x = 320;
+      point.y = 480;
+
+      var addHiyoko = function(x, y) {
+        var sprite = phina.display.Sprite(tex, 32, 32).addChildTo(that);
+        sprite.boundingType = "circle";
+        sprite.radius = 5;
+        sprite.setFrameIndex(0);
+        sprite.position.set(x, y);
+        sprite.setScale(2);
+        sprite.vx = 5;
+        sprite.vy = 5;
+        sprite.vr = ~~(Math.random()*10)-5;
+        sprite.on('enterframe', function(e) {
+            if (e.app.ticker.frame % 3 == 0) this.frameIndex = (this.frameIndex+1)%4;
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > 640) this.vx *= -1;
+            if (this.y < 0 || this.y > 960) this.vy *= -1;
+            this.rotation += this.vr;
+            
+            if (this.hitTest(point.x, point.y)) {
+              this.remove();
+            }
+        });
+        phina.display.CircleShape({
+          radius: 5,
+          stroke: "blue",
+          fill: false,
+          strokeWidth: 1,
+        }).addChildTo(sprite);
+      }
+
+      for (var i = 0; i < 20; i++) {
+        var x = ~~(Math.random()*600)+20;
+        var y = ~~(Math.random()*900)+30;
+        addHiyoko(x, y);
+      }
+    }.bind(this));
+  });
+
 });
 
 

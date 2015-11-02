@@ -40,7 +40,7 @@ phina.namespace(function() {
       var srcRect = this.srcRect;
       canvas.context.drawImage(image,
         srcRect.x, srcRect.y, srcRect.width, srcRect.height,
-        -this.width*this.originX, -this.height*this.originY, this.width, this.height
+        -this._width*this.originX, -this._height*this.originY, this._width, this._height
         );
     },
 
