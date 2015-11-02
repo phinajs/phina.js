@@ -15,16 +15,7 @@ phina.namespace(function() {
     init: function() {
       this.superInit();
       this.context = phina.asset.Sound.audioContext;
-    },
-
-    /**
-     * 複製
-     */
-    clone: function() {
-      var sound = phina.asset.Sound();
-      sound.loadFromBuffer(this.buffer);
-      sound.volume = this.volume;
-      return sound;
+      this.gainNode = this.context.createGain();
     },
 
     play: function() {
@@ -35,7 +26,8 @@ phina.namespace(function() {
       this.source = this.context.createBufferSource();
       this.source.buffer = this.buffer;
       // connect
-      this.source.connect(this.context.destination);
+      this.source.connect(this.gainNode);
+      this.gainNode.connect(this.context.destination);
       // play
       this.source.start(0);
 
@@ -91,6 +83,11 @@ phina.namespace(function() {
       this.buffer = buffer;
     },
 
+    setLoop: function(loop) {
+      this.loop = loop;
+      return this;
+    },
+
     _load: function(r) {
       var self = this;
 
@@ -117,6 +114,21 @@ phina.namespace(function() {
 
       xml.responseType = 'arraybuffer';
       xml.send(null);
+    },
+
+    _accessor: {
+      volume: {
+        get: function()  { return this.gainNode.gain.value; },
+        set: function(v) { this.gainNode.gain.value = v; },
+      },
+      loop: {
+        get: function()  { return this.source && this.source.loop; },
+        set: function(v) {
+          if (this.source) {
+            this.source.loop = v;
+          }
+        },
+      },
     },
 
     _static: {
