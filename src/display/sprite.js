@@ -45,8 +45,8 @@ phina.namespace(function() {
     },
 
     setFrameIndex: function(index, width, height) {
-      var tw  = width || this.width;      // tw
-      var th  = height || this.height;    // th
+      var tw  = width || this._width;      // tw
+      var th  = height || this._height;    // th
       var row = ~~(this.image.domElement.width / tw);
       var col = ~~(this.image.domElement.height / th);
       var maxIndex = row*col;
