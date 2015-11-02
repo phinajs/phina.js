@@ -72,11 +72,12 @@ phina.namespace(function() {
     },
 
     stop: function() {
+      if (this._id === null) return this;
       clearInterval(this._id);
 
       // ƒŒƒ“ƒ_ƒŠƒ“ƒO
       this.gif.render();
-
+      this._id = null;
       return this;
     },
 
