@@ -73,6 +73,17 @@ th.describe("asset.Sound", function() {
     };
   });
 
+  th.it('loop', function() {
+    var path = '../../assets/sounds/lo_002.mp3';
+    var sound = phina.asset.Sound()
+    sound.load(path).then(function(s) {
+      s.loop = true;
+      s.loopStart = 2.0;
+      s.loopEnd = 5.0;
+      s.play();
+    }.bind(this));
+  });
+
   th.it('oscillator', function() {
     var sound = phina.asset.Sound();
     sound._oscillator();
