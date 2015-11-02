@@ -3700,6 +3700,10 @@ phina.namespace(function() {
    */
   phina.define('phina.asset.Sound', {
     superClass: "phina.asset.Asset",
+    
+    _loop: false,
+    _loopStart: 0,
+    _loopEnd: 0,
 
     /**
      * @constructor
@@ -3717,6 +3721,10 @@ phina.namespace(function() {
 
       this.source = this.context.createBufferSource();
       this.source.buffer = this.buffer;
+      this.source.loop = this._loop;
+      this.source.loopStart = this._loopStart;
+      this.source.loopEnd = this._loopEnd;
+
       // connect
       this.source.connect(this.gainNode);
       this.gainNode.connect(this.context.destination);
@@ -3779,6 +3787,14 @@ phina.namespace(function() {
       this.loop = loop;
       return this;
     },
+    setLoopStart: function(loopStart) {
+      this.loopStart = loopStart;
+      return this;
+    },
+    setLoopEnd: function(loopEnd) {
+      this.loopEnd = loopEnd;
+      return this;
+    },
 
     _load: function(r) {
       var self = this;
@@ -3814,11 +3830,24 @@ phina.namespace(function() {
         set: function(v) { this.gainNode.gain.value = v; },
       },
       loop: {
-        get: function()  { return this.source && this.source.loop; },
+        get: function()  { return this._loop; },
         set: function(v) {
-          if (this.source) {
-            this.source.loop = v;
-          }
+          this._loop = v;
+          if (this.source) this.source._loop = v;
+        },
+      },
+      loopStart: {
+        get: function()  { return this._loopStart; },
+        set: function(v) {
+          this._loopStart = v;
+          if (this.source) this.source._loopStart = v;
+        },
+      },
+      loopEnd: {
+        get: function()  { return this._loopEnd; },
+        set: function(v) {
+          this._loopEnd = v;
+          if (this.source) this.source._loopEnd = v;
         },
       },
     },
@@ -8432,7 +8461,7 @@ phina.namespace(function() {
       var srcRect = this.srcRect;
       canvas.context.drawImage(image,
         srcRect.x, srcRect.y, srcRect.width, srcRect.height,
-        -this.width*this.originX, -this.height*this.originY, this.width, this.height
+        -this._width*this.originX, -this._height*this.originY, this._width, this._height
         );
     },
 
