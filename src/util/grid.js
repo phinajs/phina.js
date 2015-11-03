@@ -13,6 +13,8 @@
     columns: 12,
     /** ループ */
     loop: false,
+    /** オフセット値 */
+    offset: 0,
 
     /**
      * @constructor
@@ -23,16 +25,19 @@
         var width = param.width || 640;
         var columns = param.columns || 12;
         var loop = param.loop || false;
+        var offset = param.offset || 0;
       }
       else {
         var width   = arguments[0] || 640;
         var columns = arguments[1] || 12;
         var loop    = arguments[2] || false;
+        var offset = arguments[3] || 0;
       }
 
       this.width = width;
       this.columns = columns;
       this.loop = loop;
+      this.offset = offset;
       this.unitWidth = this.width/this.columns;
     },
 
@@ -42,7 +47,7 @@
         index += this.columns;
         index %= this.columns;
       }
-      return this.unitWidth * index;
+      return this.unitWidth * index + this.offset;
     },
 
     //
