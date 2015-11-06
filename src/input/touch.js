@@ -77,84 +77,78 @@
 })();
 
 
+
 ;(function() {
 
   phina.define('phina.input.TouchList', {
-    domElement: null,
+    superClass: Array,
 
-    init: function(domElement, length) {
+    domElement: null,
+    touchMap: null,
+    init: function(domElement) {
       this.domElement = domElement;
 
-      this.touches = [];
-      this.stockes = [];
-
-      (length).times(function() {
-        var touch = phina.input.Touch(domElement, true);
-        touch.id = null;
-        this.stockes.push(touch);
-      }, this);
+      this.touches = this;
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
-        Array.prototype.forEach.call(e.changedTouches, function(t) {
+        self.forEach.call(e.changedTouches, function(t) {
           var touch = self.getEmpty();
-
           touch.id = t.identifier;
           touch._start(t.pointX, t.pointY);
         });
       });
 
       this.domElement.addEventListener('touchend', function(e) {
-        Array.prototype.forEach.call(e.changedTouches, function(t) {
-          var touch = self.getTouch(t.identifier);
-          touch._end();
+        self.forEach.call(e.changedTouches, function(t) {
+          self.getTouch(t.identifier).forEach(function(touch) {
+            touch._end();
+          });
         });
       });
       this.domElement.addEventListener('touchmove', function(e) {
-        Array.prototype.forEach.call(e.changedTouches, function(t) {
-          var touch = self.getTouch(t.identifier);
-          touch._move(t.pointX, t.pointY);
+        self.forEach.call(e.changedTouches, function(t) {
+          self.getTouch(t.identifier).forEach(function(touch) {
+            touch._move(t.pointX, t.pointY);
+          });
         });
         e.stop();
       });
     },
 
     getEmpty: function() {
-      var touch = this.stockes.pop();
-      this.touches.push(touch);
-
+      var touch = phina.input.Touch(this.domElement, true);
+      this.push(touch);
       return touch;
     },
 
     getTouch: function(id) {
-      return this.touches.filter(function(touch) {
-        return touch.id === id;
-      })[0];
+      return this.filter(function(touch) {
+        return touch.id === id && touch.flags !== 0;
+      });
     },
 
     removeTouch: function(touch) {
-      var i = this.touches.indexOf(touch);
-      this.touches.splice(i, 1);
-      this.stockes.push(touch);
+      var i = this.indexOf(touch);
+      this.splice(i, 1);
     },
 
     update: function() {
-      this.touches.forEach(function(touch) {
-        if (touch.id !== null) {
-          if (!touch.released) {
-            touch.update();
+      this.forEach(function(touch) {
+        if (!touch.released) {
+          touch.update();
 
-            if (touch.flags === 0) {
-              touch.released = true;
-            }
-          }
-          else {
-            touch.released = false;
-            this.removeTouch(touch);
+          if (touch.flags === 0) {
+            touch.released = true;
           }
         }
+        else {
+          touch.released = false;
+          this.removeTouch(touch);
+        }
+
       }, this);
     }
-  })
+  });
 
 })();
