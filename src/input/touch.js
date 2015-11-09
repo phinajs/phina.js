@@ -82,17 +82,10 @@
   phina.define('phina.input.TouchList', {
     domElement: null,
 
-    init: function(domElement, length) {
+    init: function(domElement) {
       this.domElement = domElement;
 
       this.touches = [];
-      this.stockes = [];
-
-      (length).times(function() {
-        var touch = phina.input.Touch(domElement, true);
-        touch.id = null;
-        this.stockes.push(touch);
-      }, this);
 
       var self = this;
       this.domElement.addEventListener('touchstart', function(e) {
@@ -106,21 +99,23 @@
 
       this.domElement.addEventListener('touchend', function(e) {
         Array.prototype.forEach.call(e.changedTouches, function(t) {
-          var touch = self.getTouch(t.identifier);
-          touch._end();
+          self.getTouches(t.identifier).forEach(function(touch) {
+            touch._end();
+          });
         });
       });
       this.domElement.addEventListener('touchmove', function(e) {
         Array.prototype.forEach.call(e.changedTouches, function(t) {
-          var touch = self.getTouch(t.identifier);
-          touch._move(t.pointX, t.pointY);
+          self.getTouches(t.identifier).forEach(function(touch) {
+            touch._move(t.pointX, t.pointY);
+          });
         });
         e.stop();
       });
     },
 
     getEmpty: function() {
-      var touch = this.stockes.pop();
+      var touch = phina.input.Touch(this.domElement, true);
       this.touches.push(touch);
 
       return touch;
@@ -132,27 +127,31 @@
       })[0];
     },
 
+    getTouches: function(id) {
+      return this.touches.filter(function(touch) {
+        return touch.id === id && touch.flags !== 0;
+      });
+    },
+
     removeTouch: function(touch) {
       var i = this.touches.indexOf(touch);
       this.touches.splice(i, 1);
-      this.stockes.push(touch);
     },
 
     update: function() {
       this.touches.forEach(function(touch) {
-        if (touch.id !== null) {
-          if (!touch.released) {
-            touch.update();
+        if (!touch.released) {
+          touch.update();
 
-            if (touch.flags === 0) {
-              touch.released = true;
-            }
-          }
-          else {
-            touch.released = false;
-            this.removeTouch(touch);
+          if (touch.flags === 0) {
+            touch.released = true;
           }
         }
+        else {
+          touch.released = false;
+          this.removeTouch(touch);
+        }
+
       }, this);
     }
   })
