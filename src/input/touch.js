@@ -115,7 +115,7 @@
     },
 
     getEmpty: function() {
-      var touch = phina.util.Touch(this.domElement, true);
+      var touch = phina.input.Touch(this.domElement, true);
       this.touches.push(touch);
 
       return touch;
