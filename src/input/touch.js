@@ -119,6 +119,18 @@
         });
         e.stop();
       });
+
+      // iPhone では 6本指以上タッチすると強制的にすべてのタッチが解除される
+      this.domElement.addEventListener('touchcancel', function(e) {
+        console.warn('この端末での同時タッチ数の制限を超えました。');
+        each.call(e.changedTouches, function(t) {
+          var id = t.identifier;
+          var touch = touchMap[id];
+          touch._end();
+          delete touchMap[id];
+        });
+        e.stop();
+      });
     },
 
     getEmpty: function() {
