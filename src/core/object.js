@@ -98,6 +98,30 @@
     return this;
   });
 
+  /**
+   * @method  $get
+   * パス指定で値を取得
+   */
+  Object.prototype.method('$get', function(key) {
+    return key.split('.').reduce(function(t, v) {
+      return t[v];
+    }, this);
+  });
+
+  /**
+   * @method  $set
+   * パス指定で値を設定
+   */
+  Object.prototype.method('$set', function(key, value) {
+    key.split('.').reduce(function(t, v, i, arr) {
+      if (i === (arr.length-1)) {
+        t[v] = value;
+      }
+      else {
+        return t[v];
+      }
+    }, this);
+  });
 
   /**
    * @method  $has
