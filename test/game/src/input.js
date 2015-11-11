@@ -27,19 +27,19 @@ th.describe("input.Touches", function() {
     var button = phina.ui.Button().addChildTo(this);
     button.position.set(320-150, 480);
     button.onpointstart = function() {
-      this.bg.style.color = 'red';
+      this.fill = 'red';
     };
     button.onpointend = function() {
-      this.bg.style.color = 'hsl(200, 80%, 60%)';
+      this.fill = 'hsl(200, 80%, 60%)';
     };
 
     var button = phina.ui.Button().addChildTo(this);
     button.position.set(320+150, 480);
     button.onpointstart = function() {
-      this.bg.style.color = 'red';
+      this.fill = 'red';
     };
     button.onpointend = function() {
-      this.bg.style.color = 'hsl(200, 80%, 60%)';
+      this.fill = 'hsl(200, 80%, 60%)';
     };
   });
 });
