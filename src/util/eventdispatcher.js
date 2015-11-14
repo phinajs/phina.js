@@ -82,4 +82,20 @@ phina.namespace(function() {
     },
   });
 
+
+  // 別名のメソッドを定義
+  (function() {
+    var methodMap = {
+      addEventListener: 'on',
+      removeEventListener: 'off',
+      clearEventListener: 'clear',
+      hasEventListener: 'has',
+      dispatchEvent: 'fire',
+      dispatchEventByType: 'flare',
+    };
+    methodMap.forIn(function(old, name) {
+      phina.util.EventDispatcher.prototype.method(old, phina.util.EventDispatcher.prototype[name]);
+    });
+  })();
+
 });
