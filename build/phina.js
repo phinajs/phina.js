@@ -478,6 +478,18 @@
    */
   Number.prototype.method("tan", function() { return Math.tan(this) });
 
+  /**
+   * @method toDegree
+   * to degree
+   */
+  Number.prototype.method("toDegree", function() { return (this*Math.RAD_TO_DEG); });
+
+  /**
+   * @method toRadian
+   * to degree
+   */
+  Number.prototype.method("toRadian", function() { return this*Math.DEG_TO_RAD; });
+
 })();
 
 
@@ -1494,19 +1506,36 @@ phina.namespace(function() {
    */
   phina.define('phina.geom.Vector2', {
 
+    /** x座標 */
+    x: 0,
+    /** y座標 */
+    y: 0,
+
+    /**
+     * @constructor
+     */
     init: function(x, y) {
       this.x = x;
       this.y = y;
     },
 
+    /**
+     * 複製
+     */
     clone: function() {
       return phina.geom.Vector2(this.x, this.y);
     },
 
+    /**
+     * 等しいかどうかをチェック
+     */
     equals: function(v) {
       return (this.x === v.x && this.y === v.y);
     },
 
+    /**
+     * セッター
+     */
     set: function(x, y) {
       this.x = x;
       this.y = y;
@@ -1630,17 +1659,190 @@ phina.namespace(function() {
       return this.div(this.length());
     },
 
+    /**
+     * 文字列に変換
+     */
+    toString: function() {
+      return "{x:{x}, y:{y}}".format(this);
+    },
+
+    /**
+     * 角度に変換
+     */
+    toAngle: function() {
+      var rad = Math.atan2(this.y, this.x);
+      return (rad + Math.PI*2)%(Math.PI*2);
+    },
+
+    /**
+     * 角度(degree)と長さでベクトルをセット
+     */
+    fromAngle: function(rad, len) {
+      len = len || 1;
+      this.x = Math.cos(rad)*len;
+      this.y = Math.sin(rad)*len;
+      
+      return this;
+    },
+
     _accessor: {
     },
 
     _static: {
+      /**
+       * @method
+       * @static
+       * min
+       */
+      min: function(a, b) {
+        return phina.geom.Vector2(
+          (a.x < b.x) ? a.x : b.x,
+          (a.y < b.y) ? a.y : b.y
+          );
+      },
+
+      /**
+       * @method
+       * @static
+       * max
+       */
+      max: function(a, b) {
+        return phina.geom.Vector2(
+          (a.x > b.x) ? a.x : b.x,
+          (a.y > b.y) ? a.y : b.y
+          );
+      },
+
+      /**
+       * @method
+       * @static
+       * 加算
+       */
+      add: function(lhs, rhs) {
+        return phina.geom.Vector2(lhs.x+rhs.x, lhs.y+rhs.y);
+      },
+      
+      /**
+       * @method
+       * @static
+       * 減算
+       */
+      sub: function(lhs, rhs) {
+        return phina.geom.Vector2(lhs.x-rhs.x, lhs.y-rhs.y);
+      },
+      
+      /**
+       * @method
+       * @static
+       * 乗算
+       */
+      mul: function(v, n) {
+        return phina.geom.Vector2(v.x*n, v.y*n);
+      },
+      
+      /**
+       * @method
+       * @static
+       * 割算
+       */
+      div: function(v, n) {
+        return phina.geom.Vector2(v.x/n, v.y/n);
+      },
+      
+      /**
+       * @method
+       * @static
+       * 反転
+       */
+      negate: function(v) {
+        return phina.geom.Vector2(-v.x, -v.y);
+      },
+      
+      /**
+       * @method
+       * @static
+       * 内積.
+       * 投影ベクトルを求めたり, 類似度に使ったり.
+       */
+      dot: function(lhs, rhs) {
+        return lhs.x * rhs.x + lhs.y * rhs.y;
+      },
+      
+      /**
+       * @method
+       * @static
+       * 外積
+       */
+      cross: function(lhs, rhs) {
+        return (lhs.x*rhs.y) - (lhs.y*rhs.x);
+      },
+      
+      /**
+       * @method
+       * @static
+       * ２点間の距離を返す
+       */
+      distance: function(lhs, rhs) {
+        return Math.sqrt( Math.pow(lhs.x-rhs.x, 2) + Math.pow(lhs.y-rhs.y, 2) );
+      },
+
       distanceSquared: function(lhs, rhs) {
         return Math.pow(lhs.x-rhs.x, 2) + Math.pow(lhs.y-rhs.y, 2);
       },
-    },
 
-    _defined: function() {
+
+      /**
+       * @method
+       * @static
+       * マンハッタン距離
+       */
+      manhattanDistance: function(lhs, rhs) {
+        return Math.abs(lhs.x-rhs.x) + Math.abs(lhs.y-rhs.y);
+      },
       
+      /**
+       * @method
+       * @static
+       * 反射ベクトル
+       */
+      reflect: function(v, normal) {
+        var len = phina.geom.Vector2.dot(v, normal);
+        var temp= phina.geom.Vector2.mul(normal, 2*len);
+        
+        return phina.geom.sub(v, temp);
+      },
+
+      /**
+       * @method
+       * @static
+       * 補間.
+       * 0.5 で lhs と rhs の中間ベクトルを求めることができます.
+       */
+      lerp: function(lhs, rhs, t) {
+        // TODO: 
+        return phina.geom.Vector2(
+          lhs.x + (rhs.x-lhs.x)*t,
+          lhs.y + (rhs.y-lhs.y)*t
+        );
+      },
+      
+      
+      /**
+       * @method
+       * @static
+       * 補間
+       */
+      slerp: function(lhs, rhs, t) {
+          // TODO:
+          // cos...
+      },
+
+      random: function(len, min, max) {
+        min = min || 0;
+        max = max || 360;
+        len = len || 1;
+        return phina.geom.Vector2().setDegree(Math.randf(min, max), len);
+      },
     },
 
   });
@@ -7029,6 +7231,9 @@ phina.namespace(function() {
             self.flare('flickstart', {
               direction: dp.clone().normalize(),
             });
+          }
+          else {
+            self.cancel();
           }
 
           // self.flare('flick');
