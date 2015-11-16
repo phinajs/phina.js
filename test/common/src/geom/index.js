@@ -9,6 +9,18 @@ describe('#geom', function() {
       assert.equal(a.x, 1);
       assert.equal(a.y, 2);
     });
+
+    it('toAngle/fromAngle', function() {
+
+      (360).times(function(n) {
+        var v = phina.geom.Vector2();
+        v.fromAngle(n.toRadian(), 1);
+        var degree = v.toAngle().toDegree().floor();
+        assert(Math.abs(n-degree) <= 1);
+        // console.log(n, degree);
+      });
+
+    });
   });
 
   describe('Matrix33', function() {

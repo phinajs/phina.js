@@ -171,7 +171,8 @@ phina.namespace(function() {
      * 角度に変換
      */
     toAngle: function() {
-      return Math.atan2(this.y, this.x);
+      var rad = Math.atan2(this.y, this.x);
+      return (rad + Math.PI*2)%(Math.PI*2);
     },
 
     /**
