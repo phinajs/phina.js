@@ -29,6 +29,7 @@ phina.namespace(function() {
 
     /**
      * 等しいかどうかをチェック
+     * @return {Boolean}
      */
     equals: function(v) {
       return (this.x === v.x && this.y === v.y);
@@ -112,6 +113,7 @@ phina.namespace(function() {
      * 長さを取得
      * ### memo
      * magnitude って名前の方が良いかも. 検討中.
+     * @return {Number}
      */
     length: function() {
       return Math.sqrt(this.x*this.x + this.y*this.y);
@@ -121,6 +123,7 @@ phina.namespace(function() {
      * 2乗された長さを取得
      * C# の名前を引用
      * or lengthSquare or lengthSqrt
+     * @return {Number}
      */
     lengthSquared: function() {
       return this.x*this.x + this.y*this.y;
@@ -157,11 +160,13 @@ phina.namespace(function() {
      * 正規化
      */
     normalize: function() {
-      return this.div(this.length());
+      this.div(this.length());
+      return this;
     },
 
     /**
      * 文字列に変換
+     * @return {String}
      */
     toString: function() {
       return "{x:{x}, y:{y}}".format(this);
@@ -169,6 +174,7 @@ phina.namespace(function() {
 
     /**
      * 角度に変換
+     * @return {Number}
      */
     toAngle: function() {
       var rad = Math.atan2(this.y, this.x);
