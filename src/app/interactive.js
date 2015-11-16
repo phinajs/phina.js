@@ -101,7 +101,9 @@ phina.namespace(function() {
 
       if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
         obj._touchFlags[p.id] = false;
-        obj.flare('pointend');
+        obj.flare('pointend', {
+          pointer: p,
+        });
 
         if (obj._overFlags[p.id]) {
           obj._overFlags[p.id] = false;

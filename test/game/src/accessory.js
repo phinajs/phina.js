@@ -151,6 +151,65 @@ th.describe("accessory.Draggable", function() {
   });
 });
 
+th.describe("accessory.Flickable", function() {
+
+  th.it('init', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(320, 480);
+    shape.flickable.enable();
+
+    shape.flickable.friction = 0.9;
+
+    shape.update = function() {
+      if (this.x < 0) {
+        this.x = 0;
+        this.flickable.velocity.x *= -1;
+      }
+      if (this.x > 640) {
+        this.x = 640;
+        this.flickable.velocity.x *= -1;
+      }
+      if (this.y < 0) {
+        this.y = 0;
+        this.flickable.velocity.y *= -1;
+      }
+      if (this.y > 960) {
+        this.y = 960;
+        this.flickable.velocity.y *= -1;
+      }
+    };
+  });
+
+  th.it('horizontal', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(320, 480);
+    shape.flickable.enable();
+
+    shape.flickable.horizontal = true;
+    shape.flickable.vertical = false;
+  });
+  th.it('vertical', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(320, 480);
+    shape.flickable.enable();
+
+    shape.flickable.horizontal = false;
+    shape.flickable.vertical = true;
+  });
+
+  th.it('cancel', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.x = 320;
+    shape.y = 480;
+
+    shape.flickable.enable();
+
+    shape.flickable.onflickstart = function() {
+      this.cancel();
+    };
+  });
+});
+
 
 th.describe("accessory.FrameAnimation", function() {
 

@@ -12,6 +12,7 @@ th.describe("display.Shape", function() {
     setTimeout(function() {
       shape.radius = 200;
       shape.stroke = false;
+      shape.fill = 'blue';
     }, 2000);
   });
 

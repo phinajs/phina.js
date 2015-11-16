@@ -50,6 +50,7 @@
     "accessory/accessory.js",
     "accessory/tweener.js",
     "accessory/draggable.js",
+    "accessory/flickable.js",
     "accessory/frameanimation.js",
     "accessory/physical.js",
 
