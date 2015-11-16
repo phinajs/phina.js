@@ -51,6 +51,9 @@ phina.namespace(function() {
               direction: dp.clone().normalize(),
             });
           }
+          else {
+            self.cancel();
+          }
 
           // self.flare('flick');
           // self.flare('flickend');

@@ -204,7 +204,9 @@ th.describe("accessory.Flickable", function() {
 
     shape.flickable.enable();
 
-    shape.flickable.onflickstart = function() {
+    shape.flickable.onflickstart = function(e) {
+      var angle = e.direction.toAngle();
+      console.log(angle.toDegree());
       this.cancel();
     };
   });
