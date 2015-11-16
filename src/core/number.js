@@ -240,5 +240,17 @@
    */
   Number.prototype.method("tan", function() { return Math.tan(this) });
 
+  /**
+   * @method toDegree
+   * to degree
+   */
+  Number.prototype.method("toDegree", function() { return (this*Math.RAD_TO_DEG); });
+
+  /**
+   * @method toRadian
+   * to degree
+   */
+  Number.prototype.method("toRadian", function() { return this*Math.DEG_TO_RAD; });
+
 })();
 
