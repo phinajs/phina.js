@@ -7,6 +7,13 @@
 phina.js
 
 
+
+## Getting Started
+
+[runstant](http://goo.gl/k8YBGq)
+
+
+
 ## for developer
 
 ### clone
@@ -48,8 +55,3 @@ watch and launch
 ```
 $gulp dev
 ```
-
-
-### Getting Started
-
-[runstant](http://goo.gl/k8YBGq)
