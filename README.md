@@ -10,7 +10,7 @@ phina.js
 
 ## Getting Started
 
-[runstant](http://goo.gl/k8YBGq)
+[runstant](http://goo.gl/xgyU6f)
 
 
 
