@@ -50,6 +50,6 @@ $gulp dev
 ```
 
 
-### runstant
+### Getting Started
 
-http://goo.gl/0ATWNv
+[runstant](http://goo.gl/0ATWNv)
