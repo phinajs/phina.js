@@ -52,4 +52,4 @@ $gulp dev
 
 ### Getting Started
 
-[runstant](http://goo.gl/0ATWNv)
+[runstant](http://goo.gl/k8YBGq)
