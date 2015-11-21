@@ -36,6 +36,15 @@ phina.namespace(function() {
     randbool: function() {
       return this.randint(0, 1) === 1;
     },
+    randarray: function(len, min, max) {
+      len = len || 100;
+      min = min || 0;
+      max = max || 100;
+
+      return (len).map(function() {
+        return this.randint(min, max);
+      }, this);
+    },
 
     _accessor: {
       seed: {
@@ -70,6 +79,15 @@ phina.namespace(function() {
       },
       randbool: function() {
         return this.randint(0, 1) === 1;
+      },
+      randarray: function(len, min, max) {
+        len = len || 100;
+        min = min || 0;
+        max = max || 100;
+
+        return (len).map(function() {
+          return this.randint(min, max);
+        }, this);
       },
 
       xor32: function(seed) {

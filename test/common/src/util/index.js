@@ -180,6 +180,15 @@ describe('#util', function() {
       });
     });
 
+    it('randarray', function() {
+      var answer = [0, 2, 8, 0, 7, 4, 10, 8, 2, 5];
+
+      var random = phina.util.Random(16);
+      var arr = random.randarray(10, 0, 10);
+
+      assert(arr.deepEquals(answer));
+    });
+
     it('static.random', function() {
       var answer = [0, 0.12, 0.64, 0.55, 0.04];
       phina.util.Random.setSeed(8);
@@ -202,6 +211,14 @@ describe('#util', function() {
       (5).times(function(i) {
         assert.equal(phina.util.Random.randbool(), answer[i]);
       });
+    });
+    it('static.randarray', function() {
+      var answer = [0, 2, 8, 0, 7, 4, 10, 8, 2, 5];
+
+      phina.util.Random.setSeed(16);
+      var arr = phina.util.Random.randarray(10, 0, 10);
+
+      assert(arr.deepEquals(answer));
     });
   });
 
