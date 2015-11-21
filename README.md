@@ -2,9 +2,16 @@
 
 [![Join the chat at https://gitter.im/phi-jp/phina.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/phi-jp/phina.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-![image](assets/images/phina.png)
+![image](logo.png)
 
 phina.js
+
+
+
+## Getting Started
+
+[runstant](http://goo.gl/xgyU6f)
+
 
 
 ## for developer
@@ -48,8 +55,3 @@ watch and launch
 ```
 $gulp dev
 ```
-
-
-### runstant
-
-http://goo.gl/0ATWNv
