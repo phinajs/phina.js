@@ -78,15 +78,16 @@ phina.define("MainScene", {
       this.firing();
     });
 
+    this.ballSpeed = 12;
   },
 
   // 発射
   firing: function() {
     this.paddle.release();
-    this.ball.firing();
+    this.update = this._update;
   },
 
-  update: function(app) {
+  _update: function(app) {
     this.paddle.x = app.pointer.x;
     if (this.paddle.left < 0) {
       this.paddle.left = 0;
@@ -95,41 +96,52 @@ phina.define("MainScene", {
       this.paddle.right = this.gridX.width;
     }
 
+    // スピードの数分, 移動と衝突判定を繰り返す
+    (this.ballSpeed).times(function() {
+      this.ball.move();
+      this.checkHit(app);
+    }, this);
+  },
+
+  checkHit: function(app) {
     // 
     var ball = this.ball;
 
     // 画面外対応
-    if (this.ball.left < 0) {
-      this.ball.left = 0;
-      this.ball.reflectX();
+    if (ball.left < 0) {
+      ball.left = 0;
+      ball.reflectX();
     }
-    if (this.ball.right > this.gridX.width) {
-      this.ball.right = this.gridX.width
-      this.ball.reflectX();
+    if (ball.right > this.gridX.width) {
+      ball.right = this.gridX.width
+      ball.reflectX();
     }
-    if (this.ball.top < 0) {
-      this.ball.top = 0;
-      this.ball.reflectY();
+    if (ball.top < 0) {
+      ball.top = 0;
+      ball.reflectY();
     }
-    if (this.ball.bottom > this.gridY.width) {
-      this.ball.bottom = this.gridY.width
-      this.ball.reflectY();
+    if (ball.bottom > this.gridY.width) {
+      ball.bottom = this.gridY.width
+      ball.reflectY();
     }
 
     // ボールとパドル
-    if (this.ball.hitTestElement(this.paddle)) {
-      this.ball.bottom = this.paddle.top;
-      this.ball.reflectY();
-      var dx = this.paddle.x - this.ball.x;
-      this.ball.physical.velocity.x = -dx/5;
+    if (ball.hitTestElement(this.paddle)) {
+      ball.bottom = this.paddle.top;
+
+      var dx = ball.x - this.paddle.x;
+      ball.direction.x = dx;
+      ball.direction.y = -80;
+      ball.direction.normalize();
+
+      // speed up
+      this.ballSpeed += 1;
     }
 
     this.group.children.some(function(block) {
       // ヒット
       if (ball.hitTestElement(block)) {
         var dq = Vector2.sub(ball, block);
-
-        console.log(dq.x, dq.y);
 
         if (Math.abs(dq.x) < Math.abs(dq.y)) {
           ball.reflectY();
@@ -199,15 +211,21 @@ phina.define('Ball', {
       stroke: null,
       cornerRadius: 8,
     });
+
+    this.speed = 0;
+    this.direction = Vector2(1, -1).normalize();
   },
-  firing: function() {
-    this.physical.force(0, -16);
+
+  move: function() {
+    this.x += this.direction.x;
+    this.y += this.direction.y;
   },
+
   reflectX: function(x, y) {
-    this.physical.velocity.x *= -1;
+    this.direction.x *= -1;
   },
   reflectY: function(x, y) {
-    this.physical.velocity.y *= -1;
+    this.direction.y *= -1;
   },
 });
 
