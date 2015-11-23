@@ -72,6 +72,12 @@ phina.define("MainScene", {
     this.paddle = Paddle().addChildTo(this);
     this.paddle.setPosition(this.gridX.center(), this.gridY.span(15));
     this.paddle.hold(this.ball);
+
+
+    this.one('pointend', function() {
+      this.firing();
+    });
+
   },
 
   // 発射
@@ -149,10 +155,6 @@ phina.define("MainScene", {
         return true;
       }
     }, this);
-  },
-
-  onpointend: function() {
-    this.firing();
   },
 
   onenter: function() {
