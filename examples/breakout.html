@@ -1,0 +1,255 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Break out | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+<style>
+canvas {
+  box-shadow: 0px 0px 4px 0px #aaa;
+}
+</style>
+
+<script src='../build/phina.js'></script>
+<script>
+
+phina.globalize();
+
+var SCREEN_WIDTH    = 640;
+var SCREEN_HEIGHT   = 960;
+var MAX_PER_LINE    = 8;                            // ピースの横に並ぶ最大数
+var BLOCK_SIZE      = 64;
+var BLOCK_NUM       = MAX_PER_LINE*5;
+var BOARD_PADDING   = 34;
+var PADDLE_WIDTH    = 150;
+var PADDLE_HEIGHT   = 32;
+var BALL_RADIUS     = 16;
+
+var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
+var BOARD_SIZE      = SCREEN_WIDTH - BOARD_PADDING*2;
+var BOARD_OFFSET_X  = BOARD_PADDING+BLOCK_SIZE/2;
+
+
+phina.define("MainScene", {
+  superClass: 'CanvasScene',
+
+  init: function() {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+
+    this.backgroundColor = '#444';
+
+
+    this.group = CanvasElement().addChildTo(this);
+
+    var gridX = Grid(BOARD_SIZE, MAX_PER_LINE);
+    var gridY = Grid(BOARD_SIZE, MAX_PER_LINE);
+
+    var self = this;
+
+    (BLOCK_NUM).times(function(i) {
+      // グリッド上でのインデックス
+      var xIndex = i%MAX_PER_LINE;
+      var yIndex = Math.floor(i/MAX_PER_LINE);
+      var angle = (360)/BLOCK_NUM*i;
+      var block = Block(angle).addChildTo(this.group).setPosition(100, 100);
+
+      block.x = gridX.span(xIndex) + BOARD_OFFSET_X;
+      block.y = gridY.span(yIndex)+100;
+    }, this);
+
+    // ボール
+    this.ball = Ball().addChildTo(this);
+
+    // パドル
+    this.paddle = Paddle().addChildTo(this);
+    this.paddle.setPosition(this.gridX.center(), this.gridY.span(15));
+    this.paddle.hold(this.ball);
+  },
+
+  // 発射
+  firing: function() {
+    this.paddle.release();
+    this.ball.firing();
+  },
+
+  update: function(app) {
+    this.paddle.x = app.pointer.x;
+    if (this.paddle.left < 0) {
+      this.paddle.left = 0;
+    }
+    if (this.paddle.right > this.gridX.width) {
+      this.paddle.right = this.gridX.width;
+    }
+
+    // 
+    var ball = this.ball;
+
+    // 画面外対応
+    if (this.ball.left < 0) {
+      this.ball.left = 0;
+      this.ball.reflectX();
+    }
+    if (this.ball.right > this.gridX.width) {
+      this.ball.right = this.gridX.width
+      this.ball.reflectX();
+    }
+    if (this.ball.top < 0) {
+      this.ball.top = 0;
+      this.ball.reflectY();
+    }
+    if (this.ball.bottom > this.gridY.width) {
+      this.ball.bottom = this.gridY.width
+      this.ball.reflectY();
+    }
+
+    // ボールとパドル
+    if (this.ball.hitTestElement(this.paddle)) {
+      this.ball.bottom = this.paddle.top;
+      this.ball.reflectY();
+      var dx = this.paddle.x - this.ball.x;
+      this.ball.physical.velocity.x = -dx/5;
+    }
+
+    this.group.children.some(function(block) {
+      // ヒット
+      if (ball.hitTestElement(block)) {
+        var dq = Vector2.sub(ball, block);
+
+        console.log(dq.x, dq.y);
+
+        if (Math.abs(dq.x) < Math.abs(dq.y)) {
+          ball.reflectY();
+          if (dq.y >= 0) {
+            ball.top = block.bottom;
+          }
+          else {
+            ball.bottom = block.top;
+          }
+        }
+        else {
+          ball.reflectX();
+          if (dq.x >= 0) {
+            ball.left = block.right;
+          }
+          else {
+            ball.right = block.left;
+          }
+        }
+
+        block.remove();
+
+        return true;
+      }
+    }, this);
+  },
+
+  onpointend: function() {
+    this.firing();
+  },
+
+  onenter: function() {
+    return ;
+    var scene = CountScene({
+      backgroundColor: 'rgba(100, 100, 100, 1)',
+      count: ['Ready'],
+      fontSize: 100,
+    });
+    this.app.pushScene(scene);
+  },
+
+});
+
+phina.define('Block', {
+  superClass: 'RectangleShape',
+
+  init: function(angle) {
+    this.superInit({
+      width: BLOCK_SIZE,
+      height: BLOCK_SIZE,
+      fill: 'hsl({0}, 80%, 60%)'.format(angle || 0),
+      stroke: null,
+      cornerRadius: 8,
+    });
+  },
+
+  appear: function() {
+    this.tweener
+      .clear()
+      .fromJSON(PIECE_APPEAR_ANIMATION);
+  },
+});
+
+phina.define('Ball', {
+  superClass: 'CircleShape',
+
+  init: function() {
+    this.superInit({
+      radius: BALL_RADIUS,
+      fill: '#eee',
+      stroke: null,
+      cornerRadius: 8,
+    });
+  },
+  firing: function() {
+    this.physical.force(0, -16);
+  },
+  reflectX: function(x, y) {
+    this.physical.velocity.x *= -1;
+  },
+  reflectY: function(x, y) {
+    this.physical.velocity.y *= -1;
+  },
+});
+
+phina.define('Paddle', {
+  superClass: 'RectangleShape',
+  init: function() {
+    this.superInit({
+      width: PADDLE_WIDTH,
+      height: PADDLE_HEIGHT,
+      fill: '#eee',
+      stroke: null,
+      cornerRadius: 8,
+    });
+  },
+
+  hold: function(ball) {
+    this.ball = ball;
+  },
+
+  release: function() {
+    this.ball = null;
+  },
+
+  update: function() {
+    if (this.ball) {
+      this.ball.x = this.x;
+      this.ball.y = this.top-this.ball.radius;
+    }
+  }
+});
+
+
+phina.main(function() {
+  var app = GameApp({
+    startLabel: location.search.substr(1).toObject().scene || 'title',
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  });
+
+  app.enableStats();
+
+  app.run();
+});
+
+
+
+</script>
