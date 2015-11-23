@@ -23,17 +23,18 @@ phina.globalize();
 var SCREEN_WIDTH    = 640;
 var SCREEN_HEIGHT   = 960;
 var MAX_PER_LINE    = 8;                            // ピースの横に並ぶ最大数
-var BLOCK_SIZE      = 64;
 var BLOCK_NUM       = MAX_PER_LINE*5;
-var BOARD_PADDING   = 34;
+var BLOCK_SIZE      = 64;
+var BOARD_PADDING   = 50;
 var PADDLE_WIDTH    = 150;
 var PADDLE_HEIGHT   = 32;
 var BALL_RADIUS     = 16;
+var BALL_SPEED      = 16;
 
 var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
 var BOARD_SIZE      = SCREEN_WIDTH - BOARD_PADDING*2;
 var BOARD_OFFSET_X  = BOARD_PADDING+BLOCK_SIZE/2;
-
+var BOARD_OFFSET_Y  = 150;
 
 phina.define("MainScene", {
   superClass: 'CanvasScene',
@@ -62,7 +63,7 @@ phina.define("MainScene", {
       var block = Block(angle).addChildTo(this.group).setPosition(100, 100);
 
       block.x = gridX.span(xIndex) + BOARD_OFFSET_X;
-      block.y = gridY.span(yIndex)+100;
+      block.y = gridY.span(yIndex)+BOARD_OFFSET_Y;
     }, this);
 
     // ボール
@@ -73,21 +74,16 @@ phina.define("MainScene", {
     this.paddle.setPosition(this.gridX.center(), this.gridY.span(15));
     this.paddle.hold(this.ball);
 
-
+    // タッチでゲーム開始
+    this.ballSpeed = 0;
     this.one('pointend', function() {
-      this.firing();
+      this.paddle.release();
+      this.ballSpeed = BALL_SPEED;
     });
-
-    this.ballSpeed = 12;
   },
 
-  // 発射
-  firing: function() {
-    this.paddle.release();
-    this.update = this._update;
-  },
-
-  _update: function(app) {
+  update: function(app) {
+    // パドル移動
     this.paddle.x = app.pointer.x;
     if (this.paddle.left < 0) {
       this.paddle.left = 0;
@@ -167,16 +163,6 @@ phina.define("MainScene", {
         return true;
       }
     }, this);
-  },
-
-  onenter: function() {
-    return ;
-    var scene = CountScene({
-      backgroundColor: 'rgba(100, 100, 100, 1)',
-      count: ['Ready'],
-      fontSize: 100,
-    });
-    this.app.pushScene(scene);
   },
 
 });
