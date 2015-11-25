@@ -22,7 +22,7 @@ phina.globalize();
 
 var SCREEN_WIDTH    = 640;
 var SCREEN_HEIGHT   = 960;
-var MAX_PER_LINE    = 8;                            // ピースの横に並ぶ最大数
+var MAX_PER_LINE    = 8;                            
 var BLOCK_NUM       = MAX_PER_LINE*5;
 var BLOCK_SIZE      = 64;
 var BOARD_PADDING   = 50;
@@ -31,7 +31,6 @@ var PADDLE_HEIGHT   = 32;
 var BALL_RADIUS     = 16;
 var BALL_SPEED      = 16;
 
-var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
 var BOARD_SIZE      = SCREEN_WIDTH - BOARD_PADDING*2;
 var BOARD_OFFSET_X  = BOARD_PADDING+BLOCK_SIZE/2;
 var BOARD_OFFSET_Y  = 150;
@@ -95,12 +94,12 @@ phina.define("MainScene", {
     // スピードの数分, 移動と衝突判定を繰り返す
     (this.ballSpeed).times(function() {
       this.ball.move();
-      this.checkHit(app);
+      this.checkHit();
     }, this);
   },
 
-  checkHit: function(app) {
-    // 
+  checkHit: function() {
+    //
     var ball = this.ball;
 
     // 画面外対応
@@ -179,12 +178,6 @@ phina.define('Block', {
       cornerRadius: 8,
     });
   },
-
-  appear: function() {
-    this.tweener
-      .clear()
-      .fromJSON(PIECE_APPEAR_ANIMATION);
-  },
 });
 
 phina.define('Ball', {
@@ -207,10 +200,10 @@ phina.define('Ball', {
     this.y += this.direction.y;
   },
 
-  reflectX: function(x, y) {
+  reflectX: function() {
     this.direction.x *= -1;
   },
-  reflectY: function(x, y) {
+  reflectY: function() {
     this.direction.y *= -1;
   },
 });
