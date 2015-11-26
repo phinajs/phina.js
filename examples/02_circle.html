@@ -1,0 +1,110 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Circle | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+
+<script src='../build/phina.js'></script>
+<script>
+
+// グローバルに展開
+phina.globalize();
+
+// 定数
+var CIRCLE_RADIUS = 32;
+var GRAVITY = 0.98;
+var FLOOR_HEIGHT = 960;
+
+/*
+ * サークルクラス
+ */
+phina.define('Circle', {
+  superClass: 'CircleShape',
+
+  init: function(color) {
+    this.superInit({
+      fill: color,
+      stroke: null,
+      radius: CIRCLE_RADIUS,
+    });
+
+    this.blendMode = 'lighter';
+    this.vy = 0;
+  },
+
+  update: function() {
+    this.vy += GRAVITY;
+    this.y += this.vy;
+
+    // 
+    if (this.bottom > FLOOR_HEIGHT) {
+      this.bottom = FLOOR_HEIGHT;
+      this.vy *= -1;
+    }
+  },
+});
+
+
+/*
+ * メインシーン
+ */
+phina.define("MainScene", {
+  // 継承
+  superClass: 'CanvasScene',
+
+  // 初期化
+  init: function() {
+    // super init
+    this.superInit();
+
+    // 背景色
+    this.backgroundColor = '#222';
+
+    // ラベルを生成
+    var label = Label('touch me!').addChildTo(this);
+    label.x = this.gridX.center(); // x 軸
+    label.y = this.gridY.center(6); // y 軸
+    label.fill = '#eee';  // 塗りつぶし色
+
+    (10).times(function() {
+      var x = Math.randint(0, this.gridX.width);
+      var y = Math.randint(0, this.gridY.width);
+      this.addCircle(x, y);
+    }, this);
+  },
+
+  onpointmove: function(e) {
+    var p = e.pointer;
+    this.addCircle(p.x, p.y);
+  },
+
+  addCircle: function(x, y) {
+    var color = "hsla({0}, 75%, 50%, 0.75)".format(Math.randint(0, 360));
+    // サークルを生成
+    var circle = Circle(color).addChildTo(this);
+    circle.setPosition(x, y);
+  },
+});
+
+/*
+ * メイン処理
+ */
+phina.main(function() {
+  // アプリケーションを生成
+  var app = GameApp({
+    startLabel: 'main', // MainScene から開始
+  });
+
+  app.enableStats();
+
+  // 実行
+  app.run();
+});
+
+</script>
