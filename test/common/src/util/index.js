@@ -1,6 +1,16 @@
 
 describe('#util', function() {
 
+  describe('Color', function() {
+    it('init', function() {
+      var color = phina.util.Color(255, 0, 0);
+
+      console.log(color.toString());
+
+      assert(color.toString())
+    });
+  });
+
   describe('Grid', function() {
     it('init', function() {
       var grid = phina.util.Grid(960, 12);

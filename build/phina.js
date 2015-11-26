@@ -104,7 +104,7 @@
    */
   Object.prototype.method('$get', function(key) {
     return key.split('.').reduce(function(t, v) {
-      return t[v];
+      return t && t[v];
     }, this);
   });
 
@@ -118,6 +118,7 @@
         t[v] = value;
       }
       else {
+        if (!t[v]) t[v] = {};
         return t[v];
       }
     }, this);
