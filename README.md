@@ -26,26 +26,14 @@ $cd phina.js
 ### setup
 
 ```
-$npm install
 $npm install -g gulp
+$npm install
 ```
 
 ### build
 
 ```
 $gulp
-```
-
-### watch and build
-
-```
-$gulp watch
-```
-
-### launch
-
-```
-$gulp webserver
 ```
 
 ### develop
