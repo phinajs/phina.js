@@ -4,8 +4,11 @@
 
 ![image](logo.png)
 
-phina.js
+phina.js is game library.
 
+## Official
+
+http://phinajs.com
 
 
 ## Getting Started
