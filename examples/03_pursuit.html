@@ -1,0 +1,105 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Pursuit | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+
+<script src='../build/phina.js'></script>
+<script>
+
+// グローバルに展開
+phina.globalize();
+
+// 定数
+var CIRCLE_RADIUS       = 32;
+var CIRCLE_MAX_NUM      = 15;
+var CIRCLE_PURSUIT_RATE = 0.25;  // 収束率
+
+/*
+ * サークルクラス
+ */
+phina.define('Circle', {
+  superClass: 'CircleShape',
+
+  init: function(color) {
+    this.superInit({
+      fill: color,
+      stroke: null,
+      radius: CIRCLE_RADIUS,
+    });
+
+    this.blendMode = 'lighter';
+  },
+
+  update: function(app) {
+    // ターゲットがあればそれに向けて移動, 収束
+    if (this.target) {
+      this.x += (this.target.x-this.x)*CIRCLE_PURSUIT_RATE;
+      this.y += (this.target.y-this.y)*CIRCLE_PURSUIT_RATE;
+    }
+    // ターゲットがなければタッチ位置へ
+    else {
+      var p = app.pointer;
+      this.x = p.x;
+      this.y = p.y;
+    }
+  },
+});
+
+
+/*
+ * メインシーン
+ */
+phina.define("MainScene", {
+  // 継承
+  superClass: 'CanvasScene',
+
+  // 初期化
+  init: function() {
+    // super init
+    this.superInit();
+
+    // 背景色
+    this.backgroundColor = '#222';
+
+    // グループを生成
+    this.group = CanvasElement().addChildTo(this);
+
+    // サークルを生成
+    (CIRCLE_MAX_NUM).times(function(i) {
+      var color = "hsla({0}, 75%, 50%, 0.75)".format(360/CIRCLE_MAX_NUM*i);
+      var circle = Circle(color).addChildTo(this.group);
+      circle.x = Math.randint(0, this.gridX.width);
+      circle.y = Math.randint(0, this.gridY.width);
+    }, this);
+
+    // チェイン
+    this.group.children.reduce(function(prev, current) {
+      current.target = prev;
+      return current;
+    }, null);
+  },
+});
+
+/*
+ * メイン処理
+ */
+phina.main(function() {
+  // アプリケーションを生成
+  var app = GameApp({
+    startLabel: 'main', // MainScene から開始
+  });
+
+  app.enableStats();
+
+  // 実行
+  app.run();
+});
+
+</script>
