@@ -1,0 +1,146 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Particle | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+
+<script src='../build/phina.js'></script>
+<script>
+
+// グローバルに展開
+phina.globalize();
+
+// 定数
+var SCREEN_WIDTH    = 640;
+var PARTICLE_NUM    = 500;
+var FRICTION        = 0.96;
+var TO_DIST         = SCREEN_WIDTH*0.86;
+var STIR_DIST       = SCREEN_WIDTH*0.125;
+var BLOW_DIST       = SCREEN_WIDTH*0.4;
+
+/*
+ * パーティクル
+ */
+phina.define('Particle', {
+  superClass: 'StarShape',
+  
+  init: function(color) {
+    this.superInit({
+      fill: color,
+      stroke: null,
+      radius: 4,
+    });
+    
+    this.v = Vector2(0, 0);
+    this.blendMode = 'lighter';
+  },
+  
+  update: function(app) {
+    var p  = app.pointer;
+    var dv = Vector2.sub(this, p);
+    var d  = dv.length() || 0.001;
+    dv.div(d);  // normalize
+    
+    // タッチによる反発
+    if (p.getPointing()) {
+      if (d < BLOW_DIST) {
+        var blowAcc = (1 - (d/BLOW_DIST)) * 14;
+        this.v.x += dv.x * blowAcc + 0.5 - Math.random();
+        this.v.y += dv.y * blowAcc + 0.5 - Math.random();
+      }
+    }
+
+
+    // 距離が一定以内だと速度を調整する
+    if (d<TO_DIST) {
+      var toAcc = ( 1 - ( d / TO_DIST ) ) * SCREEN_WIDTH * 0.0014;
+      this.v.x -= dv.x * toAcc;
+      this.v.y -= dv.y * toAcc;
+    }
+
+
+    if (d<STIR_DIST) {
+      var mAcc = ( 1 - (d / STIR_DIST) * SCREEN_WIDTH * 0.00026 );
+      this.v.x += p.dx * mAcc * 0.1;
+      this.v.y += p.dy * mAcc * 0.1;
+    }
+
+    // 摩擦
+    this.v.mul(FRICTION);
+    // 移動
+    this.position.add(this.v);
+    
+    // ハミ出しチェック
+    if (this.x > SCREEN_WIDTH) {
+      this.x = SCREEN_WIDTH; this.v.x *= -1;
+    }
+    else if (this.x < 0) {
+      this.x = 0; this.v.x *= -1;
+    }
+    if (this.y > app.height) {
+      this.y = app.height; this.v.y *= -1;
+    }
+    else if (this.y < 0) {
+      this.y = 0; this.v.y *= -1;
+    }
+
+    // スケール
+    var scale = this.v.lengthSquared() * 0.04;
+    scale = Math.clamp(scale, 0.75, 2);
+    this.scaleX = this.scaleY = scale;
+    
+    // 回転
+    this.rotation += scale*10;
+  },
+  
+});
+
+
+
+/*
+ * メインシーン
+ */
+phina.define('MainScene', {
+  // 継承
+  superClass: 'CanvasScene',
+
+  // 初期化
+  init: function() {
+    // super init
+    this.superInit();
+
+    // 背景色
+    this.backgroundColor = '#222';
+
+    // パーティクルを生成
+    (PARTICLE_NUM).times(function() {
+      var color = "hsla({0}, 75%, 50%, 1)".format(Math.randint(0, 360));
+      var p = Particle(color).addChildTo(this);
+      p.x = Math.randint(0, this.gridX.width);
+      p.y = Math.randint(0, this.gridY.width);
+    }, this);
+  },
+});
+
+/*
+ * メイン処理
+ */
+phina.main(function() {
+  // アプリケーションを生成
+  var app = GameApp({
+    startLabel: 'main', // MainScene から開始
+  });
+
+  app.enableStats();
+
+  // 実行
+  app.run();
+});
+
+</script>
