@@ -76,6 +76,11 @@ phina.define("MainScene", {
 
       AssetManager.get('sound', 'correct').play();
     }
+
+    // space if push space
+    if (e.keyCode === 32) {
+      this.app.stop();
+    }
   },
 
   update: function(app) {

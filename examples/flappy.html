@@ -68,6 +68,12 @@ phina.define("MainScene", {
       }
     }, this);
   },
+  onkeydown: function(e) {
+    // space if push space
+    if (e.keyCode === 32) {
+      this.app.stop();
+    }
+  },
 });
 
 phina.define('Player', {

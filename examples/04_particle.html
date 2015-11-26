@@ -126,6 +126,13 @@ phina.define('MainScene', {
       p.y = Math.randint(0, this.gridY.width);
     }, this);
   },
+
+  onkeydown: function(e) {
+    // space if push space
+    if (e.keyCode === 32) {
+      this.app.stop();
+    }
+  },
 });
 
 /*
