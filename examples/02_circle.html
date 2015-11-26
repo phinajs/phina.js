@@ -29,20 +29,22 @@ phina.define('Circle', {
 
   init: function(color) {
     this.superInit({
-      fill: color,
-      stroke: null,
-      radius: CIRCLE_RADIUS,
+      fill: color,  // 塗りつぶし色
+      stroke: null, // ストローク色
+      radius: CIRCLE_RADIUS, // 半径
     });
 
     this.blendMode = 'lighter';
+    // 下への移動値
     this.vy = 0;
   },
 
   update: function() {
+    // 下に移動
     this.vy += GRAVITY;
     this.y += this.vy;
 
-    // 
+    // 地面に着いたら反発する
     if (this.bottom > FLOOR_HEIGHT) {
       this.bottom = FLOOR_HEIGHT;
       this.vy *= -1;
@@ -72,18 +74,21 @@ phina.define("MainScene", {
     label.y = this.gridY.center(6); // y 軸
     label.fill = '#eee';  // 塗りつぶし色
 
-    (10).times(function() {
+    // デフォルトでいくつか生成
+    (12).times(function() {
       var x = Math.randint(0, this.gridX.width);
       var y = Math.randint(0, this.gridY.width);
       this.addCircle(x, y);
     }, this);
   },
 
+  // タッチイベント
   onpointmove: function(e) {
     var p = e.pointer;
     this.addCircle(p.x, p.y);
   },
 
+  // サークルを追加
   addCircle: function(x, y) {
     var color = "hsla({0}, 75%, 50%, 0.75)".format(Math.randint(0, 360));
     // サークルを生成
