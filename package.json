@@ -1,7 +1,7 @@
 {
   "name": "phina.js",
-  "version": "0.0.1",
-  "description": "phina.js is a JavaScript library",
+  "version": "0.1.0",
+  "description": "phina.js is a game library in javascript",
   "main": "build/phina.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
