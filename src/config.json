@@ -1,7 +1,5 @@
 {
   "files": [
-    "banner.js",
-
     "core/object.js",
     "core/number.js",
     "core/string.js",
