@@ -11,6 +11,20 @@ var pkg = require('./package.json');
 var config = require('./src/config.json');
 var ip = require('ip');
 
+var banner = [
+  "/* ",
+  " * <%= pkg.name %> <%= pkg.version %>",
+  " * <%= pkg.description %>",
+  " * MIT Licensed",
+  " * ",
+  " * Copyright (C) 2015 phi, http://phinajs.com",
+  " */",
+  "",
+  "",
+].join('\n');
+
+
+
 gulp.task('default', ['uglify']);
 gulp.task('dev', ['watch', 'webserver']);
 
@@ -22,13 +36,21 @@ gulp.task('concat', function() {
   return gulp.src(scripts)
     .pipe(concat('phina.js'))
     .pipe(replace('<%= version %>', pkg.version))
+    .pipe(header(banner, {
+      pkg: pkg,
+    }))
     .pipe(gulp.dest('./build/'))
     ;
 });
 
 gulp.task('uglify', ['concat'], function() {
   return gulp.src('./build/phina.js')
-    .pipe(uglify())
+    .pipe(uglify({
+      banner: '/* hoge */'
+    }))
+    .pipe(header(banner, {
+      pkg: pkg,
+    }))
     .pipe(rename({
       extname: '.min.js'
     }))

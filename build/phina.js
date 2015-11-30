@@ -1,11 +1,10 @@
-/*
- * phina.js v0.1.0
- * http://github.com/phi-jp/phina.js
+/* 
+ * phina.js 0.1.0
+ * phina.js is a game library in javascript
  * MIT Licensed
  * 
  * Copyright (C) 2015 phi, http://phinajs.com
  */
-
 
 /*
  *
@@ -1372,6 +1371,8 @@
  *
  */
 
+
+
 /*
  * phina.js namespace
  */
@@ -1387,7 +1388,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.1.0';
+  phina.VERSION = '0.1.022';
 
   phina.method('isNode', function() {
     return (typeof module !== 'undefined');

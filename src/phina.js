@@ -19,7 +19,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.1.0';
+  phina.VERSION = '<%= version %>';
 
   phina.method('isNode', function() {
     return (typeof module !== 'undefined');

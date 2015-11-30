@@ -24,6 +24,7 @@
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.3",
     "gulp-download": "0.0.1",
+    "gulp-header": "^1.7.1",
     "gulp-helper": "^1.0.3",
     "gulp-jade": "^1.0.1",
     "gulp-rename": "^1.2.0",
