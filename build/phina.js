@@ -1388,7 +1388,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.1.022';
+  phina.VERSION = '0.1.0';
 
   phina.method('isNode', function() {
     return (typeof module !== 'undefined');
