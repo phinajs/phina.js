@@ -21,21 +21,21 @@ phina.namespace(function() {
 
         scenes: [
           {
-            className: 'LoadingScene',
+            className: 'phina.game.LoadingScene',
             arguments: options,
             label: 'loading',
             nextLabel: options.startLabel,
           },
 
           {
-            className: 'SplashScene',
+            className: 'phina.game.SplashScene',
             arguments: options,
             label: 'splash',
             nextLabel: 'title',
           },
 
           {
-            className: 'TitleScene',
+            className: 'phina.game.TitleScene',
             arguments: options,
             label: 'title',
             nextLabel: 'main',
@@ -47,7 +47,7 @@ phina.namespace(function() {
             nextLabel: 'result',
           },
           {
-            className: 'ResultScene',
+            className: 'phina.game.ResultScene',
             arguments: options,
             label: 'result',
             nextLabel: 'title',
