@@ -348,7 +348,7 @@ phina.namespace(function() {
         min = min || 0;
         max = max || 360;
         len = len || 1;
-        return phina.geom.Vector2().setDegree(Math.randf(min, max), len);
+        return phina.geom.Vector2().setDegree(Math.randfloat(min, max), len);
       },
     },
 
