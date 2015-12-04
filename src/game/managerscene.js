@@ -89,7 +89,7 @@ phina.namespace(function() {
           this.gotoScene(nextIndex, args);
       }
       else {
-          this.fire(tm.event.Event("finish"));
+          this.flare("finish");
       }
 
       return this;
