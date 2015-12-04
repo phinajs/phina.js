@@ -27,7 +27,7 @@ phina.namespace(function() {
               value: 0,
               width: this.width,
               height: 12,
-              color: '#aaa',
+              fill: '#aaa',
               stroke: false,
               gaugeColor: 'hsla(200, 100%, 80%, 0.8)',
               padding: 0,
