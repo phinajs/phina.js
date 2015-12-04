@@ -16,7 +16,7 @@ phina.namespace(function() {
 
       var startLabel = (options.assets) ? 'loading' : options.startLabel;
 
-      var scene = ManagerScene({
+      var scene = phina.game.ManagerScene({
         startLabel: startLabel,
 
         scenes: [
