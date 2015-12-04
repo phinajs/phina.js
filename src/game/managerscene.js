@@ -38,14 +38,19 @@ phina.namespace(function() {
     /**
      * index(or label) のシーンへ飛ぶ
      */
-    gotoScene: function(index, args) {
-      index = (typeof index == 'string') ? this.labelToIndex(index) : index||0;
+    gotoScene: function(label, args) {
+      var index = (typeof label == 'string') ? this.labelToIndex(label) : label||0;
 
       // イベント発火
 
       this.flare('prepare');
 
       var data = this.scenes[index];
+
+      if (!data) {
+        console.error('phina.js error: `{0}` に対応するシーンがありません.'.format(label));
+      }
+
       var klass = phina.using(data.className);
       if (typeof klass !== 'function') {
         klass = phina.using('phina.game.' + data.className);
