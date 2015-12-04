@@ -12,13 +12,7 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      options = (options || {}).$safe({
-        width: 640,
-        height: 960,
-        columns: 12,
-        fit: true,
-        append: true,
-      });
+      options = (options || {}).$safe(phina.display.CanvasApp.defaults);
       
       if (!options.query && !options.domElement) {
         options.domElement = document.createElement('canvas');
@@ -80,6 +74,16 @@ phina.namespace(function() {
 
     fitScreen: function() {
       this.canvas.fitScreen();
+    },
+
+    _static: {
+      defaults: {
+        width: 640,
+        height: 960,
+        columns: 12,
+        fit: true,
+        append: true,
+      },
     },
 
   });
