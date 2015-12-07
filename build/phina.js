@@ -1969,7 +1969,7 @@ phina.namespace(function() {
         min = min || 0;
         max = max || 360;
         len = len || 1;
-        return phina.geom.Vector2().setDegree(Math.randf(min, max), len);
+        return phina.geom.Vector2().setDegree(Math.randfloat(min, max), len);
       },
     },
 
@@ -6044,7 +6044,7 @@ phina.namespace(function() {
           pointer: p,
         });
 
-        if (obj.boundingType) {
+        if (obj.boundingType && obj.boundingType !== 'none') {
           this.app.domElement.style.cursor = this.cursor.hover;
         }
       }
@@ -6066,7 +6066,9 @@ phina.namespace(function() {
       }
 
       if (obj._touchFlags[p.id]) {
-        obj.flare('pointstay');
+        obj.flare('pointstay', {
+          pointer: p,
+        });
         if (p._moveFlag) {
           obj.flare('pointmove', {
             pointer: p,
@@ -6525,8 +6527,12 @@ phina.namespace(function() {
       if (this.boundingType === 'rect') {
         return this.hitTestRect(x, y);
       }
-      else {
+      else if (this.boundingType === 'circle') {
         return this.hitTestCircle(x, y);
+      }
+      else {
+        // none の場合
+        return true;
       }
     },
 
@@ -7388,6 +7394,8 @@ phina.namespace(function() {
       this.vertical = true;
       this.horizontal = true;
 
+      this.cacheList = [];
+
       this.on('attached', function() {
         this.target.setInteractive(true);
 
@@ -7395,28 +7403,35 @@ phina.namespace(function() {
           self.initialPosition.set(this.x, this.y);
           self.velocity.set(0, 0);
         });
-        this.target.on('pointmove', function(e) {
+        this.target.on('pointstay', function(e) {
           if (self.horizontal) {
             this.x += e.pointer.dx;
           }
           if (self.vertical) {
             this.y += e.pointer.dy;
           }
+
+          if (self.cacheList.length > 3) self.cacheList.shift();
+          self.cacheList.push(e.pointer.deltaPosition.clone());
         });
 
         this.target.on('pointend', function(e) {
-          var dp = e.pointer.deltaPosition;
+          // 動きのある delta position を後ろから検索　
+          var delta = self.cacheList.reverse().find(function(v) {
+            return v.lengthSquared() > 10;
+          });
+          self.cacheList.clear();
 
-          if (dp.lengthSquared() > 10) {
-            self.velocity.x = dp.x;
-            self.velocity.y = dp.y;
+          if (delta) {
+            self.velocity.x = delta.x;
+            self.velocity.y = delta.y;
 
             self.flare('flickstart', {
-              direction: dp.clone().normalize(),
+              direction: delta.normalize(),
             });
           }
           else {
-            self.cancel();
+            self.flare('flickcancel');
           }
 
           // self.flare('flick');
@@ -9385,6 +9400,9 @@ phina.namespace(function() {
 
       // TODO: 一旦むりやり対応
       this.interactive = true;
+      this.setInteractive = function(flag) {
+        this.interactive = flag;
+      };
       this._overFlags = {};
       this._touchFlags = {};
     },
@@ -9705,13 +9723,7 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      options.$safe({
-        width: 640,
-        height: 960,
-        columns: 12,
-        fit: true,
-        append: true,
-      });
+      options = (options || {}).$safe(phina.display.CanvasApp.defaults);
       
       if (!options.query && !options.domElement) {
         options.domElement = document.createElement('canvas');
@@ -9773,6 +9785,16 @@ phina.namespace(function() {
 
     fitScreen: function() {
       this.canvas.fitScreen();
+    },
+
+    _static: {
+      defaults: {
+        width: 640,
+        height: 960,
+        columns: 12,
+        fit: true,
+        append: true,
+      },
     },
 
   });
@@ -10013,16 +10035,16 @@ phina.namespace(function() {
       // draw color
       if (this.fill) {
         this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+        this.canvas.fillRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
       // draw gauge
       this.canvas.context.fillStyle = this.gaugeColor;
-      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
+      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height, this.cornerRadius);
       // draw stroke
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+        this.canvas.strokeRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
     },
 
@@ -10222,7 +10244,7 @@ phina.namespace(function() {
           this.gotoScene(nextIndex, args);
       }
       else {
-          this.fire(tm.event.Event("finish"));
+          this.flare("finish");
       }
 
       return this;
@@ -10742,7 +10764,7 @@ phina.namespace(function() {
 
       var startLabel = (options.assets) ? 'loading' : options.startLabel;
 
-      var scene = ManagerScene({
+      var scene = phina.game.ManagerScene({
         startLabel: startLabel,
 
         scenes: [
