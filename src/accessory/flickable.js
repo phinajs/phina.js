@@ -24,6 +24,8 @@ phina.namespace(function() {
       this.vertical = true;
       this.horizontal = true;
 
+      this.cacheList = [];
+
       this.on('attached', function() {
         this.target.setInteractive(true);
 
@@ -31,28 +33,35 @@ phina.namespace(function() {
           self.initialPosition.set(this.x, this.y);
           self.velocity.set(0, 0);
         });
-        this.target.on('pointmove', function(e) {
+        this.target.on('pointstay', function(e) {
           if (self.horizontal) {
             this.x += e.pointer.dx;
           }
           if (self.vertical) {
             this.y += e.pointer.dy;
           }
+
+          if (self.cacheList.length > 3) self.cacheList.shift();
+          self.cacheList.push(e.pointer.deltaPosition.clone());
         });
 
         this.target.on('pointend', function(e) {
-          var dp = e.pointer.deltaPosition;
+          // 動きのある delta position を後ろから検索　
+          var delta = self.cacheList.reverse().find(function(v) {
+            return v.lengthSquared() > 10;
+          });
+          self.cacheList.clear();
 
-          if (dp.lengthSquared() > 10) {
-            self.velocity.x = dp.x;
-            self.velocity.y = dp.y;
+          if (delta) {
+            self.velocity.x = delta.x;
+            self.velocity.y = delta.y;
 
             self.flare('flickstart', {
-              direction: dp.clone().normalize(),
+              direction: delta.normalize(),
             });
           }
           else {
-            self.cancel();
+            self.flare('flickcancel');
           }
 
           // self.flare('flick');

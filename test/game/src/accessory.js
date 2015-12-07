@@ -210,6 +210,21 @@ th.describe("accessory.Flickable", function() {
       this.cancel();
     };
   });
+
+  th.it('interface', function() {
+    var flickable = phina.accessory.Flickable().attachTo(this);
+    flickable.vertical = false;
+    flickable.horizontal = false;
+
+    var label = phina.display.Label('フリックしてね').addChildTo(this);
+    label.x = this.gridX.center();
+    label.y = this.gridY.center();
+
+    flickable.onflickstart = function(e) {
+      var angle = e.direction.toAngle().toDegree();
+      label.text = angle;
+    };
+  });
 });
 
 

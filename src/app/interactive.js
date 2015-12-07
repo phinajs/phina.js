@@ -69,7 +69,7 @@ phina.namespace(function() {
           pointer: p,
         });
 
-        if (obj.boundingType) {
+        if (obj.boundingType && obj.boundingType !== 'none') {
           this.app.domElement.style.cursor = this.cursor.hover;
         }
       }
@@ -91,7 +91,9 @@ phina.namespace(function() {
       }
 
       if (obj._touchFlags[p.id]) {
-        obj.flare('pointstay');
+        obj.flare('pointstay', {
+          pointer: p,
+        });
         if (p._moveFlag) {
           obj.flare('pointmove', {
             pointer: p,

@@ -50,8 +50,12 @@ phina.namespace(function() {
       if (this.boundingType === 'rect') {
         return this.hitTestRect(x, y);
       }
-      else {
+      else if (this.boundingType === 'circle') {
         return this.hitTestCircle(x, y);
+      }
+      else {
+        // none の場合
+        return true;
       }
     },
 
