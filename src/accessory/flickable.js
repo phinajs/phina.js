@@ -19,7 +19,7 @@ phina.namespace(function() {
       this.initialPosition = phina.geom.Vector2(0, 0);
       var self = this;
 
-      this.friction = 1.0;
+      this.friction = 0.9;
       this.velocity = phina.geom.Vector2(0, 0);
       this.vertical = true;
       this.horizontal = true;
