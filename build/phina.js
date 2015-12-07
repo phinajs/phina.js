@@ -4110,7 +4110,7 @@ phina.namespace(function() {
      */
     init: function() {
       this.superInit();
-      this.context = phina.asset.Sound.audioContext;
+      this.context = phina.asset.Sound.getAudioContext();
       this.gainNode = this.context.createGain();
     },
 
@@ -4290,8 +4290,10 @@ phina.namespace(function() {
     },
 
     _static: {
-      audioContext: (function() {
+      getAudioContext: function() {
         if (phina.isNode()) return null;
+
+        if (this.context) return this.context;
 
         var g = phina.global;
         var context = null;
@@ -4306,8 +4308,10 @@ phina.namespace(function() {
             context = new mozAudioContext();
         }
 
+        this.context = context;
+
         return context;
-      })(),
+      },
     },
 
   });
