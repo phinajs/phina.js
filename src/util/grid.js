@@ -47,7 +47,7 @@
         index += this.columns;
         index %= this.columns;
       }
-      return this.unitWidth * index + this.offset;
+      return this.unitWidth * (index + this.offset);
     },
 
     //
