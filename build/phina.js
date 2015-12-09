@@ -4971,24 +4971,22 @@ phina.namespace(function() {
       this.up     = {};
       this.last   = {};
 
+      this._keydown = null;
+      this._keyup = null;
+      this._keypress = null;
+
       var self = this;
       this.domElement.addEventListener('keydown', function(e) {
         self.key[e.keyCode] = true;
-        self.flare('keydown', {
-          keyCode: e.keyCode,
-        });
+        self._keydown = e.keyCode;
       });
 
       this.domElement.addEventListener('keyup', function(e) {
         self.key[e.keyCode] = false;
-        self.flare('keyup', {
-          keyCode: e.keyCode,
-        });
+        self._keyup = e.keyCode;
       });
       this.domElement.addEventListener('keypress', function(e) {
-        self.flare('keypress', {
-          keyCode: e.keyCode,
-        });
+        self._keypress = e.keyCode;
       });
     },
 
@@ -5005,6 +5003,19 @@ phina.namespace(function() {
         
         this.down[k] = (this.press[k] ^ this.last[k]) & this.press[k];
         this.up[k] = (this.press[k] ^ this.last[k]) & this.last[k];
+      }
+
+      if (this._keydown) {
+        this.flare('keydown', { keyCode: this._keydown });
+        this._keydown = null;
+      }
+      if (this._keyup) {
+        this.flare('keyup', { keyCode: this._keyup });
+        this._keyup = null;
+      }
+      if (this._keypress) {
+        this.flare('keypress', { keyCode: this._keypress });
+        this._keypress = null;
       }
       
       return this;
@@ -10203,15 +10214,24 @@ phina.namespace(function() {
     /**
      * index(or label) のシーンへ飛ぶ
      */
-    gotoScene: function(index, args) {
-      index = (typeof index == 'string') ? this.labelToIndex(index) : index||0;
+    gotoScene: function(label, args) {
+      var index = (typeof label == 'string') ? this.labelToIndex(label) : label||0;
 
       // イベント発火
 
       this.flare('prepare');
 
       var data = this.scenes[index];
+
+      if (!data) {
+        console.error('phina.js error: `{0}` に対応するシーンがありません.'.format(label));
+      }
+
       var klass = phina.using(data.className);
+      if (typeof klass !== 'function') {
+        klass = phina.using('phina.game.' + data.className);
+      }
+
       var initArguments = data.arguments;
       var initArguments = {}.$extend(initArguments, args);
       var scene = klass.call(null, initArguments);
