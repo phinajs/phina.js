@@ -91,6 +91,7 @@ phina.define('MainScene', {
       AssetManager.get('sound', 'touch').play();
     };
 
+    this.player.onscreenout = this.hit.bind(this);
     this.player.onfall = this.gameover.bind(this);
   },
 
@@ -184,6 +185,10 @@ phina.define('Player', {
 
     if (this.bottom > FLOOR_Y) {
       this.flare('fall');
+    }
+
+    if (!this.lock && this.bottom < 0) {
+      this.flare('screenout');
     }
   },
 
