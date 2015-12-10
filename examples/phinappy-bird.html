@@ -184,6 +184,7 @@ phina.define('Player', {
     this.rotation = this.physical.velocity.y*2+5;
 
     if (this.bottom > FLOOR_Y) {
+      this.bottom = FLOOR_Y+20;
       this.flare('fall');
     }
 
