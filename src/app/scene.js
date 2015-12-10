@@ -12,10 +12,8 @@ phina.namespace(function() {
       if (!this.app) return ;
 
       if (typeof params !== 'object') {
-        var temp = {};
-        temp.nextLabel = arguments[0];
-        temp.nextArguments = arguments[1];
-        params = temp;
+        this.nextLabel = arguments[0];
+        this.nextArguments = arguments[1];
       }
       else if (params) {
         this.nextArguments = params;
