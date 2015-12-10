@@ -14,6 +14,9 @@ phina.namespace(function() {
     /// 子供
     children: null,
 
+    /// 有効化どうか
+    awake: true,
+
     /**
      * @constructor
      */
@@ -90,6 +93,16 @@ phina.namespace(function() {
       this.parent = null;
       
       return this;
+    },
+
+    wakeUp: function() {
+      this.awake = true;
+      return true;
+    },
+
+    sleep: function() {
+      this.awake = false;
+      return true;
     },
 
     fromJSON: function(json) {
