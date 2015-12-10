@@ -99,6 +99,7 @@ phina.define('MainScene', {
     this.tubeGroup.children.each(function(child) {
       if (this.player.hitTestElement(child)) {
         console.log('hit');
+        this.exit();
       }
     }, this);
   },
