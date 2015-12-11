@@ -57,26 +57,6 @@ phina.namespace(function() {
       }
 
       this.gauge.onfull = function() {
-        
-        // load失敗時、対策
-        options.assets.forIn(function(type, assets) {
-          assets.forIn(function(key, value) {
-            var asset = phina.asset.AssetManager.get(type, key);
-            if (asset.loadError) {
-              var dummy = phina.asset.AssetManager.get(type, 'dummy');
-              if (dummy) {
-                if (dummy.loadError) {
-                  dummy.loadDummy();
-                  dummy.loadError = false;
-                }
-                phina.asset.AssetManager.set(type, key, dummy);
-              } else {
-                asset.loadDummy();
-              }
-            }
-          });
-        });
-
         if (options.exitType === 'auto') {
           this.app.popScene();
         }
