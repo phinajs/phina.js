@@ -10,11 +10,13 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(params) {
-      this.superInit({
-      	fill: 'white',
-      	stroke: false,
+    init: function(options) {
+      options = (options || {}).$safe({
+        fill: 'white',
+        stroke: false,
       });
+
+      this.superInit(options);
 
       var tweener = phina.accessory.Tweener().attachTo(this);
       tweener
