@@ -135,7 +135,7 @@ phina.namespace(function() {
               self.flare('decodeerror');
             });
 
-          } else if (404 === xml.status) {
+          } else if (xml.status === 404) {
             // not found
 
             self.loadError = true;
