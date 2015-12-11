@@ -9,12 +9,11 @@ phina.namespace(function() {
 
     init: function(time, style) {
       style = (style || {}).$safe({
-        color: '#aaa',
+        fill: '#aaa',
         radius: 64,
 
-        stroke: true,
         strokeWidth: 4,
-        strokeColor: '#aaa',
+        stroke: '#aaa',
 
         showPercentage: false, // TODO
 
@@ -58,12 +57,12 @@ phina.namespace(function() {
 
       if (style.stroke) {
         this.canvas.context.lineWidth = style.strokeWidth;
-        this.canvas.strokeStyle = style.strokeColor;
+        this.canvas.strokeStyle = style.stroke;
         // this.canvas.strokePie(0, 0, style.radius, 0, end);
         this.canvas.strokeArc(0, 0, style.radius, 0-Math.PI/2, end-Math.PI/2);
       }
 
-      this.canvas.context.fillStyle = style.color;
+      this.canvas.context.fillStyle = style.fill;
       this.canvas.fillPie(0, 0, style.radius, 0, end);
 
       if (this.label) {
