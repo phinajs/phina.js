@@ -8,6 +8,10 @@ phina.namespace(function() {
   phina.define('phina.asset.Asset', {
     superClass: "phina.util.EventDispatcher",
 
+    serverError: false,
+    notFound: false,
+    loadError: false,
+
     /**
      * @constructor
      */
@@ -33,6 +37,9 @@ phina.namespace(function() {
         resolve();
       }, 100);
     },
+
+    // ロード失敗時にダミーをセットする
+    loadDummy: function() { },
 
   });
 

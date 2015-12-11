@@ -52,7 +52,7 @@ phina.namespace(function() {
       }
       else {
         loader.onprogress = function(e) {
-          this.gauge.value = e.progress*100;
+          this.gauge.value = e.progress * 100;
         }.bind(this);
       }
 
