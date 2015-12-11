@@ -43,6 +43,11 @@ phina.namespace(function() {
       this.velocity.x = x;
       this.velocity.y = y;
     },
+
+    addForce: function(x, y) {
+      this.velocity.x += x;
+      this.velocity.y += y;
+    },
   });
 
   phina.app.Element.prototype.getter('physical', function() {
