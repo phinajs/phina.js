@@ -46,6 +46,15 @@ var ASSETS = {
 };
 
 
+// phina.define('TitleScene', {
+//   superClass: 'CanvasScene',
+
+//   init: function(options) {
+//     this.superInit(options);
+
+//   },
+// });
+
 phina.define('MainScene', {
   superClass: 'CanvasScene',
 
@@ -88,11 +97,17 @@ phina.define('MainScene', {
     });
 
     this.score = 0;
+    this.isStart = false;
 
     this.player = Player().addChildTo(this);
-    this.player.setPosition(this.gridX.span(2), this.gridY.span(8));
+    this.player.setPosition(this.gridX.span(2), this.gridY.center());
 
     this.onpointstart = function() {
+      if (!this.isStart) {
+        this.player.physical.gravity.set(0, 1);
+        this.isStart = true;
+      }
+
       this.player.fly();
       AssetManager.get('sound', 'touch').play();
     };
@@ -102,6 +117,11 @@ phina.define('MainScene', {
   },
 
   update: function(app) {
+    if (!this.isStart) {
+      this.player.y = this.gridY.center();
+      return ;
+    }
+
     if (app.frame % 30 === 0) {
       this.createTube();
     }
@@ -220,8 +240,6 @@ phina.define('Player', {
     //   height: this.height,
     // }).addChildTo(this);
 
-    this.physical.gravity.set(0, 1);
-
     this.lock = false;
   },
 
@@ -246,7 +264,6 @@ phina.define('Player', {
   fall: function() {
     this.lock = true;
     this.physical.force(0, -5);
-    this.physical.gravity.set(0, 1);
   },
 });
 
