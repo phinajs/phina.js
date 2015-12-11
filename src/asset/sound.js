@@ -121,6 +121,7 @@ phina.namespace(function() {
       xml.onreadystatechange = function() {
         if (xml.readyState === 4) {
           if ([200, 201, 0].indexOf(xml.status) !== -1) {
+
             // 音楽バイナリーデータ
             var data = xml.response;
 
@@ -130,14 +131,33 @@ phina.namespace(function() {
               r(self);
             }, function() {
               console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
-              self.loaded = true;
               r(self);
+              self.flare('decodeerror');
             });
+
+          } else if (404 === xml.status) {
+            // not found
+
+            self.loadError = true;
+            self.notFound= true;
+            r(self);
+            self.flare('loaderror');
+            self.flare('notfound');
+
+          } else {
+            // サーバーエラー
+
+            self.loadError = true;
+            self.serverError = true;
+            r(self);
+            self.flare('loaderror');
+            self.flare('servererror');
           }
         }
       };
 
       xml.responseType = 'arraybuffer';
+
       xml.send(null);
     },
 
@@ -167,6 +187,10 @@ phina.namespace(function() {
         self.loaded = true;
         r(self);
       });
+    },
+
+    loadDummy: function() {
+      this.loadFromBuffer();
     },
 
     _accessor: {
