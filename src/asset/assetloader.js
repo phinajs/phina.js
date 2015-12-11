@@ -51,7 +51,7 @@ phina.namespace(function() {
 
         self.on('progress', function(e) {
           if (e.progress >= 1.0) {
-            // load¸”sA‘Îô
+            // loadå¤±æ•—æ™‚ã€å¯¾ç­–
             params.forIn(function(type, assets) {
               assets.forIn(function(key, value) {
                 var asset = phina.asset.AssetManager.get(type, key);
