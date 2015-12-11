@@ -31,6 +31,7 @@
     "asset/script.js",
     "asset/texture.js",
     "asset/sound.js",
+    "asset/soundmanager.js",
     "asset/spritesheet.js",
     "asset/font.js",
 

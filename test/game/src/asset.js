@@ -107,6 +107,49 @@ th.describe("asset.Sound", function() {
   })
 });
 
+th.describe("asset.SoundManager", function() {
+  th.it('playMusic', function() {
+    var loader = phina.asset.AssetLoader();
+    var flow = loader.load({
+      sound: {
+        'bgm1': '../../assets/sounds/lo_002.mp3',
+        'bgm2': '../../assets/sounds/lo_002.mp3',
+      },
+    });
+
+    flow.then(function() {
+      phina.asset.SoundManager.playMusic('bgm1');
+
+      setTimeout(function() {
+        phina.asset.SoundManager.playMusic('bgm2', 1000);
+      }, 1000);
+    });
+  });
+
+  th.it('mute/unmute', function() {
+    var loader = phina.asset.AssetLoader();
+    var flow = loader.load({
+      sound: {
+        'bgm': '../../assets/sounds/lo_002.mp3',
+      },
+    });
+
+    flow.then(function() {
+      phina.asset.SoundManager.playMusic('bgm');
+
+      this.onpointstart = function() {
+        if (phina.asset.SoundManager.isMute()) {
+          phina.asset.SoundManager.unmute();
+        }
+        else {
+          phina.asset.SoundManager.mute();
+        }
+      };
+    }.bind(this));
+  });
+});
+
+
 th.describe("asset.AssetLoader", function() {
 
   th.it('load', function() {
