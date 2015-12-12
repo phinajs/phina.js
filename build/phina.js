@@ -1478,6 +1478,10 @@ phina.namespace(function() {
       _class.$extend(params._static);
     }
 
+    if (params._defined) {
+      params._defined.call(_class, _class);
+    }
+
     return _class;
   });
 
@@ -1595,13 +1599,14 @@ phina.namespace(function() {
 
   if (phina.global.addEventListener) {
     phina.global.addEventListener('load', function() {
-
-      phina._mainListeners.each(function(func) {
-        func();
+      // ちょっと遅延させる(画面サイズ問題)
+      setTimeout(function() {
+        phina._mainListeners.each(function(func) {
+          func();
+        });
+        phina._mainListeners.clear();
+        phina._mainLoaded = true;
       });
-      phina._mainListeners.clear();
-
-      phina._mainLoaded = true;
     });
   }
   else {
@@ -7874,6 +7879,11 @@ phina.namespace(function() {
     force: function(x, y) {
       this.velocity.x = x;
       this.velocity.y = y;
+    },
+
+    addForce: function(x, y) {
+      this.velocity.x += x;
+      this.velocity.y += y;
     },
   });
 
