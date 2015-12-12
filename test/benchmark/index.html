@@ -1,11 +1,13 @@
 <!doctype html>
 
 <html>
-<head>
-</head>
-<body>
-  <canvas id='world'></canvas>
-</body>
+  <head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+  </head>
+  <body>
+  </body>
 </html>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r14/Stats.js"></script>
@@ -85,15 +87,15 @@ var stats = null;
 
 window.onload = function() {
   stats = new Stats();
-  document.body.appendChild(stats.domElement);
 
   var app = CanvasApp({
-    query: '#world',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
   });
 
   app.replaceScene(MainScene());
+
+  app.enableStats();
 
   app.ticker.fps = 120;
 
