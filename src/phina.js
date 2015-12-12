@@ -109,6 +109,10 @@ phina.namespace(function() {
       _class.$extend(params._static);
     }
 
+    if (params._defined) {
+      params._defined.call(_class, _class);
+    }
+
     return _class;
   });
 
