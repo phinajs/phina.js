@@ -3,6 +3,10 @@
 <html>
   <head>
     <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title>phinappy - phina.js</title>
   </head>
   <body>
   </body>
@@ -45,15 +49,6 @@ var ASSETS = {
   },
 };
 
-
-// phina.define('TitleScene', {
-//   superClass: 'CanvasScene',
-
-//   init: function(options) {
-//     this.superInit(options);
-
-//   },
-// });
 
 phina.define('MainScene', {
   superClass: 'CanvasScene',
@@ -188,6 +183,7 @@ phina.define('MainScene', {
   }
 });
 
+var TILE_WIDTH = 32;
 phina.define('Floor', {
   superClass: 'Shape',
 
@@ -207,15 +203,15 @@ phina.define('Floor', {
 
     var c = this.canvas;
     var ground = AssetManager.get('image', 'ground');
-    var count = SCREEN_WIDTH/37+1;
+    var count = SCREEN_WIDTH/TILE_WIDTH+1;
     (count).times(function(i) {
-      c.context.drawImage(ground.domElement, i*37, 0, 37, FLOOR_HEIGHT);
+      c.context.drawImage(ground.domElement, i*TILE_WIDTH, 0, TILE_WIDTH, FLOOR_HEIGHT);
     });
   },
   update: function() {
     this.x-=SPEED;
 
-    if (this.x < -37) {
+    if (this.x < -TILE_WIDTH) {
       this.x = 0;
     }
   }
@@ -298,9 +294,10 @@ phina.define('ScoreBox', {
       this.remove();
     }
   }
-})
+});
 
 phina.main(function() {
+
   var app = GameApp({
     title: 'phinappy bird',
     width: SCREEN_WIDTH,
@@ -312,6 +309,7 @@ phina.main(function() {
   app.enableStats();
 
   app.run();
+  
 });
 
 
