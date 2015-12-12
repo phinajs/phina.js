@@ -42,7 +42,7 @@ phina.namespace(function() {
               text: params.score+'',
               fill: params.fontColor,
               stroke: null,
-              fontSize: 80,
+              fontSize: 72,
             },
             x: this.gridX.span(8),
             y: this.gridY.span(6),
@@ -56,8 +56,8 @@ phina.namespace(function() {
               stroke: null,
               fontSize: 32,
             },
-            x: this.gridX.span(8),
-            y: this.gridY.span(8),
+            x: this.gridX.center(),
+            y: this.gridY.span(9),
           },
 
           shareButton: {
@@ -70,7 +70,7 @@ phina.namespace(function() {
               cornerRadius: 64,
             }],
             x: this.gridX.span(6),
-            y: this.gridY.span(11),
+            y: this.gridY.span(12),
           },
           playButton: {
             className: 'phina.ui.Button',
@@ -82,7 +82,7 @@ phina.namespace(function() {
               cornerRadius: 64,
             }],
             x: this.gridX.span(10),
-            y: this.gridY.span(11),
+            y: this.gridY.span(12),
 
             interactive: true,
             onpush: function() {

@@ -3795,6 +3795,10 @@ phina.namespace(function() {
   phina.define('phina.asset.Asset', {
     superClass: "phina.util.EventDispatcher",
 
+    serverError: false,
+    notFound: false,
+    loadError: false,
+
     /**
      * @constructor
      */
@@ -3820,6 +3824,9 @@ phina.namespace(function() {
         resolve();
       }, 100);
     },
+
+    // ロード失敗時にダミーをセットする
+    loadDummy: function() { },
 
   });
 
@@ -3864,7 +3871,7 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.asset.AssetManager
+   * @class phina.asset.AssetLoader
    * 
    */
   phina.define('phina.asset.AssetLoader', {
@@ -3895,19 +3902,45 @@ phina.namespace(function() {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
           var flow = func(key, value);
           flow.then(function(asset) {
+            if (self.cache) {
+              phina.asset.AssetManager.set(type, key, asset);
+            }
             self.flare('progress', {
               key: key,
               asset: asset,
               progress: (++counter/flows.length),
             });
-            if (self.cache) {
-              phina.asset.AssetManager.set(type, key, asset);
-            }
           });
           flows.push(flow);
         });
       });
 
+
+      if (self.cache) {
+
+        self.on('progress', function(e) {
+          if (e.progress >= 1.0) {
+            // load失敗時、対策
+            params.forIn(function(type, assets) {
+              assets.forIn(function(key, value) {
+                var asset = phina.asset.AssetManager.get(type, key);
+                if (asset.loadError) {
+                  var dummy = phina.asset.AssetManager.get(type, 'dummy');
+                  if (dummy) {
+                    if (dummy.loadError) {
+                      dummy.loadDummy();
+                      dummy.loadError = false;
+                    }
+                    phina.asset.AssetManager.set(type, key, dummy);
+                  } else {
+                    asset.loadDummy();
+                  }
+                }
+              });
+            });
+          }
+        });
+      }
       return phina.util.Flow.all(flows).then(function(args) {
         self.flare('load');
       });
@@ -4213,6 +4246,7 @@ phina.namespace(function() {
       xml.onreadystatechange = function() {
         if (xml.readyState === 4) {
           if ([200, 201, 0].indexOf(xml.status) !== -1) {
+
             // 音楽バイナリーデータ
             var data = xml.response;
 
@@ -4222,14 +4256,33 @@ phina.namespace(function() {
               r(self);
             }, function() {
               console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
-              self.loaded = true;
               r(self);
+              self.flare('decodeerror');
             });
+
+          } else if (xml.status === 404) {
+            // not found
+
+            self.loadError = true;
+            self.notFound= true;
+            r(self);
+            self.flare('loaderror');
+            self.flare('notfound');
+
+          } else {
+            // サーバーエラー
+
+            self.loadError = true;
+            self.serverError = true;
+            r(self);
+            self.flare('loaderror');
+            self.flare('servererror');
           }
         }
       };
 
       xml.responseType = 'arraybuffer';
+
       xml.send(null);
     },
 
@@ -4259,6 +4312,10 @@ phina.namespace(function() {
         self.loaded = true;
         r(self);
       });
+    },
+
+    loadDummy: function() {
+      this.loadFromBuffer();
     },
 
     _accessor: {
@@ -4318,6 +4375,171 @@ phina.namespace(function() {
 
 });
 
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.asset.SoundManager
+   * ### Ref
+   * - http://evolve.reintroducing.com/_source/classes/as3/SoundManager/SoundManager.html
+   * - https://github.com/nicklockwood/SoundManager
+   */
+  phina.define('phina.asset.SoundManager', {
+    _static: {
+      volume: 0.8,
+      musicVolume: 0.8,
+      muteFlag: false,
+      currentMusic: null,
+
+      stop: function() {
+        // TODO: 
+      },
+      pause: function() {
+        // TODO: 
+      },
+      fade: function() {
+        // TODO: 
+      },
+      setVolume: function(volume) {
+        this.volume = volume;
+      },
+      getVolume: function() {
+        return this.volume;
+      },
+
+      /*
+       * ミュート
+       */
+      mute: function() {
+        this.muteFlag = true;
+        if (this.currentMusic) {
+          this.currentMusic.volume = 0;
+        }
+        return this;
+      },
+      /*
+       * ミュート解除
+       */
+      unmute: function() {
+        this.muteFlag = false;
+        if (this.currentMusic) {
+          this.currentMusic.volume = this.getVolumeMusic();
+        }
+        return this;
+      },
+      isMute: function() {
+        return this.muteFlag;
+      },
+
+      playMusic: function(name, fadeTime, loop) {
+        loop = (loop !== undefined) ? loop : true;
+
+        if (this.currentMusic) {
+          this.stopMusic(fadeTime);
+        }
+
+        var music = phina.asset.AssetManager.get('sound', name);
+
+        music.setLoop(loop);
+        music.play();
+
+        if (fadeTime > 0) {
+          var count = 32;
+          var counter = 0;
+          var unitTime = fadeTime/count;
+          var volume = this.getVolumeMusic();
+
+          music.volume = 0;
+          var id = setInterval(function() {
+            counter += 1;
+            var rate = counter/count;
+            music.volume = rate*volume;
+
+            if (rate >= 1) {
+              clearInterval(id);
+              return false;
+            }
+
+            return true;
+          }, unitTime);
+        }
+        else {
+          music.volume = this.getVolumeMusic();
+        }
+
+        this.currentMusic = music;
+
+        return this.currentMusic;
+      },
+
+      stopMusic: function(fadeTime) {
+        if (!this.currentMusic) { return ; }
+
+        var music = this.currentMusic;
+        this.currentMusic = null;
+
+        if (fadeTime > 0) {
+          var count = 32;
+          var counter = 0;
+          var unitTime = fadeTime/count;
+          var volume = this.getVolumeMusic();
+
+          music.volume = 0;
+          var id = setInterval(function() {
+            counter += 1;
+            var rate = counter/count;
+            music.volume = volume*(1-rate);
+
+            if (rate >= 1) {
+              music.stop();
+              clearInterval(id);
+              return false;
+            }
+
+            return true;
+          }, unitTime);
+        }
+        else {
+          music.stop();
+        }
+      },
+
+      /*
+       * 音楽を一時停止
+       */
+      pauseMusic: function() {
+        if (!this.currentMusic) { return ; }
+        this.currentMusic.pause();
+      },
+      /*
+       * 音楽を再開
+       */
+      resumeMusic: function() {
+        if (!this.currentMusic) { return ; }
+        this.currentMusic.resume();
+      },
+      /*
+       * 音楽のボリュームを設定
+       */
+      setVolumeMusic: function(volume) {
+        this.musicVolume = volume;
+        if (this.currentMusic) {
+          this.currentMusic.volume = volume;
+        }
+
+        return this;
+      },
+      /*
+       * 音楽のボリュームを取得
+       */
+      getVolumeMusic: function() {
+        return this.musicVolume;
+      },
+
+    },
+  });
+
+});
 
 
 phina.namespace(function() {
@@ -9844,11 +10066,13 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(params) {
-      this.superInit({
-      	fill: 'white',
-      	stroke: false,
+    init: function(options) {
+      options = (options || {}).$safe({
+        fill: 'white',
+        stroke: false,
       });
+
+      this.superInit(options);
 
       var tweener = phina.accessory.Tweener().attachTo(this);
       tweener
@@ -10516,7 +10740,7 @@ phina.namespace(function() {
               text: params.score+'',
               fill: params.fontColor,
               stroke: null,
-              fontSize: 80,
+              fontSize: 72,
             },
             x: this.gridX.span(8),
             y: this.gridY.span(6),
@@ -10530,8 +10754,8 @@ phina.namespace(function() {
               stroke: null,
               fontSize: 32,
             },
-            x: this.gridX.span(8),
-            y: this.gridY.span(8),
+            x: this.gridX.center(),
+            y: this.gridY.span(9),
           },
 
           shareButton: {
@@ -10544,7 +10768,7 @@ phina.namespace(function() {
               cornerRadius: 64,
             }],
             x: this.gridX.span(6),
-            y: this.gridY.span(11),
+            y: this.gridY.span(12),
           },
           playButton: {
             className: 'phina.ui.Button',
@@ -10556,7 +10780,7 @@ phina.namespace(function() {
               cornerRadius: 64,
             }],
             x: this.gridX.span(10),
-            y: this.gridY.span(11),
+            y: this.gridY.span(12),
 
             interactive: true,
             onpush: function() {
@@ -10656,7 +10880,7 @@ phina.namespace(function() {
       }
       else {
         loader.onprogress = function(e) {
-          this.gauge.value = e.progress*100;
+          this.gauge.value = e.progress * 100;
         }.bind(this);
       }
 
@@ -10865,21 +11089,20 @@ phina.namespace(function() {
   phina.define('phina.game.PieTimer', {
     superClass: 'phina.display.Shape',
 
-    init: function(time, style) {
-      style = (style || {}).$safe({
-        color: '#aaa',
+    init: function(time, options) {
+      options = (options || {}).$safe({
+        fill: '#aaa',
         radius: 64,
 
-        stroke: true,
         strokeWidth: 4,
-        strokeColor: '#aaa',
+        stroke: '#aaa',
 
         showPercentage: false, // TODO
 
         backgroundColor: 'transparent',
       });
 
-      this.superInit(style);
+      this.superInit(options);
 
       this.label = phina.display.Label('hoge').addChildTo(this);
 
@@ -10904,25 +11127,24 @@ phina.namespace(function() {
     },
 
     _render: function() {
-      var style = this.style;
-      this.canvas.width = style.radius*2 + style.padding*2;
-      this.canvas.height= style.radius*2 + style.padding*2;
-      this.canvas.clearColor(style.backgroundColor);
+      this.canvas.width = this.radius*2 + this.padding*2;
+      this.canvas.height= this.radius*2 + this.padding*2;
+      this.canvas.clearColor(this.backgroundColor);
 
       this.canvas.transformCenter();
 
       var rate = this.time / this.limit;
       var end = (Math.PI*2)*rate;
 
-      if (style.stroke) {
-        this.canvas.context.lineWidth = style.strokeWidth;
-        this.canvas.strokeStyle = style.strokeColor;
-        // this.canvas.strokePie(0, 0, style.radius, 0, end);
-        this.canvas.strokeArc(0, 0, style.radius, 0-Math.PI/2, end-Math.PI/2);
+      if (this.stroke) {
+        this.canvas.context.lineWidth = this.strokeWidth;
+        this.canvas.strokeStyle = this.stroke;
+        // this.canvas.strokePie(0, 0, this.radius, 0, end);
+        this.canvas.strokeArc(0, 0, this.radius, 0-Math.PI/2, end-Math.PI/2);
       }
 
-      this.canvas.context.fillStyle = style.color;
-      this.canvas.fillPie(0, 0, style.radius, 0, end);
+      this.canvas.context.fillStyle = this.fill;
+      this.canvas.fillPie(0, 0, this.radius, 0, end);
 
       if (this.label) {
         var left = Math.max(0, this.limit-this.time);
@@ -10955,22 +11177,10 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.social.Twitter', {
-    superClass: 'phina.display.CircleShape',
     /**
      * @constructor
      */
-    init: function(params) {
-      this.superInit({
-        color: 'white',
-        stroke: false,
-      });
-
-      var tweener = phina.accessory.Tweener().attachTo(this);
-      tweener
-        .to({scaleX:2, scaleY:2, alpha:0}, 500)
-        .call(function() {
-          this.remove();
-        }, this);
+    init: function(options) {
     },
 
     _static: {

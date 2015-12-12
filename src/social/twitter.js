@@ -8,22 +8,10 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.social.Twitter', {
-    superClass: 'phina.display.CircleShape',
     /**
      * @constructor
      */
-    init: function(params) {
-      this.superInit({
-        color: 'white',
-        stroke: false,
-      });
-
-      var tweener = phina.accessory.Tweener().attachTo(this);
-      tweener
-        .to({scaleX:2, scaleY:2, alpha:0}, 500)
-        .call(function() {
-          this.remove();
-        }, this);
+    init: function(options) {
     },
 
     _static: {
