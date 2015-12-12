@@ -35,32 +35,48 @@ phina.namespace(function() {
       this.shadowBlur = options.shadowBlur;
 
       this.canvas = phina.graphics.Canvas();
+      this.watchDraw = true;
+
       this._dirtyDraw = true;
 
       this.on('enterframe', function() {
-        if (this._dirtyDraw === true) {
-          this._render();
-          this._dirtyDraw = false;
-        }
+        this._render();
       });
     },
 
-    _render: function() {
+    calcCanvasWidth: function() {
+      return this.width + this.padding*2;
+    },
+
+    calcCanvasHeight: function() {
+      return this.height + this.padding*2;
+    },
+
+    prerender: function() {
+      this.canvas.width = this.calcCanvasWidth();
+      this.canvas.height= this.calcCanvasHeight();
+    },
+
+    render: function() {
       this._renderBackground();
 
       return this;
     },
 
-    _renderBackground: function(width, height, color) {
-      width = width || (this.width + this.padding*2);
-      height = height || (this.height + this.padding*2);
-      color = color || this.backgroundColor;
-
-      this.canvas.width = width;
-      this.canvas.height= height;
+    _renderBackground: function() {
+      color = this.backgroundColor;
       this.canvas.clearColor(color);
 
       return this;
+    },
+
+    _render: function() {
+      if (this.watchDraw && this._dirtyDraw === true) {
+        this.prerender(this.canvas);
+        this.render(this.canvas);
+
+        this._dirtyDraw = false;
+      }
     },
 
     draw: function(canvas) {
@@ -198,7 +214,7 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
     },
 
-    _render: function() {
+    render: function() {
       this._renderBackground();
 
       this.canvas.transformCenter();
@@ -249,9 +265,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+    render: function() {
+      this._renderBackground();
 
       this.canvas.transformCenter();
 
@@ -290,9 +305,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+    render: function() {
+      this._renderBackground();
 
       var canvas = this.canvas;
 
@@ -338,9 +352,8 @@ phina.namespace(function() {
       this.sideIndent = options.sideIndent;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+    render: function() {
+      this._renderBackground();
 
       var canvas = this.canvas;
 
@@ -395,9 +408,8 @@ phina.namespace(function() {
       this.sides = options.sides;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+    render: function() {
+      this._renderBackground();
 
       var canvas = this.canvas;
 
@@ -449,9 +461,8 @@ phina.namespace(function() {
       this.cornerAngle = options.cornerAngle;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+    render: function() {
+      this._renderBackground();
 
       var canvas = this.canvas;
 

@@ -1,8 +1,21 @@
 th.describe("display.Shape", function() {
 
   th.it('Shape', function() {
-    var shape = phina.display.Shape().addChildTo(this);
+    var shape = phina.display.Shape({
+      backgroundColor: 'red',
+    }).addChildTo(this);
     shape.position.set(100, 100);
+
+    var shape = phina.display.Shape().addChildTo(this);
+    shape.watchDraw = false;
+    shape.canvas.width = 50;
+    shape.canvas.height= 50;
+    shape.canvas.fillStyle = 'blue';
+    shape.canvas.transformCenter();
+    shape.canvas.fillCircle(0, 0, 20);
+
+    shape.x = 200;
+    shape.y = 500;
   });
 
   th.it('CircleShape', function() {
@@ -181,6 +194,7 @@ th.describe("display.Label", function() {
     // 
     var label = phina.display.Label('strokeWidth=8').addChildTo(this);
     label.fill = 'white';
+    label.stroke = 'green';
     label.strokeWidth = 8;
     label.position.set(center, gridY.span(3));
     // 
@@ -247,11 +261,11 @@ th.describe("display.Label", function() {
     var text = 'hoge\nfoo\nbar';
     var label = phina.display.Label(text).addChildTo(this);
     label.backgroundColor = '#aaa';
-    label.position.set(this.gridX.span(4), this.gridX.span(8));
+    label.position.set(this.gridX.span(4), this.gridX.span(6));
     // 
     var label = phina.display.Label(text).addChildTo(this);
     label.backgroundColor = '#aaa';
-    label.position.set(this.gridX.span(12), this.gridX.span(8));
+    label.position.set(this.gridX.span(12), this.gridX.span(6));
 
     var text = 'hoge\nfoo\nbar\nbaz';
     var label = phina.display.Label(text).addChildTo(this);

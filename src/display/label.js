@@ -49,9 +49,10 @@ phina.namespace(function() {
       this.lineHeight = options.lineHeight;
     },
 
-    calcWidth: function() {
+    calcCanvasWidth: function() {
       var width = 0;
       var canvas = this.canvas;
+      canvas.context.font = this.font;
       this._lines.forEach(function(line) {
         var w = canvas.context.measureText(line).width;
         if (width < w) {
@@ -59,34 +60,32 @@ phina.namespace(function() {
         }
       }, this);
       if (this.align !== 'center') width*=2;
-      return width;
+
+      return width + this.padding*2;
     },
 
-    calcHeight: function() {
+    calcCanvasHeight: function() {
       var height = this.fontSize * this._lines.length;
       if (this.baseline !== 'middle') height*=2;
-      return height*this.lineHeight;
+      return height*this.lineHeight + this.padding*2;
     },
 
-    _render: function() {
+    render: function() {
       var canvas = this.canvas;
       var context = canvas.context;
 
-      var fontSize = this.fontSize;
-      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this);
       var text = this.text + '';
-      var lines = this._lines = text.split('\n');
-      canvas.context.font = font;
+      var lines = this._lines;
+      canvas.context.font = this.font;
 
-      var w = this.calcWidth() + this.padding*2;
-      var h = this.calcHeight() + this.padding*2;
-      this._renderBackground(w, h);
+      this._renderBackground();
 
       canvas.transformCenter();
-      context.font = font;
+      context.font = this.font;
       context.textAlign = this.align;
       context.textBaseline = this.baseline;
 
+      var fontSize = this.fontSize;
       var lineSize = fontSize*this.lineHeight;
       var offset = -Math.floor(lines.length/2)*lineSize;
       offset += ((lines.length+1)%2) * (lineSize/2);
@@ -120,7 +119,11 @@ phina.namespace(function() {
        */
       text: {
         get: function() { return this._text; },
-        set: function(v) { this._dirtyDraw = true; this._text = v; },
+        set: function(v) {
+          this._dirtyDraw = true;
+          this._text = v;
+          this._lines = (this.text + '').split('\n');
+        },
       },
       /**
        * font size
@@ -164,6 +167,12 @@ phina.namespace(function() {
         get: function() { return this._lineHeight; },
         set: function(v) { this._dirtyDraw = true; this._lineHeight = v; },
       },
+
+      font: {
+        get: function() {
+          return "{fontWeight} {fontSize}px {fontFamily}".format(this);
+        },
+      }
     }
   });
 

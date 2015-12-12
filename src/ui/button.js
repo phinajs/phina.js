@@ -39,7 +39,7 @@ phina.namespace(function() {
         this.flare('push');
       });
     },
-    _render: function() {
+    render: function() {
       var canvas = this.canvas;
       var context = canvas.context;
 

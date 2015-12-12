@@ -96,7 +96,7 @@ phina.namespace(function() {
       return rate;
     },
 
-    _render: function() {
+    render: function() {
       this._renderBackground();
 
       this.canvas.transformCenter();
@@ -181,16 +181,17 @@ phina.namespace(function() {
 
       this.superInit(options);
 
+      this.setBoundingType('circle');
+
       this.radius = options.radius;
       this.anticlockwise = options.anticlockwise;
       this.showPercentage = options.showPercentage;
     },
 
-    _render: function() {
+    render: function() {
       var canvas = this.canvas;
 
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
+      this._renderBackground();
 
       this.canvas.transformCenter();
       this.canvas.rotate(-Math.PI*0.5);
