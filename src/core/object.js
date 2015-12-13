@@ -215,7 +215,7 @@
       if (descriptor) {
         break;
       }
-      target = target.__proto__;
+      target = Object.getPrototypeOf(target);
     }
 
     // すでにアクセッサーとして存在する場合
@@ -226,7 +226,7 @@
         var tempValue = this[key];
 
         this[tempKey] = tempValue;
-        
+
         this.accessor(key, {
           get: function() {
             return this[tempKey];
