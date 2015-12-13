@@ -96,35 +96,6 @@ phina.namespace(function() {
     },
 
     _accessor: {
-      width: {
-        get: function() {
-          return (this.boundingType === 'rect') ?
-            this._width : this._diameter;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._width = v;
-        },
-      },
-      height: {
-        get: function() {
-          return (this.boundingType === 'rect') ?
-            this._height : this._diameter;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._height = v;
-        },
-      },
-      radius: {
-        "get": function()   {
-          return (this.boundingType === 'rect') ?
-            (this.width+this.height)/4 : this._radius;
-        },
-        "set": function(v)  {
-          this._dirtyDraw = true;
-          this._radius = v;
-          this._diameter = v*2;
-        },
-      },
       padding: {
         get: function() {
           return this._padding;
@@ -140,15 +111,6 @@ phina.namespace(function() {
         set: function(v) {
           this._dirtyDraw = true;
           this._backgroundColor = v;
-        },
-      },
-      fill: {
-        get: function() {
-          return this._fill;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._fill = v;
         },
       },
       stroke: {
@@ -188,8 +150,20 @@ phina.namespace(function() {
         },
       },
     },
+
+    _static: {
+      watch: function(key) {
+        this.prototype.$watch(key, function() {
+          this._dirtyDraw = true;
+        });
+      },
+    },
   });
 
+  phina.display.Shape.watch('width');
+  phina.display.Shape.watch('height');
+  phina.display.Shape.watch('radius');
+  phina.display.Shape.watch('fill');
 });
 
 phina.namespace(function() {
