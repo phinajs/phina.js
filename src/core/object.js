@@ -206,6 +206,45 @@
     return temp;
   });
 
+  Object.prototype.method('$watch', function(key, callback) {
+    var target = this;
+    var descriptor = null;
+
+    while(target) {
+      descriptor = Object.getOwnPropertyDescriptor(target, key);
+      if (descriptor) {
+        break;
+      }
+      target = target.__proto__;
+    }
+
+    // すでにアクセッサーとして存在する場合
+    if (descriptor) {
+      this.accessor(key, {
+        get: function() {
+          return descriptor.get.call(this);
+        },
+        set: function(v) {
+          descriptor.set.call(this, v);
+          callback.call(this);
+        },
+      });
+    }
+    else {
+      var accesskey = '__' + key;
+
+      this.accessor(key, {
+        get: function() {
+          return this[accesskey];
+        },
+        set: function(v) {
+          this[accesskey] = v;
+          callback.call(this);
+        },
+      });
+    }
+  });
+
   if (!Object.observe) {
     Object.method('observe', function(obj, callback) {
       var keys = Object.keys(obj);
