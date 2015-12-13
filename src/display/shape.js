@@ -95,75 +95,28 @@ phina.namespace(function() {
         );
     },
 
-    _accessor: {
-      padding: {
-        get: function() {
-          return this._padding;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._padding = v;
-        },
-      },
-      backgroundColor: {
-        get: function() {
-          return this._backgroundColor;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._backgroundColor = v;
-        },
-      },
-      stroke: {
-        get: function() {
-          return this._stroke;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._stroke = v;
-        },
-      },
-      strokeWidth: {
-        get: function() {
-          return this._strokeWidth;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._strokeWidth = v;
-        },
-      },
-      shadow: {
-        get: function() {
-          return this._shadow;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._shadow = v;
-        },
-      },
-      shadowBlur: {
-        get: function() {
-          return this._shadowBlur;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._shadowBlur = v;
-        },
-      },
-    },
-
     _static: {
-      watch: function(key) {
+      watchRenderProperty: function(key) {
         this.prototype.$watch(key, function() {
           this._dirtyDraw = true;
         });
       },
     },
+
+    _defined: function() {
+      this.watchRenderProperty('width');
+      this.watchRenderProperty('height');
+      this.watchRenderProperty('radius');
+      this.watchRenderProperty('padding');
+      this.watchRenderProperty('backgroundColor');
+      this.watchRenderProperty('fill');
+      this.watchRenderProperty('stroke');
+      this.watchRenderProperty('strokeWidth');
+      this.watchRenderProperty('shadow');
+      this.watchRenderProperty('shadowBlur');
+    },
   });
 
-  phina.display.Shape.watch('width');
-  phina.display.Shape.watch('height');
-  phina.display.Shape.watch('radius');
-  phina.display.Shape.watch('fill');
 });
 
 phina.namespace(function() {
