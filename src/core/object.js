@@ -220,15 +220,35 @@
 
     // すでにアクセッサーとして存在する場合
     if (descriptor) {
-      this.accessor(key, {
-        get: function() {
-          return descriptor.get.call(this);
-        },
-        set: function(v) {
-          descriptor.set.call(this, v);
-          callback.call(this);
-        },
-      });
+      // データディスクリプタの場合
+      if (descriptor.value !== undefined) {
+        var tempKey = '__' + key;
+        var tempValue = this[key];
+
+        this[tempKey] = tempValue;
+        
+        this.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            this[tempKey] = v;
+            callback.call(this);
+          },
+        });
+      }
+      // アクセサディスクリプタの場合
+      else {
+        this.accessor(key, {
+          get: function() {
+            return descriptor.get.call(this);
+          },
+          set: function(v) {
+            descriptor.set.call(this, v);
+            callback.call(this);
+          },
+        });
+      }
     }
     else {
       var accesskey = '__' + key;
