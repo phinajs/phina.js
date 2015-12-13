@@ -104,16 +104,20 @@ phina.namespace(function() {
     },
 
     _defined: function() {
-      this.watchRenderProperty('width');
-      this.watchRenderProperty('height');
-      this.watchRenderProperty('radius');
-      this.watchRenderProperty('padding');
-      this.watchRenderProperty('backgroundColor');
-      this.watchRenderProperty('fill');
-      this.watchRenderProperty('stroke');
-      this.watchRenderProperty('strokeWidth');
-      this.watchRenderProperty('shadow');
-      this.watchRenderProperty('shadowBlur');
+      [
+        'width',
+        'height',
+        'radius',
+        'padding',
+        'backgroundColor',
+        'fill',
+        'stroke',
+        'strokeWidth',
+        'shadow',
+        'shadowBlur',
+      ].each(function(key) {
+        this.watchRenderProperty(key);
+      }, this);
     },
   });
 
