@@ -22,7 +22,7 @@ phina.globalize();
 
 var SCREEN_WIDTH    = 640;
 var SCREEN_HEIGHT   = 960;
-var MAX_PER_LINE    = 8;                            
+var MAX_PER_LINE    = 8;
 var BLOCK_NUM       = MAX_PER_LINE*5;
 var BLOCK_SIZE      = 64;
 var BOARD_PADDING   = 50;
@@ -38,15 +38,16 @@ var BOARD_OFFSET_Y  = 150;
 phina.define("MainScene", {
   superClass: 'CanvasScene',
 
-  init: function() {
-    this.superInit({
-      width: SCREEN_WIDTH,
-      height: SCREEN_HEIGHT,
-    });
+  init: function(options) {
+    this.superInit(options);
 
-    this.backgroundColor = '#444';
+    // スコアラベル
+    this.scoreLabel = Label('0').addChildTo(this);
+    this.scoreLabel.x = this.gridX.center();
+    this.scoreLabel.y = this.gridY.span(1);
+    this.scoreLabel.fill = 'white';
 
-
+    // グループ
     this.group = CanvasElement().addChildTo(this);
 
     var gridX = Grid(BOARD_SIZE, MAX_PER_LINE);
@@ -79,9 +80,17 @@ phina.define("MainScene", {
       this.paddle.release();
       this.ballSpeed = BALL_SPEED;
     });
+
+    // スコア
+    this.score = 0;
+    // 時間
+    this.time = 0;
   },
 
   update: function(app) {
+    // タイムを加算
+    this.time += app.deltaTime;
+
     // パドル移動
     this.paddle.x = app.pointer.x;
     if (this.paddle.left < 0) {
@@ -96,6 +105,11 @@ phina.define("MainScene", {
       this.ball.move();
       this.checkHit();
     }, this);
+
+    // ブロックがすべてなくなったらクリア
+    if (this.group.children.length <= 0) {
+      this.gameclear();
+    }
   },
 
   checkHit: function() {
@@ -118,6 +132,7 @@ phina.define("MainScene", {
     if (ball.bottom > this.gridY.width) {
       ball.bottom = this.gridY.width
       ball.reflectY();
+      this.gameover();
     }
 
     // ボールとパドル
@@ -132,6 +147,8 @@ phina.define("MainScene", {
       // speed up
       this.ballSpeed += 1;
     }
+
+    var combo = 0;
 
     this.group.children.some(function(block) {
       // ヒット
@@ -157,12 +174,46 @@ phina.define("MainScene", {
           }
         }
 
+        combo += 1;
+        this.score += combo*100;
+
         block.remove();
 
         return true;
       }
     }, this);
   },
+
+  gameclear: function() {
+    // add clear bonus
+    var bonus = 2000;
+    this.score += bonus;
+
+    // add time bonus
+    var seconds = (this.time/1000).floor();
+    var bonusTime = Math.max(60*10-seconds, 0);
+    this.score += (bonusTime*10);
+
+    this.gameover();
+  },
+
+  gameover: function() {
+    this.exit({
+      score: this.score,
+    });
+  },
+
+  _accessor: {
+    score: {
+      get: function() {
+        return this._score;
+      },
+      set: function(v) {
+        this._score = v;
+        this.scoreLabel.text = v;
+      },
+    },
+  }
 
 });
 
@@ -239,9 +290,11 @@ phina.define('Paddle', {
 
 phina.main(function() {
   var app = GameApp({
+    title: 'Breakout',
     startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    backgroundColor: '#444',
   });
 
   app.enableStats();
