@@ -224,6 +224,9 @@ phina.define("MainScene", {
 
 });
 
+/*
+ * ブロック
+ */
 phina.define('Block', {
   superClass: 'RectangleShape',
 
@@ -238,6 +241,9 @@ phina.define('Block', {
   },
 });
 
+/*
+ * ボール
+ */
 phina.define('Ball', {
   superClass: 'CircleShape',
 
@@ -266,6 +272,9 @@ phina.define('Ball', {
   },
 });
 
+/*
+ * パドル
+ */
 phina.define('Paddle', {
   superClass: 'RectangleShape',
   init: function() {
@@ -294,14 +303,29 @@ phina.define('Paddle', {
   }
 });
 
+/*
+ * コンボラベル
+ */
 phina.define('ComboLabel', {
   superClass: 'Label',
   init: function(num) {
     this.superInit(num + ' combo!');
 
-    this.fill = 'hsl(40, 60%, 60%)';
     this.stroke = 'white';
     this.strokeWidth = 8;
+
+    if (num < 5) {
+      this.fill = 'hsl(40, 60%, 60%)';
+      this.fontSize = 16;
+    }
+    else if (num < 10) {
+      this.fill = 'hsl(120, 60%, 60%)';
+      this.fontSize = 32;
+    }
+    else {
+      this.fill = 'hsl(220, 60%, 60%)';
+      this.fontSize = 48;
+    }
 
     this.tweener
       .by({
