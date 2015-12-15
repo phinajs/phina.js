@@ -314,6 +314,7 @@ phina.define('ComboLabel', {
     this.stroke = 'white';
     this.strokeWidth = 8;
 
+    // 数によって色とサイズを分岐
     if (num < 5) {
       this.fill = 'hsl(40, 60%, 60%)';
       this.fontSize = 16;
@@ -327,6 +328,7 @@ phina.define('ComboLabel', {
       this.fontSize = 48;
     }
 
+    // フェードアウトして削除
     this.tweener
       .by({
         alpha: -1,
