@@ -85,6 +85,8 @@ phina.define("MainScene", {
     this.score = 0;
     // 時間
     this.time = 0;
+    // コンボ
+    this.combo = 0;
   },
 
   update: function(app) {
@@ -146,9 +148,10 @@ phina.define("MainScene", {
 
       // speed up
       this.ballSpeed += 1;
-    }
 
-    var combo = 0;
+      // コンボ数をリセット
+      this.combo = 0;
+    }
 
     this.group.children.some(function(block) {
       // ヒット
@@ -174,10 +177,14 @@ phina.define("MainScene", {
           }
         }
 
-        combo += 1;
-        this.score += combo*100;
-
         block.remove();
+
+        this.combo += 1;
+        this.score += this.combo*100;
+
+        var c = ComboLabel(this.combo).addChildTo(this);
+        c.x = this.gridX.span(12) + Math.randint(-50, 50);
+        c.y = this.gridY.span(12) + Math.randint(-50, 50);
 
         return true;
       }
@@ -285,6 +292,27 @@ phina.define('Paddle', {
       this.ball.y = this.top-this.ball.radius;
     }
   }
+});
+
+phina.define('ComboLabel', {
+  superClass: 'Label',
+  init: function(num) {
+    this.superInit(num + ' combo!');
+
+    this.fill = 'hsl(40, 60%, 60%)';
+    this.stroke = 'white';
+    this.strokeWidth = 8;
+
+    this.tweener
+      .by({
+        alpha: -1,
+        y: -50,
+      })
+      .call(function() {
+        this.remove();
+      }, this)
+      ;
+  },
 });
 
 
