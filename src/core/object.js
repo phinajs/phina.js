@@ -232,8 +232,9 @@
             return this[tempKey];
           },
           set: function(v) {
+            var old = this[tempKey];
             this[tempKey] = v;
-            callback.call(this);
+            callback.call(this, v, old);
           },
         });
       }
@@ -244,8 +245,9 @@
             return descriptor.get.call(this);
           },
           set: function(v) {
+            var old = descriptor.get.call(this);
             descriptor.set.call(this, v);
-            callback.call(this);
+            callback.call(this, v, old);
           },
         });
       }
@@ -258,8 +260,9 @@
           return this[accesskey];
         },
         set: function(v) {
+          var old = this[accesskey];
           this[accesskey] = v;
-          callback.call(this);
+          callback.call(this, v, old);
         },
       });
     }

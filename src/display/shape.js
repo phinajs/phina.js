@@ -97,8 +97,10 @@ phina.namespace(function() {
 
     _static: {
       watchRenderProperty: function(key) {
-        this.prototype.$watch(key, function() {
-          this._dirtyDraw = true;
+        this.prototype.$watch(key, function(newVal, oldVal) {
+          if (newVal !== oldVal) {
+            this._dirtyDraw = true;
+          }
         });
       },
     },
