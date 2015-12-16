@@ -36,12 +36,7 @@ phina.namespace(function() {
 
       this.canvas = phina.graphics.Canvas();
       this.watchDraw = true;
-
       this._dirtyDraw = true;
-
-      this.on('enterframe', function() {
-        this._render();
-      });
     },
 
     calcCanvasWidth: function() {
@@ -64,22 +59,19 @@ phina.namespace(function() {
     },
 
     _renderBackground: function() {
-      color = this.backgroundColor;
-      this.canvas.clearColor(color);
+      this.canvas.clearColor(this.backgroundColor);
 
       return this;
     },
 
-    _render: function() {
+    draw: function(canvas) {
+      // render
       if (this.watchDraw && this._dirtyDraw === true) {
         this.prerender(this.canvas);
         this.render(this.canvas);
-
         this._dirtyDraw = false;
       }
-    },
 
-    draw: function(canvas) {
       var image = this.canvas.domElement;
       var w = image.width;
       var h = image.height;
