@@ -39,13 +39,11 @@ phina.namespace(function() {
         this.flare('push');
       });
     },
-    render: function() {
-      var canvas = this.canvas;
-      var context = canvas.context;
-
-      this._renderBackground();
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
+
+      var context = canvas.context;
 
       // stroke
       if (this.stroke) {

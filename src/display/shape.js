@@ -52,14 +52,8 @@ phina.namespace(function() {
       this.canvas.height= this.calcCanvasHeight();
     },
 
-    render: function() {
-      this._renderBackground();
-
-      return this;
-    },
-
-    _renderBackground: function() {
-      this.canvas.clearColor(this.backgroundColor);
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
 
       return this;
     },
@@ -139,20 +133,19 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
     },
 
-    render: function() {
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        canvas.context.fillStyle = this.fill;
+        canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
       if (this.stroke) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
     },
 
@@ -190,20 +183,19 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    render: function() {
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillCircle(0, 0, this.radius);
+        canvas.context.fillStyle = this.fill;
+        canvas.fillCircle(0, 0, this.radius);
       }
 
       if (this.stroke) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeCircle(0, 0, this.radius);
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeCircle(0, 0, this.radius);
       }
     },
   });
@@ -230,11 +222,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    render: function() {
-      this._renderBackground();
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -277,11 +266,8 @@ phina.namespace(function() {
       this.sideIndent = options.sideIndent;
     },
 
-    render: function() {
-      this._renderBackground();
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -333,11 +319,8 @@ phina.namespace(function() {
       this.sides = options.sides;
     },
 
-    render: function() {
-      this._renderBackground();
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -386,11 +369,8 @@ phina.namespace(function() {
       this.cornerAngle = options.cornerAngle;
     },
 
-    render: function() {
-      this._renderBackground();
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {

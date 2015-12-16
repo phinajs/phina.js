@@ -96,10 +96,9 @@ phina.namespace(function() {
       return rate;
     },
 
-    render: function() {
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       var rate = this.getRate();
 
@@ -188,12 +187,10 @@ phina.namespace(function() {
       this.showPercentage = options.showPercentage;
     },
 
-    render: function() {
-      var canvas = this.canvas;
-
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
+      
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
 

@@ -76,11 +76,10 @@ phina.namespace(function() {
 
       var text = this.text + '';
       var lines = this._lines;
-      canvas.context.font = this.font;
 
-      this._renderBackground();
-
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
+
       context.font = this.font;
       context.textAlign = this.align;
       context.textBaseline = this.baseline;
