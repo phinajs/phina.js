@@ -70,8 +70,7 @@ phina.namespace(function() {
       return height*this.lineHeight + this.padding*2;
     },
 
-    render: function() {
-      var canvas = this.canvas;
+    render: function(canvas) {
       var context = canvas.context;
 
       var text = this.text + '';
@@ -119,52 +118,9 @@ phina.namespace(function() {
       text: {
         get: function() { return this._text; },
         set: function(v) {
-          this._dirtyDraw = true;
           this._text = v;
           this._lines = (this.text + '').split('\n');
         },
-      },
-      /**
-       * font size
-       */
-      fontSize: {
-        get: function() { return this._fontSize; },
-        set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
-      },
-      /**
-       * font weight
-       */
-      fontWeight: {
-        get: function() { return this._fontWeight; },
-        set: function(v) { this._dirtyDraw = true; this._fontWeight = v; },
-      },
-      /**
-       * font family
-       */
-      fontFamily: {
-        get: function() { return this._fontFamily; },
-        set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
-      },
-      /**
-       * align
-       */
-      align: {
-        get: function() { return this._align; },
-        set: function(v) { this._dirtyDraw = true; this._align = v; },
-      },
-      /**
-       * baseline
-       */
-      baseline: {
-        get: function() { return this._baseline; },
-        set: function(v) { this._dirtyDraw = true; this._baseline = v; },
-      },
-      /**
-       * line height
-       */
-      lineHeight: {
-        get: function() { return this._lineHeight; },
-        set: function(v) { this._dirtyDraw = true; this._lineHeight = v; },
       },
 
       font: {
@@ -172,7 +128,18 @@ phina.namespace(function() {
           return "{fontWeight} {fontSize}px {fontFamily}".format(this);
         },
       }
-    }
+    },
+
+    _defined: function() {
+      var Shape = phina.display.Shape;
+      Shape.watchRenderProperty.call(this, 'text');
+      Shape.watchRenderProperty.call(this, 'fontSize');
+      Shape.watchRenderProperty.call(this, 'fontWeight');
+      Shape.watchRenderProperty.call(this, 'fontFamily');
+      Shape.watchRenderProperty.call(this, 'align');
+      Shape.watchRenderProperty.call(this, 'baseline');
+      Shape.watchRenderProperty.call(this, 'lineHeight');
+    },
   });
 
 });

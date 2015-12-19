@@ -105,16 +105,20 @@ phina.namespace(function() {
       // draw color
       if (this.fill) {
         this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
       // draw gauge
       this.canvas.context.fillStyle = this.gaugeColor;
-      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height, this.cornerRadius);
+      canvas.context.save();
+      canvas.context.clip();
+      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
+      canvas.context.restore();
+
       // draw stroke
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
     },
 
@@ -124,35 +128,17 @@ phina.namespace(function() {
           return this._value;
         },
         set: function(v) {
-          this._dirtyDraw = true;
           this.setValue(v);
         },
       },
-      maxValue: {
-        get: function() {
-          return this._maxValue;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._maxValue = v;
-        },
-      },
-      gaugeColor: {
-        get: function() {
-          return this._gaugeColor;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._gaugeColor = v;
-        },
-      },
-      cornerRadius: {
-        get: function() {
-          return this._cornerRadius;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._cornerRadius = v;
-        },
-      },
-    }
+    },
+
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'value');
+      phina.display.Shape.watchRenderProperty.call(this, 'maxValue');
+      phina.display.Shape.watchRenderProperty.call(this, 'gaugeColor');
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
+    },
   });
 
 });

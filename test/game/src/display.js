@@ -41,6 +41,10 @@ th.describe("display.Shape", function() {
       cornerRadius: 8,
     }).addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(6));
+
+    setTimeout(function() {
+      shape.cornerRadius = 16;
+    }, 2000);
   });
 
   th.it('TriangleShape', function() {
@@ -51,6 +55,10 @@ th.describe("display.Shape", function() {
   th.it('StarShape', function() {
     var shape = phina.display.StarShape().addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(4));
+
+    setTimeout(function() {
+      shape.sideIndent = 0.9;
+    }, 2000);
   });
 
   th.it('PolygonShape', function() {

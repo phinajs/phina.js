@@ -67,29 +67,14 @@ phina.namespace(function() {
       context.fillText(this.text, 0, 0);
     },
 
-    _accessor: {
-      cornerRadius: {
-        get: function() { return this._cornerRadius; },
-        set: function(v) { this._dirtyDraw = true; this._cornerRadius = v; },
-      },
-      text: {
-        get: function() { return this._text; },
-        set: function(v) { this._dirtyDraw = true; this._text = v; },
-      },
-      fontColor: {
-        get: function() { return this._fontColor; },
-        set: function(v) { this._dirtyDraw = true; this._fontColor = v; },
-      },
-      fontSize: {
-        get: function() { return this._fontSize; },
-        set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
-      },
-      fontFamily: {
-        get: function() { return this._fontFamily; },
-        set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
-      },
-
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
+      phina.display.Shape.watchRenderProperty.call(this, 'text');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontColor');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontSize');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontFamily');
     },
+
   });
 
 });

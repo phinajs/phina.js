@@ -89,10 +89,15 @@ phina.namespace(function() {
           }
         });
       },
+      watchRenderProperties: function(keys) {
+        keys.each(function(key) {
+          this.watchRenderProperty(key);
+        }, this);
+      },
     },
 
     _defined: function() {
-      [
+      this.watchRenderProperties([
         'width',
         'height',
         'radius',
@@ -103,9 +108,7 @@ phina.namespace(function() {
         'strokeWidth',
         'shadow',
         'shadowBlur',
-      ].each(function(key) {
-        this.watchRenderProperty(key);
-      }, this);
+      ]);
     },
   });
 
@@ -149,15 +152,8 @@ phina.namespace(function() {
       }
     },
 
-    _accessor: {
-      cornerRadius: {
-        get: function() {
-          return this._cornerRadius;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._cornerRadius = v;
-        },
-      }
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
     },
   });
 });
@@ -282,15 +278,9 @@ phina.namespace(function() {
       }
     },
 
-    _accessor: {
-      sides: {
-        get: function() { return this._sides; },
-        set: function(v) { this._dirtyDraw = true; this._sides = v; },
-      },
-      sideIndent: {
-        get: function() { return this._sideIndent; },
-        set: function(v) { this._dirtyDraw = true; this._sideIndent = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'sides');
+      phina.display.Shape.watchRenderProperty.call(this, 'sideIndent');
     },
   });
 
@@ -335,11 +325,8 @@ phina.namespace(function() {
       }
     },
 
-    _accessor: {
-      sides: {
-        get: function() { return this._sides; },
-        set: function(v) { this._dirtyDraw = true; this._sides = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'sides');
     },
   });
 
@@ -385,11 +372,8 @@ phina.namespace(function() {
       }
     },
 
-    _accessor: {
-      cornerAngle: {
-        get: function() { return this._cornerAngle; },
-        set: function(v) { this._dirtyDraw = true; this._cornerAngle = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerAngle');
     },
   });
 
