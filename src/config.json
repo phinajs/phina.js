@@ -10,6 +10,7 @@
     "phina.js",
     
     "geom/vector2.js",
+    "geom/vector3.js",
     "geom/matrix33.js",
     "geom/rect.js",
     "geom/circle.js",
@@ -40,6 +41,7 @@
     "input/touch.js",
     "input/keyboard.js",
     "input/gamepad.js",
+    "input/accelerometer.js",
 
     "app/updater.js",
     "app/interactive.js",
