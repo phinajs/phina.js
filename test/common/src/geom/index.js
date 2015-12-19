@@ -19,7 +19,16 @@ describe('#geom', function() {
         assert(Math.abs(n-degree) <= 1);
         // console.log(n, degree);
       });
+    });
 
+    it('random', function() {
+      var v = phina.geom.Vector2(0, 180).random();
+      console.log(v);
+    });
+
+    it('static.random', function() {
+      var v = phina.geom.Vector2.random();
+      console.log(v);
     });
   });
 
