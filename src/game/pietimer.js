@@ -44,7 +44,7 @@ phina.namespace(function() {
       this.starting = false;
     },
 
-    _render: function() {
+    render: function() {
       this.canvas.width = this.radius*2 + this.padding*2;
       this.canvas.height= this.radius*2 + this.padding*2;
       this.canvas.clearColor(this.backgroundColor);
@@ -77,7 +77,7 @@ phina.namespace(function() {
         },
         set: function(time) {
           this._time = time;
-          this._render();
+          this._dirtyDraw = true;
         },
       }
     }
