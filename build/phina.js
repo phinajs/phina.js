@@ -2066,6 +2066,35 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
+   * @class phina.geom.Vector3
+   * ベクトルクラス
+   */
+  phina.define('phina.geom.Vector3', {
+
+    /** x座標 */
+    x: 0,
+    /** y座標 */
+    y: 0,
+    /** z座標 */
+    y: 0,
+
+    /**
+     * @constructor
+     */
+    init: function(x, y, z) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+    },
+
+  });
+
+});
+
+
+phina.namespace(function() {
+
+  /**
    * @class phina.geom.Matrix33
    * マトリックスクラス
    */
@@ -6198,6 +6227,70 @@ phina.namespace(function() {
 
 });
 
+/*
+ *
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.input.Accelerometer
+   * スマートフォンのセンサー情報
+   */
+  phina.define('phina.input.Accelerometer', {
+
+    /** @property  gravity 重力センサー */
+    /** @property  acceleration 加速度センサー */
+    /** @property  rotation 回転加速度センサー */
+    /** @property  orientation スマートフォンの傾き */
+
+    /**
+     * @constructor
+     */
+    init: function() {
+
+      var self = this;
+      
+      this.gravity        = phina.geom.Vector3(0, 0, 0);
+      this.acceleration   = phina.geom.Vector3(0, 0, 0);
+      this.rotation       = phina.geom.Vector3(0, 0, 0);
+      this.orientation    = phina.geom.Vector3(0, 0, 0);
+
+      window.addEventListener("devicemotion", function(e) {
+        var acceleration = self.acceleration;
+        var gravity = self.gravity;
+        var rotation = self.rotation;
+        
+        if (e.acceleration) {
+          acceleration.x = e.acceleration.x;
+          acceleration.y = e.acceleration.y;
+          acceleration.z = e.acceleration.z;
+        }
+        if (e.accelerationIncludingGravity) {
+          gravity.x = e.accelerationIncludingGravity.x;
+          gravity.y = e.accelerationIncludingGravity.y;
+          gravity.z = e.accelerationIncludingGravity.z;
+        }
+        if (e.rotationRate) {
+          rotation.x = rotation.beta  = e.rotationRate.beta;
+          rotation.y = rotation.gamma = e.rotationRate.gamma;
+          rotation.z = rotation.alpha = e.rotationRate.alpha;
+        }
+      });
+      
+      window.addEventListener("deviceorientation", function(e) {
+        var orientation = self.orientation;
+        orientation.alpha   = e.alpha;  // z(0~360)
+        orientation.beta    = e.beta;   // x(-180~180)
+        orientation.gamma   = e.gamma;  // y(-90~90)
+      });
+    },
+
+  });
+
+});
+
 phina.namespace(function() {
 
 
@@ -9851,6 +9944,8 @@ phina.namespace(function() {
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 5);
       this.keyboard = phina.input.Keyboard(document);
+      // 加速度センサーを生成
+      this.accelerometer = phina.input.Accelerometer();
 
       // ポインタをセット(PC では Mouse, Mobile では Touch)
       this.pointer = this.touch;
