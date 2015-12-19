@@ -106,9 +106,8 @@ th.describe('game.CountScene', function() {
     phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
 
     this.onenter = function() {
-      this.app.pushScene(phina.game.TitleScene({
-        title: 'タイトルだよー♪',
-        fontColor: 'black',
+      this.app.pushScene(phina.game.CountScene({
+        count: ['Ready'],
         backgroundColor: 'red',
       }));
     };
