@@ -47,6 +47,10 @@ phina.namespace(function() {
       return this.height + this.padding*2;
     },
 
+    isStrokable: function() {
+      return this.stroke && 0 < this.strokeWidth;
+    },
+
     prerender: function() {
       this.canvas.width = this.calcCanvasWidth();
       this.canvas.height= this.calcCanvasHeight();
@@ -145,7 +149,7 @@ phina.namespace(function() {
         canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
@@ -188,7 +192,7 @@ phina.namespace(function() {
         canvas.fillCircle(0, 0, this.radius);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeCircle(0, 0, this.radius);
@@ -227,7 +231,7 @@ phina.namespace(function() {
         canvas.fillPolygon(0, 0, this.radius, 3);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokePolygon(0, 0, this.radius, 3);
@@ -271,7 +275,7 @@ phina.namespace(function() {
         canvas.fillStar(0, 0, this.radius, this.sides, this.sideIndent);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeStar(0, 0, this.radius, this.sides, this.sideIndent);
@@ -318,7 +322,7 @@ phina.namespace(function() {
         canvas.fillPolygon(0, 0, this.radius, this.sides);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokePolygon(0, 0, this.radius, this.sides);
@@ -365,7 +369,7 @@ phina.namespace(function() {
         canvas.fillHeart(0, 0, this.radius, this.cornerAngle);
       }
 
-      if (this.stroke && 0 < this.strokeWidth) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeHeart(0, 0, this.radius, this.cornerAngle);
