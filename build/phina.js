@@ -4288,6 +4288,16 @@ phina.namespace(function() {
       return this;
     },
 
+    pause: function() {
+      this.source.disconnect();
+      return this;
+    },
+
+    resume: function() {
+      this.source.connect(this.gainNode);
+      return this;
+    },
+
     // 試してみるなう
     _oscillator: function(type) {
       var context = this.context;
