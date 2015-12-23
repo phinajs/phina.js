@@ -27,6 +27,10 @@ phina.namespace(function() {
         }
       }
 
+      if (options.fps !== undefined) {
+        this.fps = options.fps
+      }
+
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 5);
