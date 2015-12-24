@@ -140,7 +140,7 @@ phina.namespace(function() {
               self.loadFromBuffer(buffer);
               r(self);
             }, function() {
-              console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
+              console.warn("音声ファイルのデコードに失敗しました。(" + self.src + ")");
               r(self);
               self.flare('decodeerror');
             });
@@ -193,7 +193,7 @@ phina.namespace(function() {
         self.loadFromBuffer(buffer);
         r(self);
       }, function() {
-        console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
+        console.warn("音声ファイルのデコードに失敗しました。(" + self.src + ")");
         self.loaded = true;
         r(self);
       });

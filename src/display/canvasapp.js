@@ -35,7 +35,7 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas(this.domElement);
       this.canvas.setSize(options.width, options.height);
 
-      this.backgroundColor = 'white';
+      this.backgroundColor = (options.backgroundColor !== undefined) ? options.backgroundColor : 'white';
 
       this.replaceScene(phina.display.CanvasScene({
         width: options.width,

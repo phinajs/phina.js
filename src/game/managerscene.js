@@ -56,8 +56,7 @@ phina.namespace(function() {
         klass = phina.using('phina.game.' + data.className);
       }
 
-      var initArguments = data.arguments;
-      var initArguments = {}.$extend(initArguments, args);
+      var initArguments = {}.$extend(data.arguments, args);
       var scene = klass.call(null, initArguments);
       if (!scene.nextLabel) {
           scene.nextLabel = data.nextLabel;
