@@ -12,7 +12,7 @@ phina.namespace(function() {
     /** y座標 */
     y: 0,
     /** z座標 */
-    y: 0,
+    z: 0,
 
     /**
      * @constructor
