@@ -2076,7 +2076,7 @@ phina.namespace(function() {
     /** y座標 */
     y: 0,
     /** z座標 */
-    y: 0,
+    z: 0,
 
     /**
      * @constructor
@@ -4373,7 +4373,7 @@ phina.namespace(function() {
               self.loadFromBuffer(buffer);
               r(self);
             }, function() {
-              console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
+              console.warn("音声ファイルのデコードに失敗しました。(" + self.src + ")");
               r(self);
               self.flare('decodeerror');
             });
@@ -4426,7 +4426,7 @@ phina.namespace(function() {
         self.loadFromBuffer(buffer);
         r(self);
       }, function() {
-        console.warn("音声ファイルのデコードに失敗しました。(" + src + ")");
+        console.warn("音声ファイルのデコードに失敗しました。(" + self.src + ")");
         self.loaded = true;
         r(self);
       });
@@ -9954,6 +9954,10 @@ phina.namespace(function() {
         }
       }
 
+      if (options.fps !== undefined) {
+        this.fps = options.fps
+      }
+
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 5);
@@ -10068,7 +10072,7 @@ phina.namespace(function() {
       this.canvas = phina.graphics.Canvas(this.domElement);
       this.canvas.setSize(options.width, options.height);
 
-      this.backgroundColor = 'white';
+      this.backgroundColor = (options.backgroundColor !== undefined) ? options.backgroundColor : 'white';
 
       this.replaceScene(phina.display.CanvasScene({
         width: options.width,
@@ -10502,8 +10506,7 @@ phina.namespace(function() {
         klass = phina.using('phina.game.' + data.className);
       }
 
-      var initArguments = data.arguments;
-      var initArguments = {}.$extend(initArguments, args);
+      var initArguments = {}.$extend(data.arguments, args);
       var scene = klass.call(null, initArguments);
       if (!scene.nextLabel) {
           scene.nextLabel = data.nextLabel;
