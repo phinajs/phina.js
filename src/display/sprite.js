@@ -11,26 +11,12 @@ phina.namespace(function() {
     init: function(image, width, height) {
       this.superInit();
 
-      if (typeof image === 'string') {
-        image = phina.asset.AssetManager.get('image', image);
-      }
-      
-      this.image = image;
-      this.width = width || this.image.domElement.width;
-      this.height = height || this.image.domElement.height;
-      this._frameIndex = 0;
-
-      this.srcRect = {
-        x: 0,
-        y: 0,
-        width: this.width,
-        height: this.height,
-      };
+      this.srcRect = phina.geom.Rect();
+      this.setImage(image, width, height);
     },
 
     draw: function(canvas) {
       var image = this.image.domElement;
-
 
       // canvas.context.drawImage(image,
       //   0, 0, image.width, image.height,
@@ -44,6 +30,22 @@ phina.namespace(function() {
         );
     },
 
+    setImage: function(image, width, height) {
+      if (typeof image === 'string') {
+        image = phina.asset.AssetManager.get('image', image);
+      }
+      this._image = image;
+      this.width = this._image.domElement.width;
+      this.height = this._image.domElement.height;
+
+      this.frameIndex = 0;
+
+      if (width) { this.width = width; }
+      if (height) { this.height = height; }
+
+      return this;
+    },
+
     setFrameIndex: function(index, width, height) {
       var tw  = width || this._width;      // tw
       var th  = height || this._height;    // th
@@ -52,8 +54,8 @@ phina.namespace(function() {
       var maxIndex = row*col;
       index = index%maxIndex;
       
-      var x   = index%row;
-      var y   = ~~(index/row);
+      var x = index%row;
+      var y = ~~(index/row);
       this.srcRect.x = x*tw;
       this.srcRect.y = y*th;
       this.srcRect.width  = tw;
@@ -65,6 +67,13 @@ phina.namespace(function() {
     },
 
     _accessor: {
+      image: {
+        get: function() {return this._image;},
+        set: function(v) {
+          this.setImage(v);
+          return this;
+        }
+      },
       frameIndex: {
         get: function() {return this._frameIndex;},
         set: function(idx) {

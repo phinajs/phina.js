@@ -89,6 +89,33 @@ th.describe("display.Shape", function() {
 
 th.describe("display.Sprite", function() {
 
+  th.it('init', function() {
+    var path = 'http://dummyimage.com/128x128/f00/fff&text=ABC';
+    phina.asset.Texture().load(path).then(function(tex) {
+      var sprite = phina.display.Sprite(tex, 64, 64).addChildTo(this);
+      sprite.x = 320;
+      sprite.y = 480;
+    }.bind(this));
+  });
+
+  th.it('setImage', function() {
+    phina.asset.AssetLoader().load({
+      image: {
+        'imgA': 'http://dummyimage.com/128x128/f00/fff&text=A',
+        'imgB': 'http://dummyimage.com/128x128/00f/fff&text=B',
+      }
+    }).then(function() {
+      var sprite = phina.display.Sprite('imgA', 64, 64).addChildTo(this);
+      sprite.x = 320;
+      sprite.y = 480;
+
+      this.onpointend = function() {
+        sprite.setImage('imgB');
+      }
+    }.bind(this));
+  });
+
+
   th.it('Sample', function() {
     var path = '../../assets/images/hiyocos.png';
     phina.asset.Texture().load(path).then(function(tex) {
