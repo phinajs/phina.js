@@ -181,9 +181,9 @@ phina.namespace(function() {
       var rad = Math.atan2(this.y, this.x);
       return (rad + Math.PI*2)%(Math.PI*2);
     },
-
+    
     /**
-     * 角度(degree)と長さでベクトルをセット
+     * 角度(radian)と長さでベクトルをセット
      */
     fromAngle: function(rad, len) {
       len = len || 1;
@@ -192,6 +192,23 @@ phina.namespace(function() {
       
       return this;
     },
+
+    /**
+     * 角度に変換(degree)
+     * @return {Number}
+     */
+    toDegree: function() {
+      return this.toAngle().toDegree();
+    },
+    
+    /**
+     * 角度(degree)と長さでベクトルをセット
+     */
+    fromDegree: function(deg, len) {
+      return this.fromAngle(deg.toRadian());
+    },
+
+
 
     _accessor: {
     },

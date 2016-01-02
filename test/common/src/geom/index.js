@@ -11,13 +11,20 @@ describe('#geom', function() {
     });
 
     it('toAngle/fromAngle', function() {
-
       (360).times(function(n) {
         var v = phina.geom.Vector2();
         v.fromAngle(n.toRadian(), 1);
         var degree = v.toAngle().toDegree().floor();
         assert(Math.abs(n-degree) <= 1);
-        // console.log(n, degree);
+      });
+    });
+
+    it('toDegree/fromDegree', function() {
+      (360).times(function(n) {
+        var v = phina.geom.Vector2();
+        v.fromDegree(n);
+        var degree = v.toDegree().floor();
+        assert(Math.abs(n-degree) <= 1);
       });
     });
 
