@@ -38,16 +38,10 @@ phina.define("MainScene", {
   },
 
   update: function(app) {
-    var gravityX = app.accelerometer.gravity.x.floor();
-    var xIndex = 0;
-    
-    if (gravityX < -2) {
-      xIndex = -4;
-    }
-    else if (gravityX > 2) {
-      xIndex = 4;
-    }
-    this.player.x = this.gridX.center(xIndex);
+    var a = app.accelerometer;
+
+    this.player.x += a.gravity.x;
+    this.player.y += -a.gravity.y;
   },
 });
 
