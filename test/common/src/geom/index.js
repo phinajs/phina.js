@@ -28,6 +28,40 @@ describe('#geom', function() {
       });
     });
 
+    it('rotate', function() {
+      (-180).step(+180, 1, function(n) {
+        var v = phina.geom.Vector2().fromAngle((n - 1).toRadian());
+        v.rotate((+1).toRadian());
+
+        var deg = Math.abs(n - v.toAngle().toDegree());
+        if (359 <  deg) { deg -= 360; }
+        if (deg < -359) { deg += 360; }
+
+        assert(deg < 0.0001);
+      });
+
+      (-180).step(+180, 1, function(n) {
+        var v = phina.geom.Vector2().fromAngle((n + 1).toRadian());
+        v.rotate((-1).toRadian());
+
+        var deg = Math.abs(n - v.toAngle().toDegree());
+        if (359 <  deg) { deg -= 360; }
+        if (deg < -359) { deg += 360; }
+
+        assert(deg < 0.0001);
+      });
+
+      var center = phina.geom.Vector2(1, 2);
+      (-180).step(+180, 1, function(n) {
+        var v1 = phina.geom.Vector2().fromAngle((n + 1).toRadian()).add(center);
+        var v2 = phina.geom.Vector2().fromAngle((n).toRadian()).add(center);
+
+        v2.rotate((1).toRadian(), center);
+
+        assert(phina.geom.Vector2.distance(v1, v2) < 0.0001);
+      });
+    });
+
     it('random', function() {
       var v = phina.geom.Vector2(0, 180).random();
       console.log(v);

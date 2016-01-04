@@ -208,7 +208,20 @@ phina.namespace(function() {
       return this.fromAngle(deg.toRadian());
     },
 
+    /**
+     * 任意の角度(radian)で回転
+     */
+    rotate: function(rad, center) {
+      center = center || phina.geom.Vector2(0, 0);
 
+      var x1 = this.x - center.x;
+      var y1 = this.y - center.y;
+      var x2 = x1 * Math.cos(rad) - y1 * Math.sin(rad);
+      var y2 = x1 * Math.sin(rad) + y1 * Math.cos(rad);
+      this.set( center.x + x2, center.y + y2 );
+
+      return this;
+    },
 
     _accessor: {
     },
