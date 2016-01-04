@@ -34,8 +34,7 @@ describe('#geom', function() {
         v.rotate((+1).toRadian());
 
         var deg = Math.abs(n - v.toAngle().toDegree());
-        if (359 <  deg) { deg -= 360; }
-        if (deg < -359) { deg += 360; }
+        if (359 < deg) { deg = (deg - 360).abs(); }
 
         assert(deg < 0.0001);
       });
@@ -45,8 +44,7 @@ describe('#geom', function() {
         v.rotate((-1).toRadian());
 
         var deg = Math.abs(n - v.toAngle().toDegree());
-        if (359 <  deg) { deg -= 360; }
-        if (deg < -359) { deg += 360; }
+        if (359 < deg) { deg = (deg - 360).abs(); }
 
         assert(deg < 0.0001);
       });
