@@ -38,7 +38,7 @@ phina.namespace(function() {
       this.gainNode.connect(this.context.destination);
       // play
       this.source.start(0);
-
+      
       // check play end
       if (this.source.buffer) {
         var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
@@ -51,7 +51,9 @@ phina.namespace(function() {
     },
 
     stop: function() {
-      this.source.stop();
+      // stop
+      this.source.stop(0);
+
       return this;
     },
 

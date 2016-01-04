@@ -205,7 +205,7 @@ phina.namespace(function() {
      * 角度(degree)と長さでベクトルをセット
      */
     fromDegree: function(deg, len) {
-      return this.fromAngle(deg.toRadian());
+      return this.fromAngle(deg.toRadian(), len);
     },
 
     /**
