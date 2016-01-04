@@ -1907,10 +1907,23 @@ phina.namespace(function() {
      * 角度(degree)と長さでベクトルをセット
      */
     fromDegree: function(deg, len) {
-      return this.fromAngle(deg.toRadian());
+      return this.fromAngle(deg.toRadian(), len);
     },
 
+    /**
+     * 任意の角度(radian)で回転
+     */
+    rotate: function(rad, center) {
+      center = center || phina.geom.Vector2(0, 0);
 
+      var x1 = this.x - center.x;
+      var y1 = this.y - center.y;
+      var x2 = x1 * Math.cos(rad) - y1 * Math.sin(rad);
+      var y2 = x1 * Math.sin(rad) + y1 * Math.cos(rad);
+      this.set( center.x + x2, center.y + y2 );
+
+      return this;
+    },
 
     _accessor: {
     },
@@ -4288,7 +4301,7 @@ phina.namespace(function() {
       this.gainNode.connect(this.context.destination);
       // play
       this.source.start(0);
-
+      
       // check play end
       if (this.source.buffer) {
         var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
@@ -4301,7 +4314,9 @@ phina.namespace(function() {
     },
 
     stop: function() {
-      this.source.stop();
+      // stop
+      this.source.stop(0);
+
       return this;
     },
 
