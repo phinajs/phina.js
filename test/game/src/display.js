@@ -26,6 +26,8 @@ th.describe("display.Shape", function() {
       shape.radius = 200;
       shape.stroke = false;
       shape.fill = 'blue';
+      shape.shadow = 'red';
+      shape.shadowBlur = 8;
     }, 2000);
   });
 

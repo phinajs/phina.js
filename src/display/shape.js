@@ -187,10 +187,20 @@ phina.namespace(function() {
       canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
+      if (this.shadow) {
+        canvas.context.shadowColor = this.shadow;
+        canvas.context.shadowBlur = this.shadowBlur;
+      }
+      else {
+        canvas.context.shadowBlur = 0;
+      }
+
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
         canvas.fillCircle(0, 0, this.radius);
       }
+
+      canvas.context.shadowBlur = 0;
 
       if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
