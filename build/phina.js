@@ -6468,9 +6468,6 @@ phina.namespace(function() {
       // 更新するかを判定
       if (element.awake === false) return ;
 
-      // タッチ判定
-      this._checkPoint(element);
-
       // 子供を更新
       var len = element.children.length;
       if (element.children.length > 0) {
@@ -6479,6 +6476,9 @@ phina.namespace(function() {
           this._checkElement(tempChildren[i]);
         }
       }
+
+      // タッチ判定
+      this._checkPoint(element);
     },
 
     _checkPoint: function(obj) {
@@ -6732,6 +6732,11 @@ phina.namespace(function() {
       currentScene: {
         "get": function()   { return this._scenes[this._sceneIndex]; },
         "set": function(v)  { this._scenes[this._sceneIndex] = v; },
+      },
+
+      rootScene: {
+        "get": function()   { return this._scenes[0]; },
+        "set": function(v)  { this._scenes[0] = v; },
       },
 
       frame: {
@@ -9303,10 +9308,20 @@ phina.namespace(function() {
       canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
+      if (this.shadow) {
+        canvas.context.shadowColor = this.shadow;
+        canvas.context.shadowBlur = this.shadowBlur;
+      }
+      else {
+        canvas.context.shadowBlur = 0;
+      }
+
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
         canvas.fillCircle(0, 0, this.radius);
       }
+
+      canvas.context.shadowBlur = 0;
 
       if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
@@ -11107,55 +11122,63 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      var startLabel = (options.assets) ? 'loading' : options.startLabel;
+      var startLabel = options.startLabel || 'title';
+
+      var scenes = options.scenes || [
+        {
+          className: 'LoadingScene',
+          label: 'loading',
+          nextLabel: options.startLabel,
+        },
+
+        {
+          className: 'SplashScene',
+          label: 'splash',
+          nextLabel: 'title',
+        },
+
+        {
+          className: 'TitleScene',
+          label: 'title',
+          nextLabel: 'main',
+        },
+        {
+          className: 'MainScene',
+          label: 'main',
+          nextLabel: 'result',
+        },
+        {
+          className: 'ResultScene',
+          label: 'result',
+          nextLabel: 'title',
+        },
+
+        {
+          className: 'PauseScene',
+          label: 'pause',
+        },
+      ];
+
+      scenes = scenes.each(function(s) {
+        s.arguments = s.arguments || options;
+      });
 
       var scene = phina.game.ManagerScene({
         startLabel: startLabel,
-
-        scenes: [
-          {
-            className: 'LoadingScene',
-            arguments: options,
-            label: 'loading',
-            nextLabel: options.startLabel,
-          },
-
-          {
-            className: 'SplashScene',
-            arguments: options,
-            label: 'splash',
-            nextLabel: 'title',
-          },
-
-          {
-            className: 'TitleScene',
-            arguments: options,
-            label: 'title',
-            nextLabel: 'main',
-          },
-          {
-            className: 'MainScene',
-            arguments: options,
-            label: 'main',
-            nextLabel: 'result',
-          },
-          {
-            className: 'ResultScene',
-            arguments: options,
-            label: 'result',
-            nextLabel: 'title',
-          },
-
-          {
-            className: 'PauseScene',
-            arguments: options,
-            label: 'pause',
-          },
-
-        ]
+        scenes: scenes,
       });
 
-      this.replaceScene(scene);
+      if (options.assets) {
+        var loading = LoadingScene(options);
+        this.replaceScene(loading);
+
+        loading.onexit = function() {
+          this.replaceScene(scene);
+        }.bind(this);
+      }
+      else {
+        this.replaceScene(scene);
+      }
     },
   });
 
