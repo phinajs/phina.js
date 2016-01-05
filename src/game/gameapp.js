@@ -14,55 +14,63 @@ phina.namespace(function() {
       });
       this.superInit(options);
 
-      var startLabel = (options.assets) ? 'loading' : options.startLabel;
+      var startLabel = options.startLabel || 'title';
+
+      var scenes = options.scenes || [
+        {
+          className: 'LoadingScene',
+          label: 'loading',
+          nextLabel: options.startLabel,
+        },
+
+        {
+          className: 'SplashScene',
+          label: 'splash',
+          nextLabel: 'title',
+        },
+
+        {
+          className: 'TitleScene',
+          label: 'title',
+          nextLabel: 'main',
+        },
+        {
+          className: 'MainScene',
+          label: 'main',
+          nextLabel: 'result',
+        },
+        {
+          className: 'ResultScene',
+          label: 'result',
+          nextLabel: 'title',
+        },
+
+        {
+          className: 'PauseScene',
+          label: 'pause',
+        },
+      ];
+
+      scenes = scenes.each(function(s) {
+        s.arguments = s.arguments || options;
+      });
 
       var scene = phina.game.ManagerScene({
         startLabel: startLabel,
-
-        scenes: [
-          {
-            className: 'LoadingScene',
-            arguments: options,
-            label: 'loading',
-            nextLabel: options.startLabel,
-          },
-
-          {
-            className: 'SplashScene',
-            arguments: options,
-            label: 'splash',
-            nextLabel: 'title',
-          },
-
-          {
-            className: 'TitleScene',
-            arguments: options,
-            label: 'title',
-            nextLabel: 'main',
-          },
-          {
-            className: 'MainScene',
-            arguments: options,
-            label: 'main',
-            nextLabel: 'result',
-          },
-          {
-            className: 'ResultScene',
-            arguments: options,
-            label: 'result',
-            nextLabel: 'title',
-          },
-
-          {
-            className: 'PauseScene',
-            arguments: options,
-            label: 'pause',
-          },
-
-        ]
+        scenes: scenes,
       });
 
-      this.replaceScene(scene);
+      if (options.assets) {
+        var loading = LoadingScene(options);
+        this.replaceScene(loading);
+
+        loading.onexit = function() {
+          this.replaceScene(scene);
+        }.bind(this);
+      }
+      else {
+        this.replaceScene(scene);
+      }
     },
   });
 
