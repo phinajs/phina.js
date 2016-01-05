@@ -36,9 +36,6 @@ phina.namespace(function() {
       // 更新するかを判定
       if (element.awake === false) return ;
 
-      // タッチ判定
-      this._checkPoint(element);
-
       // 子供を更新
       var len = element.children.length;
       if (element.children.length > 0) {
@@ -47,6 +44,9 @@ phina.namespace(function() {
           this._checkElement(tempChildren[i]);
         }
       }
+
+      // タッチ判定
+      this._checkPoint(element);
     },
 
     _checkPoint: function(obj) {
