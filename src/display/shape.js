@@ -9,7 +9,7 @@ phina.namespace(function() {
     superClass: 'phina.display.CanvasElement',
 
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         width: 64,
         height: 64,
         padding: 8,
@@ -126,8 +126,7 @@ phina.namespace(function() {
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'blue',
         stroke: '#aaa',
@@ -171,7 +170,7 @@ phina.namespace(function() {
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'red',
         stroke: '#aaa',
@@ -219,7 +218,7 @@ phina.namespace(function() {
   phina.define('phina.display.TriangleShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'green',
         stroke: '#aaa',
@@ -259,7 +258,7 @@ phina.namespace(function() {
   phina.define('phina.display.StarShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'yellow',
         stroke: '#aaa',
@@ -308,7 +307,7 @@ phina.namespace(function() {
   phina.define('phina.display.PolygonShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'cyan',
         stroke: '#aaa',
@@ -355,7 +354,7 @@ phina.namespace(function() {
   phina.define('phina.display.HeartShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         backgroundColor: 'transparent',
         fill: 'pink',
         stroke: '#aaa',
