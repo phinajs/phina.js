@@ -182,6 +182,11 @@ phina.namespace(function() {
         "set": function(v)  { this._scenes[this._sceneIndex] = v; },
       },
 
+      rootScene: {
+        "get": function()   { return this._scenes[0]; },
+        "set": function(v)  { this._scenes[0] = v; },
+      },
+
       frame: {
         "get": function () { return this.ticker.frame; },
         "set": function (v) { this.ticker.frame = v; },
