@@ -34,6 +34,7 @@ th.describe('ui.Gauge', function() {
 
     var gauge = phina.ui.Gauge().addChildTo(this);
     gauge.position.set(this.gridX.center(), this.gridY.center());
+    
     this.onpointstart = function() {
       gauge.value -= 10;
     };
@@ -46,7 +47,13 @@ th.describe('ui.Gauge', function() {
     };
     gauge.onempty = function() {
       label.text = 'empty';
-    }
+      setTimeout(function() {
+        gauge.value = 100;
+      }, 1000);
+    };
+    gauge.onfull = function() {
+      label.text = 'full';
+    };
   });
 
   th.it('style', function() {

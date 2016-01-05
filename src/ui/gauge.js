@@ -8,7 +8,7 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = (options || {}).$safe({
+      options = ({}).$safe(options, {
         width: 256,
         height: 32,
         backgroundColor: 'transparent',
@@ -57,6 +57,8 @@ phina.namespace(function() {
       // fire value change event
       this.flare('change');
 
+      this._value = value;
+
       if (this.animation) {
         var range = Math.abs(this.visualValue-value);
         var time = (range/this.maxValue)*this.animationTime;
@@ -87,8 +89,6 @@ phina.namespace(function() {
           this.flare('full');
         }
       }
-
-      this._value = value;
     },
 
     getRate: function() {
