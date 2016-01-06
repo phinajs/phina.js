@@ -198,9 +198,7 @@ phina.define('Floor', {
 
     this.x = 0;
   },
-  _render: function() {
-    this._renderBackground();
-
+  render: function() {
     var c = this.canvas;
     var ground = AssetManager.get('image', 'ground');
     var count = SCREEN_WIDTH/TILE_WIDTH+1;
