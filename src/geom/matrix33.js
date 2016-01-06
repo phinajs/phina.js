@@ -158,7 +158,7 @@ phina.namespace(function() {
         return [ this.m20, this.m21, this.m22 ];
       }
       else {
-        return [];
+        return null;
       }
     },
 
@@ -174,7 +174,7 @@ phina.namespace(function() {
         return [ this.m02, this.m12, this.m22 ];
       }
       else {
-        return [];
+        return null;
       }
     },
     /**
