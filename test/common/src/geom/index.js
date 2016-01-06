@@ -121,6 +121,30 @@ describe('#geom', function() {
 
       assert.equal(c.toString(), phina.geom.Matrix33.IDENTITY.toString());
     });
+
+    it('getRow', function() {
+      var a = phina.geom.Matrix33(
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9);
+      assert(a.getRow(0).equals([1, 2, 3]));
+      assert(a.getRow(1).equals([4, 5, 6]));
+      assert(a.getRow(2).equals([7, 8, 9]));
+      assert.equal(a.getRow(-1), null);
+      assert.equal(a.getRow(3), null)
+    });
+
+    it('getCol', function() {
+      var a = phina.geom.Matrix33(
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9);
+      assert(a.getCol(0).equals([1, 4, 7]));
+      assert(a.getCol(1).equals([2, 5, 8]));
+      assert(a.getCol(2).equals([3, 6, 9]));
+      assert.equal(a.getCol(-1), null);
+      assert.equal(a.getCol(3), null);
+    });
   });
 
 

@@ -147,13 +147,35 @@ phina.namespace(function() {
     },
 
     // 行
-    getRow: function() {
-      // TODO:
+    getRow: function(row) {
+      if ( row === 0 ) {
+        return [ this.m00, this.m01, this.m02 ];
+      }
+      else if ( row === 1 ) {
+        return [ this.m10, this.m11, this.m12 ];
+      }
+      else if ( row === 2 ) {
+        return [ this.m20, this.m21, this.m22 ];
+      }
+      else {
+        return null;
+      }
     },
 
     // 列
-    getCol: function() {
-      // TODO:
+    getCol: function(col) {
+      if ( col === 0 ) {
+        return [ this.m00, this.m10, this.m20 ];
+      }
+      else if ( col === 1 ) {
+        return [ this.m01, this.m11, this.m21 ];
+      }
+      else if ( col === 2 ) {
+        return [ this.m02, this.m12, this.m22 ];
+      }
+      else {
+        return null;
+      }
     },
     /**
      * 文字列化
