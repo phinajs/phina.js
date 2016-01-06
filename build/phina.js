@@ -2270,13 +2270,35 @@ phina.namespace(function() {
     },
 
     // 行
-    getRow: function() {
-      // TODO:
+    getRow: function(row) {
+      if ( row === 0 ) {
+        return [ this.m00, this.m01, this.m02 ];
+      }
+      else if ( row === 1 ) {
+        return [ this.m10, this.m11, this.m12 ];
+      }
+      else if ( row === 2 ) {
+        return [ this.m20, this.m21, this.m22 ];
+      }
+      else {
+        return null;
+      }
     },
 
     // 列
-    getCol: function() {
-      // TODO:
+    getCol: function(col) {
+      if ( col === 0 ) {
+        return [ this.m00, this.m10, this.m20 ];
+      }
+      else if ( col === 1 ) {
+        return [ this.m01, this.m11, this.m21 ];
+      }
+      else if ( col === 2 ) {
+        return [ this.m02, this.m12, this.m22 ];
+      }
+      else {
+        return null;
+      }
     },
     /**
      * 文字列化
@@ -3922,6 +3944,40 @@ phina.namespace(function() {
   });
 
 });
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.util.QueryString
+   * 
+   */
+  phina.define('phina.util.QueryString', {
+    _static: {
+      parse: function(text, sep, eq, isDecode) {
+        text = text || location.search.substr(1);
+        sep = sep || '&';
+        eq = eq || '=';
+        var decode = (isDecode) ? decodeURIComponent : function(a) { return a; };
+        return text.split(sep).reduce(function(obj, v) {
+          var pair = v.split(eq);
+          obj[pair[0]] = decode(pair[1]);
+          return obj;
+        }, {});
+      },
+      stringify: function(value, sep, eq, isEncode) {
+        sep = sep || '&';
+        eq = eq || '=';
+        var encode = (isEncode) ? encodeURIComponent : function(a) { return a; };
+        return Object.keys(value).map(function(key) {
+          return key + eq + encode(value[key]);
+        }).join(sep);
+      },
+    },
+  });
+
+});
+
 
 
 phina.namespace(function() {
