@@ -17,7 +17,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
-      params = (params || {}).$safe(phina.game.ResultScene.defaults);
+      params = ({}).$safe(params, phina.game.ResultScene.defaults);
 
       var message = params.message.format(params);
 

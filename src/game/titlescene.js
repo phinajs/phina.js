@@ -17,7 +17,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
-      params = (params || {}).$safe(phina.game.TitleScene.defaults);
+      params = ({}).$safe(params, phina.game.TitleScene.defaults);
 
       this.backgroundColor = params.backgroundColor;
 
