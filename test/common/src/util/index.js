@@ -15,10 +15,30 @@ describe('#util', function() {
     it('init', function() {
       var grid = phina.util.Grid(960, 12);
 
-      assert(grid.unit(), 80);
-      assert(grid.span(1), 80);
-      assert(grid.span(6), 480);
-      assert(grid.center(), 480);
+      assert.equal(grid.unit(), 80);
+      assert.equal(grid.span(1), 80);
+      assert.equal(grid.span(6), 480);
+      assert.equal(grid.center(), 480);
+    });
+  });
+
+  describe('QueryString', function() {
+    it('parse', function() {
+      var obj = phina.util.QueryString.parse('hoge=100&foo=bar');
+      assert.equal(+obj.hoge, 100);
+      assert.equal(obj.foo, 'bar');
+      var obj = phina.util.QueryString.parse('2*4|4*2', '|', '*');
+      assert.equal(+obj[2], 4);
+      assert.equal(+obj[4], 2);
+    });
+
+    it('stringify', function() {
+      var str = phina.util.QueryString.stringify({"hoge":"100", "foo":"bar"});
+      assert.equal(str, 'hoge=100&foo=bar');
+      var str = phina.util.QueryString.stringify({"2":"4","4":"2"}, '|', '*'); 
+      assert.equal(str, '2*4|4*2');
+      var str = phina.util.QueryString.stringify({"名前":"ファイ"}, null, null, true); 
+      assert.equal(str, '名前=%E3%83%95%E3%82%A1%E3%82%A4');
     });
   });
 
