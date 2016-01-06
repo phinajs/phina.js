@@ -16,7 +16,7 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      options = (options || {}).$safe(phina.game.LoadingScene.defaults);
+      options = ({}).$safe(options, phina.game.LoadingScene.defaults);
       this.superInit(options);
 
       this.fromJSON({
