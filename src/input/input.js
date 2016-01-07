@@ -25,6 +25,8 @@
       this._tempPosition = phina.geom.Vector2(0, 0);
 
       this.maxCacheNum = phina.input.Input.defaults.maxCacheNum;
+      this.minDistance = phina.input.Input.defaults.minDistance
+      this.maxDistance = phina.input.Input.defaults.maxDistance;
       this.cachePositions = [];
       this.flickDirection = phina.geom.Vector2(0, 0);
 
@@ -71,6 +73,7 @@
       this.position.set(x, y);
       this.prevPosition.set(x, y);
 
+      this.flickDirection.set(0, 0);
       this.cachePositions.clear();
     },
 
@@ -82,8 +85,15 @@
       var first = this.cachePositions.first;
       var last = this.cachePositions.last;
 
-      this.flickDirection.x = last.x - first.x;
-      this.flickDirection.y = last.y - first.y;
+      var v = phina.geom.Vector2.sub(last, first);
+
+      var len = v.length();
+
+      if (len > this.minDistance) {
+        var normalLen = len.clamp(this.minDistance, this.maxDistance);
+        v.div(len).mul(normalLen);
+        this.flickDirection.set(v.x, v.y);
+      }
 
       this.cachePositions.clear();
     },
@@ -159,6 +169,8 @@
     _static: {
       defaults: {
         maxCacheNum: 3,
+        minDistance: 10,
+        maxDistance: 100,
       },
     },
   });

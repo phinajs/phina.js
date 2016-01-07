@@ -91,7 +91,6 @@ th.describe("input.Pointer", function() {
         label.text = pointer.flickDirection.toAngle().toDegree().floor();
         shape.vx = pointer.fx;
         shape.vy = pointer.fy;
-        console.log(pointer.fx, pointer.fy);
       }
     }
   });

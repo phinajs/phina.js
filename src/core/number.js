@@ -217,6 +217,12 @@
   Number.prototype.method("min", function(value) { return Math.min(this, value) });
 
   /**
+   * @method clamp
+   * clamp
+   */
+  Number.prototype.method("clamp", function(min, max) { return Math.clamp(this, min, max) });
+
+  /**
    * @method pow
    * 乗数
    */
