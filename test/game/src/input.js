@@ -44,6 +44,8 @@ th.describe("input.Touches", function() {
   });
 });
 
+
+
 th.describe("input.Mouse", function() {
 
   th.it('getPointing', function() {
@@ -62,6 +64,41 @@ th.describe("input.Mouse", function() {
   });
 
 });
+
+th.describe("input.Pointer", function() {
+
+  th.it('fx,fy', function() {
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(320, 480);
+    shape.vx = shape.vy = 0;
+    shape.update = function() {
+      this.vx *= 0.9;
+      this.vy *= 0.9;
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.left < 0) { this.left = 0; this.vx *= -1; }
+      if (this.right > 640) { this.right = 640; this.vx *= -1; }
+      if (this.top < 0) { this.top = 0; this.vy *= -1; }
+      if (this.bottom > 960) { this.bottom = 960; this.vy *= -1; }
+    };
+    var label = phina.display.Label(320).addChildTo(this);
+    label.setPosition(60, 40);
+
+    this.update = function(app) {
+      var pointer = app.pointer;
+
+      if (pointer.getPointingEnd()) {
+        label.text = pointer.flickDirection.toAngle().toDegree().floor();
+        shape.vx = pointer.fx;
+        shape.vy = pointer.fy;
+        console.log(pointer.fx, pointer.fy);
+      }
+    }
+  });
+
+});
+
+
 
 th.describe('input.Gamepad', function() {
 

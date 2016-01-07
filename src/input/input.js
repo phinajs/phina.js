@@ -23,6 +23,11 @@
       this.deltaPosition = phina.geom.Vector2(0, 0);
       this.prevPosition = phina.geom.Vector2(0, 0);
       this._tempPosition = phina.geom.Vector2(0, 0);
+
+      this.maxCacheNum = phina.input.Input.defaults.maxCacheNum;
+      this.cachePositions = [];
+      this.flickDirection = phina.geom.Vector2(0, 0);
+
       this.flags = 0;
     },
 
@@ -48,6 +53,11 @@
 
       // 現在の位置を更新
       this.position.set(this._tempPosition.x, this._tempPosition.y);
+
+      if (this.cachePositions.length > this.maxCacheNum) {
+        this.cachePositions.shift();
+      }
+      this.cachePositions.push(this.position.clone());
     },
 
     _start: function(x, y, flag) {
@@ -60,11 +70,22 @@
       var y = this._tempPosition.y;
       this.position.set(x, y);
       this.prevPosition.set(x, y);
+
+      this.cachePositions.clear();
     },
 
     _end: function(flag) {
       flag = (flag !== undefined) ? flag : 1;
       this.flags &= ~(flag);
+
+
+      var first = this.cachePositions.first;
+      var last = this.cachePositions.last;
+
+      this.flickDirection.x = last.x - first.x;
+      this.flickDirection.y = last.y - first.y;
+
+      this.cachePositions.clear();
     },
 
     // スケールを考慮
@@ -114,6 +135,30 @@
       dy: {
         "get": function()   { return this.deltaPosition.y; },
         "set": function(v)  { this.deltaPosition.y = v; }
+      },
+
+      /**
+       * @property    fx
+       * fx値
+       */
+      fx: {
+        "get": function()   { return this.flickDirection.x; },
+        "set": function(v)  { this.flickDirection.x = v; }
+      },
+      /**
+       * @property    fy
+       * fy値
+       */
+      fy: {
+        "get": function()   { return this.flickDirection.y; },
+        "set": function(v)  { this.flickDirection.y = v; }
+      },
+
+    },
+
+    _static: {
+      defaults: {
+        maxCacheNum: 3,
       },
     },
   });
