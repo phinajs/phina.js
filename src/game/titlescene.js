@@ -54,7 +54,7 @@ phina.namespace(function() {
           },
         });
 
-        this.on('pointstart', function() {
+        this.on('pointend', function() {
           this.exit();
         });
       }

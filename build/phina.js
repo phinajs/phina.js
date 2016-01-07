@@ -10883,7 +10883,7 @@ phina.namespace(function() {
           },
         });
 
-        this.on('pointstart', function() {
+        this.on('pointend', function() {
           this.exit();
         });
       }
@@ -11003,7 +11003,7 @@ phina.namespace(function() {
       });
 
       if (params.exitType === 'touch') {
-        this.on('pointstart', function() {
+        this.on('pointend', function() {
           this.exit();
         });
       }
