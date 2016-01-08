@@ -81,6 +81,7 @@
       flag = (flag !== undefined) ? flag : 1;
       this.flags &= ~(flag);
 
+      if (this.cachePositions.length < 2) return;
 
       var first = this.cachePositions.first;
       var last = this.cachePositions.last;
