@@ -10379,17 +10379,17 @@ phina.namespace(function() {
 
       var context = canvas.context;
 
-      // stroke
-      if (this.stroke) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-
       // fill
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
         canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+      }
+
+      // stroke
+      if (this.isStrokable()) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
       // text
@@ -10977,10 +10977,14 @@ phina.namespace(function() {
               text: '★',
               width: 128,
               height: 128,
+              fontColor: params.fontColor,
               fontSize: 50,
               cornerRadius: 64,
+              fill: 'rgba(240, 240, 240, 0.5)',
+              // stroke: '#aaa',
+              // strokeWidth: 2,
             }],
-            x: this.gridX.span(6),
+            x: this.gridX.center(-3),
             y: this.gridY.span(12),
           },
           playButton: {
@@ -10989,10 +10993,14 @@ phina.namespace(function() {
               text: '▶',
               width: 128,
               height: 128,
+              fontColor: params.fontColor,
               fontSize: 50,
               cornerRadius: 64,
+              fill: 'rgba(240, 240, 240, 0.5)',
+              // stroke: '#aaa',
+              // strokeWidth: 2,
             }],
-            x: this.gridX.span(10),
+            x: this.gridX.center(3),
             y: this.gridY.span(12),
 
             interactive: true,
@@ -11010,8 +11018,9 @@ phina.namespace(function() {
       }
 
       this.shareButton.onclick = function() {
+        var text = 'Score: {0}\n{1}'.format(params.score, message);
         var url = phina.social.Twitter.createURL({
-          text: message,
+          text: text,
           hashtags: params.hashtags,
           url: params.url,
         });
@@ -11023,7 +11032,7 @@ phina.namespace(function() {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\nscore: {score}\n',
+        message: 'this is phina.js project.',
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
