@@ -48,10 +48,10 @@ th.describe('game.ResultScene', function() {
     phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
 
     this.onenter = function() {
-      this.app.pushScene(phina.game.TitleScene({
+      this.app.pushScene(phina.game.ResultScene({
         title: 'タイトルだよー♪',
         fontColor: 'black',
-        backgroundColor: 'red',
+        backgroundColor: 'white',
       }));
     };
   });

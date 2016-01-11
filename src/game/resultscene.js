@@ -66,10 +66,14 @@ phina.namespace(function() {
               text: '★',
               width: 128,
               height: 128,
+              fontColor: params.fontColor,
               fontSize: 50,
               cornerRadius: 64,
+              fill: 'rgba(240, 240, 240, 0.5)',
+              // stroke: '#aaa',
+              // strokeWidth: 2,
             }],
-            x: this.gridX.span(6),
+            x: this.gridX.center(-3),
             y: this.gridY.span(12),
           },
           playButton: {
@@ -78,10 +82,14 @@ phina.namespace(function() {
               text: '▶',
               width: 128,
               height: 128,
+              fontColor: params.fontColor,
               fontSize: 50,
               cornerRadius: 64,
+              fill: 'rgba(240, 240, 240, 0.5)',
+              // stroke: '#aaa',
+              // strokeWidth: 2,
             }],
-            x: this.gridX.span(10),
+            x: this.gridX.center(3),
             y: this.gridY.span(12),
 
             interactive: true,
@@ -99,8 +107,9 @@ phina.namespace(function() {
       }
 
       this.shareButton.onclick = function() {
+        var text = 'Score: {0}\n{1}'.format(params.score, message);
         var url = phina.social.Twitter.createURL({
-          text: message,
+          text: text,
           hashtags: params.hashtags,
           url: params.url,
         });
@@ -112,7 +121,7 @@ phina.namespace(function() {
       defaults: {
         score: 16,
 
-        message: 'this is phina.js project.\nscore: {score}\n',
+        message: 'this is phina.js project.',
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 

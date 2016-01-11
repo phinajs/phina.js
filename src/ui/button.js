@@ -45,17 +45,17 @@ phina.namespace(function() {
 
       var context = canvas.context;
 
-      // stroke
-      if (this.stroke) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-
       // fill
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
         canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+      }
+
+      // stroke
+      if (this.isStrokable()) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
       // text
