@@ -28,7 +28,7 @@
       this.minDistance = phina.input.Input.defaults.minDistance
       this.maxDistance = phina.input.Input.defaults.maxDistance;
       this.cachePositions = [];
-      this.flickDirection = phina.geom.Vector2(0, 0);
+      this.flickVelocity = phina.geom.Vector2(0, 0);
 
       this.flags = 0;
     },
@@ -73,7 +73,7 @@
       this.position.set(x, y);
       this.prevPosition.set(x, y);
 
-      this.flickDirection.set(0, 0);
+      this.flickVelocity.set(0, 0);
       this.cachePositions.clear();
     },
 
@@ -93,7 +93,7 @@
       if (len > this.minDistance) {
         var normalLen = len.clamp(this.minDistance, this.maxDistance);
         v.div(len).mul(normalLen);
-        this.flickDirection.set(v.x, v.y);
+        this.flickVelocity.set(v.x, v.y);
       }
 
       this.cachePositions.clear();
@@ -153,16 +153,16 @@
        * fx値
        */
       fx: {
-        "get": function()   { return this.flickDirection.x; },
-        "set": function(v)  { this.flickDirection.x = v; }
+        "get": function()   { return this.flickVelocity.x; },
+        "set": function(v)  { this.flickVelocity.x = v; }
       },
       /**
        * @property    fy
        * fy値
        */
       fy: {
-        "get": function()   { return this.flickDirection.y; },
-        "set": function(v)  { this.flickDirection.y = v; }
+        "get": function()   { return this.flickVelocity.y; },
+        "set": function(v)  { this.flickVelocity.y = v; }
       },
 
     },

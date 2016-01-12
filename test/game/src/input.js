@@ -88,7 +88,7 @@ th.describe("input.Pointer", function() {
       var pointer = app.pointer;
 
       if (pointer.getPointingEnd()) {
-        label.text = pointer.flickDirection.toAngle().toDegree().floor();
+        label.text = pointer.flickVelocity.toAngle().toDegree().floor();
         shape.vx = pointer.fx;
         shape.vy = pointer.fy;
       }
