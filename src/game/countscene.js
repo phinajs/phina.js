@@ -26,7 +26,7 @@ phina.namespace(function() {
           label: {
             className: 'phina.display.Label',
             arguments: {
-              fill: 'white',
+              fill: options.fontColor,
               fontSize: options.fontSize,
               stroke: false,
             },
