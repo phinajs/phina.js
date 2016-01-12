@@ -109,6 +109,7 @@ th.describe('game.CountScene', function() {
       this.app.pushScene(phina.game.CountScene({
         count: ['Ready'],
         backgroundColor: 'red',
+        fontColor: 'green',
       }));
     };
   });
