@@ -40,7 +40,7 @@
    * @param   {String} key name
    * @param   {Function} function
    */
-  Object.defineProperty(Object.prototype, "method", {
+  Object.defineProperty(Object.prototype, "$method", {
     value: function(name, fn) {
       Object.defineProperty(this, name, {
         value: fn,
@@ -56,7 +56,7 @@
    * @method setter
    * セッターを定義する
    */
-  Object.prototype.method("setter", function(name, fn){
+  Object.prototype.$method("setter", function(name, fn){
     Object.defineProperty(this, name, {
       set: fn,
       enumerable: false,
@@ -68,7 +68,7 @@
    * @method getter
    * ゲッターを定義する
    */
-  Object.prototype.method("getter", function(name, fn){
+  Object.prototype.$method("getter", function(name, fn){
     Object.defineProperty(this, name, {
       get: fn,
       enumerable: false,
@@ -80,7 +80,7 @@
    * @method accessor
    * アクセッサ(セッター/ゲッター)を定義する
    */
-  Object.prototype.method("accessor", function(name, param) {
+  Object.prototype.$method("accessor", function(name, param) {
     Object.defineProperty(this, name, {
       set: param["set"],
       get: param["get"],
@@ -94,7 +94,7 @@
    * @method forIn
    * オブジェクト用ループ処理
    */
-  Object.prototype.method("forIn", function(fn, self) {
+  Object.prototype.$method("forIn", function(fn, self) {
     self = self || this;
 
     Object.keys(this).forEach(function(key, index) {
@@ -110,7 +110,7 @@
    * @method  $get
    * パス指定で値を取得
    */
-  Object.prototype.method('$get', function(key) {
+  Object.prototype.$method('$get', function(key) {
     return key.split('.').reduce(function(t, v) {
       return t && t[v];
     }, this);
@@ -120,7 +120,7 @@
    * @method  $set
    * パス指定で値を設定
    */
-  Object.prototype.method('$set', function(key, value) {
+  Object.prototype.$method('$set', function(key, value) {
     key.split('.').reduce(function(t, v, i, arr) {
       if (i === (arr.length-1)) {
         t[v] = value;
@@ -136,7 +136,7 @@
    * @method  $has
    * そのプロパティを持っているかを判定する
    */
-  Object.prototype.method("$has", function(key) {
+  Object.prototype.$method("$has", function(key) {
     return this.hasOwnProperty(key);
   });
 
@@ -144,7 +144,7 @@
    * @method  $extend
    * 他のライブラリと競合しちゃうので extend -> $extend としました
    */
-  Object.prototype.method("$extend", function() {
+  Object.prototype.$method("$extend", function() {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         this[property] = source[property];
@@ -159,7 +159,7 @@
    * 安全拡張
    * 上書きしない
    */
-  Object.prototype.method("$safe", function(source) {
+  Object.prototype.$method("$safe", function(source) {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         if (this[property] === undefined) this[property] = source[property];
@@ -174,7 +174,7 @@
    * 厳格拡張
    * すでにあった場合は警告
    */
-  Object.prototype.method("$strict", function(source) {
+  Object.prototype.$method("$strict", function(source) {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         console.assert(!this[property], "tm error: {0} is Already".format(property));
@@ -188,7 +188,7 @@
    * @method  $pick
    * ピック
    */
-  Object.prototype.method("$pick", function() {
+  Object.prototype.$method("$pick", function() {
     var temp = {};
 
     Array.prototype.forEach.call(arguments, function(key) {
@@ -202,7 +202,7 @@
    * @method  $omit
    * オミット
    */
-  Object.prototype.method("$omit", function() {
+  Object.prototype.$method("$omit", function() {
     var temp = {};
 
     for (var key in this) {
@@ -214,7 +214,7 @@
     return temp;
   });
 
-  Object.prototype.method('$watch', function(key, callback) {
+  Object.prototype.$method('$watch', function(key, callback) {
     var target = this;
     var descriptor = null;
 
@@ -277,7 +277,7 @@
   });
 
   if (!Object.observe) {
-    Object.method('observe', function(obj, callback) {
+    Object.$method('observe', function(obj, callback) {
       var keys = Object.keys(obj);
       keys.forEach(function(key) {
         var tempKey = '__' + key;
@@ -298,7 +298,7 @@
   }
 
   if (!Object.unobserve) {
-    Object.method('unobserve', function(obj, callback) {
+    Object.$method('unobserve', function(obj, callback) {
       console.assert(false);
     });
   }
@@ -323,7 +323,7 @@
    * 四捨五入
    * 桁数指定版
    */
-  Number.prototype.method("round", function(figure) {
+  Number.prototype.$method("round", function(figure) {
     figure = figure || 0;
     var base = Math.pow(10, figure);
     var temp = this * base;
@@ -336,7 +336,7 @@
    * 切り上げ.
    * 桁数指定版
    */
-  Number.prototype.method("ceil",  function(figure) {
+  Number.prototype.$method("ceil",  function(figure) {
     figure = figure || 0;
     var base = Math.pow(10, figure);
     var temp = this * base;
@@ -348,7 +348,7 @@
    * 切り捨て
    * 桁数指定版
    */
-  Number.prototype.method("floor",  function(figure) {
+  Number.prototype.$method("floor",  function(figure) {
     figure = figure || 0;
     var base = Math.pow(10, figure);
     var temp = this * base;
@@ -364,7 +364,7 @@
    * @method  toInt
    * integer 型に変換する
    */
-  Number.prototype.method("toInt",  function() {
+  Number.prototype.$method("toInt",  function() {
     return (this | 0);
   });
   
@@ -372,7 +372,7 @@
    * @method  toHex
    * 16進数化
    */
-  Number.prototype.method("toHex",  function() {
+  Number.prototype.$method("toHex",  function() {
     return this.toString(16);
   });
   
@@ -380,7 +380,7 @@
    * @method  toBin
    * 2進数化
    */
-  Number.prototype.method("toBin",  function() {
+  Number.prototype.$method("toBin",  function() {
     return this.toString(2);
   });
   
@@ -389,7 +389,7 @@
    * @method  toUnsigned
    * unsigned 型に変換する
    */
-  Number.prototype.method("toUnsigned",  function() {
+  Number.prototype.$method("toUnsigned",  function() {
     return this >>> 0;
   });
   
@@ -397,7 +397,7 @@
    * @method  padding
    * 文字埋め
    */
-  Number.prototype.method("padding",  function(n, ch) {
+  Number.prototype.$method("padding",  function(n, ch) {
     var str = this+'';
     n  = n-str.length;
     ch = ch || '0';
@@ -412,7 +412,7 @@
    * @method  times
    * 数値分繰り返す
    */
-  Number.prototype.method("times",  function(fn, self) {
+  Number.prototype.$method("times",  function(fn, self) {
     self = self || this;
     for (var i=0; i<this; ++i) {
       fn.call(self, i);
@@ -424,7 +424,7 @@
    * @method  upto
    * インクリメント繰り返し
    */
-  Number.prototype.method("upto",  function(t, fn, self) {
+  Number.prototype.$method("upto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i<=t; ++i) {
       fn.call(self, i);
@@ -436,7 +436,7 @@
    * @method  downto
    * デクリメント繰り返し
    */
-  Number.prototype.method("downto",  function(t, fn, self) {
+  Number.prototype.$method("downto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i>=t; --i) {
       fn.call(self, i);
@@ -448,7 +448,7 @@
    * @method step
    * ステップ繰り返し(float対応)
    */
-  Number.prototype.method("step",  function(limit, step, fn, self) {
+  Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
     for (var i=+this; i<=limit; i+=step) {
       fn.call(self, i);
@@ -460,7 +460,7 @@
    * @method  map
    * return で返された値の配列を作る
    */
-  Number.prototype.method("map",  function(fn, self) {
+  Number.prototype.$method("map",  function(fn, self) {
     self = self || this;
 
     var results = [];
@@ -475,97 +475,97 @@
    * @method abs
    * 絶対値
    */
-  Number.prototype.method("abs", function() { return Math.abs(this) });
+  Number.prototype.$method("abs", function() { return Math.abs(this) });
 
   /**
    * @method acos
    * アークコサイン
    */
-  Number.prototype.method("acos", function() { return Math.acos(this) });
+  Number.prototype.$method("acos", function() { return Math.acos(this) });
 
   /**
    * @method asin
    * アークサイン
    */
-  Number.prototype.method("asin", function() { return Math.asin(this) });
+  Number.prototype.$method("asin", function() { return Math.asin(this) });
 
   /**
    * @method atan
    * アークタンジェント
    */
-  Number.prototype.method("atan", function() { return Math.atan(this) });
+  Number.prototype.$method("atan", function() { return Math.atan(this) });
 
   /**
    * @method cos
    * コサイン
    */
-  Number.prototype.method("cos", function() { return Math.cos(this) });
+  Number.prototype.$method("cos", function() { return Math.cos(this) });
 
   /**
    * @method exp
    * E^num
    */
-  Number.prototype.method("exp", function() { return Math.exp(this) });
+  Number.prototype.$method("exp", function() { return Math.exp(this) });
 
   /**
    * @method log
    * 自然対数
    */
-  Number.prototype.method("log", function() { return Math.log(this) });
+  Number.prototype.$method("log", function() { return Math.log(this) });
 
   /**
    * @method max
    * max
    */
-  Number.prototype.method("max", function(value) { return Math.max(this, value) });
+  Number.prototype.$method("max", function(value) { return Math.max(this, value) });
 
   /**
    * @method min
    * min
    */
-  Number.prototype.method("min", function(value) { return Math.min(this, value) });
+  Number.prototype.$method("min", function(value) { return Math.min(this, value) });
 
   /**
    * @method clamp
    * clamp
    */
-  Number.prototype.method("clamp", function(min, max) { return Math.clamp(this, min, max) });
+  Number.prototype.$method("clamp", function(min, max) { return Math.clamp(this, min, max) });
 
   /**
    * @method pow
    * 乗数
    */
-  Number.prototype.method("pow", function(exponent) { return Math.pow(this, exponent) });
+  Number.prototype.$method("pow", function(exponent) { return Math.pow(this, exponent) });
 
   /**
    * @method sin
    * サイン
    */
-  Number.prototype.method("sin", function() { return Math.sin(this) });
+  Number.prototype.$method("sin", function() { return Math.sin(this) });
 
   /**
    * @method sqrt
    * 平方根
    */
-  Number.prototype.method("sqrt", function() { return Math.sqrt(this) });
+  Number.prototype.$method("sqrt", function() { return Math.sqrt(this) });
 
   /**
    * @method tan
    * タンジェント
    */
-  Number.prototype.method("tan", function() { return Math.tan(this) });
+  Number.prototype.$method("tan", function() { return Math.tan(this) });
 
   /**
    * @method toDegree
    * to degree
    */
-  Number.prototype.method("toDegree", function() { return (this*Math.RAD_TO_DEG); });
+  Number.prototype.$method("toDegree", function() { return (this*Math.RAD_TO_DEG); });
 
   /**
    * @method toRadian
    * to degree
    */
-  Number.prototype.method("toRadian", function() { return this*Math.DEG_TO_RAD; });
+  Number.prototype.$method("toRadian", function() { return this*Math.DEG_TO_RAD; });
 
 })();
 
@@ -593,7 +593,7 @@
    *          b: 255
    *      }));
    */
-  String.prototype.method("format", function(arg) {
+  String.prototype.$method("format", function(arg) {
     // 置換ファンク
     var rep_fn = undefined;
     
@@ -628,7 +628,7 @@
    * <a href="http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/">Reference</a>
    * 
    */
-  String.prototype.method("trim", function() {
+  String.prototype.$method("trim", function() {
     return this.replace(/^\s+|\s+$/g, "");
   });
   
@@ -645,7 +645,7 @@
    * - [デザインとプログラムの狭間で: javascriptでキャピタライズ（一文字目を大文字にする）](http://design-program.blogspot.com/2011/02/javascript.html)
    * 
    */
-  String.prototype.method("capitalize", function() {
+  String.prototype.$method("capitalize", function() {
     return this.replace(/\w+/g, function(word){
       return word.capitalizeFirstLetter();
     });
@@ -655,7 +655,7 @@
    * @method  capitalizeFirstLetter
    * 先頭文字のみキャピタライズ
    */
-  String.prototype.method("capitalizeFirstLetter", function() {
+  String.prototype.$method("capitalizeFirstLetter", function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
   });
   
@@ -663,7 +663,7 @@
    * @method  toDash
    * ダッシュ
    */
-  String.prototype.method("toDash", function() {
+  String.prototype.$method("toDash", function() {
     return this.replace(/([A-Z])/g, function(m){ return '-'+m.toLowerCase(); });
   });
   
@@ -672,7 +672,7 @@
    * @method toHash
    * ハッシュ値に変換
    */
-  String.prototype.method("toHash", function() {
+  String.prototype.$method("toHash", function() {
     return this.toCRC32();
   });
   
@@ -680,7 +680,7 @@
    * @method  padding
    * 左側に指定された文字を詰めて右寄せにする
    */
-  String.prototype.method("padding", function(n, ch) {
+  String.prototype.$method("padding", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -694,7 +694,7 @@
    * @method  paddingLeft
    * 左側に指定された文字を詰めて右寄せにする
    */
-  String.prototype.method("paddingLeft", function(n, ch) {
+  String.prototype.$method("paddingLeft", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -708,7 +708,7 @@
    * @method  paddingRight
    * 右側に指定された文字を詰めて左寄せにする
    */
-  String.prototype.method("paddingRight", function(n, ch) {
+  String.prototype.$method("paddingRight", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -722,7 +722,7 @@
    * @method  quotemeta
    * メタ文字をクォート
    */
-  String.prototype.method("quotemeta", function(n) {
+  String.prototype.$method("quotemeta", function(n) {
     return this.replace(/([^0-9A-Za-z_])/g, '\\$1');
   });
   
@@ -730,7 +730,7 @@
    * @method  repeat
    * リピート
    */
-  String.prototype.method("repeat", function(n) {
+  String.prototype.$method("repeat", function(n) {
     // TODO: 確認する
     var arr = Array(n);
     for (var i=0; i<n; ++i) arr[i] = this;
@@ -741,7 +741,7 @@
    * @method  count
    * その文字が入ってる数をカウント
    */
-  String.prototype.method("count", function(str) {
+  String.prototype.$method("count", function(str) {
     var re = new RegExp(str, 'gm');
     return this.match(re).length;
   });
@@ -751,7 +751,7 @@
    * 含んでいるかを返す
    * ruby のやつ
    */
-  String.prototype.method("include", function(str) {
+  String.prototype.$method("include", function(str) {
     return this.indexOf(str) != -1;
   });
   
@@ -759,7 +759,7 @@
    * @method  toString
    * 配列に変換
    */
-  String.prototype.method("toArray", function() {
+  String.prototype.$method("toArray", function() {
     var arr = [];
     for (var i=0,len=this.length; i<len; ++i) {
       arr.push(this[i]);
@@ -767,7 +767,7 @@
     return arr;
   });
   
-  String.prototype.method("toObject", function(sep, eq) {
+  String.prototype.$method("toObject", function(sep, eq) {
     sep = sep || '&';
     eq  = eq || '=';
 
@@ -803,7 +803,7 @@
    * @method  toCRC32
    * CRC32 変換
    */
-  String.prototype.method("toCRC32", function() {
+  String.prototype.$method("toCRC32", function() {
     var crc = 0, x=0, y=0;
     
     crc = crc ^ (-1);
@@ -850,7 +850,7 @@
    * @method  equals
    * 渡された配列と等しいかどうかをチェック
    */
-  Array.prototype.method("equals", function(arr) {
+  Array.prototype.$method("equals", function(arr) {
     // 長さチェック
     if (this.length !== arr.length) return false;
     
@@ -868,7 +868,7 @@
    * ネストされている配列含め渡された配列と等しいかどうかをチェック
    * equalsDeep にするか検討. (Java では deepEquals なのでとりあえず合わせとく)
    */
-  Array.prototype.method("deepEquals", function(arr) {
+  Array.prototype.$method("deepEquals", function(arr) {
     // 長さチェック
     if (this.length !== arr.length) return false;
     
@@ -885,7 +885,7 @@
    * @method    contains
    * 要素が含まれいるかをチェック
    */
-  Array.prototype.method("contains", function(item, fromIndex) {
+  Array.prototype.$method("contains", function(item, fromIndex) {
     return this.indexOf(item, fromIndex) != -1;
   });
   
@@ -893,7 +893,7 @@
    * @method  at
    * ループ添字アクセス(Ruby っぽいやつ)
    */
-  Array.prototype.method("at", function(i) {
+  Array.prototype.$method("at", function(i) {
     i%=this.length;
     i+=this.length;
     i%=this.length;
@@ -901,7 +901,7 @@
   });
 
 
-  Array.prototype.method("find", function(fn, self) {
+  Array.prototype.$method("find", function(fn, self) {
     var target = null;
 
     this.some(function(elm, i) {
@@ -914,7 +914,7 @@
     return target;
   });
 
-  Array.prototype.method("findIndex", function(fn, self) {
+  Array.prototype.$method("findIndex", function(fn, self) {
     var target = null;
 
     this.some(function(elm, i) {
@@ -931,7 +931,7 @@
    * @method  swap
    * a番目 と b番目 を入れ替える
    */
-  Array.prototype.method("swap", function(a, b) {
+  Array.prototype.$method("swap", function(a, b) {
     var temp = this[a];
     this[a] = this[b];
     this[b] = temp;
@@ -944,7 +944,7 @@
    * elm と一致する要素を削除
    * イレース
    */
-  Array.prototype.method("erase", function(elm) {
+  Array.prototype.$method("erase", function(elm) {
     var index  = this.indexOf(elm);
     if (index >= 0) {
       this.splice(index, 1);
@@ -956,7 +956,7 @@
    * @method  eraseAll
    * elm と一致する要素を全て削除
    */
-  Array.prototype.method("eraseAll", function(elm) {
+  Array.prototype.$method("eraseAll", function(elm) {
     for (var i=0,len=this.length; i<len; ++i) {
       if (this[i] == elm) {
         this.splice(i--, 1);
@@ -969,7 +969,7 @@
    * @method  eraseIf
    * 条件にマッチした要素を削除
    */
-  Array.prototype.method("eraseIf", function(fn) {
+  Array.prototype.$method("eraseIf", function(fn) {
     for (var i=0,len=this.length; i<len; ++i) {
       if ( fn(this[i], i, this) ) {
         this.splice(i, 1);
@@ -983,7 +983,7 @@
    * @method  eraseIfAll
    * 条件にマッチした要素を削除
    */
-  Array.prototype.method("eraseIfAll", function(fn) {
+  Array.prototype.$method("eraseIfAll", function(fn) {
     for (var i=0,len=this.length; i<len; ++i) {
       if ( fn(this[i], i, this) ) {
         this.splice(i--, 1);
@@ -997,7 +997,7 @@
    * @method  random
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("random", function(min, max) {
+  Array.prototype.$method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -1007,7 +1007,7 @@
    * @method  pickup
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("pickup", function(min, max) {
+  Array.prototype.$method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -1017,7 +1017,7 @@
    * @method  lot
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("lot", function(min, max) {
+  Array.prototype.$method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -1027,7 +1027,7 @@
    * @method  uniq
    * 重複削除
    */
-  Array.prototype.method("uniq", function(deep) {
+  Array.prototype.$method("uniq", function(deep) {
     return this.filter(function(value, index, self) {
       return self.indexOf(value) === index;
     });
@@ -1039,7 +1039,7 @@
    * フラット.
    * Ruby のやつ.
    */
-  Array.prototype.method("flatten", function(level) {
+  Array.prototype.$method("flatten", function(level) {
     var arr = null;
 
     if (level) {
@@ -1063,7 +1063,7 @@
    * @method  clone
    * 配列をクローン
    */
-  Array.prototype.method("clone", function(deep) {
+  Array.prototype.$method("clone", function(deep) {
     if (deep === true) {
       var a = Array(this.length);
       for (var i=0,len=this.length; i<len; ++i) {
@@ -1081,7 +1081,7 @@
    * @method  clear
    * クリア
    */
-  Array.prototype.method("clear", function() {
+  Array.prototype.$method("clear", function() {
     this.length = 0;
     return this;
   });
@@ -1090,7 +1090,7 @@
    * @method  fill
    * 特定の値で満たす
    */
-  Array.prototype.method("fill", function(value, start, end) {
+  Array.prototype.$method("fill", function(value, start, end) {
     start = start || 0;
     end   = end   || (this.length);
     
@@ -1106,7 +1106,7 @@
    * @method  range
    * python のやつ
    */
-  Array.prototype.method("range", function(start, end, step) {
+  Array.prototype.$method("range", function(start, end, step) {
     this.clear();
     
     if (arguments.length == 1) {
@@ -1132,7 +1132,7 @@
    * @method  shuffle
    * シャッフル
    */
-  Array.prototype.method("shuffle", function() {
+  Array.prototype.$method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
       var j = Math.randint(0, len-1);
       
@@ -1148,7 +1148,7 @@
    * @method  sum
    * 合計
    */
-  Array.prototype.method("sum", function() {
+  Array.prototype.$method("sum", function() {
     var sum = 0;
     for (var i=0,len=this.length; i<len; ++i) {
       sum += this[i];
@@ -1160,7 +1160,7 @@
    * @method  average
    * 平均
    */
-  Array.prototype.method("average", function() {
+  Array.prototype.$method("average", function() {
     var sum = 0;
     var len = this.length;
     for (var i=0; i<len; ++i) {
@@ -1174,7 +1174,7 @@
    * 繰り返し
    * チェーンメソッド対応
    */
-  Array.prototype.method("each", function() {
+  Array.prototype.$method("each", function() {
     this.forEach.apply(this, arguments);
     return this;
   });
@@ -1184,7 +1184,7 @@
    * @method  toULElement
    * ULElement に変換
    */
-  Array.prototype.method("toULElement", function(){
+  Array.prototype.$method("toULElement", function(){
       // TODO: 
   });
 
@@ -1192,7 +1192,7 @@
    * @method  toOLElement
    * OLElement に変換
    */
-  Array.prototype.method("toOLElement", function(){
+  Array.prototype.$method("toOLElement", function(){
       // TODO:
   });
 
@@ -1202,7 +1202,7 @@
    * @method  range
    * range
    */
-  Array.method("range", function(start, end, step) {
+  Array.$method("range", function(start, end, step) {
     return Array.prototype.range.apply([], arguments);
   });
 
@@ -1212,7 +1212,7 @@
    * of関数 可変長引数をとってArrayにして返す
    * ES6準拠
    */
-  Array.method("of", function() {
+  Array.$method("of", function() {
     return Array.prototype.slice.call(arguments);
   });
 
@@ -1222,7 +1222,7 @@
    *
    * ES6準拠
    */
-  Array.method("from", function(arrayLike, callback, context) {
+  Array.$method("from", function(arrayLike, callback, context) {
     if (!Object(arrayLike).length) return [];
 
     return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {
@@ -1255,17 +1255,7 @@
    * @method  format
    * 日付フォーマットに合わせた文字列を返す
    */
-  Date.prototype.method('format', function(pattern) {
-    /*
-    var str = '{y}/{m}/{d}'.format({
-      y: this.getYear()+1900,
-      m: this.getMonth()+1,
-      d: this.getDate(),
-    });
-    
-    return str;
-    */
-    
+  Date.prototype.$method('format', function(pattern) {
     var year    = this.getFullYear();
     var month   = this.getMonth();
     var date    = this.getDate();
@@ -1274,57 +1264,66 @@
     var minutes = this.getMinutes();
     var seconds = this.getSeconds();
     var millseconds = this.getMilliseconds();
-    var str = '';
     
-    for (var i=0,len=pattern.length; i<len; ++i) {
-      var ch = pattern.charAt(i);
-      var temp = '';
-      switch(ch) {
-        // 日
-        case 'd': temp = date.padding(2, '0'); break;
-        case 'D': temp = WEEK[day].substr(0, 3); break;
-        case 'j': temp = date; break;
-        case 'l': temp = WEEK[day]; break;
-        // case 'N': temp = ; break;
-        // case 'S': temp = ; break;
-        // case 'w': temp = ; break;
-        // case 'z': temp = ; break;
-        
-        // 月
-        case 'F': temp = MONTH[month]; break;
-        case 'm': temp = (month+1).padding(2, '0'); break;
-        case 'M': temp = MONTH[month].substr(0, 3); break;
-        case 'n': temp = (month+1); break;
-        // case 't': temp = (month+1); break;
-        
-        // 年
-        // case 'L': temp = ; break;
-        // case 'o': temp = ; break;
-        case 'Y': temp = year; break;
-        case 'y': temp = year.toString().substr(2, 2); break;
-        
-        
-        // 時間
-        // case "a": temp = ; break;
-        // case "A": temp = ; break;
-        // case "B": temp = ; break;
-        // case "g": temp = ; break;
-        case "G": temp = hours; break;
-        // case "h": temp = ; break;
-        case "H": temp = hours.padding(2, '0'); break;
-        case "i": temp = minutes.padding(2, '0'); break;
-        case "s": temp = seconds.padding(2, '0'); break;
-        case "S": temp = millseconds.padding(3, '0'); break;
-        
-        default : temp = ch; break;
-      }
-      str += temp;
-    }
-    return str;
+    var patterns = {
+      'yyyy': String(year).padding(4, '0'),
+      'yy': year.toString().substr(2, 2),
+      'y': year,
+
+      'MMMM': MONTH[day],
+      'MMM': MONTH[day].substr(0, 3),
+      'MM': String(month+1).padding(2, '0'),
+      'M': (month+1),
+
+      'dd': String(date).padding(2, '0'),
+      'd': date,
+
+      'EEEE': WEEK[day],
+      'EEE': WEEK[day].substr(0, 3),
+
+      'HH': String(hours).padding(2, '0'),
+      'H': hours,
+
+      'mm': String(minutes).padding(2, '0'),
+      'm': minutes,
+
+      'ss': String(seconds).padding(2, '0'),
+      's': seconds,
+      
+      // // date
+      // 'd': String('00' + date).slice(-2),
+      // 'D': WEEK[day].substr(0, 3),
+      // 'j': date,
+      // 'l': WEEK[day],
+      
+      // // month
+      // 'm': String('00' + (month+1)).slice(-2),
+      // 'M': MONTH[month].substr(0, 3),
+      // 'n': (month+1),
+      // 'F': MONTH[month],
+      
+      // // year
+      // 'y': year.toString().substr(2, 2),
+      // 'Y': year,
+      
+      // // time
+      // 'G': hours,
+      // 'H': String('00' + hours).slice(-2),
+      // 'i': String('00' + minutes).slice(-2),
+      // 's': String('00' + seconds).slice(-2),
+      // 'S': String('000' + millseconds).slice(-3),
+    };
+
+    var regstr = '(' + Object.keys(patterns).join('|') + ')';
+    var re = new RegExp(regstr, 'g');
+
+    return pattern.replace(re, function(str) {
+      return patterns[str];
+    });
   });
 
 
-  Date.prototype.method('calculateAge', function(birthday, when) {
+  Date.prototype.$method('calculateAge', function(birthday, when) {
     // birthday
     if (typeof birthday === 'string') {
       birthday = new Date(birthday);
@@ -1398,7 +1397,7 @@
    * @method clamp
    * クランプ
    */
-  Math.method("clamp", function(value, min, max) {
+  Math.$method("clamp", function(value, min, max) {
     return (value < min) ? min : ( (value > max) ? max : value );
   });
   
@@ -1406,7 +1405,7 @@
    * @method inside
    * min <= value <= max のとき true を返す
    */
-  Math.method("inside", function(value, min, max) {
+  Math.$method("inside", function(value, min, max) {
     return (value >= min) && (value) <= max;
   });
   
@@ -1414,7 +1413,7 @@
    * @method randint
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randint", function(min, max) {
+  Math.$method("randint", function(min, max) {
     return Math.floor( Math.random()*(max-min+1) ) + min;
   });
   
@@ -1422,7 +1421,7 @@
    * @method randfloat
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randfloat", function(min, max) {
+  Math.$method("randfloat", function(min, max) {
     return Math.random()*(max-min)+min;
   });
   
@@ -1430,7 +1429,7 @@
    * @method randbool
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randbool", function() {
+  Math.$method("randbool", function() {
     return Math.randint(0, 1) === 1;
   });
     
@@ -1458,11 +1457,11 @@ var phina = phina || {};
    */
   phina.VERSION = '0.2.0';
 
-  phina.method('isNode', function() {
+  phina.$method('isNode', function() {
     return (typeof module !== 'undefined');
   });
 
-  phina.method('namespace', function(fn) {
+  phina.$method('namespace', function(fn) {
     fn.call(this);
   });
 
@@ -1482,7 +1481,7 @@ var phina = phina || {};
    * @method isMobile
    * mobile かどうかをチェック
    */
-  phina.method('isMobile', function() {
+  phina.$method('isMobile', function() {
     if (!phina.global.navigator) return false;
     var ua = phina.global.navigator.userAgent;
     return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
@@ -1507,7 +1506,7 @@ phina.namespace(function() {
    * @method createClass
    * クラスを生成
    */
-  phina.method('createClass', function(params) {
+  phina.$method('createClass', function(params) {
     var props = {};
 
     var _class = function() {
@@ -1533,7 +1532,7 @@ phina.namespace(function() {
     // // 
     // params.forIn(function(key, value) {
     //   if (typeof value === 'function') {
-    //     _class.method(key, value);
+    //     _class.$method(key, value);
     //   }
     //   else {
     //     _class.prototype[key] = value;
@@ -1571,7 +1570,7 @@ phina.namespace(function() {
   /*
    * 
    */
-  phina.method('using', function(path) {
+  phina.$method('using', function(path) {
     if (!path) {
       return phina.global;
     }
@@ -1589,7 +1588,7 @@ phina.namespace(function() {
   /*
    * 
    */
-  phina.method('register', function(path, _class) {
+  phina.$method('register', function(path, _class) {
     var pathes = path.split(/[,.\/ ]|::/);
     var className = pathes.last;
     var parentPath = path.substring(0, path.lastIndexOf('.'));
@@ -1608,7 +1607,7 @@ phina.namespace(function() {
    * @method define
    * クラスを定義
    */
-  phina.method('define', function(path, params) {
+  phina.$method('define', function(path, params) {
     if (params.superClass) {
       if (typeof params.superClass === 'string') {
         var _superClass = phina.using(params.superClass);
@@ -1651,7 +1650,7 @@ phina.namespace(function() {
   });
 
 
-  phina.method('globalize', function() {
+  phina.$method('globalize', function() {
     phina.forIn(function(key, value) {
       var ns = key;
 
@@ -1670,7 +1669,7 @@ phina.namespace(function() {
 
   phina._mainListeners = [];
   phina._mainLoaded = false;
-  phina.method('main', function(func) {
+  phina.$method('main', function(func) {
     if (phina._mainLoaded) {
       func();
     }
@@ -2767,7 +2766,7 @@ phina.namespace(function() {
       dispatchEventByType: 'flare',
     };
     methodMap.forIn(function(old, name) {
-      phina.util.EventDispatcher.prototype.method(old, phina.util.EventDispatcher.prototype[name]);
+      phina.util.EventDispatcher.prototype.$method(old, phina.util.EventDispatcher.prototype[name]);
     });
   })();
 
@@ -3942,10 +3941,10 @@ phina.namespace(function() {
     },
   });
 
-  Math.method("randint", function(min, max) {
+  Math.$method("randint", function(min, max) {
     return phina.util.Random.randint(min, max);
   });
-  Math.method("randfloat", function(min, max) {
+  Math.$method("randfloat", function(min, max) {
     return phina.util.Random.randfloat(min, max);
   });
 
@@ -6838,7 +6837,7 @@ phina.namespace(function() {
       if (this.awake) {
         this.update && this.update();
         this.updater.update(this.currentScene);
-        this.interactive.check(this.currentScene);
+        this.interactive && this.interactive.check(this.currentScene);
       }
     },
 
@@ -7558,7 +7557,7 @@ phina.namespace(function() {
     },
   });
 
-  phina.app.Element.prototype.method('attach', function(accessory) {
+  phina.app.Element.prototype.$method('attach', function(accessory) {
     if (!this.accessories) {
       this.accessories = [];
       this.on('enterframe', function(e) {
@@ -7575,7 +7574,7 @@ phina.namespace(function() {
     return this;
   });
 
-  phina.app.Element.prototype.method('detach', function(accessory) {
+  phina.app.Element.prototype.$method('detach', function(accessory) {
     if (this.accessories) {
       this.accessories.erase(accessory);
       accessory.setTarget(null);
