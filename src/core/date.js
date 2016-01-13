@@ -22,16 +22,6 @@
    * 日付フォーマットに合わせた文字列を返す
    */
   Date.prototype.method('format', function(pattern) {
-    /*
-    var str = '{y}/{m}/{d}'.format({
-      y: this.getYear()+1900,
-      m: this.getMonth()+1,
-      d: this.getDate(),
-    });
-    
-    return str;
-    */
-    
     var year    = this.getFullYear();
     var month   = this.getMonth();
     var date    = this.getDate();
@@ -40,53 +30,62 @@
     var minutes = this.getMinutes();
     var seconds = this.getSeconds();
     var millseconds = this.getMilliseconds();
-    var str = '';
     
-    for (var i=0,len=pattern.length; i<len; ++i) {
-      var ch = pattern.charAt(i);
-      var temp = '';
-      switch(ch) {
-        // 日
-        case 'd': temp = date.padding(2, '0'); break;
-        case 'D': temp = WEEK[day].substr(0, 3); break;
-        case 'j': temp = date; break;
-        case 'l': temp = WEEK[day]; break;
-        // case 'N': temp = ; break;
-        // case 'S': temp = ; break;
-        // case 'w': temp = ; break;
-        // case 'z': temp = ; break;
-        
-        // 月
-        case 'F': temp = MONTH[month]; break;
-        case 'm': temp = (month+1).padding(2, '0'); break;
-        case 'M': temp = MONTH[month].substr(0, 3); break;
-        case 'n': temp = (month+1); break;
-        // case 't': temp = (month+1); break;
-        
-        // 年
-        // case 'L': temp = ; break;
-        // case 'o': temp = ; break;
-        case 'Y': temp = year; break;
-        case 'y': temp = year.toString().substr(2, 2); break;
-        
-        
-        // 時間
-        // case "a": temp = ; break;
-        // case "A": temp = ; break;
-        // case "B": temp = ; break;
-        // case "g": temp = ; break;
-        case "G": temp = hours; break;
-        // case "h": temp = ; break;
-        case "H": temp = hours.padding(2, '0'); break;
-        case "i": temp = minutes.padding(2, '0'); break;
-        case "s": temp = seconds.padding(2, '0'); break;
-        case "S": temp = millseconds.padding(3, '0'); break;
-        
-        default : temp = ch; break;
-      }
-      str += temp;
-    }
-    return str;
+    var patterns = {
+      'yyyy': String(year).padding(4, '0'),
+      'yy': year.toString().substr(2, 2),
+      'y': year,
+
+      'MMMM': MONTH[day],
+      'MMM': MONTH[day].substr(0, 3),
+      'MM': String(month+1).padding(2, '0'),
+      'M': (month+1),
+
+      'dd': String(date).padding(2, '0'),
+      'd': date,
+
+      'EEEE': WEEK[day],
+      'EEE': WEEK[day].substr(0, 3),
+
+      'HH': String(hours).padding(2, '0'),
+      'H': hours,
+
+      'mm': String(minutes).padding(2, '0'),
+      'm': minutes,
+
+      'ss': String(seconds).padding(2, '0'),
+      's': seconds,
+      
+      // // date
+      // 'd': String('00' + date).slice(-2),
+      // 'D': WEEK[day].substr(0, 3),
+      // 'j': date,
+      // 'l': WEEK[day],
+      
+      // // month
+      // 'm': String('00' + (month+1)).slice(-2),
+      // 'M': MONTH[month].substr(0, 3),
+      // 'n': (month+1),
+      // 'F': MONTH[month],
+      
+      // // year
+      // 'y': year.toString().substr(2, 2),
+      // 'Y': year,
+      
+      // // time
+      // 'G': hours,
+      // 'H': String('00' + hours).slice(-2),
+      // 'i': String('00' + minutes).slice(-2),
+      // 's': String('00' + seconds).slice(-2),
+      // 'S': String('000' + millseconds).slice(-3),
+    };
+    
+    var regstr = '(' + Object.keys(patterns).join('|') + ')';
+    var re = new RegExp(regstr, 'g');
+
+    return pattern.replace(re, function(str) {
+      return patterns[str];
+    });
   });
 
 
