@@ -21,7 +21,7 @@
    *          b: 255
    *      }));
    */
-  String.prototype.method("format", function(arg) {
+  String.prototype.$method("format", function(arg) {
     // 置換ファンク
     var rep_fn = undefined;
     
@@ -56,7 +56,7 @@
    * <a href="http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/">Reference</a>
    * 
    */
-  String.prototype.method("trim", function() {
+  String.prototype.$method("trim", function() {
     return this.replace(/^\s+|\s+$/g, "");
   });
   
@@ -73,7 +73,7 @@
    * - [デザインとプログラムの狭間で: javascriptでキャピタライズ（一文字目を大文字にする）](http://design-program.blogspot.com/2011/02/javascript.html)
    * 
    */
-  String.prototype.method("capitalize", function() {
+  String.prototype.$method("capitalize", function() {
     return this.replace(/\w+/g, function(word){
       return word.capitalizeFirstLetter();
     });
@@ -83,7 +83,7 @@
    * @method  capitalizeFirstLetter
    * 先頭文字のみキャピタライズ
    */
-  String.prototype.method("capitalizeFirstLetter", function() {
+  String.prototype.$method("capitalizeFirstLetter", function() {
     return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase();
   });
   
@@ -91,7 +91,7 @@
    * @method  toDash
    * ダッシュ
    */
-  String.prototype.method("toDash", function() {
+  String.prototype.$method("toDash", function() {
     return this.replace(/([A-Z])/g, function(m){ return '-'+m.toLowerCase(); });
   });
   
@@ -100,7 +100,7 @@
    * @method toHash
    * ハッシュ値に変換
    */
-  String.prototype.method("toHash", function() {
+  String.prototype.$method("toHash", function() {
     return this.toCRC32();
   });
   
@@ -108,7 +108,7 @@
    * @method  padding
    * 左側に指定された文字を詰めて右寄せにする
    */
-  String.prototype.method("padding", function(n, ch) {
+  String.prototype.$method("padding", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -122,7 +122,7 @@
    * @method  paddingLeft
    * 左側に指定された文字を詰めて右寄せにする
    */
-  String.prototype.method("paddingLeft", function(n, ch) {
+  String.prototype.$method("paddingLeft", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -136,7 +136,7 @@
    * @method  paddingRight
    * 右側に指定された文字を詰めて左寄せにする
    */
-  String.prototype.method("paddingRight", function(n, ch) {
+  String.prototype.$method("paddingRight", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
     ch = ch || ' ';
@@ -150,7 +150,7 @@
    * @method  quotemeta
    * メタ文字をクォート
    */
-  String.prototype.method("quotemeta", function(n) {
+  String.prototype.$method("quotemeta", function(n) {
     return this.replace(/([^0-9A-Za-z_])/g, '\\$1');
   });
   
@@ -158,7 +158,7 @@
    * @method  repeat
    * リピート
    */
-  String.prototype.method("repeat", function(n) {
+  String.prototype.$method("repeat", function(n) {
     // TODO: 確認する
     var arr = Array(n);
     for (var i=0; i<n; ++i) arr[i] = this;
@@ -169,7 +169,7 @@
    * @method  count
    * その文字が入ってる数をカウント
    */
-  String.prototype.method("count", function(str) {
+  String.prototype.$method("count", function(str) {
     var re = new RegExp(str, 'gm');
     return this.match(re).length;
   });
@@ -179,7 +179,7 @@
    * 含んでいるかを返す
    * ruby のやつ
    */
-  String.prototype.method("include", function(str) {
+  String.prototype.$method("include", function(str) {
     return this.indexOf(str) != -1;
   });
   
@@ -187,7 +187,7 @@
    * @method  toString
    * 配列に変換
    */
-  String.prototype.method("toArray", function() {
+  String.prototype.$method("toArray", function() {
     var arr = [];
     for (var i=0,len=this.length; i<len; ++i) {
       arr.push(this[i]);
@@ -195,7 +195,7 @@
     return arr;
   });
   
-  String.prototype.method("toObject", function(sep, eq) {
+  String.prototype.$method("toObject", function(sep, eq) {
     sep = sep || '&';
     eq  = eq || '=';
 
@@ -231,7 +231,7 @@
    * @method  toCRC32
    * CRC32 変換
    */
-  String.prototype.method("toCRC32", function() {
+  String.prototype.$method("toCRC32", function() {
     var crc = 0, x=0, y=0;
     
     crc = crc ^ (-1);

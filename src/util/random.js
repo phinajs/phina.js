@@ -100,10 +100,10 @@ phina.namespace(function() {
     },
   });
 
-  Math.method("randint", function(min, max) {
+  Math.$method("randint", function(min, max) {
     return phina.util.Random.randint(min, max);
   });
-  Math.method("randfloat", function(min, max) {
+  Math.$method("randfloat", function(min, max) {
     return phina.util.Random.randfloat(min, max);
   });
 

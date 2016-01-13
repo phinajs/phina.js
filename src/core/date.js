@@ -21,7 +21,7 @@
    * @method  format
    * 日付フォーマットに合わせた文字列を返す
    */
-  Date.prototype.method('format', function(pattern) {
+  Date.prototype.$method('format', function(pattern) {
     var year    = this.getFullYear();
     var month   = this.getMonth();
     var date    = this.getDate();
@@ -79,7 +79,7 @@
       // 's': String('00' + seconds).slice(-2),
       // 'S': String('000' + millseconds).slice(-3),
     };
-    
+
     var regstr = '(' + Object.keys(patterns).join('|') + ')';
     var re = new RegExp(regstr, 'g');
 
@@ -89,7 +89,7 @@
   });
 
 
-  Date.prototype.method('calculateAge', function(birthday, when) {
+  Date.prototype.$method('calculateAge', function(birthday, when) {
     // birthday
     if (typeof birthday === 'string') {
       birthday = new Date(birthday);

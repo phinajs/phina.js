@@ -50,7 +50,7 @@
    * @method clamp
    * クランプ
    */
-  Math.method("clamp", function(value, min, max) {
+  Math.$method("clamp", function(value, min, max) {
     return (value < min) ? min : ( (value > max) ? max : value );
   });
   
@@ -58,7 +58,7 @@
    * @method inside
    * min <= value <= max のとき true を返す
    */
-  Math.method("inside", function(value, min, max) {
+  Math.$method("inside", function(value, min, max) {
     return (value >= min) && (value) <= max;
   });
   
@@ -66,7 +66,7 @@
    * @method randint
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randint", function(min, max) {
+  Math.$method("randint", function(min, max) {
     return Math.floor( Math.random()*(max-min+1) ) + min;
   });
   
@@ -74,7 +74,7 @@
    * @method randfloat
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randfloat", function(min, max) {
+  Math.$method("randfloat", function(min, max) {
     return Math.random()*(max-min)+min;
   });
   
@@ -82,7 +82,7 @@
    * @method randbool
    * ランダムな値を指定された範囲内で生成
    */
-  Math.method("randbool", function() {
+  Math.$method("randbool", function() {
     return Math.randint(0, 1) === 1;
   });
     

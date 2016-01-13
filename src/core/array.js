@@ -29,7 +29,7 @@
    * @method  equals
    * 渡された配列と等しいかどうかをチェック
    */
-  Array.prototype.method("equals", function(arr) {
+  Array.prototype.$method("equals", function(arr) {
     // 長さチェック
     if (this.length !== arr.length) return false;
     
@@ -47,7 +47,7 @@
    * ネストされている配列含め渡された配列と等しいかどうかをチェック
    * equalsDeep にするか検討. (Java では deepEquals なのでとりあえず合わせとく)
    */
-  Array.prototype.method("deepEquals", function(arr) {
+  Array.prototype.$method("deepEquals", function(arr) {
     // 長さチェック
     if (this.length !== arr.length) return false;
     
@@ -64,7 +64,7 @@
    * @method    contains
    * 要素が含まれいるかをチェック
    */
-  Array.prototype.method("contains", function(item, fromIndex) {
+  Array.prototype.$method("contains", function(item, fromIndex) {
     return this.indexOf(item, fromIndex) != -1;
   });
   
@@ -72,7 +72,7 @@
    * @method  at
    * ループ添字アクセス(Ruby っぽいやつ)
    */
-  Array.prototype.method("at", function(i) {
+  Array.prototype.$method("at", function(i) {
     i%=this.length;
     i+=this.length;
     i%=this.length;
@@ -80,7 +80,7 @@
   });
 
 
-  Array.prototype.method("find", function(fn, self) {
+  Array.prototype.$method("find", function(fn, self) {
     var target = null;
 
     this.some(function(elm, i) {
@@ -93,7 +93,7 @@
     return target;
   });
 
-  Array.prototype.method("findIndex", function(fn, self) {
+  Array.prototype.$method("findIndex", function(fn, self) {
     var target = null;
 
     this.some(function(elm, i) {
@@ -110,7 +110,7 @@
    * @method  swap
    * a番目 と b番目 を入れ替える
    */
-  Array.prototype.method("swap", function(a, b) {
+  Array.prototype.$method("swap", function(a, b) {
     var temp = this[a];
     this[a] = this[b];
     this[b] = temp;
@@ -123,7 +123,7 @@
    * elm と一致する要素を削除
    * イレース
    */
-  Array.prototype.method("erase", function(elm) {
+  Array.prototype.$method("erase", function(elm) {
     var index  = this.indexOf(elm);
     if (index >= 0) {
       this.splice(index, 1);
@@ -135,7 +135,7 @@
    * @method  eraseAll
    * elm と一致する要素を全て削除
    */
-  Array.prototype.method("eraseAll", function(elm) {
+  Array.prototype.$method("eraseAll", function(elm) {
     for (var i=0,len=this.length; i<len; ++i) {
       if (this[i] == elm) {
         this.splice(i--, 1);
@@ -148,7 +148,7 @@
    * @method  eraseIf
    * 条件にマッチした要素を削除
    */
-  Array.prototype.method("eraseIf", function(fn) {
+  Array.prototype.$method("eraseIf", function(fn) {
     for (var i=0,len=this.length; i<len; ++i) {
       if ( fn(this[i], i, this) ) {
         this.splice(i, 1);
@@ -162,7 +162,7 @@
    * @method  eraseIfAll
    * 条件にマッチした要素を削除
    */
-  Array.prototype.method("eraseIfAll", function(fn) {
+  Array.prototype.$method("eraseIfAll", function(fn) {
     for (var i=0,len=this.length; i<len; ++i) {
       if ( fn(this[i], i, this) ) {
         this.splice(i--, 1);
@@ -176,7 +176,7 @@
    * @method  random
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("random", function(min, max) {
+  Array.prototype.$method("random", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -186,7 +186,7 @@
    * @method  pickup
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("pickup", function(min, max) {
+  Array.prototype.$method("pickup", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -196,7 +196,7 @@
    * @method  lot
    * 要素の中からランダムで取り出す
    */
-  Array.prototype.method("lot", function(min, max) {
+  Array.prototype.$method("lot", function(min, max) {
     min = min || 0;
     max = max || this.length-1;
     return this[ Math.randint(min, max) ];
@@ -206,7 +206,7 @@
    * @method  uniq
    * 重複削除
    */
-  Array.prototype.method("uniq", function(deep) {
+  Array.prototype.$method("uniq", function(deep) {
     return this.filter(function(value, index, self) {
       return self.indexOf(value) === index;
     });
@@ -218,7 +218,7 @@
    * フラット.
    * Ruby のやつ.
    */
-  Array.prototype.method("flatten", function(level) {
+  Array.prototype.$method("flatten", function(level) {
     var arr = null;
 
     if (level) {
@@ -242,7 +242,7 @@
    * @method  clone
    * 配列をクローン
    */
-  Array.prototype.method("clone", function(deep) {
+  Array.prototype.$method("clone", function(deep) {
     if (deep === true) {
       var a = Array(this.length);
       for (var i=0,len=this.length; i<len; ++i) {
@@ -260,7 +260,7 @@
    * @method  clear
    * クリア
    */
-  Array.prototype.method("clear", function() {
+  Array.prototype.$method("clear", function() {
     this.length = 0;
     return this;
   });
@@ -269,7 +269,7 @@
    * @method  fill
    * 特定の値で満たす
    */
-  Array.prototype.method("fill", function(value, start, end) {
+  Array.prototype.$method("fill", function(value, start, end) {
     start = start || 0;
     end   = end   || (this.length);
     
@@ -285,7 +285,7 @@
    * @method  range
    * python のやつ
    */
-  Array.prototype.method("range", function(start, end, step) {
+  Array.prototype.$method("range", function(start, end, step) {
     this.clear();
     
     if (arguments.length == 1) {
@@ -311,7 +311,7 @@
    * @method  shuffle
    * シャッフル
    */
-  Array.prototype.method("shuffle", function() {
+  Array.prototype.$method("shuffle", function() {
     for (var i=0,len=this.length; i<len; ++i) {
       var j = Math.randint(0, len-1);
       
@@ -327,7 +327,7 @@
    * @method  sum
    * 合計
    */
-  Array.prototype.method("sum", function() {
+  Array.prototype.$method("sum", function() {
     var sum = 0;
     for (var i=0,len=this.length; i<len; ++i) {
       sum += this[i];
@@ -339,7 +339,7 @@
    * @method  average
    * 平均
    */
-  Array.prototype.method("average", function() {
+  Array.prototype.$method("average", function() {
     var sum = 0;
     var len = this.length;
     for (var i=0; i<len; ++i) {
@@ -353,7 +353,7 @@
    * 繰り返し
    * チェーンメソッド対応
    */
-  Array.prototype.method("each", function() {
+  Array.prototype.$method("each", function() {
     this.forEach.apply(this, arguments);
     return this;
   });
@@ -363,7 +363,7 @@
    * @method  toULElement
    * ULElement に変換
    */
-  Array.prototype.method("toULElement", function(){
+  Array.prototype.$method("toULElement", function(){
       // TODO: 
   });
 
@@ -371,7 +371,7 @@
    * @method  toOLElement
    * OLElement に変換
    */
-  Array.prototype.method("toOLElement", function(){
+  Array.prototype.$method("toOLElement", function(){
       // TODO:
   });
 
@@ -381,7 +381,7 @@
    * @method  range
    * range
    */
-  Array.method("range", function(start, end, step) {
+  Array.$method("range", function(start, end, step) {
     return Array.prototype.range.apply([], arguments);
   });
 
@@ -391,7 +391,7 @@
    * of関数 可変長引数をとってArrayにして返す
    * ES6準拠
    */
-  Array.method("of", function() {
+  Array.$method("of", function() {
     return Array.prototype.slice.call(arguments);
   });
 
@@ -401,7 +401,7 @@
    *
    * ES6準拠
    */
-  Array.method("from", function(arrayLike, callback, context) {
+  Array.$method("from", function(arrayLike, callback, context) {
     if (!Object(arrayLike).length) return [];
 
     return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {

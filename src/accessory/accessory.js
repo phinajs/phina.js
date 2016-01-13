@@ -38,7 +38,7 @@ phina.namespace(function() {
     },
   });
 
-  phina.app.Element.prototype.method('attach', function(accessory) {
+  phina.app.Element.prototype.$method('attach', function(accessory) {
     if (!this.accessories) {
       this.accessories = [];
       this.on('enterframe', function(e) {
@@ -55,7 +55,7 @@ phina.namespace(function() {
     return this;
   });
 
-  phina.app.Element.prototype.method('detach', function(accessory) {
+  phina.app.Element.prototype.$method('detach', function(accessory) {
     if (this.accessories) {
       this.accessories.erase(accessory);
       accessory.setTarget(null);

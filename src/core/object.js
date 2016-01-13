@@ -32,7 +32,7 @@
    * @param   {String} key name
    * @param   {Function} function
    */
-  Object.defineProperty(Object.prototype, "method", {
+  Object.defineProperty(Object.prototype, "$method", {
     value: function(name, fn) {
       Object.defineProperty(this, name, {
         value: fn,
@@ -48,7 +48,7 @@
    * @method setter
    * セッターを定義する
    */
-  Object.prototype.method("setter", function(name, fn){
+  Object.prototype.$method("setter", function(name, fn){
     Object.defineProperty(this, name, {
       set: fn,
       enumerable: false,
@@ -60,7 +60,7 @@
    * @method getter
    * ゲッターを定義する
    */
-  Object.prototype.method("getter", function(name, fn){
+  Object.prototype.$method("getter", function(name, fn){
     Object.defineProperty(this, name, {
       get: fn,
       enumerable: false,
@@ -72,7 +72,7 @@
    * @method accessor
    * アクセッサ(セッター/ゲッター)を定義する
    */
-  Object.prototype.method("accessor", function(name, param) {
+  Object.prototype.$method("accessor", function(name, param) {
     Object.defineProperty(this, name, {
       set: param["set"],
       get: param["get"],
@@ -86,7 +86,7 @@
    * @method forIn
    * オブジェクト用ループ処理
    */
-  Object.prototype.method("forIn", function(fn, self) {
+  Object.prototype.$method("forIn", function(fn, self) {
     self = self || this;
 
     Object.keys(this).forEach(function(key, index) {
@@ -102,7 +102,7 @@
    * @method  $get
    * パス指定で値を取得
    */
-  Object.prototype.method('$get', function(key) {
+  Object.prototype.$method('$get', function(key) {
     return key.split('.').reduce(function(t, v) {
       return t && t[v];
     }, this);
@@ -112,7 +112,7 @@
    * @method  $set
    * パス指定で値を設定
    */
-  Object.prototype.method('$set', function(key, value) {
+  Object.prototype.$method('$set', function(key, value) {
     key.split('.').reduce(function(t, v, i, arr) {
       if (i === (arr.length-1)) {
         t[v] = value;
@@ -128,7 +128,7 @@
    * @method  $has
    * そのプロパティを持っているかを判定する
    */
-  Object.prototype.method("$has", function(key) {
+  Object.prototype.$method("$has", function(key) {
     return this.hasOwnProperty(key);
   });
 
@@ -136,7 +136,7 @@
    * @method  $extend
    * 他のライブラリと競合しちゃうので extend -> $extend としました
    */
-  Object.prototype.method("$extend", function() {
+  Object.prototype.$method("$extend", function() {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         this[property] = source[property];
@@ -151,7 +151,7 @@
    * 安全拡張
    * 上書きしない
    */
-  Object.prototype.method("$safe", function(source) {
+  Object.prototype.$method("$safe", function(source) {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         if (this[property] === undefined) this[property] = source[property];
@@ -166,7 +166,7 @@
    * 厳格拡張
    * すでにあった場合は警告
    */
-  Object.prototype.method("$strict", function(source) {
+  Object.prototype.$method("$strict", function(source) {
     Array.prototype.forEach.call(arguments, function(source) {
       for (var property in source) {
         console.assert(!this[property], "tm error: {0} is Already".format(property));
@@ -180,7 +180,7 @@
    * @method  $pick
    * ピック
    */
-  Object.prototype.method("$pick", function() {
+  Object.prototype.$method("$pick", function() {
     var temp = {};
 
     Array.prototype.forEach.call(arguments, function(key) {
@@ -194,7 +194,7 @@
    * @method  $omit
    * オミット
    */
-  Object.prototype.method("$omit", function() {
+  Object.prototype.$method("$omit", function() {
     var temp = {};
 
     for (var key in this) {
@@ -206,7 +206,7 @@
     return temp;
   });
 
-  Object.prototype.method('$watch', function(key, callback) {
+  Object.prototype.$method('$watch', function(key, callback) {
     var target = this;
     var descriptor = null;
 
@@ -269,7 +269,7 @@
   });
 
   if (!Object.observe) {
-    Object.method('observe', function(obj, callback) {
+    Object.$method('observe', function(obj, callback) {
       var keys = Object.keys(obj);
       keys.forEach(function(key) {
         var tempKey = '__' + key;
@@ -290,7 +290,7 @@
   }
 
   if (!Object.unobserve) {
-    Object.method('unobserve', function(obj, callback) {
+    Object.$method('unobserve', function(obj, callback) {
       console.assert(false);
     });
   }

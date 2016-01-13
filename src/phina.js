@@ -21,11 +21,11 @@ var phina = phina || {};
    */
   phina.VERSION = '<%= version %>';
 
-  phina.method('isNode', function() {
+  phina.$method('isNode', function() {
     return (typeof module !== 'undefined');
   });
 
-  phina.method('namespace', function(fn) {
+  phina.$method('namespace', function(fn) {
     fn.call(this);
   });
 
@@ -45,7 +45,7 @@ var phina = phina || {};
    * @method isMobile
    * mobile かどうかをチェック
    */
-  phina.method('isMobile', function() {
+  phina.$method('isMobile', function() {
     if (!phina.global.navigator) return false;
     var ua = phina.global.navigator.userAgent;
     return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
@@ -70,7 +70,7 @@ phina.namespace(function() {
    * @method createClass
    * クラスを生成
    */
-  phina.method('createClass', function(params) {
+  phina.$method('createClass', function(params) {
     var props = {};
 
     var _class = function() {
@@ -96,7 +96,7 @@ phina.namespace(function() {
     // // 
     // params.forIn(function(key, value) {
     //   if (typeof value === 'function') {
-    //     _class.method(key, value);
+    //     _class.$method(key, value);
     //   }
     //   else {
     //     _class.prototype[key] = value;
@@ -134,7 +134,7 @@ phina.namespace(function() {
   /*
    * 
    */
-  phina.method('using', function(path) {
+  phina.$method('using', function(path) {
     if (!path) {
       return phina.global;
     }
@@ -152,7 +152,7 @@ phina.namespace(function() {
   /*
    * 
    */
-  phina.method('register', function(path, _class) {
+  phina.$method('register', function(path, _class) {
     var pathes = path.split(/[,.\/ ]|::/);
     var className = pathes.last;
     var parentPath = path.substring(0, path.lastIndexOf('.'));
@@ -171,7 +171,7 @@ phina.namespace(function() {
    * @method define
    * クラスを定義
    */
-  phina.method('define', function(path, params) {
+  phina.$method('define', function(path, params) {
     if (params.superClass) {
       if (typeof params.superClass === 'string') {
         var _superClass = phina.using(params.superClass);
@@ -214,7 +214,7 @@ phina.namespace(function() {
   });
 
 
-  phina.method('globalize', function() {
+  phina.$method('globalize', function() {
     phina.forIn(function(key, value) {
       var ns = key;
 
@@ -233,7 +233,7 @@ phina.namespace(function() {
 
   phina._mainListeners = [];
   phina._mainLoaded = false;
-  phina.method('main', function(func) {
+  phina.$method('main', function(func) {
     if (phina._mainLoaded) {
       func();
     }
