@@ -164,7 +164,8 @@ th.describe("asset.AssetLoader", function() {
       },
     });
 
-    var logLabel = phina.display.Label('# Loaded\n', {
+    var logLabel = phina.display.Label({
+      text: '# Loaded\n',
       align: 'left',
     }).addChildTo(this);
     logLabel.x = 100;
@@ -176,12 +177,10 @@ th.describe("asset.AssetLoader", function() {
       elm.y = 480;
 
       var sound = phina.asset.AssetManager.get('sound', 'correct');
-      var temp = sound.clone();
-      temp.play();
+      sound.play();
 
       this.onpointstart = function(app) {
-        var temp = sound.clone();
-        temp.play();
+        sound.play();
         elm.x = app.pointer.x;
         elm.y = app.pointer.y;
       };

@@ -15,12 +15,12 @@ th.describe("box2d.Box2dLayer", function() {
       var shape = phina.display.RectangleShape().addChildTo(this);
       shape.x = x;
       shape.y = y;
-      shape.width = shape.style.width = width;
-      shape.height = shape.style.height = height;
+      shape.width = shape.width = width;
+      shape.height = shape.height = height;
       shape.alpha = 0.5;
       layer.createBody({
-        width: shape.style.width,
-        height: shape.style.height,
+        width: shape.width,
+        height: shape.height,
         type: 'static', // or kinematic or static 
         shape: 'box', // or box or polygon
         // shape: 'box',
@@ -33,7 +33,7 @@ th.describe("box2d.Box2dLayer", function() {
 
     var createBall = function(x, y) {
       var shape = phina.display.CircleShape().addChildTo(this);
-      shape.radius = shape.style.radius = 32;
+      shape.radius = shape.radius = 32;
       shape.alpha = 0.5;
       shape.position.set(x, y);
       layer.createBody({

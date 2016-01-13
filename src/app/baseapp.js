@@ -166,7 +166,7 @@ phina.namespace(function() {
       if (this.awake) {
         this.update && this.update();
         this.updater.update(this.currentScene);
-        this.interactive.check(this.currentScene);
+        this.interactive && this.interactive.check(this.currentScene);
       }
     },
 

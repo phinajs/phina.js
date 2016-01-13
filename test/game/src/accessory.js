@@ -63,7 +63,7 @@ th.describe("accessory.Tweener", function() {
       .set('rotation', 90)
       .set({scaleX:4, scaleY:4})
       .call(function() {
-        shape.style.color = 'green';
+        shape.fill = 'green';
       })
   });
 
