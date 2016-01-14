@@ -1270,8 +1270,8 @@
       'yy': year.toString().substr(2, 2),
       'y': year,
 
-      'MMMM': MONTH[day],
-      'MMM': MONTH[day].substr(0, 3),
+      'MMMM': MONTH[month],
+      'MMM': MONTH[month].substr(0, 3),
       'MM': String(month+1).padding(2, '0'),
       'M': (month+1),
 
