@@ -16,10 +16,10 @@ describe('#Date', function() {
     assert.equal(b.format('y'), '2016');
 
     // MMMM
-    assert.equal(a.format('MMMM'), 'June');
+    assert.equal(a.format('MMMM'), 'September');
     assert.equal(b.format('MMMM'), 'March');
     // MMM
-    assert.equal(a.format('MMM'), 'Jun');
+    assert.equal(a.format('MMM'), 'Sep');
     assert.equal(b.format('MMM'), 'Mar');
     // MM
     assert.equal(a.format('MM'), '09');
