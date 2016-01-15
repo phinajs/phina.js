@@ -10,6 +10,9 @@ phina.namespace(function() {
   phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
+    // update type
+    type : 'normal',
+
     /**
      * @constructor
      */
@@ -29,6 +32,11 @@ phina.namespace(function() {
 
     update: function(app) {
       this._update(app);
+    },
+
+    setType:function(type){
+      this.type = type;
+      return this;
     },
 
     to: function(props, duration, easing) {
@@ -267,8 +275,7 @@ phina.namespace(function() {
 
     _updateTween: function(app) {
       var tween = this._tween;
-      // var time = app.ticker.deltaTime;
-      var time = 1000/app.fps;
+      var time = this._getUnitTime(app);
 
       tween.forward(time);
       this.flare('tween');
@@ -282,7 +289,7 @@ phina.namespace(function() {
 
     _updateWait: function(app) {
       var wait = this._wait;
-      var time = app.ticker.deltaTime;
+      var time = this._getUnitTime(app);
       wait.time += time;
 
       if (wait.time >= wait.limit) {
@@ -291,6 +298,32 @@ phina.namespace(function() {
         this._update = this._updateTask;
       }
     },
+
+    _getUnitTime : function(app){
+      var func = this._static.getUnitTimeMap[this.type];
+      if (func) {
+        return func(app);
+      }
+      else {
+        return 1000 / app.fps;
+      }
+    },
+
+    _static: {
+      getUnitTimeMap: {
+        normal: function(app) {
+          return 1000 / app.fps;
+        },
+        delta: function(app) {
+          return app.ticker.deltaTime;
+        },
+
+        fps: function(app) {
+          return 1;
+        },
+
+      }
+    }
   });
 
   phina.app.Element.prototype.getter('tweener', function() {
