@@ -130,11 +130,11 @@ phina.namespace(function() {
     },
 
     fadeOut: function(duration, easing) {
-      return this.fade(0.0, duration, easing)
+      return this.fade(0.0, duration, easing);
     },
 
     fadeIn: function(duration, easing) {
-      return this.fade(1.0, duration, easing)
+      return this.fade(1.0, duration, easing);
     },
 
     /**
@@ -206,7 +206,7 @@ phina.namespace(function() {
       }
 
       json.tweens.each(function(t) {
-        var t = t.clone();
+        t = t.clone();
         var method = t.shift();
         this[method].apply(this, t);
       }, this);
