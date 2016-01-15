@@ -239,14 +239,15 @@ phina.namespace(function() {
       if (task.type === 'tween') {
         this._tween = phina.util.Tween();
 
+        var duration = task.duration || this._static.DEFAULT_UNIT_TIME_MAP[this.updateType] || 1000;
         if (task.mode === 'to') {
-          this._tween.to(this.target, task.props, task.duration, task.easing);
+          this._tween.to(this.target, task.props, duration, task.easing);
         }
         else if (task.mode === 'by') {
-          this._tween.by(this.target, task.props, task.duration, task.easing);
+          this._tween.by(this.target, task.props, duration, task.easing);
         }
         else {
-          this._tween.from(this.target, task.props, task.duration, task.easing);
+          this._tween.from(this.target, task.props, duration, task.easing);
         }
         this._update = this._updateTween;
         this._update(app);
@@ -323,6 +324,11 @@ phina.namespace(function() {
 
       },
 
+      DEFAULT_UNIT_TIME_MAP: {
+        normal: 1000,
+        delta: 1000,
+        fps: 30,
+      },
     }
   });
 
