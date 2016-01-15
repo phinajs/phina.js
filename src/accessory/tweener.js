@@ -10,8 +10,7 @@ phina.namespace(function() {
   phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
-    // update type
-    type : 'normal',
+    updateType : 'normal',
 
     /**
      * @constructor
@@ -34,8 +33,8 @@ phina.namespace(function() {
       this._update(app);
     },
 
-    setType:function(type){
-      this.type = type;
+    setUpdateType: function(type) {
+      this.updateType = type;
       return this;
     },
 
@@ -300,7 +299,7 @@ phina.namespace(function() {
     },
 
     _getUnitTime : function(app){
-      var func = this._static.getUnitTimeMap[this.type];
+      var func = this._static.getUnitTimeMap[this.updateType];
       if (func) {
         return func(app);
       }
