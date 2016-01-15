@@ -219,7 +219,7 @@ phina.namespace(function() {
     },
 
     _updateTask: function(app) {
-      if (!this.playing) return;
+      if (!this.playing) return ;
 
       var task = this._tasks[this._index];
       if (!task) {
@@ -230,7 +230,7 @@ phina.namespace(function() {
         else {
           this.playing = false;
         }
-        return;
+        return ;
       }
       else {
         ++this._index;
