@@ -7,8 +7,10 @@ phina.namespace(function() {
    * @class phina.accessory.Tweener
    * Tweener
    */
-  phina.define('phina.accessory.Tweener', {
+  var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
+
+    updateType: 'normal',
 
     /**
      * @constructor
@@ -29,6 +31,11 @@ phina.namespace(function() {
 
     update: function(app) {
       this._update(app);
+    },
+
+    setUpdateType: function(type) {
+      this.updateType = type;
+      return this;
     },
 
     to: function(props, duration, easing) {
@@ -112,22 +119,22 @@ phina.namespace(function() {
     },
 
     moveTo: function(x, y, duration, easing) {
-      return this.to({x:x,y:y}, duration, easing);
+      return this.to({ x: x, y: y }, duration, easing);
     },
     moveBy: function(x, y, duration, easing) {
-      return this.by({x:x,y:y}, duration, easing);
+      return this.by({ x: x, y: y }, duration, easing);
     },
 
     fade: function(value, duration, easing) {
-      return this.to({alpha:value}, duration, easing);
+      return this.to({ alpha: value }, duration, easing);
     },
 
     fadeOut: function(duration, easing) {
-      return this.fade(0.0, duration, easing)
+      return this.fade(0.0, duration, easing);
     },
 
     fadeIn: function(duration, easing) {
-      return this.fade(1.0, duration, easing)
+      return this.fade(1.0, duration, easing);
     },
 
     /**
@@ -199,7 +206,7 @@ phina.namespace(function() {
       }
 
       json.tweens.each(function(t) {
-        var t = t.clone();
+        t = t.clone();
         var method = t.shift();
         this[method].apply(this, t);
       }, this);
@@ -232,14 +239,15 @@ phina.namespace(function() {
       if (task.type === 'tween') {
         this._tween = phina.util.Tween();
 
+        var duration = task.duration || this._getDefaultDuration();
         if (task.mode === 'to') {
-          this._tween.to(this.target, task.props, task.duration, task.easing);
+          this._tween.to(this.target, task.props, duration, task.easing);
         }
         else if (task.mode === 'by') {
-          this._tween.by(this.target, task.props, task.duration, task.easing);
+          this._tween.by(this.target, task.props, duration, task.easing);
         }
         else {
-          this._tween.from(this.target, task.props, task.duration, task.easing);
+          this._tween.from(this.target, task.props, duration, task.easing);
         }
         this._update = this._updateTween;
         this._update(app);
@@ -267,8 +275,7 @@ phina.namespace(function() {
 
     _updateTween: function(app) {
       var tween = this._tween;
-      // var time = app.ticker.deltaTime;
-      var time = 1000/app.fps;
+      var time = this._getUnitTime(app);
 
       tween.forward(time);
       this.flare('tween');
@@ -282,7 +289,7 @@ phina.namespace(function() {
 
     _updateWait: function(app) {
       var wait = this._wait;
-      var time = app.ticker.deltaTime;
+      var time = this._getUnitTime(app);
       wait.time += time;
 
       if (wait.time >= wait.limit) {
@@ -291,7 +298,50 @@ phina.namespace(function() {
         this._update = this._updateTask;
       }
     },
+
+    _getUnitTime: function(app) {
+      var obj = UPDATE_MAP[this.updateType];
+      if (obj) {
+        return obj.func(app);
+      }
+      else {
+        return 1000 / app.fps;
+      }
+    },
+
+    _getDefaultDuration: function() {
+      var obj = UPDATE_MAP[this.updateType];
+      return obj && obj.duration;
+    },
+
+    _static: {
+      UPDATE_MAP: {
+        normal: {
+          func: function(app) {
+            return 1000 / app.fps;
+          },
+          duration: 1000,
+        },
+
+        delta: {
+          func: function(app) {
+            return app.ticker.deltaTime;
+          },
+          duration: 1000,
+        },
+
+        fps: {
+          func: function(app) {
+            return 1;
+          },
+          duration: 30,
+        },
+
+      }
+    }
   });
+
+  var UPDATE_MAP = Tweener.UPDATE_MAP;
 
   phina.app.Element.prototype.getter('tweener', function() {
     if (!this._tweener) {
