@@ -299,7 +299,7 @@ phina.namespace(function() {
     },
 
     _getUnitTime : function(app){
-      var func = this._static.getUnitTimeMap[this.updateType];
+      var func = this._static.UNIT_TIME_FUNCTION_MAP[this.updateType];
       if (func) {
         return func(app);
       }
@@ -309,7 +309,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      getUnitTimeMap: {
+      UNIT_TIME_FUNCTION_MAP: {
         normal: function(app) {
           return 1000 / app.fps;
         },
@@ -321,7 +321,8 @@ phina.namespace(function() {
           return 1;
         },
 
-      }
+      },
+
     }
   });
 
