@@ -7,10 +7,10 @@ phina.namespace(function() {
    * @class phina.accessory.Tweener
    * Tweener
    */
-  phina.define('phina.accessory.Tweener', {
+  var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
-    updateType : 'normal',
+    updateType: 'normal',
 
     /**
      * @constructor
@@ -119,14 +119,14 @@ phina.namespace(function() {
     },
 
     moveTo: function(x, y, duration, easing) {
-      return this.to({x:x,y:y}, duration, easing);
+      return this.to({ x: x, y: y }, duration, easing);
     },
     moveBy: function(x, y, duration, easing) {
-      return this.by({x:x,y:y}, duration, easing);
+      return this.by({ x: x, y: y }, duration, easing);
     },
 
     fade: function(value, duration, easing) {
-      return this.to({alpha:value}, duration, easing);
+      return this.to({ alpha: value }, duration, easing);
     },
 
     fadeOut: function(duration, easing) {
@@ -219,7 +219,7 @@ phina.namespace(function() {
     },
 
     _updateTask: function(app) {
-      if (!this.playing) return ;
+      if (!this.playing) return;
 
       var task = this._tasks[this._index];
       if (!task) {
@@ -230,7 +230,7 @@ phina.namespace(function() {
         else {
           this.playing = false;
         }
-        return ;
+        return;
       }
       else {
         ++this._index;
@@ -239,7 +239,7 @@ phina.namespace(function() {
       if (task.type === 'tween') {
         this._tween = phina.util.Tween();
 
-        var duration = task.duration || this._static.DEFAULT_UNIT_TIME_MAP[this.updateType] || 1000;
+        var duration = task.duration || this._getDefaultDuration();
         if (task.mode === 'to') {
           this._tween.to(this.target, task.props, duration, task.easing);
         }
@@ -299,38 +299,49 @@ phina.namespace(function() {
       }
     },
 
-    _getUnitTime : function(app){
-      var func = this._static.UNIT_TIME_FUNCTION_MAP[this.updateType];
-      if (func) {
-        return func(app);
+    _getUnitTime: function(app) {
+      var obj = UPDATE_MAP[this.updateType];
+      if (obj) {
+        return obj.func(app);
       }
       else {
         return 1000 / app.fps;
       }
     },
 
+    _getDefaultDuration: function() {
+      var obj = UPDATE_MAP[this.updateType];
+      return obj && obj.duration;
+    },
+
     _static: {
-      UNIT_TIME_FUNCTION_MAP: {
-        normal: function(app) {
-          return 1000 / app.fps;
-        },
-        delta: function(app) {
-          return app.ticker.deltaTime;
-        },
-
-        fps: function(app) {
-          return 1;
+      UPDATE_MAP: {
+        normal: {
+          func: function(app) {
+            return 1000 / app.fps;
+          },
+          duration: 1000,
         },
 
-      },
+        delta: {
+          func: function(app) {
+            return app.ticker.deltaTime;
+          },
+          duration: 1000,
+        },
 
-      DEFAULT_UNIT_TIME_MAP: {
-        normal: 1000,
-        delta: 1000,
-        fps: 30,
-      },
+        fps: {
+          func: function(app) {
+            return 1;
+          },
+          duration: 30,
+        },
+
+      }
     }
   });
+
+  var UPDATE_MAP = Tweener.UPDATE_MAP;
 
   phina.app.Element.prototype.getter('tweener', function() {
     if (!this._tweener) {
