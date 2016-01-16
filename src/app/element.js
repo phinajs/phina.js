@@ -95,14 +95,18 @@ phina.namespace(function() {
       return this;
     },
 
+    isAwake: function() {
+      return this.awake;
+    },
+
     wakeUp: function() {
       this.awake = true;
-      return true;
+      return this;
     },
 
     sleep: function() {
       this.awake = false;
-      return true;
+      return this;
     },
 
     fromJSON: function(json) {
