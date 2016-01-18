@@ -415,7 +415,7 @@
   Number.prototype.$method("times",  function(fn, self) {
     self = self || this;
     for (var i=0; i<this; ++i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -427,7 +427,7 @@
   Number.prototype.$method("upto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i<=t; ++i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -439,7 +439,7 @@
   Number.prototype.$method("downto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i>=t; --i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -451,7 +451,7 @@
   Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
     for (var i=+this; i<=limit; i+=step) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -7739,6 +7739,20 @@ phina.namespace(function() {
       return this.by({ x: x, y: y }, duration, easing);
     },
 
+    rotateTo: function(rotation, duration, easing) {
+      return this.to({ rotation: rotation }, duration, easing);
+    },
+    rotateBy: function(rotation, duration, easing) {
+      return this.by({ rotation: rotation }, duration, easing);
+    },
+
+    scaleTo: function(scale, duration, easing) {
+      return this.to({ scaleX: scale, scaleY: scale }, duration, easing);
+    },
+    scaleBy: function(scale, duration, easing) {
+      return this.by({ scaleX: scale, scaleY: scale }, duration, easing);
+    },
+
     fade: function(value, duration, easing) {
       return this.to({ alpha: value }, duration, easing);
     },
@@ -11173,6 +11187,7 @@ phina.namespace(function() {
         }.bind(this);
       }
       else {
+        this.gauge.animationTime = 100;
         loader.onprogress = function(e) {
           this.gauge.value = e.progress * 100;
         }.bind(this);
