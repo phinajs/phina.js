@@ -9,11 +9,9 @@ phina.namespace(function() {
       this._context = this.canvas.context;
     },
     render: function(scene) {
+      this.canvas.clear();
       if (scene.backgroundColor) {
         this.canvas.clearColor(scene.backgroundColor);
-      }
-      else {
-        this.canvas.clear();
       }
       
       this._context.save();
