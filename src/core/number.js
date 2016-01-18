@@ -106,7 +106,7 @@
   Number.prototype.$method("times",  function(fn, self) {
     self = self || this;
     for (var i=0; i<this; ++i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -118,7 +118,7 @@
   Number.prototype.$method("upto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i<=t; ++i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -130,7 +130,7 @@
   Number.prototype.$method("downto",  function(t, fn, self) {
     self = self || this;
     for (var i=+this; i>=t; --i) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
@@ -142,7 +142,7 @@
   Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
     for (var i=+this; i<=limit; i+=step) {
-      fn.call(self, i);
+      fn.call(self, i, this);
     }
     return this;
   });
