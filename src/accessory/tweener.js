@@ -125,6 +125,20 @@ phina.namespace(function() {
       return this.by({ x: x, y: y }, duration, easing);
     },
 
+    rotateTo: function(rotation, duration, easing) {
+      return this.to({ rotation: rotation }, duration, easing);
+    },
+    rotateBy: function(rotation, duration, easing) {
+      return this.by({ rotation: rotation }, duration, easing);
+    },
+
+    scaleTo: function(scale, duration, easing) {
+      return this.to({ scaleX: scale, scaleY: scale }, duration, easing);
+    },
+    scaleBy: function(scale, duration, easing) {
+      return this.by({ scaleX: scale, scaleY: scale }, duration, easing);
+    },
+
     fade: function(value, duration, easing) {
       return this.to({ alpha: value }, duration, easing);
     },
