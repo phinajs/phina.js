@@ -51,6 +51,7 @@ phina.namespace(function() {
         }.bind(this);
       }
       else {
+        this.gauge.animationTime = 100;
         loader.onprogress = function(e) {
           this.gauge.value = e.progress * 100;
         }.bind(this);
