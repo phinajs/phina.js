@@ -16,6 +16,7 @@
     "geom/circle.js",
     "geom/collision.js",
 
+    "util/support.js",
     "util/eventdispatcher.js",
     "util/tween.js",
     "util/ticker.js",

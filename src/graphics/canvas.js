@@ -620,9 +620,9 @@ phina.namespace(function() {
     },
 
     _static: {
-      dummyCanvas: (function() {
-        if (!phina.isNode()) {
-          return document.createElement('canvas');
+      _context: (function() {
+        if (phina.util.Support.canvas) {
+          return document.createElement('canvas').getContext('2d');
         }
         else {
           return null;

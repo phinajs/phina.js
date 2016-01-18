@@ -235,7 +235,7 @@ phina.namespace(function() {
 
     _static: {
       getAudioContext: function() {
-        if (phina.isNode()) return null;
+        if (!phina.util.Support.webAudio) return null;
 
         if (this.context) return this.context;
 
