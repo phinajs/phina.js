@@ -252,4 +252,13 @@ describe('#util', function() {
     });
   });
 
+  describe('Support', function() {
+    it('test', function() {
+      assert(phina.util.Support.canvas);
+      assert(phina.util.Support.webGL);
+      assert(phina.util.Support.webAudio);
+    });
+  });
+
+
 });
