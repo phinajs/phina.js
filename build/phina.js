@@ -11182,7 +11182,7 @@ phina.namespace(function() {
         this.gauge.value = 90;
 
         loader.onload = function() {
-          this.gauge.animationTime = 1*1000;
+          this.gauge.animationTime = 0;
           this.gauge.value = 100;
         }.bind(this);
       }
@@ -11209,7 +11209,7 @@ phina.namespace(function() {
 
         exitType: 'auto',
 
-        lie: true,
+        lie: false,
       },
     },
 
