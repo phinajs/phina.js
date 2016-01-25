@@ -78,6 +78,17 @@ phina.namespace(function() {
       // 決定時の処理をオフにする(iPhone 時のちらつき対策)
       this.domElement.addEventListener("touchstart", function(e) { e.stop(); });
       this.domElement.addEventListener("touchmove", function(e) { e.stop(); });
+
+      // ウィンドウフォーカス時イベントリスナを登録
+      phina.global.addEventListener('focus', function() {
+        this.flare('focus');
+        this.currentScene.flare('focus');
+      }.bind(this), false);
+      // ウィンドウブラー時イベントリスナを登録
+      phina.global.addEventListener('blur', function() {
+        this.flare('blur');
+        this.currentScene.flare('blur');
+      }.bind(this), false);
     },
 
     update: function() {
