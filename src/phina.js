@@ -83,15 +83,17 @@ phina.namespace(function() {
       _class.prototype = Object.create(params.superClass.prototype);
       params.init.owner = _class;
       _class.prototype.superInit = function() {
-        var caller = this.superInit.caller;
-        var subclass = caller.owner;
-        var superclass = subclass.prototype.superClass;
-        var superInit = superclass.prototype.init;
+        this.__counter = this.__counter || 0;
 
+        var superClass = this._hierarchies[this.__counter++];
+        var superInit = superClass.prototype.init;
         superInit.apply(this, arguments);
+
+        this.__counter = 0;
       };
       _class.prototype.constructor = _class;
     }
+
 
     // // 
     // params.forIn(function(key, value) {
@@ -102,10 +104,16 @@ phina.namespace(function() {
     //     _class.prototype[key] = value;
     //   }
     // });
+    // 継承
     _class.prototype.$extend(params);
 
-    // 
-    _class.prototype.selfClass = _class;
+    // 継承用
+    _class.prototype._hierarchies = [];
+    var _super = _class.prototype.superClass;
+    while(_super) {
+      _class.prototype._hierarchies.push(_super);
+      _super = _super.prototype.superClass;
+    }
 
     // accessor
     if (params._accessor) {
