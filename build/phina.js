@@ -1527,6 +1527,20 @@ phina.namespace(function() {
 
         this.__counter = 0;
       };
+      _class.prototype.superMethod = function() {
+        var args = Array.prototype.slice.call(arguments, 0);
+        var name = args.shift();
+        this.__counters = this.__counters || {};
+        this.__counters[name] = this.__counters[name] || 0;
+
+        var superClass = this._hierarchies[ this.__counters[name]++ ];
+        var superMethod = superClass.prototype[name];
+        var rst = superMethod.apply(this, arguments);
+
+        this.__counters[name] = 0;
+
+        return rst;
+      };
       _class.prototype.constructor = _class;
     }
 
