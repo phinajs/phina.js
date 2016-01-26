@@ -6,6 +6,9 @@
  * Copyright (C) 2015 phi, http://phinajs.com
  */
 
+
+'use strict';
+
 /*
  *
  */
@@ -3223,10 +3226,11 @@ phina.namespace(function() {
 
       this.startTime = this.currentTime = (new Date()).getTime();
 
-      (function() {
+      var fn = function() {
         var delay = self.run();
-        setTimeout(arguments.callee, delay);
-      })();
+        setTimeout(fn, delay);
+      };
+      fn();
 
       return this;
     },
@@ -7068,7 +7072,7 @@ phina.namespace(function() {
           });
         }
         else {
-          if (key !== 'type') {
+          if (key !== 'type' && key !== 'className') {
             this[key] = value;
           }
         }
