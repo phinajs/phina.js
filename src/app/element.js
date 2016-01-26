@@ -134,7 +134,7 @@ phina.namespace(function() {
           });
         }
         else {
-          if (key !== 'type') {
+          if (key !== 'type' && key !== 'className') {
             this[key] = value;
           }
         }

@@ -21,6 +21,9 @@ var banner = [
   " */",
   "",
   "",
+  "'use strict';",
+  "",
+  "",
 ].join('\n');
 
 
