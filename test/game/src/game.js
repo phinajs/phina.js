@@ -1,9 +1,9 @@
 
 th.describe('game.GameApp', function() {
 
-  th.it('debug', function() {
+  th.it('enableDebugger', function() {
     this.onenter = function() {
-      this.app.debug();
+      this.app.enableDebugger();
     };
   });
 });
