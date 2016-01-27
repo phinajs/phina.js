@@ -86,6 +86,7 @@
     "game/resultscene.js",
     "game/loadingscene.js",
     "game/countscene.js",
+    "game/pausescene.js",
     "game/gameapp.js",
     "game/pietimer.js",
 
