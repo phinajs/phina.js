@@ -99,7 +99,7 @@ phina.namespace(function() {
 
         var superClass = this._hierarchies[ this.__counters[name]++ ];
         var superMethod = superClass.prototype[name];
-        var rst = superMethod.apply(this, arguments);
+        var rst = superMethod.apply(this, args);
 
         this.__counters[name] = 0;
 
