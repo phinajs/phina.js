@@ -1,3 +1,14 @@
+
+th.describe('game.GameApp', function() {
+
+  th.it('debug', function() {
+    this.onenter = function() {
+      this.app.debug();
+    };
+  });
+});
+
+
 th.describe('game.SplashScene', function() {
 
   th.it('default', function() {

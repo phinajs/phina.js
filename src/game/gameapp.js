@@ -72,6 +72,12 @@ phina.namespace(function() {
         this.replaceScene(scene);
       }
     },
+
+    debug: function() {
+      this.enableDatGUI(function() {
+        
+      });
+    },
   });
 
 });
