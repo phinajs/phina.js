@@ -48,7 +48,12 @@ phina.namespace(function() {
               data = (new DOMParser()).parseFromString(data, "text/xml");
             }
 
-            resolve(data);
+            if (params.direct) {
+              resolve(data);
+            } else {
+              self.data = data;
+              resolve(self);
+            }
           }
         }
       };

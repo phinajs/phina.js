@@ -108,6 +108,7 @@ phina.namespace(function() {
           return text.load({
             path: path,
             dataType: "json",
+            direct: true,
           });
         },
         xml: function(key, path) {
@@ -115,11 +116,16 @@ phina.namespace(function() {
           return text.load({
             path: path,
             dataType: "xml",
+            direct: true,
           });
         },
         text: function(key, path) {
           var text = phina.asset.File();
           return text.load(path);
+          return text.load({
+            path: path,
+            direct: true,
+          });
         }
       }
     }
