@@ -44,10 +44,11 @@ phina.namespace(function() {
 
             if (params.dataType === 'json') {
               data = JSON.parse(data);
+            } else if (params.dataType === 'xml') {
+              data = (new DOMParser()).parseFromString(data, "text/xml");
             }
 
-            self.data = data;
-            resolve(self);
+            resolve(data);
           }
         }
       };

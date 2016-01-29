@@ -103,6 +103,24 @@ phina.namespace(function() {
           font.setFontName(key);
           return font.load(path);
         },
+        json: function(key, path) {
+          var text = phina.asset.File();
+          return text.load({
+            path: path,
+            dataType: "json",
+          });
+        },
+        xml: function(key, path) {
+          var text = phina.asset.File();
+          return text.load({
+            path: path,
+            dataType: "xml",
+          });
+        },
+        text: function(key, path) {
+          var text = phina.asset.File();
+          return text.load(path);
+        }
       }
     }
 
