@@ -1,9 +1,8 @@
-
 phina.namespace(function() {
 
   /**
    * @class phina.asset.Texture
-   * 
+   *
    */
   phina.define('phina.asset.Texture', {
     superClass: "phina.asset.Asset",
@@ -17,6 +16,7 @@ phina.namespace(function() {
 
     _load: function(resolve) {
       this.domElement = new Image();
+      this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
       this.domElement.src = this.src;
 
       var self = this;
@@ -33,7 +33,33 @@ phina.namespace(function() {
       };
     },
 
+    transmit: function(color) {
+      // imagaオブジェクトをゲット
+      var image = this.domElement;
+      // 新規canvas作成
+      var canvas = phina.graphics.Canvas().setSize(image.width, image.height);
+      // 新規canvasに描画
+      canvas.context.drawImage(image, 0, 0);
+      // canvas全体のイメージデータ配列をゲット
+      var imageData = canvas.context.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+      // 透過色の指定がなければ左上のrgb値を抽出
+      var r = (color !== undefined) ? color.r : data[0];
+      var g = (color !== undefined) ? color.g : data[1];
+      var b = (color !== undefined) ? color.b : data[2];
+      // 配列を4要素目から4つ飛び（アルファ値）でループ
+      (3).step(data.length, 4, function(i) {
+        // rgb値を逆算でゲットし、左上のrgbと比較
+        if (data[i - 3] === r && data[i - 2] === g && data[i - 1] === b) {
+          // 一致した場合はアルファ値を書き換える
+          data[i] = 0;
+        }
+      });
+      // 書き換えたイメージデータをcanvasに戻す
+      canvas.context.putImageData(imageData, 0, 0);
+
+      this.domElement = canvas.domElement;
+    },
   });
 
 });
-
