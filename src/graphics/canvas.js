@@ -722,11 +722,6 @@ phina.namespace(function() {
         "set": function(v)  { this.context.lineWidth = v; }
       },
 
-      lineJoin: {
-        "get": function()   { return this.context.lineJoin; },
-        "set": function(v)  { this.context.lineJoin = v; }
-      },
-
       font: {
         "get": function()   { return this.context.font; },
         "set": function(v)  { this.context.font = v; }

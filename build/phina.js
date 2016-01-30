@@ -1538,7 +1538,7 @@ phina.namespace(function() {
 
         var superClass = this._hierarchies[ this.__counters[name]++ ];
         var superMethod = superClass.prototype[name];
-        var rst = superMethod.apply(this, arguments);
+        var rst = superMethod.apply(this, args);
 
         this.__counters[name] = 0;
 
@@ -9182,11 +9182,6 @@ phina.namespace(function() {
         "set": function(v)  { this.context.lineWidth = v; }
       },
 
-      lineJoin: {
-        "get": function()   { return this.context.lineJoin; },
-        "set": function(v)  { this.context.lineJoin = v; }
-      },
-
       font: {
         "get": function()   { return this.context.font; },
         "set": function(v)  { this.context.font = v; }
@@ -9492,7 +9487,7 @@ phina.namespace(function() {
    * @class phina.display.Shape
    *
    */
-  phina.define('phina.display.Shape', {
+  var Shape = phina.define('phina.display.Shape', {
     superClass: 'phina.display.CanvasElement',
 
     init: function(options) {
@@ -9581,8 +9576,9 @@ phina.namespace(function() {
         });
       },
       watchRenderProperties: function(keys) {
+        var watchRenderProperty = this.watchRenderProperty || Shape.watchRenderProperty;
         keys.each(function(key) {
-          this.watchRenderProperty(key);
+          watchRenderProperty.call(this, key);
         }, this);
       },
     },
