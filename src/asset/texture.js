@@ -16,7 +16,12 @@ phina.namespace(function() {
 
     _load: function(resolve) {
       this.domElement = new Image();
-      this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
+
+      var isLocal = (location.protocol == 'file:');
+      if ( !isLocal && !(/^data:/.test(this.src)) ) {
+        this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
+      }
+
       this.domElement.src = this.src;
 
       var self = this;
