@@ -174,6 +174,25 @@ phina.namespace(function() {
     },
 
     /**
+     * 大体の向きを文字列で取得
+     * @return {String}
+     */
+    getDirection: function() {
+      var angle = this.toDegree();
+      if (angle < 45) {
+        return "right";
+      } else if (angle < 135) {
+        return "down";
+      } else if (angle < 225) {
+        return "left"
+      } else if (angle < 315) {
+        return "up";
+      } else {
+        return "right";
+      }
+    },
+
+    /**
      * 角度に変換
      * @return {Number}
      */
