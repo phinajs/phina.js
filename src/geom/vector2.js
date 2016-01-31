@@ -179,17 +179,16 @@ phina.namespace(function() {
      */
     getDirection: function() {
       var angle = this.toDegree();
-      switch(true) {
-        case angle < 45 :
-          return "right";
-        case angle < 135:
-          return "down";
-        case angle < 225:
-          return "left";
-        case angle < 315:
-          return "up";
-        default:
-          return "right";
+      if (angle < 45) {
+        return "right";
+      } else if (angle < 135) {
+        return "down";
+      } else if (angle < 225) {
+        return "left"
+      } else if (angle < 315) {
+        return "up";
+      } else {
+        return "right";
       }
     },
 
