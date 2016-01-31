@@ -1,7 +1,7 @@
 
 phina.namespace(function() {
 
-  var BASE_URL = 'http://'
+  var BASE_URL = 'http://';
 
   /**
    * @class phina.social.Twitter

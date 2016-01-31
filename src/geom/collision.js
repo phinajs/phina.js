@@ -19,7 +19,7 @@ phina.namespace(function() {
       testCircleRect: function(circle, rect) {
         // まずは大きな矩形で判定(高速化)
         var bigRect = phina.geom.Rect(rect.left-circle.radius, rect.top-circle.radius, rect.width+circle.radius*2, rect.height+circle.radius*2);
-        if (bigRect.contains(circle.x, circle.y) == false) {
+        if (bigRect.contains(circle.x, circle.y) === false) {
           return false;
         }
         

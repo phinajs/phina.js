@@ -28,7 +28,7 @@ phina.namespace(function() {
       }
 
       if (options.fps !== undefined) {
-        this.fps = options.fps
+        this.fps = options.fps;
       }
 
       this.mouse = phina.input.Mouse(this.domElement);

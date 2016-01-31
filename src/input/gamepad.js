@@ -234,7 +234,7 @@ phina.namespace(function() {
         button = phina.input.Gamepad.BUTTON_CODE[button];
       }
       if (this.buttons[button]) {
-        return this.buttons[button].up
+        return this.buttons[button].up;
       } else {
         return false;
       }
@@ -251,7 +251,7 @@ phina.namespace(function() {
         (this.getKey('right') << 1) | // 0010
         (this.getKey('down')); // 0001
 
-      if (arrowBit != 0 && ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
+      if (arrowBit !== 0 && ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
         angle = ARROW_BIT_TO_ANGLE_TABLE[arrowBit];
       }
 

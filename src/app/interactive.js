@@ -27,7 +27,7 @@ phina.namespace(function() {
 
     check: function(root) {
       if (!this._enable) return ;
-      this._checkElement(root)
+      this._checkElement(root);
     },
 
     _checkElement: function(element) {

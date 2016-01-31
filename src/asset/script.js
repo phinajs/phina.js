@@ -16,6 +16,7 @@ phina.namespace(function() {
     },
 
     _load: function(resolve) {
+      var self = this;
       this.domElement = document.createElement('script');
       this.domElement.src = this.src;
 

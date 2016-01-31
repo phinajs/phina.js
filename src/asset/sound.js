@@ -243,13 +243,13 @@ phina.namespace(function() {
         var context = null;
 
         if (g.AudioContext) {
-            context = new AudioContext();
+          context = new AudioContext();
         }
         else if (g.webkitAudioContext) {
-            context = new webkitAudioContext();
+          context = new webkitAudioContext();
         }
         else if (g.mozAudioContext) {
-            context = new mozAudioContext();
+          context = new mozAudioContext();
         }
 
         this.context = context;

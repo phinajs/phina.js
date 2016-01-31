@@ -71,7 +71,7 @@ phina.namespace(function() {
 
     getRoot: function() {
       var elm = this;
-      for (elm=this.parent; elm.parent != null; elm = elm.parent) {
+      for (elm=this.parent; elm.parent !== null; elm = elm.parent) {
 
       }
       return elm;

@@ -45,7 +45,7 @@ phina.namespace(function() {
      * 空っぽかをチェック
      */
     isEmpty: function() {
-      return this.value == 0;
+      return this.value === 0;
     },
 
     setValue: function(value) {

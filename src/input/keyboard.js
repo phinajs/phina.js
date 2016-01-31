@@ -123,7 +123,7 @@ phina.namespace(function() {
         (this.getKey("right")  << 1) | // 0010
         (this.getKey("down"));         // 0001
       
-      if (arrowBit != 0 && phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
+      if (arrowBit !== 0 && phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
         angle = phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE[arrowBit];
       }
       

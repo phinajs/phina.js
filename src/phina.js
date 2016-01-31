@@ -198,7 +198,7 @@ phina.namespace(function() {
       if (typeof params.superClass === 'string') {
         var _superClass = phina.using(params.superClass);
         if (typeof _superClass != 'function') {
-          if (_classDefinedCallback[params.superClass] == null) {
+          if (_classDefinedCallback[params.superClass] === null) {
             _classDefinedCallback[params.superClass] = [];
           }
           _classDefinedCallback[params.superClass].push(function() {

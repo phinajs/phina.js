@@ -28,7 +28,7 @@ phina.namespace(function() {
       this.rotation       = phina.geom.Vector3(0, 0, 0);
       this.orientation    = phina.geom.Vector3(0, 0, 0);
 
-      window.addEventListener("devicemotion", function(e) {
+      phina.global.addEventListener("devicemotion", function(e) {
         var acceleration = self.acceleration;
         var gravity = self.gravity;
         var rotation = self.rotation;
@@ -50,7 +50,7 @@ phina.namespace(function() {
         }
       });
       
-      window.addEventListener("deviceorientation", function(e) {
+      phina.global.addEventListener("deviceorientation", function(e) {
         var orientation = self.orientation;
         orientation.alpha   = e.alpha;  // z(0~360)
         orientation.beta    = e.beta;   // x(-180~180)

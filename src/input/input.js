@@ -25,7 +25,7 @@
       this._tempPosition = phina.geom.Vector2(0, 0);
 
       this.maxCacheNum = phina.input.Input.defaults.maxCacheNum;
-      this.minDistance = phina.input.Input.defaults.minDistance
+      this.minDistance = phina.input.Input.defaults.minDistance;
       this.maxDistance = phina.input.Input.defaults.maxDistance;
       this.cachePositions = [];
       this.flickVelocity = phina.geom.Vector2(0, 0);

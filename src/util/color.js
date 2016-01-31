@@ -183,7 +183,7 @@ phina.namespace(function() {
         return this.stringToNumber(str);
       },
       stringToNumber: function(str) {
-        var vlaue = null;
+        var value = null;
         var type = null;
 
         if (str[0] === '#') {
@@ -219,7 +219,7 @@ phina.namespace(function() {
         s *= 0.01;
         l *= 0.01;
 
-        if (s == 0) {
+        if (s === 0) {
           var l = Math.round(l * 255);
           return [l, l, l];
         }
@@ -275,7 +275,7 @@ phina.namespace(function() {
       HSLAtoRGBA: function(h, s, l, a) {
         var temp = phina.util.Color.HSLtoRGB(h, s, l);
         temp[3] = a;
-        return rgb;
+        return temp;
       },
 
       /**
