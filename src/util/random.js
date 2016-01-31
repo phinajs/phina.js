@@ -72,7 +72,7 @@ phina.namespace(function() {
       },
 
       randint: function(min, max) {
-        return window.Math.floor( this.random()*(max-min+1) ) + min;
+        return phina.global.Math.floor( this.random()*(max-min+1) ) + min;
       },
       randfloat: function(min, max) {
         return this.random()*(max-min)+min;
@@ -97,6 +97,23 @@ phina.namespace(function() {
 
         return seed;
       },
+
+      /*
+       * http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+       */
+      uuid: function() {
+        var d = new Date().getTime();
+        if(phina.global.performance && typeof phina.global.performance.now === "function"){
+          d += performance.now(); //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (d + Math.random()*16)%16 | 0;
+          d = Math.floor(d/16);
+          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+      },
+
     },
   });
 
