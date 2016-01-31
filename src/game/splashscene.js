@@ -10,7 +10,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.SplashScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
 
     init: function(options) {
       this.superInit(options);

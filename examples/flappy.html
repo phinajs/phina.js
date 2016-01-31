@@ -32,7 +32,7 @@ var SCREEN_WIDTH = 960;
 var SCREEN_HEIGHT = 640;
 
 phina.define("MainScene", {
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   init: function() {
     this.superInit({
@@ -45,7 +45,7 @@ phina.define("MainScene", {
     this.player = Player().addChildTo(this);
     this.player.setPosition(this.gridX.span(2), this.gridY.span(8));
 
-    this.enemyGroup = CanvasElement().addChildTo(this);
+    this.enemyGroup = DisplayElement().addChildTo(this);
 
     this.onpointstart = function() {
       this.player.fly();

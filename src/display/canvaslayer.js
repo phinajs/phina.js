@@ -5,7 +5,7 @@ phina.namespace(function() {
    * @class phina.display.Layer
    */
   phina.define('phina.display.Layer', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,
@@ -44,7 +44,7 @@ phina.namespace(function() {
    * @class
    */
   phina.define('phina.display.ThreeLayer', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     scene: null,
     camera: null,

@@ -1,7 +1,7 @@
 th.describe("app.Element", function() {
 
   th.it('hitTest', function() {
-    var group = phina.display.CanvasElement().addChildTo(this);
+    var group = phina.display.DisplayElement().addChildTo(this);
     group.x = 100;
     group.y = 100;
     group.rotation = 10;

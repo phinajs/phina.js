@@ -93,6 +93,8 @@
 
 
     "box2d/box2dlayer.js",
-    "box2d/box2dbody.js"
+    "box2d/box2dbody.js",
+
+    "dirty.js"
   ]
 }

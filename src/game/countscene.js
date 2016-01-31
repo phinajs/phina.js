@@ -10,7 +10,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.CountScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
     /**
      * @constructor
      */

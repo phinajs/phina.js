@@ -2,10 +2,10 @@
 phina.namespace(function() {
 
   /**
-   * @class phina.display.CanvasElement
+   * @class phina.display.DisplayElement
    * 
    */
-  phina.define('phina.display.CanvasElement', {
+  phina.define('phina.display.DisplayElement', {
     superClass: 'phina.app.Object2D',
 
     /** 表示フラグ */

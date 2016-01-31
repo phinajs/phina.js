@@ -4,13 +4,13 @@ phina.namespace(function() {
   /**
    * @class
    */
-  phina.define('phina.display.CanvasScene', {
+  phina.define('phina.display.DisplayScene', {
     superClass: 'phina.app.Scene',
 
     init: function(params) {
       this.superInit();
 
-      params = (params || {}).$safe(phina.display.CanvasScene.default);
+      params = (params || {}).$safe(phina.display.DisplayScene.default);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
