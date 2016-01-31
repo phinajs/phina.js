@@ -47,13 +47,10 @@ phina.namespace(function() {
             } else if (params.dataType === 'xml') {
               data = (new DOMParser()).parseFromString(data, "text/xml");
             }
+            self.dataType = params.dataType;
 
-            if (params.direct) {
-              resolve(data);
-            } else {
-              self.data = data;
-              resolve(self);
-            }
+            self.data = data;
+            resolve(self);
           }
         }
       };
