@@ -37,7 +37,7 @@ var PIECE_APPEAR_ANIMATION = {
 
 
 phina.define("MainScene", {
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   init: function() {
     this.superInit({
@@ -47,7 +47,7 @@ phina.define("MainScene", {
 
     this.currentIndex = 1;
 
-    this.group = CanvasElement().addChildTo(this);
+    this.group = DisplayElement().addChildTo(this);
 
     var gridX = Grid(BOARD_SIZE, 5);
     var gridY = Grid(BOARD_SIZE, 5);

@@ -58,7 +58,7 @@ phina.define('Circle', {
  */
 phina.define("MainScene", {
   // 継承
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   // 初期化
   init: function() {
@@ -69,7 +69,7 @@ phina.define("MainScene", {
     this.backgroundColor = '#222';
 
     // グループを生成
-    this.group = CanvasElement().addChildTo(this);
+    this.group = DisplayElement().addChildTo(this);
 
     // サークルを生成
     (CIRCLE_MAX_NUM).times(function(i) {

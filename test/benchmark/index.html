@@ -27,7 +27,7 @@ var IMAGE = '../../assets/images/tomapiko_min.png';
 
 
 phina.define("MainScene", {
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   init: function() {
     this.superInit({
@@ -52,7 +52,7 @@ phina.define("MainScene", {
   },
 
   create: function() {
-    var group = CanvasElement().addChildTo(this);
+    var group = DisplayElement().addChildTo(this);
     group.vy = 5 * Math.random();
     group.vr = 5 * Math.random();
     group.x = Math.random() * SCREEN_WIDTH;

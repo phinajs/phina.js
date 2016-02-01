@@ -6,7 +6,7 @@ phina.namespace(function() {
    *
    */
   var Shape = phina.define('phina.display.Shape', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     init: function(options) {
       options = ({}).$safe(options, {

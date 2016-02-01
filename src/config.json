@@ -64,11 +64,11 @@
     "graphics/canvas.js",
     "graphics/canvasrecorder.js",
 
-    "display/canvaselement.js",
+    "display/displayelement.js",
     "display/shape.js",
     "display/sprite.js",
     "display/label.js",
-    "display/canvasscene.js",
+    "display/displayscene.js",
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
     "display/domapp.js",
@@ -94,6 +94,8 @@
 
 
     "box2d/box2dlayer.js",
-    "box2d/box2dbody.js"
+    "box2d/box2dbody.js",
+
+    "dirty.js"
   ]
 }

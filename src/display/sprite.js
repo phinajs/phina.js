@@ -6,7 +6,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.display.Sprite', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     init: function(image, width, height) {
       this.superInit();

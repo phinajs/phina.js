@@ -51,7 +51,7 @@ var ASSETS = {
 
 
 phina.define('MainScene', {
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   init: function() {
     this.superInit({
@@ -69,10 +69,10 @@ phina.define('MainScene', {
           originY: 0,
         },
         tubeGroup: {
-          className: 'CanvasElement',
+          className: 'DisplayElement',
         },
         scoreBoxGroup: {
-          className: 'CanvasElement',
+          className: 'DisplayElement',
         },
         floor: {
           className: 'Floor',
@@ -216,7 +216,7 @@ phina.define('Floor', {
 });
 
 phina.define('Player', {
-  superClass: 'CanvasElement',
+  superClass: 'DisplayElement',
 
   init: function(index) {
     this.superInit({
@@ -277,7 +277,7 @@ phina.define('Tube', {
 });
 
 phina.define('ScoreBox', {
-  superClass: 'CanvasElement',
+  superClass: 'DisplayElement',
 
   init: function() {
     this.superInit({

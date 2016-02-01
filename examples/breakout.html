@@ -36,7 +36,7 @@ var BOARD_OFFSET_X  = BOARD_PADDING+BLOCK_SIZE/2;
 var BOARD_OFFSET_Y  = 150;
 
 phina.define("MainScene", {
-  superClass: 'CanvasScene',
+  superClass: 'DisplayScene',
 
   init: function(options) {
     this.superInit(options);
@@ -48,7 +48,7 @@ phina.define("MainScene", {
     this.scoreLabel.fill = 'white';
 
     // グループ
-    this.group = CanvasElement().addChildTo(this);
+    this.group = DisplayElement().addChildTo(this);
 
     var gridX = Grid(BOARD_SIZE, MAX_PER_LINE);
     var gridY = Grid(BOARD_SIZE, MAX_PER_LINE);

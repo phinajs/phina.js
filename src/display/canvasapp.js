@@ -37,7 +37,7 @@ phina.namespace(function() {
 
       this.backgroundColor = (options.backgroundColor !== undefined) ? options.backgroundColor : 'white';
 
-      this.replaceScene(phina.display.CanvasScene({
+      this.replaceScene(phina.display.DisplayScene({
         width: options.width,
         height: options.height,
       }));
