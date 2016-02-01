@@ -61,6 +61,7 @@ phina.namespace(function() {
         if (options.exitType === 'auto') {
           this.app.popScene();
         }
+        this.flare('loaded');
       }.bind(this);
 
       loader.load(options.assets);

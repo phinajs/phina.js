@@ -50,15 +50,25 @@ phina.namespace(function() {
       });
 
       if (options.assets) {
-        var loading = LoadingScene(options);
+        var loadingOptions = ({}).$extend(options, {
+          exitType: '',
+        });
+        var loading = LoadingScene(loadingOptions);
         this.replaceScene(loading);
 
-        loading.onexit = function() {
+        loading.onloaded = function() {
           this.replaceScene(scene);
+          if (options.debug) {
+            this._enableDebugger();
+          }
         }.bind(this);
+
       }
       else {
         this.replaceScene(scene);
+        if (options.debug) {
+          this._enableDebugger();
+        }
       }
 
       // 自動でポーズする
@@ -70,7 +80,7 @@ phina.namespace(function() {
       }
     },
 
-    enableDebugger: function() {
+    _enableDebugger: function() {
       if (this.gui) return ;
 
       this.enableDatGUI(function(gui) {

@@ -19,7 +19,7 @@ phina.namespace(function() {
 
       var isLocal = (location.protocol == 'file:');
       if ( !isLocal && !(/^data:/.test(this.src)) ) {
-        this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
+        // this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
       }
 
       this.domElement.src = this.src;
