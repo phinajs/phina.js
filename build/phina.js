@@ -9496,10 +9496,10 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.display.CanvasElement
+   * @class phina.display.DisplayElement
    * 
    */
-  phina.define('phina.display.CanvasElement', {
+  phina.define('phina.display.DisplayElement', {
     superClass: 'phina.app.Object2D',
 
     /** 表示フラグ */
@@ -9577,7 +9577,7 @@ phina.namespace(function() {
    *
    */
   var Shape = phina.define('phina.display.Shape', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     init: function(options) {
       options = ({}).$safe(options, {
@@ -9972,7 +9972,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.display.Sprite', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     init: function(image, width, height) {
       this.superInit();
@@ -10206,13 +10206,13 @@ phina.namespace(function() {
   /**
    * @class
    */
-  phina.define('phina.display.CanvasScene', {
+  phina.define('phina.display.DisplayScene', {
     superClass: 'phina.app.Scene',
 
     init: function(params) {
       this.superInit();
 
-      params = (params || {}).$safe(phina.display.CanvasScene.default);
+      params = (params || {}).$safe(phina.display.DisplayScene.default);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
@@ -10266,7 +10266,7 @@ phina.namespace(function() {
    * @class phina.display.Layer
    */
   phina.define('phina.display.Layer', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,
@@ -10305,7 +10305,7 @@ phina.namespace(function() {
    * @class
    */
   phina.define('phina.display.ThreeLayer', {
-    superClass: 'phina.display.CanvasElement',
+    superClass: 'phina.display.DisplayElement',
 
     scene: null,
     camera: null,
@@ -10589,7 +10589,7 @@ phina.namespace(function() {
 
       this.backgroundColor = (options.backgroundColor !== undefined) ? options.backgroundColor : 'white';
 
-      this.replaceScene(phina.display.CanvasScene({
+      this.replaceScene(phina.display.DisplayScene({
         width: options.width,
         height: options.height,
       }));
@@ -11148,7 +11148,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.SplashScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
 
     init: function(options) {
       this.superInit(options);
@@ -11201,7 +11201,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.TitleScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
     /**
      * @constructor
      */
@@ -11282,7 +11282,7 @@ phina.namespace(function() {
    *
    */
   phina.define('phina.game.ResultScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
     /**
      * @constructor
      */
@@ -11422,7 +11422,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.LoadingScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
 
     /**
      * @constructor
@@ -11505,7 +11505,7 @@ phina.namespace(function() {
    * 
    */
   phina.define('phina.game.CountScene', {
-    superClass: 'phina.display.CanvasScene',
+    superClass: 'phina.display.DisplayScene',
     /**
      * @constructor
      */
@@ -12088,5 +12088,35 @@ phina.namespace(function() {
       this.body.CreateFixture(fixture);
     },
   });
+});
+
+
+
+
+phina.namespace(function() {
+
+
+  phina.define('phina.display.CanvasElement', {
+    superClass: 'phina.display.DisplayElement',
+
+    init: function(options) {
+      this.superInit(options);
+
+      console.warn('[phina warn] CanvasElement は非推奨になりました. DisplayElement をお使いください.');
+    }
+  });
+
+
+  phina.define('phina.display.CanvasScene', {
+    superClass: 'phina.display.DisplayScene',
+
+    init: function(options) {
+      this.superInit(options);
+
+      console.warn('[phina warn] CanvasScene は非推奨になりました. DisplayScene をお使いください.');
+    }
+  });
+
+
 });
 
