@@ -610,13 +610,13 @@
         else {
           return arg[k];
         }
-      }
+      };
     }
     // 複数引数だった場合
     else {
       var args = arguments;
       /** @ignore */
-      rep_fn = function(m, k) { return args[ parseInt(k) ]; }
+      rep_fn = function(m, k) { return args[ parseInt(k) ]; };
     }
     
     return this.replace( /\{(\w+)\}/g, rep_fn );
@@ -1637,7 +1637,7 @@ phina.namespace(function() {
       if (typeof params.superClass === 'string') {
         var _superClass = phina.using(params.superClass);
         if (typeof _superClass != 'function') {
-          if (_classDefinedCallback[params.superClass] == null) {
+          if (_classDefinedCallback[params.superClass] === null) {
             _classDefinedCallback[params.superClass] = [];
           }
           _classDefinedCallback[params.superClass].push(function() {
@@ -1903,6 +1903,25 @@ phina.namespace(function() {
      */
     toString: function() {
       return "{x:{x}, y:{y}}".format(this);
+    },
+
+    /**
+     * 大体の向きを文字列で取得
+     * @return {String}
+     */
+    getDirection: function() {
+      var angle = this.toDegree();
+      if (angle < 45) {
+        return "right";
+      } else if (angle < 135) {
+        return "down";
+      } else if (angle < 225) {
+        return "left"
+      } else if (angle < 315) {
+        return "up";
+      } else {
+        return "right";
+      }
     },
 
     /**
@@ -2654,7 +2673,7 @@ phina.namespace(function() {
       testCircleRect: function(circle, rect) {
         // まずは大きな矩形で判定(高速化)
         var bigRect = phina.geom.Rect(rect.left-circle.radius, rect.top-circle.radius, rect.width+circle.radius*2, rect.height+circle.radius*2);
-        if (bigRect.contains(circle.x, circle.y) == false) {
+        if (bigRect.contains(circle.x, circle.y) === false) {
           return false;
         }
         
@@ -3693,7 +3712,7 @@ phina.namespace(function() {
         return this.stringToNumber(str);
       },
       stringToNumber: function(str) {
-        var vlaue = null;
+        var value = null;
         var type = null;
 
         if (str[0] === '#') {
@@ -3729,7 +3748,7 @@ phina.namespace(function() {
         s *= 0.01;
         l *= 0.01;
 
-        if (s == 0) {
+        if (s === 0) {
           var l = Math.round(l * 255);
           return [l, l, l];
         }
@@ -3785,7 +3804,7 @@ phina.namespace(function() {
       HSLAtoRGBA: function(h, s, l, a) {
         var temp = phina.util.Color.HSLtoRGB(h, s, l);
         temp[3] = a;
-        return rgb;
+        return temp;
       },
 
       /**
@@ -3959,7 +3978,7 @@ phina.namespace(function() {
       },
 
       randint: function(min, max) {
-        return window.Math.floor( this.random()*(max-min+1) ) + min;
+        return phina.global.Math.floor( this.random()*(max-min+1) ) + min;
       },
       randfloat: function(min, max) {
         return this.random()*(max-min)+min;
@@ -3984,6 +4003,23 @@ phina.namespace(function() {
 
         return seed;
       },
+
+      /*
+       * http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+       */
+      uuid: function() {
+        var d = new Date().getTime();
+        if(phina.global.performance && typeof phina.global.performance.now === "function"){
+          d += performance.now(); //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (d + Math.random()*16)%16 | 0;
+          d = Math.floor(d/16);
+          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+      },
+
     },
   });
 
@@ -4217,6 +4253,24 @@ phina.namespace(function() {
           font.setFontName(key);
           return font.load(path);
         },
+        json: function(key, path) {
+          var text = phina.asset.File();
+          return text.load({
+            path: path,
+            dataType: "json",
+          });
+        },
+        xml: function(key, path) {
+          var text = phina.asset.File();
+          return text.load({
+            path: path,
+            dataType: "xml",
+          });
+        },
+        text: function(key, path) {
+          var text = phina.asset.File();
+          return text.load(path);
+        }
       }
     }
 
@@ -4271,7 +4325,10 @@ phina.namespace(function() {
 
             if (params.dataType === 'json') {
               data = JSON.parse(data);
+            } else if (params.dataType === 'xml') {
+              data = (new DOMParser()).parseFromString(data, "text/xml");
             }
+            self.dataType = params.dataType;
 
             self.data = data;
             resolve(self);
@@ -4313,6 +4370,7 @@ phina.namespace(function() {
     },
 
     _load: function(resolve) {
+      var self = this;
       this.domElement = document.createElement('script');
       this.domElement.src = this.src;
 
@@ -4644,13 +4702,13 @@ phina.namespace(function() {
         var context = null;
 
         if (g.AudioContext) {
-            context = new AudioContext();
+          context = new AudioContext();
         }
         else if (g.webkitAudioContext) {
-            context = new webkitAudioContext();
+          context = new webkitAudioContext();
         }
         else if (g.mozAudioContext) {
-            context = new mozAudioContext();
+          context = new mozAudioContext();
         }
 
         this.context = context;
@@ -5092,7 +5150,7 @@ phina.namespace(function() {
       this._tempPosition = phina.geom.Vector2(0, 0);
 
       this.maxCacheNum = phina.input.Input.defaults.maxCacheNum;
-      this.minDistance = phina.input.Input.defaults.minDistance
+      this.minDistance = phina.input.Input.defaults.minDistance;
       this.maxDistance = phina.input.Input.defaults.maxDistance;
       this.cachePositions = [];
       this.flickVelocity = phina.geom.Vector2(0, 0);
@@ -5637,7 +5695,7 @@ phina.namespace(function() {
         (this.getKey("right")  << 1) | // 0010
         (this.getKey("down"));         // 0001
       
-      if (arrowBit != 0 && phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
+      if (arrowBit !== 0 && phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
         angle = phina.input.Keyboard.ARROW_BIT_TO_ANGLE_TABLE[arrowBit];
       }
       
@@ -6232,7 +6290,7 @@ phina.namespace(function() {
         button = phina.input.Gamepad.BUTTON_CODE[button];
       }
       if (this.buttons[button]) {
-        return this.buttons[button].up
+        return this.buttons[button].up;
       } else {
         return false;
       }
@@ -6249,7 +6307,7 @@ phina.namespace(function() {
         (this.getKey('right') << 1) | // 0010
         (this.getKey('down')); // 0001
 
-      if (arrowBit != 0 && ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
+      if (arrowBit !== 0 && ARROW_BIT_TO_ANGLE_TABLE.hasOwnProperty(arrowBit)) {
         angle = ARROW_BIT_TO_ANGLE_TABLE[arrowBit];
       }
 
@@ -6495,7 +6553,7 @@ phina.namespace(function() {
       this.rotation       = phina.geom.Vector3(0, 0, 0);
       this.orientation    = phina.geom.Vector3(0, 0, 0);
 
-      window.addEventListener("devicemotion", function(e) {
+      phina.global.addEventListener("devicemotion", function(e) {
         var acceleration = self.acceleration;
         var gravity = self.gravity;
         var rotation = self.rotation;
@@ -6517,7 +6575,7 @@ phina.namespace(function() {
         }
       });
       
-      window.addEventListener("deviceorientation", function(e) {
+      phina.global.addEventListener("deviceorientation", function(e) {
         var orientation = self.orientation;
         orientation.alpha   = e.alpha;  // z(0~360)
         orientation.beta    = e.beta;   // x(-180~180)
@@ -6655,7 +6713,7 @@ phina.namespace(function() {
 
     check: function(root) {
       if (!this._enable) return ;
-      this._checkElement(root)
+      this._checkElement(root);
     },
 
     _checkElement: function(element) {
@@ -8569,7 +8627,7 @@ phina.namespace(function() {
 
       // リサイズ時のリスナとして登録しておく
       if (isEver) {
-        window.addEventListener("resize", _fitFunc, false);
+        phina.global.addEventListener("resize", _fitFunc, false);
       }
     },
 
@@ -8907,7 +8965,7 @@ phina.namespace(function() {
      */
     polygon: function(x, y, size, sides, offsetAngle) {
       var radDiv = (Math.PI*2)/sides;
-      var radOffset = (offsetAngle!=undefined) ? offsetAngle*Math.PI/180 : -Math.PI/2;
+      var radOffset = (offsetAngle!==undefined) ? offsetAngle*Math.PI/180 : -Math.PI/2;
       
       this.moveTo(x + Math.cos(radOffset)*size, y + Math.sin(radOffset)*size);
       for (var i=1; i<sides; ++i) {
@@ -10401,7 +10459,7 @@ phina.namespace(function() {
       }
 
       if (options.fps !== undefined) {
-        this.fps = options.fps
+        this.fps = options.fps;
       }
 
       this.mouse = phina.input.Mouse(this.domElement);
@@ -10742,7 +10800,7 @@ phina.namespace(function() {
      * 空っぽかをチェック
      */
     isEmpty: function() {
-      return this.value == 0;
+      return this.value === 0;
     },
 
     setValue: function(value) {
@@ -10942,15 +11000,42 @@ phina.namespace(function() {
       return this;
     },
 
+
+    replaceScene: function(label, args) {
+      var index = (typeof label == 'string') ? this.labelToIndex(label) : label||0;
+
+      var data = this.scenes[index];
+
+      if (!data) {
+        console.error('phina.js error: `{0}` に対応するシーンがありません.'.format(label));
+      }
+
+      var klass = phina.using(data.className);
+      if (typeof klass !== 'function') {
+        klass = phina.using('phina.game.' + data.className);
+      }
+
+      var initArguments = {}.$extend(data.arguments, args);
+      var scene = klass.call(null, initArguments);
+      if (!scene.nextLabel) {
+          scene.nextLabel = data.nextLabel;
+      }
+      if (!scene.nextArguments) {
+          scene.nextArguments = data.nextArguments;
+      }
+      this.app.replaceScene(scene);
+
+      this.sceneIndex = index;
+
+      return this;
+    },
+
+
     /**
      * index(or label) のシーンへ飛ぶ
      */
     gotoScene: function(label, args) {
       var index = (typeof label == 'string') ? this.labelToIndex(label) : label||0;
-
-      // イベント発火
-
-      this.flare('prepare');
 
       var data = this.scenes[index];
 
@@ -10974,12 +11059,6 @@ phina.namespace(function() {
       this.app.pushScene(scene);
 
       this.sceneIndex = index;
-      this.currentScene = scene;
-
-      // イベント発火
-      this.flare('goto', {
-        scene: scene,
-      });
 
       return this;
     },
@@ -11517,6 +11596,68 @@ phina.namespace(function() {
 
 });
 
+/*
+ * PauseScene
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.game.PauseScene
+   *
+   */
+  phina.define('phina.game.PauseScene', {
+    superClass: 'phina.display.CanvasScene',
+    /**
+     * @constructor
+     */
+    init: function(params) {
+      this.superInit(params);
+
+      params = ({}).$safe(params, phina.game.PauseScene.defaults);
+
+      this.backgroundColor = params.backgroundColor;
+
+      this.fromJSON({
+        children: {
+          text: {
+            className: 'phina.display.Label',
+            arguments: {
+              text: 'Pause',
+              fill: params.fontColor,
+              stroke: null,
+              fontSize: 48,
+            },
+            x: this.gridX.center(),
+            y: this.gridY.center(),
+          },
+        }
+      });
+
+      if (params.exitType === 'touch') {
+        this.on('pointend', function() {
+          this.exit();
+        });
+      }
+    },
+
+    _static: {
+      defaults: {
+        width: 640,
+        height: 960,
+
+        fontColor: 'white',
+        backgroundColor: 'hsla(0, 0%, 0%, 0.85)',
+
+        exitType: 'touch',
+      },
+    },
+
+  });
+
+});
+
 phina.namespace(function() {
 
   /**
@@ -11537,12 +11678,6 @@ phina.namespace(function() {
 
       var scenes = options.scenes || [
         {
-          className: 'LoadingScene',
-          label: 'loading',
-          nextLabel: options.startLabel,
-        },
-
-        {
           className: 'SplashScene',
           label: 'splash',
           nextLabel: 'title',
@@ -11562,11 +11697,6 @@ phina.namespace(function() {
           className: 'ResultScene',
           label: 'result',
           nextLabel: 'title',
-        },
-
-        {
-          className: 'PauseScene',
-          label: 'pause',
         },
       ];
 
@@ -11590,6 +11720,37 @@ phina.namespace(function() {
       else {
         this.replaceScene(scene);
       }
+
+      // 自動でポーズする
+      if (options.autoPause) {
+        this.on('blur', function() {
+          var pauseScene = phina.game.PauseScene();
+          this.pushScene(pauseScene);
+        });
+      }
+    },
+
+    enableDebugger: function() {
+      if (this.gui) return ;
+
+      this.enableDatGUI(function(gui) {
+        var f = gui.addFolder('scenes');
+        var funcs = {};
+        this.rootScene.scenes.each(function(scene) {
+          funcs[scene.label] = function() {
+            this.rootScene.replaceScene(scene.label);
+            console.log(this._scenes.length);
+          }.bind(this);
+          return scene;
+        }, this);
+
+        funcs.forIn(function(key, value) {
+          f.add(funcs, key);
+        });
+        f.open();
+
+        this.gui = gui;
+      }.bind(this));
     },
   });
 
@@ -11684,7 +11845,7 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
-  var BASE_URL = 'http://'
+  var BASE_URL = 'http://';
 
   /**
    * @class phina.social.Twitter
