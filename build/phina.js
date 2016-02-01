@@ -4407,7 +4407,7 @@ phina.namespace(function() {
 
       var isLocal = (location.protocol == 'file:');
       if ( !isLocal && !(/^data:/.test(this.src)) ) {
-        this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
+        // this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
       }
 
       this.domElement.src = this.src;
@@ -11473,6 +11473,7 @@ phina.namespace(function() {
         if (options.exitType === 'auto') {
           this.app.popScene();
         }
+        this.flare('loaded');
       }.bind(this);
 
       loader.load(options.assets);
@@ -11710,15 +11711,25 @@ phina.namespace(function() {
       });
 
       if (options.assets) {
-        var loading = LoadingScene(options);
+        var loadingOptions = ({}).$extend(options, {
+          exitType: '',
+        });
+        var loading = LoadingScene(loadingOptions);
         this.replaceScene(loading);
 
-        loading.onexit = function() {
+        loading.onloaded = function() {
           this.replaceScene(scene);
+          if (options.debug) {
+            this._enableDebugger();
+          }
         }.bind(this);
+
       }
       else {
         this.replaceScene(scene);
+        if (options.debug) {
+          this._enableDebugger();
+        }
       }
 
       // 自動でポーズする
@@ -11730,7 +11741,7 @@ phina.namespace(function() {
       }
     },
 
-    enableDebugger: function() {
+    _enableDebugger: function() {
       if (this.gui) return ;
 
       this.enableDatGUI(function(gui) {
