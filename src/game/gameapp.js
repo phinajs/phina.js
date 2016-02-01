@@ -18,12 +18,6 @@ phina.namespace(function() {
 
       var scenes = options.scenes || [
         {
-          className: 'LoadingScene',
-          label: 'loading',
-          nextLabel: options.startLabel,
-        },
-
-        {
           className: 'SplashScene',
           label: 'splash',
           nextLabel: 'title',
@@ -43,11 +37,6 @@ phina.namespace(function() {
           className: 'ResultScene',
           label: 'result',
           nextLabel: 'title',
-        },
-
-        {
-          className: 'PauseScene',
-          label: 'pause',
         },
       ];
 
@@ -71,6 +60,37 @@ phina.namespace(function() {
       else {
         this.replaceScene(scene);
       }
+
+      // 自動でポーズする
+      if (options.autoPause) {
+        this.on('blur', function() {
+          var pauseScene = phina.game.PauseScene();
+          this.pushScene(pauseScene);
+        });
+      }
+    },
+
+    enableDebugger: function() {
+      if (this.gui) return ;
+
+      this.enableDatGUI(function(gui) {
+        var f = gui.addFolder('scenes');
+        var funcs = {};
+        this.rootScene.scenes.each(function(scene) {
+          funcs[scene.label] = function() {
+            this.rootScene.replaceScene(scene.label);
+            console.log(this._scenes.length);
+          }.bind(this);
+          return scene;
+        }, this);
+
+        funcs.forIn(function(key, value) {
+          f.add(funcs, key);
+        });
+        f.open();
+
+        this.gui = gui;
+      }.bind(this));
     },
   });
 

@@ -349,9 +349,11 @@ phina.main(function() {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     backgroundColor: '#444',
+    autoPause: true,
   });
 
   app.enableStats();
+  app.enableDebugger();
 
   app.run();
 });

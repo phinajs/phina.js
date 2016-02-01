@@ -39,21 +39,6 @@ window.openStandalone = function() {
   var w = window.open(location.href);
 };
 
-window.onload = function() {
-  init();
-};
-
-var init = function() {
-  var app = phina.display.CanvasApp({
-    query:'#world',
-  });
-  var scene = MainScene();
-  app.replaceScene(scene);
-  app.run();
-
-  app.enableStats();
-};
-
 phina.define('MainScene', {
   superClass: 'phina.display.CanvasScene',
   init: function() {
@@ -64,6 +49,19 @@ phina.define('MainScene', {
 
 {{code}}
   },
+});
+
+
+phina.main(function() {
+  var app = phina.game.GameApp({
+    query:'#world',
+
+  });
+  var scene = MainScene();
+  app.replaceScene(scene);
+  app.run();
+
+  app.enableStats();
 });
 
 </script>
