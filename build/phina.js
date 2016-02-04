@@ -8415,11 +8415,13 @@ phina.namespace(function() {
     force: function(x, y) {
       this.velocity.x = x;
       this.velocity.y = y;
+      return this.target;
     },
 
     addForce: function(x, y) {
       this.velocity.x += x;
       this.velocity.y += y;
+      return this.target;
     },
   });
 
