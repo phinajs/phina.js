@@ -240,6 +240,8 @@ phina.namespace(function() {
     phina.forIn(function(key, value) {
       var ns = key;
 
+      if (typeof value !== 'object') return ;
+
       value.forIn(function(key, value) {
         // if (phina.global[key]) {
         //   console.log(ns, key);
