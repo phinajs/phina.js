@@ -1679,6 +1679,8 @@ phina.namespace(function() {
     phina.forIn(function(key, value) {
       var ns = key;
 
+      if (typeof value !== 'object') return ;
+
       value.forIn(function(key, value) {
         // if (phina.global[key]) {
         //   console.log(ns, key);
@@ -8393,8 +8395,8 @@ phina.namespace(function() {
     init: function(target) {
       this.superInit(target);
 
-      this.velocity = new phina.geom.Vector2(0, 0);
-      this.gravity = new phina.geom.Vector2(0, 0);
+      this.velocity = phina.geom.Vector2(0, 0);
+      this.gravity = phina.geom.Vector2(0, 0);
 
       this.friction = 1.0;
     },
@@ -8413,15 +8415,24 @@ phina.namespace(function() {
     },
 
     force: function(x, y) {
-      this.velocity.x = x;
-      this.velocity.y = y;
-      return this.target;
+      this.velocity.set(x, y);
+      return this;
     },
 
     addForce: function(x, y) {
       this.velocity.x += x;
       this.velocity.y += y;
-      return this.target;
+      return this;
+    },
+
+    setGravity: function(x, y) {
+      this.gravity.set(x, y);
+      return this;
+    },
+
+    setFriction: function(fr) {
+      this.friction = fr;
+      return this;
     },
   });
 
