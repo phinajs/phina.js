@@ -4739,6 +4739,15 @@ phina.namespace(function() {
       muteFlag: false,
       currentMusic: null,
 
+      play: function(name) {
+        var sound = phina.asset.AssetManager.get('sound', name);
+
+        sound.volume = this.getVolume();
+        sound.play();
+
+        return sound;
+      },
+
       stop: function() {
         // TODO: 
       },

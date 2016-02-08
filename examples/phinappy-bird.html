@@ -104,7 +104,7 @@ phina.define('MainScene', {
       }
 
       this.player.fly();
-      AssetManager.get('sound', 'touch').play();
+      SoundManager.play('touch');
     };
 
     this.player.onscreenout = this.hit.bind(this);
