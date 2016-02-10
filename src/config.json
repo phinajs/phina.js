@@ -68,6 +68,7 @@
     "display/shape.js",
     "display/sprite.js",
     "display/label.js",
+    "display/labelarea.js",
     "display/displayscene.js",
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
