@@ -48,7 +48,6 @@ phina.namespace(function() {
       }
 
       this._lineUpdate = false;
-      var s = performance.now();
       var lines = this._lines = (this.text + '').split('\n');
 
       if (this.width < 1) return lines;
@@ -97,7 +96,7 @@ phina.namespace(function() {
         }
 
       }
-      console.log(performance.now() - s, 'ms');
+
       return lines;
 
     },
