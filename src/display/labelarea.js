@@ -137,7 +137,7 @@ phina.namespace(function() {
 
       var end = (height / 2 - offsetY + lineSize * 2) / lineSize | 0;
       lines = lines.filter(function(line, i) {
-        return start < i && end > i;
+        return start <= i && end > i;
       });
 
       if (this.stroke) {
