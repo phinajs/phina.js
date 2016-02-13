@@ -67,6 +67,8 @@ phina.namespace(function() {
             breakFlag = false,
             char;
 
+        if (text === '') { continue;}
+
         while (true) {
           //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
 
