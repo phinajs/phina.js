@@ -4,7 +4,7 @@ phina.namespace(function() {
   var dummyContext = dummyCanvas.getContext('2d');
   var textWidthCache = {};
 
-  var LabelArea = phina.define('phina.display.LabelArea', {
+  var LabelArea = phina.define('phina.ui.LabelArea', {
     superClass: 'phina.display.Label',
 
     _lineUpdate: true,

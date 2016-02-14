@@ -68,7 +68,6 @@
     "display/shape.js",
     "display/sprite.js",
     "display/label.js",
-    "display/labelarea.js",
     "display/displayscene.js",
     "display/canvaslayer.js",
     "display/canvasrenderer.js",
@@ -80,6 +79,7 @@
 
     "ui/button.js",
     "ui/gauge.js",
+    "ui/labelarea.js",
 
     "game/managerscene.js",
     "game/splashscene.js",
