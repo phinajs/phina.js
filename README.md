@@ -17,6 +17,11 @@ http://phinajs.com
 
 ```
 <script src='https://rawgit.com/phi-jp/phina.js/v0.1.2/build/phina.js'></script>
+<script>
+phina.main(function() {
+  console.log(phina.VERSION) // show version
+});
+</script>
 ```
 
 ### Node.js
