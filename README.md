@@ -11,7 +11,24 @@ phina.js is game library.
 http://phinajs.com
 
 
-## Getting Started
+## Usage
+
+### Browser
+
+```
+<script src='https://rawgit.com/phi-jp/phina.js/v0.1.2/build/phina.js'></script>
+```
+
+### Node.js
+
+```
+var phina = require('phina.js');
+console.log(phina.VERSION) // show version
+```
+
+### Runstant
+
+Getting started
 
 [runstant](http://goo.gl/xgyU6f)
 
