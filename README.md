@@ -15,7 +15,7 @@ http://phinajs.com
 
 **Browser**
 
-```
+```html
 <script src='https://rawgit.com/phi-jp/phina.js/v0.1.2/build/phina.js'></script>
 <script>
 phina.main(function() {
@@ -26,7 +26,7 @@ phina.main(function() {
 
 **Node.js**
 
-```
+```js
 var phina = require('phina.js');
 console.log(phina.VERSION) // show version
 ```
