@@ -13,7 +13,7 @@ http://phinajs.com
 
 ## Usage
 
-### Browser
+**Browser**
 
 ```
 <script src='https://rawgit.com/phi-jp/phina.js/v0.1.2/build/phina.js'></script>
@@ -24,18 +24,16 @@ phina.main(function() {
 </script>
 ```
 
-### Node.js
+**Node.js**
 
 ```
 var phina = require('phina.js');
 console.log(phina.VERSION) // show version
 ```
 
-### Runstant
+**Runstant**
 
-Getting started
-
-[runstant](http://goo.gl/xgyU6f)
+[Getting started](http://goo.gl/xgyU6f)
 
 
 
