@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/phi-jp/phina.js/issues"
   },
-  "homepage": "https://github.com/phi-jp/phina.js",
+  "homepage": "http://phinajs.com",
   "devDependencies": {
     "grunt": "~0.4.1",
     "gulp": "^3.8.10",
