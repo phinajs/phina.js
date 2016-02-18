@@ -10237,7 +10237,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit();
 
-      params = (params || {}).$safe(phina.display.DisplayScene.default);
+      params = ({}).$safe(params, phina.display.DisplayScene.default);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
@@ -10296,15 +10296,17 @@ phina.namespace(function() {
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,
 
-    init: function(params) {
-      this.superInit(params);
+    init: function(options) {
+      this.superInit(options);
       this.canvas = phina.graphics.Canvas();
-      params = (params || {}).$safe({
+      options = ({}).$safe(options, {
         width: 640,
         height: 960,
       });
-      this.width = this.canvas.width  = params.width;
-      this.height = this.canvas.height = params.height;
+      this.width = this.canvas.width  = options.width;
+      this.height = this.canvas.height = options.height;
+      this.gridX = phina.util.Grid(options.width, 16);
+      this.gridY = phina.util.Grid(options.height, 16);
 
       this.renderer = phina.display.CanvasRenderer(this.canvas);
     },
@@ -10340,12 +10342,12 @@ phina.namespace(function() {
     /** 子供を 自分のCanvasRenderer で描画するか */
     renderChildBySelf: false,
 
-    init: function(params) {
+    init: function(options) {
       this.superInit();
 
       this.scene = new THREE.Scene();
 
-      this.camera = new THREE.PerspectiveCamera( 75, params.width / params.height, 1, 10000 );
+      this.camera = new THREE.PerspectiveCamera( 75, options.width / options.height, 1, 10000 );
       this.camera.position.z = 1000;
 
       this.light = new THREE.DirectionalLight( 0xffffff, 1 );
@@ -10354,7 +10356,7 @@ phina.namespace(function() {
 
       this.renderer = new THREE.WebGLRenderer();
       this.renderer.setClearColor( 0xf0f0f0 );
-      this.renderer.setSize( params.width, params.height );
+      this.renderer.setSize( options.width, options.height );
 
       this.on('enterframe', function() {
         this.renderer.render( this.scene, this.camera );
