@@ -7,8 +7,8 @@ phina.namespace(function() {
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.DisplayElement',
 
-    /** 子供を 自分のCanvasRenderer で描画するか */
-    renderChildBySelf: false,
+    /** 子供を 自分の CanvasRenderer で描画するか */
+    renderChildBySelf: true,
 
     init: function(options) {
       this.superInit(options);
@@ -54,7 +54,7 @@ phina.namespace(function() {
     renderer: null,
 
     /** 子供を 自分のCanvasRenderer で描画するか */
-    renderChildBySelf: false,
+    renderChildBySelf: true,
 
     init: function(options) {
       this.superInit();
