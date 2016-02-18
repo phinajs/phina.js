@@ -323,7 +323,7 @@ th.describe("display.Layer", function() {
   th.it('sample', function() {
     var SCREEN_WIDTH = 640;
     var SCREEN_HEIGHT = 960;
-    var layer = phina.display.Layer({
+    var layer = phina.display.CanvasLayer({
       width: 400,
       height: 400,
     }).addChildTo(this);
@@ -335,6 +335,8 @@ th.describe("display.Layer", function() {
     var circle = phina.display.CircleShape({
       radius: 150,
     }).addChildTo(layer);
+    circle.x = layer.gridX.center();
+    circle.y = layer.gridY.center();
   });
 });
 
@@ -349,6 +351,8 @@ th.describe("display.ThreeLayer", function() {
       width: SCREEN_WIDTH,
       height: SCREEN_HEIGHT,
     }).addChildTo(this);
+    layer.x = 320;
+    layer.y = 480;
 
     var geometry = new THREE.BoxGeometry( 20, 20, 20 );
 
