@@ -10,7 +10,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit();
 
-      params = (params || {}).$safe(phina.display.DisplayScene.default);
+      params = ({}).$safe(params, phina.display.DisplayScene.default);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
