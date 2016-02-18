@@ -11,27 +11,57 @@ phina.namespace(function() {
     renderChildBySelf: true,
 
     init: function(options) {
-      this.superInit(options);
-      this.canvas = phina.graphics.Canvas();
       options = ({}).$safe(options, {
         width: 640,
         height: 960,
       });
-      this.width = this.canvas.width  = options.width;
-      this.height = this.canvas.height = options.height;
+      this.superInit(options);
+      this.width = options.width;
+      this.height = options.height;
       this.gridX = phina.util.Grid(options.width, 16);
       this.gridY = phina.util.Grid(options.height, 16);
-
-      this.renderer = phina.display.CanvasRenderer(this.canvas);
     },
 
     draw: function(canvas) {
-      var temp = this._worldMatrix;
-      this._worldMatrix = null;
-      this.renderer.render(this);
-      this._worldMatrix = temp;
+      if (!this.domElement) return ;
 
-      var image = this.canvas.domElement;
+      var image = this.domElement;
+      canvas.context.drawImage(image,
+        0, 0, image.width, image.height,
+        -this.width*this.originX, -this.height*this.originY, this.width, this.height
+        );
+    },
+  });
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.display.Layer
+   */
+  phina.define('phina.display.CanvasLayer', {
+    superClass: 'phina.display.Layer',
+
+    init: function(options) {
+      this.superInit(options);
+      this.canvas = phina.graphics.Canvas();
+      this.canvas.width  = this.width;
+      this.canvas.height = this.height;
+
+      this.renderer = phina.display.CanvasRenderer(this.canvas);
+      this.domElement = this.canvas.domElement;
+
+      this.on('enterframe', function() {
+        var temp = this._worldMatrix;
+        this._worldMatrix = null;
+        this.renderer.render(this);
+        this._worldMatrix = temp;
+      });
+    },
+
+    draw: function(canvas) {
+      var image = this.domElement;
       canvas.context.drawImage(image,
         0, 0, image.width, image.height,
         -this.width*this.originX, -this.height*this.originY, this.width, this.height
@@ -46,18 +76,15 @@ phina.namespace(function() {
    * @class
    */
   phina.define('phina.display.ThreeLayer', {
-    superClass: 'phina.display.DisplayElement',
+    superClass: 'phina.display.Layer',
 
     scene: null,
     camera: null,
     light: null,
     renderer: null,
 
-    /** 子供を 自分のCanvasRenderer で描画するか */
-    renderChildBySelf: true,
-
     init: function(options) {
-      this.superInit();
+      this.superInit(options);
 
       this.scene = new THREE.Scene();
 
@@ -75,11 +102,8 @@ phina.namespace(function() {
       this.on('enterframe', function() {
         this.renderer.render( this.scene, this.camera );
       });
-    },
 
-    draw: function(canvas) {
-      var domElement = this.renderer.domElement;
-      canvas.context.drawImage(domElement, 0, 0, domElement.width, domElement.height);
+      this.domElement = this.renderer.domElement;
     },
   });
 });
