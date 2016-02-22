@@ -79,6 +79,7 @@
 
     "ui/button.js",
     "ui/gauge.js",
+    "ui/labelarea.js",
 
     "game/managerscene.js",
     "game/splashscene.js",
