@@ -47,13 +47,20 @@ phina.namespace(function() {
       return this.height + this.padding*2;
     },
 
+    calcCanvasSize: function () {
+      return {
+        width: this.calcCanvasWidth(),
+        height: this.calcCanvasHeight(),
+      };
+    },
+
     isStrokable: function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function() {
-      this.canvas.width = this.calcCanvasWidth();
-      this.canvas.height= this.calcCanvasHeight();
+    prerender: function () {
+      var size = this.calcCanvasSize();
+      this.canvas.setSize(size.width, size.height);
     },
 
     render: function(canvas) {
