@@ -80,14 +80,8 @@ phina.namespace(function() {
 
       var index = anim.frames[this.currentFrameIndex];
       var frame = this.ss.getFrame(index);
-      var target = this.target;
+      this.target.srcRect.set(frame.x, frame.y, frame.width, frame.height);
 
-      target.srcRect.x = frame.x;
-      target.srcRect.y = frame.y;
-      target.srcRect.width = frame.width;
-      target.srcRect.height = frame.height;
-      target.width = frame.width;
-      target.height = frame.height;
     },
   });
 });
