@@ -58,9 +58,9 @@ phina.namespace(function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function () {
+    prerender: function (canvas) {
       var size = this.calcCanvasSize();
-      this.canvas.setSize(size.width, size.height);
+      canvas.setSize(size.width, size.height);
       canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
     },
