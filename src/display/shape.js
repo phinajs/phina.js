@@ -61,6 +61,8 @@ phina.namespace(function() {
     prerender: function () {
       var size = this.calcCanvasSize();
       this.canvas.setSize(size.width, size.height);
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
     },
 
     render: function(canvas) {
@@ -148,8 +150,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -191,8 +191,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.shadow) {
         canvas.context.shadowColor = this.shadow;
@@ -240,8 +238,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -284,8 +280,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -331,8 +325,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -378,8 +370,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;

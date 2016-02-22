@@ -40,8 +40,6 @@ phina.namespace(function() {
       });
     },
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       var context = canvas.context;
 

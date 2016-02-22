@@ -97,9 +97,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
-
       var rate = this.getRate();
 
       // draw color
@@ -115,7 +112,7 @@ phina.namespace(function() {
       canvas.context.restore();
 
       // draw stroke
-      if (this.stroke) {
+      if (this.isStrokable()) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
         this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
