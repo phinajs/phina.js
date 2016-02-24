@@ -149,6 +149,25 @@ th.describe("accessory.Draggable", function() {
       this.back();
     };
   });
+
+  th.it('lock_unlock', function() {
+
+    (32).times(function(i) {
+      var shape = phina.display.CircleShape().addChildTo(this);
+      shape.x = 100 + i*10;
+      shape.y = 100 + i*10;
+      shape.draggable.enable();
+
+      shape.ondragstart = function() {
+        phina.accessory.Draggable.lock();
+      };
+
+      shape.draggable.ondragend = function() {
+        phina.accessory.Draggable.unlock();
+        // this.back();
+      };
+    }, this);
+  });
 });
 
 th.describe("accessory.Flickable", function() {
