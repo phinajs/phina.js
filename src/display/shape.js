@@ -481,18 +481,21 @@ phina.namespace(function () {
       canvas.lineCap = this.lineCap;
       canvas.lineJoin = this.lineJoin;
       var paths = this.paths;
-      if (this.isStrokable() && paths.length > 1) {
+      if (paths.length > 1) {
         var c = canvas.context;
         var p = paths[0];
-        c.lineWidth = this.strokeWidth;
-        c.strokeStyle = this.stroke;
         c.beginPath();
         c.moveTo(p.x, p.y);
         for (var i = 1, len = paths.length; i < len; ++i) {
           p = paths[i];
           c.lineTo(p.x, p.y);
         }
-        c.stroke();
+
+        if (this.isStrokable()) {
+          c.lineWidth = this.strokeWidth;
+          c.strokeStyle = this.stroke;
+          c.stroke();
+        }
 
         if (this.fill) {
           c.fillStyle = this.fill;
