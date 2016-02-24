@@ -4513,7 +4513,7 @@ phina.namespace(function() {
 
     stop: function() {
       // stop
-      this.source.stop(0);
+      this.source && this.source.stop(0);
 
       return this;
     },
