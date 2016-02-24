@@ -145,8 +145,8 @@ th.describe("accessory.Draggable", function() {
 
     shape.draggable.enable();
 
-    shape.draggable.ondragend = function() {
-      this.back();
+    shape.ondragend = function() {
+      this.draggable.back(500);
     };
   });
 
