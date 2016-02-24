@@ -392,7 +392,7 @@ phina.namespace(function() {
 
 phina.namespace(function () {
 
-  var PathShape = phina.define('PathShape', {
+  var PathShape = phina.define('phina.display.PathShape', {
     superClass: 'phina.display.Shape',
     paths: null,
 
@@ -400,7 +400,9 @@ phina.namespace(function () {
       options = ({}).$safe(options || {}, PathShape.defaults);
 
       this.superInit(options);
-      this.paths = [];
+      this.paths = options.paths || [];
+      this.lineJoin = options.lineJoin;
+      this.lineCap = options.lineCap;
     },
     
     setPaths: function (paths) {
