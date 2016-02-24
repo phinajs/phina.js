@@ -389,3 +389,133 @@ phina.namespace(function() {
   });
 
 });
+
+phina.namespace(function () {
+
+  var PathShape = phina.define('PathShape', {
+    superClass: 'phina.display.Shape',
+    paths: null,
+
+    init: function (options) {
+      options = ({}).$safe(options || {}, PathShape.defaults);
+
+      this.superInit(options);
+      this.paths = [];
+    },
+    
+    setPaths: function (paths) {
+      this.paths = paths;
+      this._dirtyDraw = true;
+      return this;
+    },
+
+    clearColor: function () {
+      this.paths.length = 0;
+      this._dirtyDraw = true;
+      return this;
+    },
+
+    addPaths: function (paths) {
+      [].push.apply(this.paths, paths);
+      this._dirtyDraw = true;
+      return this;
+    },
+
+    addPath: function (x, y) {
+      this.paths.push(phina.geom.Vector2(x, y));
+      this._dirtyDraw = true;
+      return this;
+    },
+
+    getPath: function (i) {
+      return this.paths[i];
+    },
+
+    getPaths: function () {
+      return this.paths;
+    },
+
+    changePath: function (i, x, y) {
+      this.paths[i].set(x, y);
+      this._dirtyDraw = true;
+      return this;
+    },
+
+    calcCanvasSize: function () {
+      var paths = this.paths;
+      if (paths.length === 0) {
+        return {
+          width: 0,
+          height:0,
+        };
+      }
+      var maxX = -Infinity;
+      var maxY = -Infinity
+      var minX = Infinity;
+      var minY = Infinity;
+
+      for (var i = 0, len = paths.length; i < len; ++i) {
+        var path = paths[i];
+        if (maxX < path.x) { maxX = path.x; }
+        if (minX > path.x) { minX = path.x; }
+        if (maxY < path.y) { maxY = path.y; }
+        if (minY > path.y) { minY = path.y; }
+      }
+      return {
+        width: Math.max(Math.abs(maxX), Math.abs(minX)) * 2 + this.padding * 2,
+        height: Math.max(Math.abs(maxY), Math.abs(minY)) * 2 + this.padding * 2,
+      };
+    },
+
+    calcCanvasWidth: function () {
+      return this.calcCanvasSize().width;
+    },
+
+    calcCanvasHeight: function () {
+      return this.calcCanvasSize().height;
+    },
+
+    render: function (canvas) {
+      canvas.lineCap = this.lineCap;
+      canvas.lineJoin = this.lineJoin;
+      var paths = this.paths;
+      if (this.isStrokable() && paths.length > 1) {
+        var c = canvas.context;
+        var p = paths[0];
+        c.lineWidth = this.strokeWidth;
+        c.strokeStyle = this.stroke;
+        c.beginPath();
+        c.moveTo(p.x, p.y);
+        for (var i = 1, len = paths.length; i < len; ++i) {
+          p = paths[i];
+          c.lineTo(p.x, p.y);
+        }
+        c.stroke();
+
+        if (this.fill) {
+          c.fillStyle = this.fill;
+          c.fill();
+        }
+      }
+
+    },
+
+    _defined: function () {
+      phina.display.Shape.watchRenderProperties.call(this, [
+        'lineCap',
+        'lineJoin'
+      ]);
+    },
+
+    _static: {
+      defaults: {
+        fill: false,
+        backgroundColor: 'transparent',
+        lineCap: 'round',
+        lineJoin:'round',
+      },
+    }
+
+  });
+
+});
