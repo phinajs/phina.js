@@ -8159,17 +8159,28 @@ phina.namespace(function() {
       });
     },
 
-    back: function() {
-      // TODO: 
-      this.target.x = this.initialPosition.x;
-      this.target.y = this.initialPosition.y;
-      // this.setInteractive(false);
-      // this.tweener.clear()
-      //     .move(this.initialX, this.initialY, 500, "easeOutElastic")
-      //     .call(function () {
-      //         this.setInteractive(true);
-      //         this.fire(tm.event.Event("backend"));
-      //     }.bind(this));
+    back: function(time, easing) {
+      if (time) {
+        var t = this.target;
+        t.setInteractive(false);
+        var tweener = phina.accessory.Tweener().attachTo(t);
+        tweener
+          .to({
+            x: this.initialPosition.x,
+            y: this.initialPosition.y,
+          }, time, easing || 'easeOutElastic')
+          .call(function() {
+            tweener.remove();
+
+            t.setInteractive(true);
+            this.flare('backend');
+          }, this);
+      }
+      else {
+        this.target.x = this.initialPosition.x;
+        this.target.y = this.initialPosition.y;
+        this.flare('backend');
+      }
     },
 
     enable: function() {
