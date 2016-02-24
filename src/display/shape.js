@@ -47,13 +47,22 @@ phina.namespace(function() {
       return this.height + this.padding*2;
     },
 
+    calcCanvasSize: function () {
+      return {
+        width: this.calcCanvasWidth(),
+        height: this.calcCanvasHeight(),
+      };
+    },
+
     isStrokable: function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function() {
-      this.canvas.width = this.calcCanvasWidth();
-      this.canvas.height= this.calcCanvasHeight();
+    prerender: function (canvas) {
+      var size = this.calcCanvasSize();
+      canvas.setSize(size.width, size.height);
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
     },
 
     render: function(canvas) {
@@ -141,8 +150,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -184,8 +191,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.shadow) {
         canvas.context.shadowColor = this.shadow;
@@ -233,8 +238,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -277,8 +280,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -324,8 +325,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;
@@ -371,8 +370,6 @@ phina.namespace(function() {
     },
 
     render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       if (this.fill) {
         canvas.context.fillStyle = this.fill;

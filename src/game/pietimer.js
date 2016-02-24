@@ -44,17 +44,21 @@ phina.namespace(function() {
       this.starting = false;
     },
 
-    render: function() {
-      this.canvas.width = this.radius*2 + this.padding*2;
-      this.canvas.height= this.radius*2 + this.padding*2;
-      this.canvas.clearColor(this.backgroundColor);
+    calcCanvasWidth: function () {
+      return this.radius * 2 + this.padding * 2;
+    },
 
-      this.canvas.transformCenter();
+    calcCanvasHeight: function () {
+      return this.radius * 2 + this.padding * 2;
+    },
+
+
+    render: function() {
 
       var rate = this.time / this.limit;
       var end = (Math.PI*2)*rate;
 
-      if (this.stroke) {
+      if (this.isStrokable()) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
         // this.canvas.strokePie(0, 0, this.radius, 0, end);

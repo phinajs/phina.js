@@ -76,8 +76,6 @@ phina.namespace(function() {
       var text = this.text + '';
       var lines = this._lines;
 
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       context.font = this.font;
       context.textAlign = this.align;

@@ -1,5 +1,6 @@
 
 phina.namespace(function() {
+
   var dummyCanvas = document.createElement('canvas');
   var dummyContext = dummyCanvas.getContext('2d');
   var textWidthCache = {};
@@ -55,8 +56,8 @@ phina.namespace(function() {
       var rowWidth = this.width;
       dummyContext.font = this.font;
 
-      //‚Ç‚Ì‚Ö‚ñ‚Å‰üs‚³‚ê‚é‚©–Ú¯‚Â‚¯‚Æ‚­
-      var index = rowWidth / dummyContext.measureText('‚ ').width | 0;
+      //ã©ã®ã¸ã‚“ã§æ”¹è¡Œã•ã‚Œã‚‹ã‹ç›®æ˜Ÿã¤ã‘ã¨ã
+      var index = rowWidth / dummyContext.measureText('ã‚').width | 0;
 
       var cache = this.getTextWidthCache();
       for (var i = lines.length; i--;) {
@@ -91,7 +92,7 @@ phina.namespace(function() {
           if (breakFlag) {
             break;
           }
-          //index ‚ª 0 ‚Ì‚Æ‚«‚Í–³ŒÀƒ‹[ƒv‚É‚È‚é‚Ì‚ÅA1‚É‚µ‚Æ‚­
+          //index ãŒ 0 ã®ã¨ãã¯ç„¡é™ãƒ«ãƒ¼ãƒ—ã«ãªã‚‹ã®ã§ã€1ã«ã—ã¨ã
           if (index === 0) index = 1;
 
           lines.splice(i + j++, 1, text.substring(0, index), text = text.substring(index, len));
@@ -111,8 +112,6 @@ phina.namespace(function() {
       var length = lines.length;
       var width = this.width;
       var height = this.height;
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
 
       context.font = this.font;
       context.textAlign = this.align;
