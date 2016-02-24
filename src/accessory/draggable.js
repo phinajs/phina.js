@@ -31,6 +31,7 @@ phina.namespace(function() {
           self.initialPosition.x = this.x;
           self.initialPosition.y = this.y;
           self.flare('dragstart');
+          this.flare('dragstart');
         });
         this.target.on('pointmove', function(e) {
           if (!this._dragging) return ;
@@ -38,6 +39,7 @@ phina.namespace(function() {
           this.x += e.pointer.dx;
           this.y += e.pointer.dy;
           self.flare('drag');
+          this.flare('drag');
         });
 
         this.target.on('pointend', function(e) {
@@ -45,6 +47,7 @@ phina.namespace(function() {
 
           this._dragging = false;
           self.flare('dragend');
+          this.flare('dragend');
         });
       });
     },
