@@ -6761,17 +6761,20 @@ phina.namespace(function() {
       var overFlag = obj.hitTest(p.x, p.y);
       obj._overFlags[p.id] = overFlag;
 
+      var e = {
+        pointer: p,
+        interactive: this,
+      };
+
       if (!prevOverFlag && overFlag) {
-        obj.flare('pointover', {
-          pointer: p,
-        });
+        obj.flare('pointover', e);
 
         if (obj.boundingType && obj.boundingType !== 'none') {
           this.app.domElement.style.cursor = this.cursor.hover;
         }
       }
       if (prevOverFlag && !overFlag) {
-        obj.flare('pointout');
+        obj.flare('pointout', e);
 
         this.app.domElement.style.cursor = this.cursor.normal;
       }
@@ -6779,34 +6782,26 @@ phina.namespace(function() {
       if (overFlag) {
         if (p.getPointingStart()) {
           obj._touchFlags[p.id] = true;
-          obj.flare('pointstart', {
-            pointer: p,
-          });
+          obj.flare('pointstart', e);
           // クリックフラグを立てる
           obj._clicked = true;
         }
       }
 
       if (obj._touchFlags[p.id]) {
-        obj.flare('pointstay', {
-          pointer: p,
-        });
+        obj.flare('pointstay', e);
         if (p._moveFlag) {
-          obj.flare('pointmove', {
-            pointer: p,
-          });
+          obj.flare('pointmove', e);
         }
       }
 
       if (obj._touchFlags[p.id]===true && p.getPointingEnd()) {
         obj._touchFlags[p.id] = false;
-        obj.flare('pointend', {
-          pointer: p,
-        });
+        obj.flare('pointend', e);
 
         if (obj._overFlags[p.id]) {
           obj._overFlags[p.id] = false;
-          obj.flare('pointout');
+          obj.flare('pointout', e);
         }
       }
     },
