@@ -7643,15 +7643,17 @@ phina.namespace(function() {
       this.superInit();
     },
 
-    exit: function(params) {
+    exit: function(nextLabel, nextArguments) {
       if (!this.app) return ;
 
-      if (typeof params !== 'object') {
-        this.nextLabel = arguments[0];
-        this.nextArguments = arguments[1];
-      }
-      else if (params) {
-        this.nextArguments = params;
+      if (arguments.length > 0) {
+        if (typeof arguments[0] === 'object') {
+          nextLabel = arguments[0].nextLabel || this.nextLabel;
+          nextArguments = arguments[0];
+        }
+
+        this.nextLabel = nextLabel;
+        this.nextArguments = nextArguments;
       }
 
       this.app.popScene();
@@ -8340,6 +8342,7 @@ phina.namespace(function() {
       this.ss = phina.asset.AssetManager.get('spritesheet', ss);
       this.paused = true;
       this.finished = false;
+      this.fit = true;
     },
 
     update: function() {
@@ -8401,6 +8404,10 @@ phina.namespace(function() {
       var frame = this.ss.getFrame(index);
       this.target.srcRect.set(frame.x, frame.y, frame.width, frame.height);
 
+      if (this.fit) {
+        this.target.width = frame.width;
+        this.target.height = frame.height;
+      }
     },
   });
 });
