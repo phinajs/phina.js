@@ -8,15 +8,17 @@ phina.namespace(function() {
       this.superInit();
     },
 
-    exit: function(params) {
+    exit: function(nextLabel, nextArguments) {
       if (!this.app) return ;
 
-      if (typeof params !== 'object') {
-        this.nextLabel = arguments[0];
-        this.nextArguments = arguments[1];
-      }
-      else if (params) {
-        this.nextArguments = params;
+      if (arguments.length > 0) {
+        if (typeof arguments[0] === 'object') {
+          nextLabel = arguments[0].nextLabel || this.nextLabel;
+          nextArguments = arguments[0];
+        }
+
+        this.nextLabel = nextLabel;
+        this.nextArguments = nextArguments;
       }
 
       this.app.popScene();
