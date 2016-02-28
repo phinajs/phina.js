@@ -168,8 +168,8 @@ phina.namespace(function() {
     },
 
     stop: function() {
-      this.rewind();
       this.playing = false;
+      this.rewind();
       return this;
     },
 
