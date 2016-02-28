@@ -179,7 +179,6 @@ phina.namespace(function() {
     rewind: function() {
       this._update = this._updateTask;
       this._index = 0;
-      this.play();
       return this;
     },
 
