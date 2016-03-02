@@ -18,11 +18,11 @@ phina.namespace(function() {
     init: function(target) {
       this.superInit(target);
 
-      this._loop = false;
       this._init();
     },
 
     _init: function() {
+      this._loop = false;
       this._tasks = [];
       this._index = 0;
       this.playing = true;
@@ -179,7 +179,6 @@ phina.namespace(function() {
     rewind: function() {
       this._update = this._updateTask;
       this._index = 0;
-      this.play();
       return this;
     },
 
