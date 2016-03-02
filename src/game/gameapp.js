@@ -53,7 +53,7 @@ phina.namespace(function() {
         var loadingOptions = ({}).$extend(options, {
           exitType: '',
         });
-        var loading = LoadingScene(loadingOptions);
+        var loading = phina.game.LoadingScene(loadingOptions);
         this.replaceScene(loading);
 
         loading.onloaded = function() {
