@@ -6708,9 +6708,10 @@ phina.namespace(function() {
         hover: 'pointer',
       };
 
-      this.app.domElement.addEventListener('mouseover', function() {
-        this.app.domElement.style.cursor = this.cursor.normal;
-      }.bind(this), false);
+      this._holds = [];
+      this.app.on('changescene', function() {
+        this._holds.clear();
+      }.bind(this));
     },
 
     enable: function() {
@@ -6723,6 +6724,14 @@ phina.namespace(function() {
     },
 
     check: function(root) {
+      // カーソルのスタイルを反映
+      if (this._holds.length > 0) {
+        this.app.domElement.style.cursor = this.cursor.hover;
+      }
+      else {
+        this.app.domElement.style.cursor = this.cursor.normal;
+      }
+
       if (!this._enable) return ;
       this._checkElement(root);
     },
@@ -6770,13 +6779,12 @@ phina.namespace(function() {
         obj.flare('pointover', e);
 
         if (obj.boundingType && obj.boundingType !== 'none') {
-          this.app.domElement.style.cursor = this.cursor.hover;
+          this._holds.push(obj);
         }
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout', e);
-
-        this.app.domElement.style.cursor = this.cursor.normal;
+        this._holds.erase(obj);
       }
 
       if (overFlag) {
@@ -6853,6 +6861,9 @@ phina.namespace(function() {
     },
 
     replaceScene: function(scene) {
+      this.flare('replace');
+      this.flare('changescene');
+
       var e = null;
       if (this.currentScene) {
         this.currentScene.app = null;
@@ -6868,6 +6879,7 @@ phina.namespace(function() {
 
     pushScene: function(scene) {
       this.flare('push');
+      this.flare('changescene');
 
       this.currentScene.flare('pause', {
         app: this,
@@ -6891,6 +6903,7 @@ phina.namespace(function() {
      */
     popScene: function() {
       this.flare('pop');
+      this.flare('changescene');
 
       var scene = this._scenes.pop();
       --this._sceneIndex;
@@ -7755,11 +7768,11 @@ phina.namespace(function() {
     init: function(target) {
       this.superInit(target);
 
-      this._loop = false;
       this._init();
     },
 
     _init: function() {
+      this._loop = false;
       this._tasks = [];
       this._index = 0;
       this.playing = true;
@@ -7916,7 +7929,6 @@ phina.namespace(function() {
     rewind: function() {
       this._update = this._updateTask;
       this._index = 0;
-      this.play();
       return this;
     },
 
@@ -12065,7 +12077,7 @@ phina.namespace(function() {
         var loadingOptions = ({}).$extend(options, {
           exitType: '',
         });
-        var loading = LoadingScene(loadingOptions);
+        var loading = phina.game.LoadingScene(loadingOptions);
         this.replaceScene(loading);
 
         loading.onloaded = function() {
@@ -12117,6 +12129,7 @@ phina.namespace(function() {
   });
 
 });
+
 phina.namespace(function() {
 
   /**
