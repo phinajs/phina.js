@@ -41,6 +41,9 @@ phina.namespace(function() {
     },
 
     replaceScene: function(scene) {
+      this.flare('replace');
+      this.flare('changescene');
+
       var e = null;
       if (this.currentScene) {
         this.currentScene.app = null;
@@ -56,6 +59,7 @@ phina.namespace(function() {
 
     pushScene: function(scene) {
       this.flare('push');
+      this.flare('changescene');
 
       this.currentScene.flare('pause', {
         app: this,
@@ -79,6 +83,7 @@ phina.namespace(function() {
      */
     popScene: function() {
       this.flare('pop');
+      this.flare('changescene');
 
       var scene = this._scenes.pop();
       --this._sceneIndex;

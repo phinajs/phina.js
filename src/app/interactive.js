@@ -11,9 +11,10 @@ phina.namespace(function() {
         hover: 'pointer',
       };
 
-      this.app.domElement.addEventListener('mouseover', function() {
-        this.app.domElement.style.cursor = this.cursor.normal;
-      }.bind(this), false);
+      this._holds = [];
+      this.app.on('changescene', function() {
+        this._holds.clear();
+      }.bind(this));
     },
 
     enable: function() {
@@ -26,6 +27,14 @@ phina.namespace(function() {
     },
 
     check: function(root) {
+      // カーソルのスタイルを反映
+      if (this._holds.length > 0) {
+        this.app.domElement.style.cursor = this.cursor.hover;
+      }
+      else {
+        this.app.domElement.style.cursor = this.cursor.normal;
+      }
+
       if (!this._enable) return ;
       this._checkElement(root);
     },
@@ -73,13 +82,12 @@ phina.namespace(function() {
         obj.flare('pointover', e);
 
         if (obj.boundingType && obj.boundingType !== 'none') {
-          this.app.domElement.style.cursor = this.cursor.hover;
+          this._holds.push(obj);
         }
       }
       if (prevOverFlag && !overFlag) {
         obj.flare('pointout', e);
-
-        this.app.domElement.style.cursor = this.cursor.normal;
+        this._holds.erase(obj);
       }
 
       if (overFlag) {
