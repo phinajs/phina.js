@@ -53,7 +53,7 @@ phina.namespace(function() {
     stop: function() {
       // stop
       if(this.source){
-        this.source.stop(0);
+        this.source.stop && this.source.stop(0);
         this.source = null;
       }
       return this;
