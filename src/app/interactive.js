@@ -6,6 +6,7 @@ phina.namespace(function() {
     init: function(app) {
       this.app = app;
       this._enable = true;
+      this.multiTouch = true;
       this.cursor = {
         normal: '',
         hover: 'pointer',
@@ -59,11 +60,16 @@ phina.namespace(function() {
     },
 
     _checkPoint: function(obj) {
-      this.app.pointers.forEach(function(p) {
-        if (p.id !== null) {
-          this.__checkPoint(obj, p);
-        }
-      }, this);
+      if (this.multiTouch) {
+        this.app.pointers.forEach(function(p) {
+          if (p.id !== null) {
+            this.__checkPoint(obj, p);
+          }
+        }, this);
+      }
+      else {
+        this.__checkPoint(obj, this.app.pointer);
+      }
     },
 
     __checkPoint: function(obj, p) {
