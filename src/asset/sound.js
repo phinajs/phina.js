@@ -52,7 +52,10 @@ phina.namespace(function() {
 
     stop: function() {
       // stop
-      this.source && this.source.stop(0);
+      if (this.source) {
+        this.source && this.source.stop(0);
+        this.source = null;
+      }
 
       return this;
     },
