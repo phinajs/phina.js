@@ -38,6 +38,15 @@ phina.namespace(function() {
       };
     },
 
+    clone: function () {
+      var image = this.domElement;
+      var canvas = phina.graphics.Canvas().setSize(image.width, image.height);
+      var t = phina.asset.Texture();
+      canvas.context.drawImage(image, 0, 0);
+      t.domElement = canvas.domElement;
+      return t;
+    },
+
     transmit: function(color) {
       // imagaオブジェクトをゲット
       var image = this.domElement;
@@ -65,6 +74,38 @@ phina.namespace(function() {
 
       this.domElement = canvas.domElement;
     },
+
+    filter: function (filters) {
+      if (!filters) {
+        return this;
+      }
+      if (!Array.isArray(filters)) {
+        filters = [filters];
+      }
+      var image = this.domElement;
+      var w = image.width;
+      var h = image.height;
+      var canvas = phina.graphics.Canvas().setSize(w, h);
+      var imageData = null;
+
+      canvas.context.drawImage(image, 0, 0);
+      imageData = canvas.context.getImageData(0, 0, w, h);
+      filters.forEach( function (fn) {
+        if (typeof fn == 'function') {
+          h.times( function (y) {
+            w.times( function (x) {
+              var i = (y * w + x) * 4;
+              var pixel = imageData.data.slice(i, i + 4);
+              fn(pixel, i, x, y, imageData);
+            });
+          });
+        }
+      });
+      canvas.context.putImageData(imageData, 0, 0);
+      this.domElement = canvas.domElement;
+      return this;
+    },
+
   });
 
 });
