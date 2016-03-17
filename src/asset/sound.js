@@ -4,11 +4,11 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Sound
-   *
+   * 
    */
   phina.define('phina.asset.Sound', {
     superClass: "phina.asset.Asset",
-
+    
     _loop: false,
     _loopStart: 0,
     _loopEnd: 0,
@@ -38,7 +38,7 @@ phina.namespace(function() {
       this.gainNode.connect(this.context.destination);
       // play
       this.source.start(0);
-
+      
       // check play end
       if (this.source.buffer) {
         var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
@@ -52,10 +52,11 @@ phina.namespace(function() {
 
     stop: function() {
       // stop
-      if(this.source){
+      if (this.source) {
         this.source.stop && this.source.stop(0);
         this.source = null;
       }
+
       return this;
     },
 
@@ -79,7 +80,7 @@ phina.namespace(function() {
       // Square wave is type = “square”
       // Sawtooth wave is type = “saw”
       // Triangle wave is type = “triangle”
-      // Custom wave is type = “custom”
+      // Custom wave is type = “custom” 
       oscillator.type = type || 'sine';
 
       this.source = oscillator;
@@ -263,3 +264,4 @@ phina.namespace(function() {
   });
 
 });
+
