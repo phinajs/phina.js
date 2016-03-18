@@ -1,0 +1,246 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Shooting | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+<style>
+canvas {
+  box-shadow: 0px 0px 4px 0px #aaa;
+}
+</style>
+
+<script src='../build/phina.js'></script>
+<script>
+
+phina.globalize();
+
+var SCREEN_WIDTH    = 640;
+var SCREEN_HEIGHT   = 960;
+var ASSETS = {
+  image: {
+    bg: '../assets/images/shooting/bg.png',
+    player: '../assets/images/shooting/player.png',
+    enemy: '../assets/images/shooting/enemy.png',
+    bullet: '../assets/images/shooting/bullet.png',
+    crash: '../assets/images/shooting/crash.png',
+  },
+};
+
+phina.define("MainScene", {
+  superClass: 'DisplayScene',
+
+  init: function(options) {
+    this.superInit(options);
+
+    this.bg = Background().addChildTo(this);
+
+    this.player = Player().addChildTo(this);
+    this.player.setPosition(this.gridX.center(), this.gridY.span(14));
+
+    this.bulletGroup = DisplayElement().addChildTo(this);
+    this.enemyGroup = DisplayElement().addChildTo(this);
+
+  },
+
+  // onclick: function() {
+  //   var c = Canvas();
+  //   c.setSize(512, 512);
+  //   var texture = AssetManager.get('image', 'crash');
+  //   c.drawImage(texture.domElement, 0, 0, 512, 512);
+  //   c.saveAsImage();
+  // },
+
+  update: function(app) {
+    var self = this;
+    var p = app.pointer;
+    if (p.getPointing()) {
+      this.player.x += p.dx;
+      this.player.y += p.dy;
+    }
+
+    if (app.frame % 10 === 0) {
+      var b = Bullet().addChildTo(this.bulletGroup);
+      b.x = this.player.x;
+      b.y = this.player.y;
+    }
+
+    if (app.frame % 30 === 0) {
+      var e = Enemy().addChildTo(this.enemyGroup);
+      e.x = Random.randint(0, this.gridX.width);
+      e.y = -50;
+    }
+
+    var bullets = this.bulletGroup.children;
+    var enemies = this.enemyGroup.children;
+
+    bullets.each(function(bullet) {
+      enemies.some(function(enemy) {
+        if (bullet.hitTestElement(enemy)) {
+          bullet.remove();
+          enemy.remove();
+          var crash = Crash().addChildTo(self);
+          crash.setPosition(enemy.x, enemy.y);
+          return true;
+        }
+      });
+    });
+  },
+
+  gameclear: function() {
+    // add clear bonus
+    var bonus = 2000;
+    this.score += bonus;
+
+    // add time bonus
+    var seconds = (this.time/1000).floor();
+    var bonusTime = Math.max(60*10-seconds, 0);
+    this.score += (bonusTime*10);
+
+    this.gameover();
+  },
+
+  gameover: function() {
+    this.exit({
+      score: this.score,
+    });
+  },
+
+  _accessor: {
+    score: {
+      get: function() {
+        return this._score;
+      },
+      set: function(v) {
+        this._score = v;
+        this.scoreLabel.text = v;
+      },
+    },
+  }
+
+});
+
+/*
+ * バックグラウンド
+ * 無限スクロール
+ */
+phina.define('Background', {
+  superClass: 'DisplayElement',
+
+  init: function() {
+    this.superInit();
+
+    this.bg0 = Sprite('bg', 640, 2064*2).addChildTo(this);
+    this.bg0.setOrigin(0, 0);
+    this.bg1 = Sprite('bg', 640, 2064*2).addChildTo(this);
+    this.bg1.setOrigin(0, 1);
+    this.bg1 = -this.bg1.height;
+    this.y = -this.bg0.height + SCREEN_HEIGHT;
+  },
+
+  update: function() {
+    this.y += 8;
+    if (this.y >= SCREEN_HEIGHT) {
+      this.y = -this.bg0.height + SCREEN_HEIGHT;
+    }
+  }
+});
+
+/*
+ * プレイヤー
+ */
+phina.define('Player', {
+  superClass: 'Sprite',
+
+  init: function() {
+    this.superInit('player', 64, 64);
+
+    this.frameIndex = 0;
+  },
+});
+
+/*
+ * 弾
+ */
+phina.define('Bullet', {
+  superClass: 'Sprite',
+
+  init: function() {
+    this.superInit('bullet', 16, 34);
+  },
+
+  update: function() {
+    this.y -= 32;
+
+    if (this.y < -20) {
+      this.remove();
+    }
+  },
+});
+
+/*
+ * 敵
+ */
+phina.define('Enemy', {
+  superClass: 'Sprite',
+
+  init: function() {
+    this.superInit('enemy');
+  },
+
+  update: function() {
+    this.y += 8;
+    if (this.y > (SCREEN_HEIGHT+100)) {
+      this.remove();
+    }
+  }
+});
+
+
+/*
+ * 敵
+ */
+phina.define('Crash', {
+  superClass: 'Sprite',
+
+  init: function() {
+    this.superInit('crash', 64, 64);
+    this.frameIndex = 0;
+
+    this.scale.set(2, 2);
+  },
+
+  update: function() {
+    this.frameIndex += 1;
+
+    if (this.frameIndex >= 60) {
+      this.remove();
+    }
+  }
+});
+
+
+phina.main(function() {
+  var app = GameApp({
+    title: 'Breakout',
+    startLabel: location.search.substr(1).toObject().scene || 'title',
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    assets: ASSETS,
+    backgroundColor: '#444',
+    autoPause: true,
+  });
+
+  app.enableStats();
+
+  app.run();
+});
+
+
+
+</script>
