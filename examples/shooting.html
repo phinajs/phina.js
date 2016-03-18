@@ -46,6 +46,12 @@ phina.define("MainScene", {
     this.bulletGroup = DisplayElement().addChildTo(this);
     this.enemyGroup = DisplayElement().addChildTo(this);
 
+    this.scoreLabel = Label().addChildTo(this);
+    this.scoreLabel.align = 'right';
+    this.scoreLabel.fill = 'white';
+    this.scoreLabel.x = this.gridX.span(15);
+    this.scoreLabel.y = this.gridY.span(1);
+    this.score = 0;
   },
 
   // onclick: function() {
@@ -79,6 +85,7 @@ phina.define("MainScene", {
     var bullets = this.bulletGroup.children;
     var enemies = this.enemyGroup.children;
 
+    // bullet and enemy
     bullets.each(function(bullet) {
       enemies.some(function(enemy) {
         if (bullet.hitTestElement(enemy)) {
@@ -86,9 +93,17 @@ phina.define("MainScene", {
           enemy.remove();
           var crash = Crash().addChildTo(self);
           crash.setPosition(enemy.x, enemy.y);
+          self.score += 10;
           return true;
         }
       });
+    });
+
+    // enemy and player
+    enemies.some(function(enemy) {
+      if (self.player.hitTestElement(enemy)) {
+        self.gameover();
+      }
     });
   },
 
@@ -227,7 +242,7 @@ phina.define('Crash', {
 
 phina.main(function() {
   var app = GameApp({
-    title: 'Breakout',
+    title: 'Shooting',
     startLabel: location.search.substr(1).toObject().scene || 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
