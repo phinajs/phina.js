@@ -28,6 +28,7 @@ var ASSETS = {
     player: '../assets/images/shooting/player.png',
     enemy: '../assets/images/shooting/enemy.png',
     bullet: '../assets/images/shooting/bullet.png',
+    enemy_bullet: '../assets/images/shooting/enemy_bullet.png',
     crash: '../assets/images/shooting/crash.png',
   },
 };
@@ -45,6 +46,7 @@ phina.define("MainScene", {
 
     this.bulletGroup = DisplayElement().addChildTo(this);
     this.enemyGroup = DisplayElement().addChildTo(this);
+    this.enemyBulletGroup = DisplayElement().addChildTo(this);
 
     this.scoreLabel = Label().addChildTo(this);
     this.scoreLabel.align = 'right';
@@ -56,9 +58,10 @@ phina.define("MainScene", {
 
   // onclick: function() {
   //   var c = Canvas();
-  //   c.setSize(512, 512);
-  //   var texture = AssetManager.get('image', 'crash');
-  //   c.drawImage(texture.domElement, 0, 0, 512, 512);
+  //   c.setSize(32, 32);
+
+  //   c.fillStyle = 'white';
+  //   c.fillCircle(16, 16, 16);
   //   c.saveAsImage();
   // },
 
@@ -77,13 +80,14 @@ phina.define("MainScene", {
     }
 
     if (app.frame % 30 === 0) {
-      var e = Enemy().addChildTo(this.enemyGroup);
-      e.x = Random.randint(0, this.gridX.width);
+      var e = Enemy(this.enemyBulletGroup).addChildTo(this.enemyGroup);
+      e.x = Random.randint(50, this.gridX.width-100);
       e.y = -50;
     }
 
     var bullets = this.bulletGroup.children;
     var enemies = this.enemyGroup.children;
+    var enemyBullets = this.enemyBulletGroup.children;
 
     // bullet and enemy
     bullets.each(function(bullet) {
@@ -105,6 +109,14 @@ phina.define("MainScene", {
         self.gameover();
       }
     });
+
+    // enemy bullet and player
+    enemyBullets.some(function(bullet) {
+      if (self.player.hitTest(bullet.x, bullet.y)) {
+        self.gameover();
+      }
+    });
+
   },
 
   gameclear: function() {
@@ -175,6 +187,8 @@ phina.define('Player', {
   init: function() {
     this.superInit('player', 64, 64);
 
+    this.boundingType = 'circle';
+
     this.frameIndex = 0;
   },
 });
@@ -204,21 +218,66 @@ phina.define('Bullet', {
 phina.define('Enemy', {
   superClass: 'Sprite',
 
-  init: function() {
+  init: function(bulletGroup) {
     this.superInit('enemy');
+
+    this.bulletGroup = bulletGroup;
+
+    this.tweener
+      .wait(2000)
+      .call(function() {
+        this.shot();
+      }, this)
+      .setLoop(true)
+      ;
   },
 
   update: function() {
-    this.y += 8;
+    this.y += 4;
     if (this.y > (SCREEN_HEIGHT+100)) {
       this.remove();
     }
-  }
+  },
+
+  shot: function() {
+    var n = 36;
+    (n).times(function(i) {
+      var angle = 360/n*i;
+      var v = Vector2().fromDegree(angle, 10);
+      var b = EnemyBullet(v).addChildTo(this.bulletGroup);
+
+      b.x = this.x;
+      b.y = this.y;
+    }, this);
+    console.log('hoge');
+  },
+});
+/*
+ * 敵の弾
+ */
+phina.define('EnemyBullet', {
+  superClass: 'Sprite',
+
+  init: function(v) {
+    this.superInit('enemy_bullet', 32, 32);
+    this.v = v;
+  },
+
+  update: function() {
+    this.x += this.v.x;
+    this.y += this.v.y;
+
+    if (this.right < 0 || this.left > SCREEN_WIDTH) {
+      this.remove();
+    }
+    else if (this.bottom < 0 || this.top > SCREEN_HEIGHT) {
+      this.remove();
+    }
+  },
 });
 
-
 /*
- * 敵
+ * クラッシュ
  */
 phina.define('Crash', {
   superClass: 'Sprite',
