@@ -8,7 +8,7 @@ th.describe("display.PlainElement", function() {
     elm.canvas.fillStyle = 'blue';
     elm.canvas.transformCenter();
     elm.canvas.clearColor('red');
-    elm.canvas.fillCircle(0, 0, 20);
+    elm.canvas.fillCircle(0, 0, 240);
 
     elm.x = 320;
     elm.y = 480;

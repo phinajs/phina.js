@@ -6,7 +6,7 @@ phina.namespace(function() {
    *
    */
   var Shape = phina.define('phina.display.Shape', {
-    superClass: 'phina.display.DisplayElement',
+    superClass: 'phina.display.PlainElement',
 
     init: function(options) {
       options = ({}).$safe(options, {
@@ -34,9 +34,16 @@ phina.namespace(function() {
       this.shadow = options.shadow;
       this.shadowBlur = options.shadowBlur;
 
-      this.canvas = phina.graphics.Canvas();
       this.watchDraw = true;
       this._dirtyDraw = true;
+
+      this.on('enterframe', function() {
+        // render
+        if (this.watchDraw && this._dirtyDraw === true) {
+          this.render(this.canvas);
+          this._dirtyDraw = false;
+        }
+      });
     },
 
     calcCanvasWidth: function() {
@@ -58,40 +65,45 @@ phina.namespace(function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function (canvas) {
+    render: function(canvas) {
+      var context = canvas.context;
+      // リサイズ
       var size = this.calcCanvasSize();
       canvas.setSize(size.width, size.height);
+      // クリアカラー
       canvas.clearColor(this.backgroundColor);
+      // 中心に座標を移動
       canvas.transformCenter();
-    },
 
-    render: function(canvas) {
-      canvas.clearColor(this.backgroundColor);
+      // 描画前処理
+      this.prerender(this.canvas);
 
-      return this;
-    },
-
-    draw: function(canvas) {
-      // render
-      if (this.watchDraw && this._dirtyDraw === true) {
-        this.prerender(this.canvas);
-        this.render(this.canvas);
-        this._dirtyDraw = false;
+      // ストローク描画
+      if (this.stroke) {
+        context.strokeStyle = this.stroke;
+        context.lineWidth = this.strokeWidth;
+        context.lineJoin = "round";
+        context.shadowBlur = 0;
+        this.renderStroke(canvas);
       }
 
-      var image = this.canvas.domElement;
-      var w = image.width;
-      var h = image.height;
+      // 塗りつぶし描画
+      if (this.fill) {
+        context.fillStyle = this.fill;
 
-      // var x = -this.width*this.originX - this.padding;
-      // var y = -this.height*this.originY - this.padding;
-      var x = -w*this.origin.x;
-      var y = -h*this.origin.y;
+        // shadow の on/off
+        if (this.shadow) {
+          context.shadowColor = this.shadow;
+          context.shadowBlur = this.shadowBlur;
+        }
+        else {
+          context.shadowBlur = 0;
+        }
 
-      canvas.context.drawImage(image,
-        0, 0, w, h,
-        x, y, w, h
-        );
+        this.renderFill(canvas);
+      }
+
+      return this;
     },
 
     _static: {
