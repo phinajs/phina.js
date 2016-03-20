@@ -447,8 +447,8 @@ phina.namespace(function () {
       var paths = this.paths;
       if (paths.length === 0) {
         return {
-          width: 0,
-          height:0,
+          width: this.padding * 2,
+          height:this.padding * 2,
         };
       }
       var maxX = -Infinity;
