@@ -96,27 +96,21 @@ phina.namespace(function() {
       return rate;
     },
 
-    render: function(canvas) {
-      var rate = this.getRate();
+    renderFill: function(canvas) {
+      canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    },
 
-      // draw color
-      if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-      // draw gauge
-      this.canvas.context.fillStyle = this.gaugeColor;
+    renderStroke: function(canvas) {
+      canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    },
+
+    postrender: function(canvas) {
+      var rate = this.getRate();
+      canvas.context.fillStyle = this.gaugeColor;
       canvas.context.save();
       canvas.context.clip();
-      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
+      canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
       canvas.context.restore();
-
-      // draw stroke
-      if (this.isStrokable()) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
     },
 
     _accessor: {

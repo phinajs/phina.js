@@ -58,9 +58,11 @@ th.describe('ui.Gauge', function() {
 
   th.it('style', function() {
     var gauge1 = phina.ui.Gauge({
-      backgroundColor: 'red',
-      color: 'white',
+      // backgroundColor: 'red',
+      fill: 'red',
+      stroke: 'green',
       gaugeColor: 'blue',
+      strokeWidth: 8,
     }).addChildTo(this);
     gauge1.position.set(this.gridX.center(), this.gridY.center(-2));
     gauge1.setValue(50);

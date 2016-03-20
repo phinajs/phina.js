@@ -68,6 +68,9 @@ phina.namespace(function() {
     prerender: function() {
 
     },
+    postrender: function() {
+
+    },
     renderFill: function() {
 
     },
@@ -112,6 +115,9 @@ phina.namespace(function() {
 
         this.renderFill(canvas);
       }
+
+      // 描画後処理
+      this.postrender(this.canvas);
 
       return this;
     },
