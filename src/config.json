@@ -65,6 +65,7 @@
     "graphics/canvasrecorder.js",
 
     "display/displayelement.js",
+    "display/plainelement.js",
     "display/shape.js",
     "display/sprite.js",
     "display/label.js",

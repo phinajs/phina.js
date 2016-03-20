@@ -1,3 +1,20 @@
+th.describe("display.PlainElement", function() {
+
+  th.it('init', function() {
+    var elm = phina.display.PlainElement({
+      width: 600,
+      height: 600,
+    }).addChildTo(this);
+    elm.canvas.fillStyle = 'blue';
+    elm.canvas.transformCenter();
+    elm.canvas.clearColor('red');
+    elm.canvas.fillCircle(0, 0, 20);
+
+    elm.x = 320;
+    elm.y = 480;
+  });
+});
+
 th.describe("display.Shape", function() {
 
   th.it('Shape', function() {
