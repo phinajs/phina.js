@@ -109,13 +109,13 @@ th.describe('ui.Gauge', function() {
 th.describe('ui.CircleGauge', function() {
 
   th.it('default', function() {
-    var label = phina.display.Label('full').addChildTo(this);
-    label.setPosition(this.gridX.center(), this.gridY.center(-2));
 
     var g1 = phina.ui.CircleGauge({
       anticlockwise: true,
     }).addChildTo(this);
     g1.position.set(this.gridX.center(), this.gridY.center(-2));
+    var label = phina.display.Label('full').addChildTo(this);
+    label.setPosition(this.gridX.center(), this.gridY.center(-2));
 
     this.onpointstart = function() {
       g1.value -= 10;

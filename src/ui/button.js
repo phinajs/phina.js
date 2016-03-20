@@ -39,23 +39,12 @@ phina.namespace(function() {
         this.flare('push');
       });
     },
-    render: function(canvas) {
+    prerender: function(canvas) {
+      canvas.roundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    },
 
+    postrender: function(canvas) {
       var context = canvas.context;
-
-      // fill
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-
-      // stroke
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-
       // text
       var font = "{fontSize}px {fontFamily}".format(this);
       context.font = font;
