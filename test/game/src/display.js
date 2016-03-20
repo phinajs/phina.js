@@ -86,7 +86,7 @@ th.describe("display.Shape", function() {
   });
 
   th.it('HeartShape', function() {
-    var shape = phina.display.HeartShape().addChildTo(this);
+    var shape = phina.display.HeartShape({strokeWidth:8}).addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(4));
   });
 
