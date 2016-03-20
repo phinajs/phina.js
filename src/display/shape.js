@@ -411,7 +411,7 @@ phina.namespace(function () {
       return this;
     },
 
-    clearColor: function () {
+    clear: function () {
       this.paths.length = 0;
       this._dirtyDraw = true;
       return this;
@@ -452,7 +452,7 @@ phina.namespace(function () {
         };
       }
       var maxX = -Infinity;
-      var maxY = -Infinity
+      var maxY = -Infinity;
       var minX = Infinity;
       var minY = Infinity;
 
