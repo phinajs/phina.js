@@ -96,12 +96,8 @@ phina.namespace(function() {
       return rate;
     },
 
-    renderFill: function(canvas) {
-      canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-    },
-
-    renderStroke: function(canvas) {
-      canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    prerender: function(canvas) {
+      canvas.roundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
     },
 
     postrender: function(canvas) {

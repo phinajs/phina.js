@@ -69,7 +69,7 @@ th.describe('ui.Gauge', function() {
 
     var gauge2 = phina.ui.Gauge({
       stroke: 'black',
-      color: '#aaa',
+      fill: 'white',
       gaugeColor: 'green',
       cornerRadius: 16,
     }).addChildTo(this);

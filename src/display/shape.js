@@ -65,17 +65,17 @@ phina.namespace(function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function() {
+    prerender: function(canvas) {
 
     },
-    postrender: function() {
+    postrender: function(canvas) {
 
     },
-    renderFill: function() {
-
+    renderFill: function(canvas) {
+      canvas.fill();
     },
-    renderStroke: function() {
-
+    renderStroke: function(canvas) {
+      canvas.stroke();
     },
 
     render: function(canvas) {
@@ -177,11 +177,8 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
     },
 
-    renderFill: function(canvas) {
-      canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-    },
-    renderStroke: function(canvas) {
-      canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    prerender: function(canvas) {
+      canvas.roundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
     },
 
     _defined: function() {
@@ -212,13 +209,9 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    renderFill: function(canvas) {
-      canvas.fillCircle(0, 0, this.radius);
+    prerender: function(canvas) {
+      canvas.circle(0, 0, this.radius);
     },
-    renderStroke: function(canvas) {
-      canvas.strokeCircle(0, 0, this.radius);
-    },
-
   });
 });
 
@@ -244,11 +237,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    renderFill: function(canvas) {
-      canvas.fillPolygon(0, 0, this.radius, 3);
-    },
-    renderStroke: function(canvas) {
-      canvas.strokePolygon(0, 0, this.radius, 3);
+    prerender: function(canvas) {
+      canvas.polygon(0, 0, this.radius, 3);
     },
 
   });
@@ -280,11 +270,8 @@ phina.namespace(function() {
       this.sideIndent = options.sideIndent;
     },
 
-    renderFill: function(canvas) {
-      canvas.fillStar(0, 0, this.radius, this.sides, this.sideIndent);
-    },
-    renderStroke: function(canvas) {
-      canvas.strokeStar(0, 0, this.radius, this.sides, this.sideIndent);
+    prerender: function(canvas) {
+      canvas.star(0, 0, this.radius, this.sides, this.sideIndent);
     },
 
     _defined: function() {
@@ -318,11 +305,8 @@ phina.namespace(function() {
       this.sides = options.sides;
     },
 
-    renderFill: function(canvas) {
-      canvas.fillPolygon(0, 0, this.radius, this.sides);
-    },
-    renderStroke: function(canvas) {
-      canvas.strokePolygon(0, 0, this.radius, this.sides);
+    prerender: function(canvas) {
+      canvas.polygon(0, 0, this.radius, this.sides);
     },
 
     _defined: function() {
@@ -356,11 +340,8 @@ phina.namespace(function() {
       this.cornerAngle = options.cornerAngle;
     },
 
-    renderFill: function(canvas) {
-      canvas.fillHeart(0, 0, this.radius, this.cornerAngle);
-    },
-    renderStroke: function(canvas) {
-      canvas.strokeHeart(0, 0, this.radius, this.cornerAngle);
+    prerender: function(canvas) {
+      canvas.heart(0, 0, this.radius, this.cornerAngle);
     },
 
     _defined: function() {
