@@ -131,8 +131,8 @@ phina.namespace(function() {
         offsetY = offsetY * height - length * lineSize + lineSize;
       }
 
-      offsetY += this.scrollY;
-      offsetX += this.scrollX;
+      offsetY -= this.scrollY;
+      offsetX -= this.scrollX;
       var start = (offsetY + height / 2) / -lineSize | 0;
       if (start < 0) { start = 0; }
 
