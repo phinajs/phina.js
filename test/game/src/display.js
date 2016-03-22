@@ -72,6 +72,37 @@ th.describe("display.Shape", function() {
     var shape = phina.display.HeartShape().addChildTo(this);
     shape.position.set(this.gridX.center(), this.gridY.span(4));
   });
+  
+  th.it('PathShape', function() {
+    var shapeStroke = phina.display.PathShape().addChildTo(this);
+    var shapeFill = phina.display.PathShape({
+      fill:'yellow',
+      stroke:'black',
+      strokeWidth:10,
+      padding:10,
+    }).addChildTo(this);
+    shapeStroke
+    .addPath(-50,-50)
+    .addPath(50,50)
+    .addPath(50,-50)
+    .addPath(-50,50)
+    .addPath(-50,-50);
+  
+    shapeStroke.setPosition(this.gridX.center(), this.gridY.center(-4));
+    
+    shapeFill.addPaths([
+      {x:-100,y:-100},
+      {x:100,y:-100},
+      {x:25,y:-25},
+      {x:75,y:25},
+      {x:-25,y:100},
+      {x:25,y:25},
+      {x:-50,y:-25},
+      {x:0,y:-75},
+      {x:-100,y:-100},
+    ]).setPosition(this.gridX.center(), this.gridY.center(4));
+    
+  });
 
   th.it('origin', function() {
     var shape = phina.display.CircleShape({
