@@ -217,21 +217,12 @@ phina.namespace(function() {
         bottom: 0.5,
       },
     },
-    _defined: function() {
-      var watch = phina.display.Shape.watchRenderProperty;
-      [
-        'verticalAlign',
-        'text',
-        'scroll',
-        'scrollX',
-        'scrollY'
-      ]
-      .forEach(function(p) {
-        watch.call(this, p);
-      }, this);
 
+    _defined: function() {
       var func = function(newVal, oldVal) {
-        this._lineUpdate = newVal !== oldVal;
+        if((this._lineUpdate === false) && (newVal !== oldVal)){
+          this._lineUpdate = true;
+        }
       };
 
       [
@@ -244,14 +235,15 @@ phina.namespace(function() {
         this.$watch(key, func);
       }, this.prototype);
 
-      // phina.display.Shape.watchRenderProperties.call(this ,[
-      //   'verticalAlign',
-      //   'text',
-      //   'scroll',
-      //   'scroll.x',
-      //   'scroll.y'
-      // ]);
+      phina.display.Shape.watchRenderProperties.call(this ,[
+        'verticalAlign',
+        'text',
+        'scroll',
+        'scrollX',
+        'scrollY'
+      ]);
     },
+
 
     enableScroll: function() {
       //   this.setInteractive(true);
