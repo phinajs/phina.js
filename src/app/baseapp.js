@@ -163,6 +163,8 @@ phina.namespace(function() {
       this._update();
       this._draw();
 
+      this.interactive && this.interactive.check(this.currentScene);
+
       // stats update
       if (this.stats) this.stats.update();
     },
@@ -171,7 +173,6 @@ phina.namespace(function() {
       if (this.awake) {
         this.update && this.update();
         this.updater.update(this.currentScene);
-        this.interactive && this.interactive.check(this.currentScene);
       }
     },
 
