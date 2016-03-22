@@ -145,9 +145,21 @@ th.describe('ui.LabelArea', function() {
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(100).join('LabelArea test string.');
+    label.text = new Array(10).join('LabelArea test string.\n');
   });
   
+  th.it('scroll', function(){
+    var label = phina.ui.LabelArea().addChildTo(this);
+    label.backgroundColor = '#aaa';
+    label.position.set(this.gridX.center(), this.gridY.center());
+    label.text = new Array(10).join('LabelArea test string.\n');
+    label.tweener.to({
+      scrollY: 600,
+    },1000,'easeInBack').to({
+      scrollY:0,
+    },1000,'easeInBack').setLoop(true);
+    
+  });
 
   th.it('align', function() {
     // 
