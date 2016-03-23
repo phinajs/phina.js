@@ -88,7 +88,7 @@ phina.namespace(function() {
     negate: function() {
       this.x = -this.x;
       this.y = -this.y;
-      
+
       return this;
     },
 
@@ -118,7 +118,7 @@ phina.namespace(function() {
     length: function() {
       return Math.sqrt(this.x*this.x + this.y*this.y);
     },
-    
+
     /**
      * 2乗された長さを取得
      * C# の名前を引用
@@ -128,14 +128,14 @@ phina.namespace(function() {
     lengthSquared: function() {
       return this.x*this.x + this.y*this.y;
     },
-    
+
     /**
      * ２点間の距離を返す
      */
     distance: function(v) {
       return Math.sqrt( Math.pow(this.x-v.x, 2) + Math.pow(this.y-v.y, 2) );
     },
-    
+
     /**
      * ２点間の距離を返す
      */
@@ -156,7 +156,7 @@ phina.namespace(function() {
 
       return this;
     },
-    
+
     /**
      * 正規化
      */
@@ -200,7 +200,7 @@ phina.namespace(function() {
       var rad = Math.atan2(this.y, this.x);
       return (rad + Math.PI*2)%(Math.PI*2);
     },
-    
+
     /**
      * 角度(radian)と長さでベクトルをセット
      */
@@ -208,7 +208,7 @@ phina.namespace(function() {
       len = len || 1;
       this.x = Math.cos(rad)*len;
       this.y = Math.sin(rad)*len;
-      
+
       return this;
     },
 
@@ -219,7 +219,7 @@ phina.namespace(function() {
     toDegree: function() {
       return this.toAngle().toDegree();
     },
-    
+
     /**
      * 角度(degree)と長さでベクトルをセット
      */
@@ -278,7 +278,7 @@ phina.namespace(function() {
       add: function(lhs, rhs) {
         return phina.geom.Vector2(lhs.x+rhs.x, lhs.y+rhs.y);
       },
-      
+
       /**
        * @method
        * @static
@@ -287,7 +287,7 @@ phina.namespace(function() {
       sub: function(lhs, rhs) {
         return phina.geom.Vector2(lhs.x-rhs.x, lhs.y-rhs.y);
       },
-      
+
       /**
        * @method
        * @static
@@ -296,7 +296,7 @@ phina.namespace(function() {
       mul: function(v, n) {
         return phina.geom.Vector2(v.x*n, v.y*n);
       },
-      
+
       /**
        * @method
        * @static
@@ -305,7 +305,7 @@ phina.namespace(function() {
       div: function(v, n) {
         return phina.geom.Vector2(v.x/n, v.y/n);
       },
-      
+
       /**
        * @method
        * @static
@@ -314,7 +314,7 @@ phina.namespace(function() {
       negate: function(v) {
         return phina.geom.Vector2(-v.x, -v.y);
       },
-      
+
       /**
        * @method
        * @static
@@ -324,7 +324,7 @@ phina.namespace(function() {
       dot: function(lhs, rhs) {
         return lhs.x * rhs.x + lhs.y * rhs.y;
       },
-      
+
       /**
        * @method
        * @static
@@ -333,7 +333,7 @@ phina.namespace(function() {
       cross: function(lhs, rhs) {
         return (lhs.x*rhs.y) - (lhs.y*rhs.x);
       },
-      
+
       /**
        * @method
        * @static
@@ -356,7 +356,19 @@ phina.namespace(function() {
       manhattanDistance: function(lhs, rhs) {
         return Math.abs(lhs.x-rhs.x) + Math.abs(lhs.y-rhs.y);
       },
-      
+
+      /**
+       * @method
+       * @static
+       * 法線ベクトル
+       */
+      normal: function(a, b) {
+        var temp = phina.geom.Vector2.sub(a, b);
+        var n = phina.geom.Vector2(-temp.y, temp.x);
+
+        return n.normalize();
+      },
+
       /**
        * @method
        * @static
@@ -365,8 +377,8 @@ phina.namespace(function() {
       reflect: function(v, normal) {
         var len = phina.geom.Vector2.dot(v, normal);
         var temp= phina.geom.Vector2.mul(normal, 2*len);
-        
-        return phina.geom.sub(v, temp);
+
+        return phina.geom.Vector2.sub(v, temp);
       },
 
       /**
@@ -376,14 +388,14 @@ phina.namespace(function() {
        * 0.5 で lhs と rhs の中間ベクトルを求めることができます.
        */
       lerp: function(lhs, rhs, t) {
-        // TODO: 
+        // TODO:
         return phina.geom.Vector2(
           lhs.x + (rhs.x-lhs.x)*t,
           lhs.y + (rhs.y-lhs.y)*t
         );
       },
-      
-      
+
+
       /**
        * @method
        * @static
