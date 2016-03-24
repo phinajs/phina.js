@@ -7033,6 +7033,8 @@ phina.namespace(function() {
       this._update();
       this._draw();
 
+      this.interactive && this.interactive.check(this.currentScene);
+
       // stats update
       if (this.stats) this.stats.update();
     },
@@ -7041,7 +7043,6 @@ phina.namespace(function() {
       if (this.awake) {
         this.update && this.update();
         this.updater.update(this.currentScene);
-        this.interactive && this.interactive.check(this.currentScene);
       }
     },
 
@@ -10098,7 +10099,7 @@ phina.namespace(function () {
       return this;
     },
 
-    clearColor: function () {
+    clear: function () {
       this.paths.length = 0;
       this._dirtyDraw = true;
       return this;
@@ -10134,12 +10135,12 @@ phina.namespace(function () {
       var paths = this.paths;
       if (paths.length === 0) {
         return {
-          width: 0,
-          height:0,
+          width: this.padding * 2,
+          height:this.padding * 2,
         };
       }
       var maxX = -Infinity;
-      var maxY = -Infinity
+      var maxY = -Infinity;
       var minX = Infinity;
       var minY = Infinity;
 
