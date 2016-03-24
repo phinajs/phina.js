@@ -438,7 +438,7 @@ phina.namespace(function () {
       return this.calcCanvasSize().height;
     },
 
-    render: function (canvas) {
+    prerender: function (canvas) {
       canvas.lineCap = this.lineCap;
       canvas.lineJoin = this.lineJoin;
       var paths = this.paths;
@@ -451,19 +451,7 @@ phina.namespace(function () {
           p = paths[i];
           c.lineTo(p.x, p.y);
         }
-
-        if (this.isStrokable()) {
-          c.lineWidth = this.strokeWidth;
-          c.strokeStyle = this.stroke;
-          c.stroke();
-        }
-
-        if (this.fill) {
-          c.fillStyle = this.fill;
-          c.fill();
-        }
       }
-
     },
 
     _defined: function () {
