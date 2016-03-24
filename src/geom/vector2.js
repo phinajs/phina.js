@@ -364,9 +364,8 @@ phina.namespace(function() {
        */
       normal: function(a, b) {
         var temp = phina.geom.Vector2.sub(a, b);
-        var n = phina.geom.Vector2(-temp.y, temp.x);
 
-        return n.normalize();
+        return phina.geom.Vector2(-temp.y, temp.x);
       },
 
       /**
