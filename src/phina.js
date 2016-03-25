@@ -266,7 +266,8 @@ phina.namespace(function() {
     }
   });
 
-  if (phina.global.addEventListener) {
+  var doc = phina.global.document;
+  if (phina.global.addEventListener && doc && doc.readyState !== 'complete') {
     phina.global.addEventListener('load', function() {
       var run = function() {
         var listeners = phina._mainListeners.clone();
