@@ -171,6 +171,11 @@ phina.namespace(function() {
 
     _update: function() {
       if (this.awake) {
+        // エンターフレームイベント
+        if (this.has('enterframe')) {
+          this.flare('enterframe');
+        }
+
         this.update && this.update();
         this.updater.update(this.currentScene);
       }

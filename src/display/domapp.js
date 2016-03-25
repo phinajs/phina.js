@@ -89,13 +89,14 @@ phina.namespace(function() {
         this.flare('blur');
         this.currentScene.flare('blur');
       }.bind(this), false);
-    },
 
-    update: function() {
-      this.mouse.update();
-      this.touch.update();
-      this.touchList.update();
-      this.keyboard.update();
+      // 更新関数を登録
+      this.on('enterframe', function() {
+        this.mouse.update();
+        this.touch.update();
+        this.touchList.update();
+        this.keyboard.update();
+      });
     },
 
     _checkClick: function(e) {
