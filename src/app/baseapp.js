@@ -23,6 +23,7 @@ phina.namespace(function() {
       this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
+      this.interactive = phina.app.Interactive(this);
 
       this.awake = true;
       this.ticker = phina.util.Ticker();
@@ -163,7 +164,7 @@ phina.namespace(function() {
       this._update();
       this._draw();
 
-      this.interactive && this.interactive.check(this.currentScene);
+      this.interactive.check(this.currentScene);
 
       // stats update
       if (this.stats) this.stats.update();

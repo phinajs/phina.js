@@ -68,9 +68,6 @@ phina.namespace(function() {
         });
       }.bind(this));
 
-      // interactive
-      this.interactive = phina.app.Interactive(this);
-
       // click 対応
       var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
       this.domElement.addEventListener(eventName, this._checkClick.bind(this));
