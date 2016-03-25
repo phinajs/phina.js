@@ -185,16 +185,18 @@ phina.define('MainScene', {
 
 var TILE_WIDTH = 32;
 phina.define('Floor', {
-  superClass: 'Shape',
+  superClass: 'PlainElement',
 
   init: function() {
     this.superInit();
 
-    this.width = SCREEN_WIDTH+64;
-    this.height = FLOOR_HEIGHT;
+    this.canvas.width = SCREEN_WIDTH+64;
+    this.canvas.height = FLOOR_HEIGHT;
     this.originX = 0;
     this.originY = 1;
     this.padding = 0;
+
+    this.render();
 
     this.x = 0;
   },
