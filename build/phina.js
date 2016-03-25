@@ -6916,6 +6916,7 @@ phina.namespace(function() {
       this._sceneIndex = 0;
 
       this.updater = phina.app.Updater(this);
+      this.interactive = phina.app.Interactive(this);
 
       this.awake = true;
       this.ticker = phina.util.Ticker();
@@ -7056,7 +7057,7 @@ phina.namespace(function() {
       this._update();
       this._draw();
 
-      this.interactive && this.interactive.check(this.currentScene);
+      this.interactive.check(this.currentScene);
 
       // stats update
       if (this.stats) this.stats.update();
@@ -7064,6 +7065,11 @@ phina.namespace(function() {
 
     _update: function() {
       if (this.awake) {
+        // エンターフレームイベント
+        if (this.has('enterframe')) {
+          this.flare('enterframe');
+        }
+
         this.update && this.update();
         this.updater.update(this.currentScene);
       }
@@ -10765,9 +10771,6 @@ phina.namespace(function() {
         });
       }.bind(this));
 
-      // interactive
-      this.interactive = phina.app.Interactive(this);
-
       // click 対応
       var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
       this.domElement.addEventListener(eventName, this._checkClick.bind(this));
@@ -10786,13 +10789,14 @@ phina.namespace(function() {
         this.flare('blur');
         this.currentScene.flare('blur');
       }.bind(this), false);
-    },
 
-    update: function() {
-      this.mouse.update();
-      this.touch.update();
-      this.touchList.update();
-      this.keyboard.update();
+      // 更新関数を登録
+      this.on('enterframe', function() {
+        this.mouse.update();
+        this.touch.update();
+        this.touchList.update();
+        this.keyboard.update();
+      });
     },
 
     _checkClick: function(e) {
