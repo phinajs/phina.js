@@ -92,7 +92,7 @@ phina.namespace(function() {
       this.prerender(this.canvas);
 
       // ストローク描画
-      if (this.stroke) {
+      if (this.isStrokable()) {
         context.strokeStyle = this.stroke;
         context.lineWidth = this.strokeWidth;
         context.lineJoin = "round";
