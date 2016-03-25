@@ -360,13 +360,24 @@ phina.namespace(function() {
       /**
        * @method
        * @static
+       * 法線ベクトル
+       */
+      normal: function(a, b) {
+        var temp = phina.geom.Vector2.sub(a, b);
+
+        return phina.geom.Vector2(-temp.y, temp.x);
+      },
+
+      /**
+       * @method
+       * @static
        * 反射ベクトル
        */
       reflect: function(v, normal) {
         var len = phina.geom.Vector2.dot(v, normal);
         var temp= phina.geom.Vector2.mul(normal, 2*len);
         
-        return phina.geom.sub(v, temp);
+        return phina.geom.Vector2.sub(v, temp);
       },
 
       /**
