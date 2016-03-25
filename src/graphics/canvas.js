@@ -756,6 +756,11 @@ phina.namespace(function() {
           return null;
         }
       })(),
+
+      measureText: function(font, text) {
+        this._context.font = font;
+        return this._context.measureText(text);
+      },
     },
   });
 });

@@ -1,8 +1,6 @@
 
 phina.namespace(function() {
 
-  var dummyCanvas = document.createElement('canvas');
-  var dummyContext = dummyCanvas.getContext('2d');
   var textWidthCache = {};
 
   var LabelArea = phina.define('phina.ui.LabelArea', {
@@ -54,10 +52,9 @@ phina.namespace(function() {
       if (this.width < 1) return lines;
 
       var rowWidth = this.width;
-      dummyContext.font = this.font;
 
       //どのへんで改行されるか目星つけとく
-      var index = rowWidth / dummyContext.measureText('あ').width | 0;
+      var index = rowWidth / phina.graphics.Canvas.measureText(this.font, 'あ').width | 0;
 
       var cache = this.getTextWidthCache();
       for (var i = lines.length; i--;) {
@@ -76,12 +73,12 @@ phina.namespace(function() {
           len = text.length;
           if (index >= len) index = len - 1;
 
-          width = cache[char = text.substring(0, index)] || (cache[char] = dummyContext.measureText(char).width);
+          width = cache[char = text.substring(0, index)] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width);
 
           if (rowWidth < width) {
-            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = dummyContext.measureText(char).width)));
+            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width)));
           } else {
-            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = dummyContext.measureText(char).width))) {
+            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width))) {
               if (index >= len) {
                 breakFlag = true;
                 break;
