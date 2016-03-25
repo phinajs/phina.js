@@ -46,6 +46,12 @@ phina.namespace(function() {
         this.fitScreen();
       }
 
+      if (options.pixelated) {
+        // チラつき防止
+        // https://drafts.csswg.org/css-images/#the-image-rendering
+        this.domElement.style.imageRendering = 'pixelated';
+      }
+
       // pushScene, popScene 対策
       this.on('push', function() {
         // onenter 対策で描画しておく
