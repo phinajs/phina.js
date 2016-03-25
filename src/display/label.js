@@ -70,43 +70,30 @@ phina.namespace(function() {
       return height*this.lineHeight + this.padding*2;
     },
 
-    render: function(canvas) {
+    prerender: function(canvas) {
       var context = canvas.context;
-
-      var text = this.text + '';
-      var lines = this._lines;
-
-
       context.font = this.font;
       context.textAlign = this.align;
       context.textBaseline = this.baseline;
 
-      var fontSize = this.fontSize;
-      var lineSize = fontSize*this.lineHeight;
-      var offset = -Math.floor(lines.length/2)*lineSize;
-      offset += ((lines.length+1)%2) * (lineSize/2);
+      var lines = this._lines;
+      this.lineSize = this.fontSize*this.lineHeight;
+      this._offset = -Math.floor(lines.length/2)*this.lineSize;
+      this._offset += ((lines.length+1)%2) * (this.lineSize/2);
+    },
 
-      if (this.stroke) {
-        context.strokeStyle = this.stroke;
-        context.lineWidth = this.strokeWidth;
-        context.lineJoin = "round";
-        context.shadowBlur = 0;
-        lines.forEach(function(line, i) {
-          context.strokeText(line, 0, i*lineSize+offset);
-        }, this);
-      }
+    renderFill: function(canvas) {
+      var context = canvas.context;
+      this._lines.forEach(function(line, i) {
+        context.fillText(line, 0, i*this.lineSize+this._offset);
+      }, this);
+    },
 
-      if (this.shadow) {
-        context.shadowColor = this.shadow;
-        context.shadowBlur = this.shadowBlur;
-      }
-
-      if (this.fill) {
-        context.fillStyle = this.fill;
-        lines.forEach(function(line, i) {
-          context.fillText(line, 0, i*lineSize+offset);
-        }, this);
-      }
+    renderStroke: function(canvas) {
+      var context = canvas.context;
+      this._lines.forEach(function(line, i) {
+        context.strokeText(line, 0, i*this.lineSize+this._offset);
+      }, this);
     },
 
     _accessor: {

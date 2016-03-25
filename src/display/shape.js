@@ -6,7 +6,7 @@ phina.namespace(function() {
    *
    */
   var Shape = phina.define('phina.display.Shape', {
-    superClass: 'phina.display.DisplayElement',
+    superClass: 'phina.display.PlainElement',
 
     init: function(options) {
       options = ({}).$safe(options, {
@@ -34,9 +34,16 @@ phina.namespace(function() {
       this.shadow = options.shadow;
       this.shadowBlur = options.shadowBlur;
 
-      this.canvas = phina.graphics.Canvas();
       this.watchDraw = true;
       this._dirtyDraw = true;
+
+      this.on('enterframe', function() {
+        // render
+        if (this.watchDraw && this._dirtyDraw === true) {
+          this.render(this.canvas);
+          this._dirtyDraw = false;
+        }
+      });
     },
 
     calcCanvasWidth: function() {
@@ -58,40 +65,61 @@ phina.namespace(function() {
       return this.stroke && 0 < this.strokeWidth;
     },
 
-    prerender: function (canvas) {
-      var size = this.calcCanvasSize();
-      canvas.setSize(size.width, size.height);
-      canvas.clearColor(this.backgroundColor);
-      canvas.transformCenter();
+    prerender: function(canvas) {
+
+    },
+    postrender: function(canvas) {
+
+    },
+    renderFill: function(canvas) {
+      canvas.fill();
+    },
+    renderStroke: function(canvas) {
+      canvas.stroke();
     },
 
     render: function(canvas) {
+      var context = canvas.context;
+      // リサイズ
+      var size = this.calcCanvasSize();
+      canvas.setSize(size.width, size.height);
+      // クリアカラー
       canvas.clearColor(this.backgroundColor);
+      // 中心に座標を移動
+      canvas.transformCenter();
 
-      return this;
-    },
+      // 描画前処理
+      this.prerender(this.canvas);
 
-    draw: function(canvas) {
-      // render
-      if (this.watchDraw && this._dirtyDraw === true) {
-        this.prerender(this.canvas);
-        this.render(this.canvas);
-        this._dirtyDraw = false;
+      // ストローク描画
+      if (this.stroke) {
+        context.strokeStyle = this.stroke;
+        context.lineWidth = this.strokeWidth;
+        context.lineJoin = "round";
+        context.shadowBlur = 0;
+        this.renderStroke(canvas);
       }
 
-      var image = this.canvas.domElement;
-      var w = image.width;
-      var h = image.height;
+      // 塗りつぶし描画
+      if (this.fill) {
+        context.fillStyle = this.fill;
 
-      // var x = -this.width*this.originX - this.padding;
-      // var y = -this.height*this.originY - this.padding;
-      var x = -w*this.origin.x;
-      var y = -h*this.origin.y;
+        // shadow の on/off
+        if (this.shadow) {
+          context.shadowColor = this.shadow;
+          context.shadowBlur = this.shadowBlur;
+        }
+        else {
+          context.shadowBlur = 0;
+        }
 
-      canvas.context.drawImage(image,
-        0, 0, w, h,
-        x, y, w, h
-        );
+        this.renderFill(canvas);
+      }
+
+      // 描画後処理
+      this.postrender(this.canvas);
+
+      return this;
     },
 
     _static: {
@@ -149,18 +177,8 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
     },
 
-    render: function(canvas) {
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
+    prerender: function(canvas) {
+      canvas.roundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
     },
 
     _defined: function() {
@@ -177,6 +195,7 @@ phina.namespace(function() {
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
+
     init: function(options) {
       options = ({}).$safe(options, {
         backgroundColor: 'transparent',
@@ -190,28 +209,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    render: function(canvas) {
-
-      if (this.shadow) {
-        canvas.context.shadowColor = this.shadow;
-        canvas.context.shadowBlur = this.shadowBlur;
-      }
-      else {
-        canvas.context.shadowBlur = 0;
-      }
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillCircle(0, 0, this.radius);
-      }
-
-      canvas.context.shadowBlur = 0;
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeCircle(0, 0, this.radius);
-      }
+    prerender: function(canvas) {
+      canvas.circle(0, 0, this.radius);
     },
   });
 });
@@ -223,6 +222,7 @@ phina.namespace(function() {
    */
   phina.define('phina.display.TriangleShape', {
     superClass: 'phina.display.Shape',
+
     init: function(options) {
       options = ({}).$safe(options, {
         backgroundColor: 'transparent',
@@ -237,19 +237,10 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    render: function(canvas) {
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillPolygon(0, 0, this.radius, 3);
-      }
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokePolygon(0, 0, this.radius, 3);
-      }
+    prerender: function(canvas) {
+      canvas.polygon(0, 0, this.radius, 3);
     },
+
   });
 
 });
@@ -279,18 +270,8 @@ phina.namespace(function() {
       this.sideIndent = options.sideIndent;
     },
 
-    render: function(canvas) {
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillStar(0, 0, this.radius, this.sides, this.sideIndent);
-      }
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeStar(0, 0, this.radius, this.sides, this.sideIndent);
-      }
+    prerender: function(canvas) {
+      canvas.star(0, 0, this.radius, this.sides, this.sideIndent);
     },
 
     _defined: function() {
@@ -324,18 +305,8 @@ phina.namespace(function() {
       this.sides = options.sides;
     },
 
-    render: function(canvas) {
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillPolygon(0, 0, this.radius, this.sides);
-      }
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokePolygon(0, 0, this.radius, this.sides);
-      }
+    prerender: function(canvas) {
+      canvas.polygon(0, 0, this.radius, this.sides);
     },
 
     _defined: function() {
@@ -369,18 +340,8 @@ phina.namespace(function() {
       this.cornerAngle = options.cornerAngle;
     },
 
-    render: function(canvas) {
-
-      if (this.fill) {
-        canvas.context.fillStyle = this.fill;
-        canvas.fillHeart(0, 0, this.radius, this.cornerAngle);
-      }
-
-      if (this.isStrokable()) {
-        canvas.context.lineWidth = this.strokeWidth;
-        canvas.strokeStyle = this.stroke;
-        canvas.strokeHeart(0, 0, this.radius, this.cornerAngle);
-      }
+    prerender: function(canvas) {
+      canvas.heart(0, 0, this.radius, this.cornerAngle);
     },
 
     _defined: function() {
@@ -477,7 +438,7 @@ phina.namespace(function () {
       return this.calcCanvasSize().height;
     },
 
-    render: function (canvas) {
+    prerender: function (canvas) {
       canvas.lineCap = this.lineCap;
       canvas.lineJoin = this.lineJoin;
       var paths = this.paths;
@@ -490,19 +451,7 @@ phina.namespace(function () {
           p = paths[i];
           c.lineTo(p.x, p.y);
         }
-
-        if (this.isStrokable()) {
-          c.lineWidth = this.strokeWidth;
-          c.strokeStyle = this.stroke;
-          c.stroke();
-        }
-
-        if (this.fill) {
-          c.fillStyle = this.fill;
-          c.fill();
-        }
       }
-
     },
 
     _defined: function () {

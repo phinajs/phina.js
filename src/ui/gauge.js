@@ -96,27 +96,17 @@ phina.namespace(function() {
       return rate;
     },
 
-    render: function(canvas) {
-      var rate = this.getRate();
+    prerender: function(canvas) {
+      canvas.roundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+    },
 
-      // draw color
-      if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
-      // draw gauge
-      this.canvas.context.fillStyle = this.gaugeColor;
+    postrender: function(canvas) {
+      var rate = this.getRate();
+      canvas.context.fillStyle = this.gaugeColor;
       canvas.context.save();
       canvas.context.clip();
-      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
+      canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
       canvas.context.restore();
-
-      // draw stroke
-      if (this.isStrokable()) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
-      }
     },
 
     _accessor: {
@@ -170,25 +160,25 @@ phina.namespace(function() {
       this.showPercentage = options.showPercentage;
     },
 
-    render: function(canvas) {
+    prerender: function(canvas) {
+      var rate = this.getRate();
+      var end = (Math.PI*2)*rate;
+      this.startAngle = 0;
+      this.endAngle = end;
       
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
+    },
 
-      var rate = this.getRate();
-      var end = (Math.PI*2)*rate;
-      var startAngle = 0;
-      var endAngle = end;
+    renderFill: function(canvas) {
+      canvas.fillPie(0, 0, this.radius, this.startAngle, this.endAngle);
+    },
 
-      if (this.isStrokable()) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeArc(0, 0, this.radius, startAngle, endAngle);
-      }
+    renderStroke: function(canvas) {
+      canvas.strokeArc(0, 0, this.radius, this.startAngle, this.endAngle);
+    },
 
-      canvas.context.fillStyle = this.fill;
-      canvas.fillPie(0, 0, this.radius, startAngle, endAngle);
-
+    postrender: function() {
       // if (this.showPercentage) {
       //   // TODO:
       //   var left = Math.max(0, this.limit-this.time);

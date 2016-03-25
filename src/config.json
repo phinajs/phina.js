@@ -65,6 +65,7 @@
     "graphics/canvasrecorder.js",
 
     "display/displayelement.js",
+    "display/plainelement.js",
     "display/shape.js",
     "display/sprite.js",
     "display/label.js",
@@ -89,7 +90,6 @@
     "game/countscene.js",
     "game/pausescene.js",
     "game/gameapp.js",
-    "game/pietimer.js",
 
     "social/twitter.js",
 

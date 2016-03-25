@@ -58,16 +58,18 @@ th.describe('ui.Gauge', function() {
 
   th.it('style', function() {
     var gauge1 = phina.ui.Gauge({
-      backgroundColor: 'red',
-      color: 'white',
+      // backgroundColor: 'red',
+      fill: 'red',
+      stroke: 'green',
       gaugeColor: 'blue',
+      strokeWidth: 8,
     }).addChildTo(this);
     gauge1.position.set(this.gridX.center(), this.gridY.center(-2));
     gauge1.setValue(50);
 
     var gauge2 = phina.ui.Gauge({
       stroke: 'black',
-      color: '#aaa',
+      fill: 'white',
       gaugeColor: 'green',
       cornerRadius: 16,
     }).addChildTo(this);
@@ -107,13 +109,13 @@ th.describe('ui.Gauge', function() {
 th.describe('ui.CircleGauge', function() {
 
   th.it('default', function() {
-    var label = phina.display.Label('full').addChildTo(this);
-    label.setPosition(this.gridX.center(), this.gridY.center(-2));
 
     var g1 = phina.ui.CircleGauge({
       anticlockwise: true,
     }).addChildTo(this);
     g1.position.set(this.gridX.center(), this.gridY.center(-2));
+    var label = phina.display.Label('full').addChildTo(this);
+    label.setPosition(this.gridX.center(), this.gridY.center(-2));
 
     this.onpointstart = function() {
       g1.value -= 10;

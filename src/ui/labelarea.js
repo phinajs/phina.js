@@ -104,8 +104,11 @@ phina.namespace(function() {
 
     },
 
-    render: function(canvas) {
+    prerender: function(canvas) {
       var context = canvas.context;
+      context.font = this.font;
+      context.textAlign = this.align;
+      context.textBaseline = this.baseline;
 
       var text = this.text + '';
       var lines = this.getLines();
@@ -113,9 +116,6 @@ phina.namespace(function() {
       var width = this.width;
       var height = this.height;
 
-      context.font = this.font;
-      context.textAlign = this.align;
-      context.textBaseline = this.baseline;
       var fontSize = this.fontSize;
       var lineSize = fontSize * this.lineHeight;
       var offsetX = this.getOffsetX() * width;
@@ -141,29 +141,35 @@ phina.namespace(function() {
         return start <= i && end > i;
       });
 
-      if (this.stroke) {
-        context.strokeStyle = this.stroke;
-        context.lineWidth = this.strokeWidth;
-        context.lineJoin = "round";
-        context.shadowBlur = 0;
-        lines.forEach(function(line, i) {
-          context.strokeText(line, offsetX, (start + i) * lineSize + offsetY);
-        }, this);
-      }
-
-      if (this.shadow) {
-        context.shadowColor = this.shadow;
-        context.shadowBlur = this.shadowBlur;
-      }
-
-      if (this.fill) {
-        context.fillStyle = this.fill;
-        lines.forEach(function(line, i) {
-          context.fillText(line, offsetX, (start + i) * lineSize + offsetY);
-        }, this);
-      }
-
+      this.lines = lines;
+      this.offsetX = offsetX;
+      this.offsetY = offsetY;
+      this.lineSize = lineSize;
+      this.start = start;
     },
+
+    renderFill: function(canvas) {
+      var context = canvas.context;
+      var offsetX = this.offsetX;
+      var offsetY = this.offsetY;
+      var lineSize = this.lineSize;
+      var start = this.start;
+      this.lines.forEach(function(line, i) {
+        context.fillText(line, offsetX, (start + i) * lineSize + offsetY);
+      }, this);
+    },
+
+    renderStroke: function(canvas) {
+      var context = canvas.context;
+      var offsetX = this.offsetX;
+      var offsetY = this.offsetY;
+      var lineSize = this.lineSize;
+      var start = this.start;
+      this.lines.forEach(function(line, i) {
+        context.strokeText(line, offsetX, (start + i) * lineSize + offsetY);
+      }, this);
+    },
+
     _accessor: {
       text: {
         get: function() {
