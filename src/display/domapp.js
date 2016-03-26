@@ -68,9 +68,6 @@ phina.namespace(function() {
         });
       }.bind(this));
 
-      // interactive
-      this.interactive = phina.app.Interactive(this);
-
       // click 対応
       var eventName = phina.isMobile() ? 'touchend' : 'mouseup';
       this.domElement.addEventListener(eventName, this._checkClick.bind(this));
@@ -89,13 +86,14 @@ phina.namespace(function() {
         this.flare('blur');
         this.currentScene.flare('blur');
       }.bind(this), false);
-    },
 
-    update: function() {
-      this.mouse.update();
-      this.touch.update();
-      this.touchList.update();
-      this.keyboard.update();
+      // 更新関数を登録
+      this.on('enterframe', function() {
+        this.mouse.update();
+        this.touch.update();
+        this.touchList.update();
+        this.keyboard.update();
+      });
     },
 
     _checkClick: function(e) {
