@@ -54,6 +54,34 @@ phina.namespace(function() {
         
         return false;
       },
+      // 円と2点を結ぶ線分の当たり判定
+      testCircleLine : function(circle, p1, p2) {
+        var r2 = Math.pow(circle.radius, 2);
+        // 円の中心座標
+        var p3 = circle.position;
+        // 各ベクトル
+        var p1p2 = phina.geom.Vector2.sub(p1, p2);
+        var p1p3 = phina.geom.Vector2.sub(p1, p3);
+        var p2p3 = phina.geom.Vector2.sub(p2, p3);
+        // 外積
+        var cross = phina.geom.Vector2.cross(p1p2, p1p3);
+        // 外積の絶対値の2乗
+        var abs2 = Math.pow(Math.abs(cross), 2);
+        // p1p2の長さの2乗
+        var length2 = p1p2.lengthSquared();
+        // 円の中心から線分までの垂線の距離の2乗
+        var d2 = abs2 / length2;
+        // 円の半径の2乗より小さいなら重複
+        if (d2 <= r2) {
+          var dot1 = phina.geom.Vector2.dot(p1p3, p1p2);
+          var dot2 = phina.geom.Vector2.dot(p2p3, p1p2);
+          // 通常は内積の乗算
+          if (dot1 * dot2 <= 0) return true;
+          // 特殊ケース
+          if (p1p3.lengthSquared() < r2 || p2p3.lengthSquared() < r2) return true;
+        }
+        return false;
+      },
     }
 
   });
