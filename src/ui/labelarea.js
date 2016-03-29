@@ -52,9 +52,11 @@ phina.namespace(function() {
       if (this.width < 1) return lines;
 
       var rowWidth = this.width;
-
+      
+      var context = this.canvas.context;
+      context.font = this.font;
       //どのへんで改行されるか目星つけとく
-      var index = rowWidth / phina.graphics.Canvas.measureText(this.font, 'あ').width | 0;
+      var index = rowWidth / context.measureText('あ').width | 0;
 
       var cache = this.getTextWidthCache();
       for (var i = lines.length; i--;) {
@@ -73,12 +75,12 @@ phina.namespace(function() {
           len = text.length;
           if (index >= len) index = len - 1;
 
-          width = cache[char = text.substring(0, index)] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width);
+          width = cache[char = text.substring(0, index)] || (cache[char] = context.measureText(char).width);
 
           if (rowWidth < width) {
-            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width)));
+            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = context.measureText(char).width)));
           } else {
-            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = phina.graphics.Canvas.measureText(this.font, char).width))) {
+            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = context.measureText(char).width))) {
               if (index >= len) {
                 breakFlag = true;
                 break;
