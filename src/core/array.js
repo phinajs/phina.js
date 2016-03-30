@@ -428,9 +428,10 @@
     if(func){
       var maxValue = max, minValue = min;
       min = max = 0;
-      if(typeof self !== 'undefined'){func = func.bind(self);}
+      if(typeof self === 'undefined'){self = this;}
+      
       for (; i < len; ++i) {
-        var v = func(this[i], i, this);
+        var v = func.call(self, this[i], i, this);
         if(maxValue < v){
           maxValue = v;
           max = i;
