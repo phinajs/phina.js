@@ -414,7 +414,7 @@
    * most関数 最大値と最小値を返す
    *
    */
-  Array.prototype.$method("most", function(func) {
+  Array.prototype.$method("most", function(func, self) {
     var len = this.length,
         min = Infinity,
         max =-Infinity,
@@ -428,6 +428,7 @@
     if(func){
       var maxValue = max, minValue = min;
       min = max = 0;
+      if(typeof self !== 'undefined'){func = func.bind(self);}
       for (; i < len; ++i) {
         var v = func(this[i], i, this);
         if(maxValue < v){
