@@ -184,6 +184,11 @@ describe('#Array', function() {
     assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.x;}).min.x, -10);
     assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).max.y, 101);
     assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).min.y, -101);
+    assert.equal([0,1,2,3].most(function(e){
+      console.log(this);
+      if(this==e){return Infinity;}
+      return e;
+    }, 0).min, 1);
   });
   
     
