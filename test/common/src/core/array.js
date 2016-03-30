@@ -180,10 +180,10 @@ describe('#Array', function() {
     assert.equal([].most().max, -Infinity);
     assert.equal([5,1,4,1,9,2,-10].most().min, -10);
     assert.equal([5,1,4,1,9,2,-10].most().max, 9);
-    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.x;}).max, 10);
-    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.x;}).min, -10);
-    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).max, 101);
-    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).min, -101);
+    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.x;}).max.x, 10);
+    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.x;}).min.x, -10);
+    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).max.y, 101);
+    assert.equal([{x:10,y:101},{x:-10,y:-101},{x:0,y:10}].most(function(e){return e.y;}).min.y, -101);
   });
   
     
