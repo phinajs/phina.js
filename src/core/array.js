@@ -408,5 +408,41 @@
       return item;
     }, context);
   });
+  
+  /**
+   * @method most
+   * most関数 最大値と最小値を返す
+   *
+   */
+  Array.$method("most", function(func) {
+    var len = this.length,
+        min = Infinity,
+        max =-Infinity,
+        i   = 0;
+    if(len < 1){
+      return {
+        max: max,
+        min: min,
+      };
+    }
+    if(func){
+      for (;i < len; ++i) {
+        var v = func(this[i], i, this);
+        if(max < v){max = v;}
+        if(min > v){min = v;}
+      }
+    }
+    else{
+      for (;i < len; ++i) {
+        if(max<this[i]){max=this[i];}
+        if(min>this[i]){min=this[i];}
+      }
+    }
+    
+    return {
+      max: max,
+      min: min,
+    };
+  });  
 
 })();
