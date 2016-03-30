@@ -426,11 +426,21 @@
       };
     }
     if(func){
-      for (;i < len; ++i) {
+      var maxValue = max, minValue = min;
+      min = max = 0;
+      for (; i < len; ++i) {
         var v = func(this[i], i, this);
-        if(max < v){max = v;}
-        if(min > v){min = v;}
+        if(maxValue < v){
+          maxValue = v;
+          max = i;
+        }
+        if(minValue > v){
+          minValue = v;
+          min = i;
+        }
       }
+      max = this[max];
+      min = this[min];
     }
     else{
       for (;i < len; ++i) {
