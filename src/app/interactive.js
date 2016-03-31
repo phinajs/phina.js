@@ -29,11 +29,13 @@ phina.namespace(function() {
 
     check: function(root) {
       // カーソルのスタイルを反映
-      if (this._holds.length > 0) {
-        this.app.domElement.style.cursor = this.cursor.hover;
-      }
-      else {
-        this.app.domElement.style.cursor = this.cursor.normal;
+      if (this.app.domElement) {
+        if (this._holds.length > 0) {
+          this.app.domElement.style.cursor = this.cursor.hover;
+        }
+        else {
+          this.app.domElement.style.cursor = this.cursor.normal;
+        }
       }
 
       if (!this._enable) return ;
