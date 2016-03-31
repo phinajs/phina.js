@@ -59,33 +59,41 @@ phina.namespace(function() {
       var index = rowWidth / context.measureText('あ').width | 0;
 
       var cache = this.getTextWidthCache();
-      for (var i = lines.length; i--;) {
-        var text = lines[i],
-            len,
-            j = 0,
-            width,
-            breakFlag = false,
-            char;
-
+      for (var i = lines.length - 1; 0 <= i; --i) {
+        var text = lines[i];
         if (text === '') { continue;}
-
+        
+        var j = 0;
+        var breakFlag = false;
+        var char;
         while (true) {
           //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
 
-          len = text.length;
+          var len = text.length;
           if (index >= len) index = len - 1;
-
-          width = cache[char = text.substring(0, index)] || (cache[char] = context.measureText(char).width);
-
-          if (rowWidth < width) {
-            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = context.measureText(char).width)));
+          char = text.substring(0, index);
+          if(!cache[char]){ cache[char] = context.measureText(char).width;}
+          var textWidth = cache[char];
+          
+          if (rowWidth < textWidth) {
+            do{
+              char = text[--index];
+              if(!cache[char]){ cache[char] = context.measureText(char).width;}
+              textWidth -= cache[char];
+            }while (rowWidth < textWidth);
+            
           } else {
-            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = context.measureText(char).width))) {
+            
+            do{
+              char = text[index++];
               if (index >= len) {
                 breakFlag = true;
                 break;
               }
-            }
+              if(!cache[char]){ cache[char] = context.measureText(char).width;}
+              textWidth += cache[char];
+            }while (rowWidth >= textWidth);
+            
             --index;
           }
           if (breakFlag) {
