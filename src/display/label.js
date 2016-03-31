@@ -19,24 +19,7 @@ phina.namespace(function() {
         options = arguments[0];
       }
 
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-
-        fill: 'black',
-        stroke: null,
-        strokeWidth: 2,
-
-        // 
-        text: 'Hello, world!',
-        // 
-        fontSize: 32,
-        fontWeight: '',
-        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
-        // 
-        align: 'center',
-        baseline: 'middle',
-        lineHeight: 1.2,
-      });
+      options = ({}).$safe(options, phina.display.Label.defaults);
 
       this.superInit(options);
 
@@ -113,6 +96,27 @@ phina.namespace(function() {
           return "{fontWeight} {fontSize}px {fontFamily}".format(this);
         },
       }
+    },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+
+        fill: 'black',
+        stroke: null,
+        strokeWidth: 2,
+
+        // 
+        text: 'Hello, world!',
+        // 
+        fontSize: 32,
+        fontWeight: '',
+        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+        // 
+        align: 'center',
+        baseline: 'middle',
+        lineHeight: 1.2,
+      },
     },
 
     _defined: function() {
