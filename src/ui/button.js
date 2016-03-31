@@ -36,7 +36,6 @@ phina.namespace(function() {
       var context = canvas.context;
       // text
       var font = "{fontWeight} {fontSize}px {fontFamily}".format(this);
-      console.log(font);
       context.font = font;
       context.textAlign = 'center';
       context.textBaseline = 'middle';
