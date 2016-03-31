@@ -40,7 +40,7 @@ phina.namespace(function() {
       var cache = textWidthCache[this.font];
       return cache || (textWidthCache[this.font] = {});
     },
-
+    
     getLines: function() {
       if (this._lineUpdate === false) {
         return this._lines;
@@ -52,49 +52,66 @@ phina.namespace(function() {
       if (this.width < 1) return lines;
 
       var rowWidth = this.width;
-      
+
       var context = this.canvas.context;
       context.font = this.font;
       //どのへんで改行されるか目星つけとく
-      var index = rowWidth / context.measureText('あ').width | 0;
+      var pos = rowWidth / context.measureText('あ').width | 0;
 
       var cache = this.getTextWidthCache();
-      for (var i = lines.length; i--;) {
-        var text = lines[i],
-            len,
-            j = 0,
-            width,
-            breakFlag = false,
-            char;
+      for (var i = lines.length - 1; 0 <= i; --i) {
+        var text = lines[i];
+        if (text === '') {
+          continue;
+        }
 
-        if (text === '') { continue;}
-
+        var j = 0;
+        var breakFlag = false;
+        var char;
         while (true) {
           //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
 
-          len = text.length;
-          if (index >= len) index = len - 1;
+          var len = text.length;
+          if (pos >= len) pos = len - 1;
+          char = text.substring(0, pos);
+          if (!cache[char]) {
+            cache[char] = context.measureText(char).width;
+          }
+          var textWidth = cache[char];
 
-          width = cache[char = text.substring(0, index)] || (cache[char] = context.measureText(char).width);
+          if (rowWidth < textWidth) {
+            do {
+              char = text[--pos];
+              if (!cache[char]) {
+                cache[char] = context.measureText(char).width;
+              }
+              textWidth -= cache[char];
+            } while (rowWidth < textWidth);
 
-          if (rowWidth < width) {
-            while (rowWidth < (width -= cache[char = text[--index]] || (cache[char] = context.measureText(char).width)));
           } else {
-            while (rowWidth >= (width += cache[char = text[index++]] || (cache[char] = context.measureText(char).width))) {
-              if (index >= len) {
+
+            do {
+              char = text[pos++];
+              if (pos >= len) {
                 breakFlag = true;
                 break;
               }
-            }
-            --index;
+              if (!cache[char]) {
+                cache[char] = context.measureText(char).width;
+              }
+              textWidth += cache[char];
+            } while (rowWidth >= textWidth);
+
+            --pos;
           }
           if (breakFlag) {
             break;
           }
-          //index が 0 のときは無限ループになるので、1にしとく
-          if (index === 0) index = 1;
+          //0 のときは無限ループになるので、1にしとく
+          if (pos === 0) pos = 1;
 
-          lines.splice(i + j++, 1, text.substring(0, index), text = text.substring(index, len));
+          lines.splice(i + j, 1, text.substring(0, pos), text = text.substring(pos, len));
+          ++j;
         }
 
       }
