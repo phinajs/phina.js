@@ -16,6 +16,7 @@ th.describe("ui.Button", function() {
       fill: 'red',
       fontColor: 'blue',
       fontSize: 64,
+      fontWeight: 'bold',
       fontFamily: 'Helvetica',
     }).addChildTo(this);
     button.position.set(320, 480);

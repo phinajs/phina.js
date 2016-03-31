@@ -13,25 +13,14 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
-      options = (options || {}).$safe({
-        width: 200,
-        height: 80,
-        backgroundColor: 'transparent',
-        fill: 'hsl(200, 80%, 60%)',
-        stroke: null,
-
-        cornerRadius: 8,
-        text: 'Hello',
-        fontColor: 'white',
-        fontSize: 32,
-        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
-      });
+      options = (options || {}).$safe(phina.ui.Button.defaults);
       this.superInit(options);
 
       this.cornerRadius = options.cornerRadius;
       this.text         = options.text;
       this.fontColor    = options.fontColor;
       this.fontSize     = options.fontSize;
+      this.fontWeight     = options.fontWeight;
       this.fontFamily   = options.fontFamily;
 
       this.setInteractive(true);
@@ -46,12 +35,30 @@ phina.namespace(function() {
     postrender: function(canvas) {
       var context = canvas.context;
       // text
-      var font = "{fontSize}px {fontFamily}".format(this);
+      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this);
+      console.log(font);
       context.font = font;
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.fillStyle = this.fontColor;
       context.fillText(this.text, 0, 0);
+    },
+
+    _static: {
+      defaults: {
+        width: 200,
+        height: 80,
+        backgroundColor: 'transparent',
+        fill: 'hsl(200, 80%, 60%)',
+        stroke: null,
+
+        cornerRadius: 8,
+        text: 'Hello',
+        fontColor: 'white',
+        fontSize: 32,
+        fontWeight: '',
+        fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
+      },
     },
 
     _defined: function() {
