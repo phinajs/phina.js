@@ -415,46 +415,49 @@
    *
    */
   Array.prototype.$method("most", function(func, self) {
-    var len = this.length,
-        min = Infinity,
-        max =-Infinity,
-        i   = 0;
-    if(len < 1){
+    if(this.length < 1){
+      return {
+        max: -Infinity,
+        min: Infinity,
+      };
+    }
+    if(func){
+      var maxValue = -Infinity;
+      var minValue = Infinity;
+      var maxIndex = 0;
+      var minIndex = 0;
+      
+      if(typeof self === 'undefined'){self = this;}
+      
+      for (var i = 0, len = this.length; i < len; ++i) {
+        var v = func.call(self, this[i], i, this);
+        if(maxValue < v){
+          maxValue = v;
+          maxIndex = i;
+        }
+        if(minValue > v){
+          minValue = v;
+          minIndex = i;
+        }
+      }
+      return {
+        max: this[maxIndex],
+        min: this[minIndex],
+      };
+    }
+    else{
+      var max = -Infinity;
+      var min = Infinity;
+      for (var i = 0, len = this.length;i < len; ++i) {
+        if(max<this[i]){max=this[i];}
+        if(min>this[i]){min=this[i];}
+      }
       return {
         max: max,
         min: min,
       };
     }
-    if(func){
-      var maxValue = max, minValue = min;
-      min = max = 0;
-      if(typeof self === 'undefined'){self = this;}
-      
-      for (; i < len; ++i) {
-        var v = func.call(self, this[i], i, this);
-        if(maxValue < v){
-          maxValue = v;
-          max = i;
-        }
-        if(minValue > v){
-          minValue = v;
-          min = i;
-        }
-      }
-      max = this[max];
-      min = this[min];
-    }
-    else{
-      for (;i < len; ++i) {
-        if(max<this[i]){max=this[i];}
-        if(min>this[i]){min=this[i];}
-      }
-    }
     
-    return {
-      max: max,
-      min: min,
-    };
   });  
 
 })();
