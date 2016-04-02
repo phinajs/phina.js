@@ -5,7 +5,7 @@ phina.namespace(function() {
    * @class phina.display.Shape
    *
    */
-  var Shape = phina.define('phina.display.Shape', {
+  phina.define('phina.display.Shape', {
     superClass: 'phina.display.DisplayElement',
 
     init: function(options) {
