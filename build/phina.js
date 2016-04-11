@@ -8929,6 +8929,11 @@ phina.namespace(function() {
       return this;
     },
 
+    bezierCurveTo: function() {
+      this.context.bezierCurveTo.apply(this.context, arguments);
+      return this;
+    },
+
     /**
      * パス内を塗りつぶす
      */
