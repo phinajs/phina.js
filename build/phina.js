@@ -9545,6 +9545,10 @@ phina.namespace(function() {
         this._context.font = font;
         return this._context.measureText(text);
       },
+
+      createLinearGradient: function() {
+        return this._context.createLinearGradient.apply(this._context, arguments);
+      },
     },
   });
 });
