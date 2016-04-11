@@ -8924,6 +8924,11 @@ phina.namespace(function() {
       return this;
     },
 
+    quadraticCurveTo: function() {
+      this.context.quadraticCurveTo.apply(this.context, arguments);
+      return this;
+    },
+
     /**
      * パス内を塗りつぶす
      */
