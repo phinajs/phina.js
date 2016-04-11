@@ -21,9 +21,11 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function() {
+    init: function(options) {
       this.superInit();
-      
+
+      options = ({}).$safe(options, phina.app.Object2D.defaults);
+
       this.position = phina.geom.Vector2(0, 0);
       this.scale    = phina.geom.Vector2(1, 1);
       this.origin   = phina.geom.Vector2(0.5, 0.5);
@@ -35,8 +37,10 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
-      this.width = 64;
-      this.height = 64;
+      this.x = options.x;
+      this.y = options.y;
+      this.width = options.width;
+      this.height = options.height;
       this.radius = 32;
       this.boundingType = 'rect';
     },
@@ -411,7 +415,20 @@ phina.namespace(function() {
           // TODO: どうしようかな??
         }
       },
-    }
+    },
+    _static: {
+      defaults: {
+        x: 0,
+        y: 0,
+        width: 64,
+        height: 64,
+        radius: 32,
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0,
+      },
+    },
+
   });
 
   
