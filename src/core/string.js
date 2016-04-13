@@ -41,7 +41,7 @@
     else {
       var args = arguments;
       /** @ignore */
-      rep_fn = function(m, k) { return args[ parseInt(k) ]; };
+      rep_fn = function(m, k) { return args[ parseInt(k) ] || ''; };
     }
     
     return this.replace( /\{(\w+)\}/g, rep_fn );
