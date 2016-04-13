@@ -291,16 +291,20 @@
     if (arguments.length == 1) {
       for (var i=0; i<start; ++i) this[i] = i;
     }
-    else if (start < end){
-      step  = step || 1;
-      for (var i=start, index=0; i<end; i+=step, ++index) {
-        this[index] = i;
+    else if (start < end) {
+      step = step || 1;
+      if (step > 0) {
+        for (var i=start, index=0; i<end; i+=step, ++index) {
+          this[index] = i;
+        }
       }
     }
     else {
-      step  = step || -1;
-      for (var i=start, index=0; i>end; i+=step, ++index) {
-        this[index] = i;
+      step = step || -1;
+      if (step < 0) {
+        for (var i=start, index=0; i>end; i+=step, ++index) {
+          this[index] = i;
+        }
       }
     }
     
