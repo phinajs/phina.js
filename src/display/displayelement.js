@@ -21,15 +21,11 @@ phina.namespace(function() {
     init: function(options) {
       options = (options || {});
       
-      this.superInit();
+      this.superInit(options);
 
       this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
-
-      this.width = options.width || 64;
-      this.height = options.height || 64;
-      this.radius = options.radius || 32;
     },
 
     /**
