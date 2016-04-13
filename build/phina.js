@@ -7442,9 +7442,10 @@ phina.namespace(function() {
 
       options = ({}).$safe(options, phina.app.Object2D.defaults);
 
-      this.position = phina.geom.Vector2(0, 0);
-      this.scale    = phina.geom.Vector2(1, 1);
-      this.origin   = phina.geom.Vector2(0.5, 0.5);
+      this.position = phina.geom.Vector2(options.x, options.y);
+      this.scale    = phina.geom.Vector2(options.scaleX, options.scaleY);
+      this.rotation = options.rotation;
+      this.origin   = phina.geom.Vector2(options.originX, options.originY);
 
       this._matrix = phina.geom.Matrix33().identity();
       this._worldMatrix = phina.geom.Matrix33().identity();
@@ -7453,8 +7454,6 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
-      this.x = options.x;
-      this.y = options.y;
       this.width = options.width;
       this.height = options.height;
       this.radius = options.radius;
@@ -7836,12 +7835,15 @@ phina.namespace(function() {
       defaults: {
         x: 0,
         y: 0,
-        width: 64,
-        height: 64,
-        radius: 32,
         scaleX: 1,
         scaleY: 1,
         rotation: 0,
+        originX: 0.5,
+        originY: 0.5,
+        
+        width: 64,
+        height: 64,
+        radius: 32,
         boundingType: 'rect',
       },
     },
