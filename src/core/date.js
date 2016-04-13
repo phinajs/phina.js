@@ -92,7 +92,7 @@
   /*
    * http://qiita.com/n0bisuke/items/dd537bd4cbe9ab501ce8
    */
-  Date.prototype.$method('calculateAge', function(birthday, when) {
+  Date.$method('calculateAge', function(birthday, when) {
     // birthday
     if (typeof birthday === 'string') {
       birthday = new Date(birthday);
