@@ -38,7 +38,7 @@ phina.namespace(function() {
         }
       }
 
-      if (!this._enable) return ;
+      if (!this._enable || !this.app.pointers) return ;
       this._checkElement(root);
     },
 

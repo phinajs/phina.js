@@ -91,10 +91,14 @@
   Number.prototype.$method("padding",  function(n, ch) {
     var str = this+'';
     n  = n-str.length;
-    ch = ch || '0';
+    ch = (ch || '0')[0];
     
     while(n-- > 0) { str = ch + str; }
     
+    if (str.indexOf("-") >= 0) {
+      str = "-" + str.replace("-", "");
+    }
+
     return str;
   });
 
@@ -141,8 +145,10 @@
    */
   Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
-    for (var i=+this; i<=limit; i+=step) {
-      fn.call(self, i, this);
+    if (this < limit && step > 0 || this > limit && step < 0) {
+      for (var i=+this; i<=limit; i+=step) {
+        fn.call(self, i, this);
+      }
     }
     return this;
   });

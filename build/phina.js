@@ -403,10 +403,14 @@
   Number.prototype.$method("padding",  function(n, ch) {
     var str = this+'';
     n  = n-str.length;
-    ch = ch || '0';
+    ch = (ch || '0')[0];
     
     while(n-- > 0) { str = ch + str; }
     
+    if (str.indexOf("-") >= 0) {
+      str = "-" + str.replace("-", "");
+    }
+
     return str;
   });
 
@@ -453,8 +457,10 @@
    */
   Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
-    for (var i=+this; i<=limit; i+=step) {
-      fn.call(self, i, this);
+    if (this < limit && step > 0 || this > limit && step < 0) {
+      for (var i=+this; i<=limit; i+=step) {
+        fn.call(self, i, this);
+      }
     }
     return this;
   });
@@ -616,7 +622,7 @@
     else {
       var args = arguments;
       /** @ignore */
-      rep_fn = function(m, k) { return args[ parseInt(k) ]; };
+      rep_fn = function(m, k) { return args[ parseInt(k) ] || ''; };
     }
     
     return this.replace( /\{(\w+)\}/g, rep_fn );
@@ -686,7 +692,7 @@
   String.prototype.$method("padding", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = ch + str; }
     
@@ -700,7 +706,7 @@
   String.prototype.$method("paddingLeft", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = ch + str; }
     
@@ -714,7 +720,7 @@
   String.prototype.$method("paddingRight", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = str + ch; }
     
@@ -1115,16 +1121,20 @@
     if (arguments.length == 1) {
       for (var i=0; i<start; ++i) this[i] = i;
     }
-    else if (start < end){
-      step  = step || 1;
-      for (var i=start, index=0; i<end; i+=step, ++index) {
-        this[index] = i;
+    else if (start < end) {
+      step = step || 1;
+      if (step > 0) {
+        for (var i=start, index=0; i<end; i+=step, ++index) {
+          this[index] = i;
+        }
       }
     }
     else {
-      step  = step || -1;
-      for (var i=start, index=0; i>end; i+=step, ++index) {
-        this[index] = i;
+      step = step || -1;
+      if (step < 0) {
+        for (var i=start, index=0; i>end; i+=step, ++index) {
+          this[index] = i;
+        }
       }
     }
     
@@ -1377,7 +1387,10 @@
   });
 
 
-  Date.prototype.$method('calculateAge', function(birthday, when) {
+  /*
+   * http://qiita.com/n0bisuke/items/dd537bd4cbe9ab501ce8
+   */
+  Date.$method('calculateAge', function(birthday, when) {
     // birthday
     if (typeof birthday === 'string') {
       birthday = new Date(birthday);
@@ -6887,7 +6900,7 @@ phina.namespace(function() {
         }
       }
 
-      if (!this._enable) return ;
+      if (!this._enable || !this.app.pointers) return ;
       this._checkElement(root);
     },
 

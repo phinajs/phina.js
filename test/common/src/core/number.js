@@ -45,6 +45,7 @@ describe('#Number', function() {
 
   it('padding', function() {
     assert.equal((50).padding(10), "0000000050");
+    assert.equal((-50).padding(4), "-050");
   });
 
   it('times', function() {

@@ -149,6 +149,7 @@ describe('#Array', function() {
     assert([].range(0, -10, -2).equals([0, -2, -4, -6, -8]));
     assert([].range().equals([]));
     assert([].range(1, 0).equals([1]));
+    assert([].range(1, 10, -1).equals([]));
   });
 
   it('flatten', function() {

@@ -65,5 +65,11 @@ describe('#Date', function() {
 
     // assert.equal(date.format('Y/m/d'), '2015/11/17');
   });
-  
+
+  it('calculateAge', function() {
+    var age = Date.calculateAge('1988-9-16');
+    assert.equal(Date.calculateAge('1988-9-16'), 27); // 27 歳
+    assert.equal(Date.calculateAge('1988-9-16', '2000-1-1'), 11); // 11 歳
+  });
+
 });
