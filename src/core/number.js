@@ -91,7 +91,7 @@
   Number.prototype.$method("padding",  function(n, ch) {
     var str = this+'';
     n  = n-str.length;
-    ch = ch || '0';
+    ch = (ch || '0')[0];
     
     while(n-- > 0) { str = ch + str; }
     

@@ -111,7 +111,7 @@
   String.prototype.$method("padding", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = ch + str; }
     
@@ -125,7 +125,7 @@
   String.prototype.$method("paddingLeft", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = ch + str; }
     
@@ -139,7 +139,7 @@
   String.prototype.$method("paddingRight", function(n, ch) {
     var str = this.toString();
     n  = n-str.length;
-    ch = ch || ' ';
+    ch = (ch || ' ')[0];
     
     while(n-- > 0) { str = str + ch; }
     
