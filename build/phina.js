@@ -622,7 +622,15 @@
     else {
       var args = arguments;
       /** @ignore */
-      rep_fn = function(m, k) { return args[ parseInt(k) ] || ''; };
+      rep_fn = function(m, k) {
+        var v = args[ parseInt(k) ];
+        if (v !== undefined && v !== null) {
+          return v;
+        }
+        else {
+          return '';
+        }
+      };
     }
     
     return this.replace( /\{(\w+)\}/g, rep_fn );
@@ -7426,13 +7434,14 @@ phina.namespace(function() {
     /** 基準位置 */
     origin: null,
 
-
     /**
      * @constructor
      */
-    init: function() {
+    init: function(options) {
       this.superInit();
-      
+
+      options = ({}).$safe(options, phina.app.Object2D.defaults);
+
       this.position = phina.geom.Vector2(0, 0);
       this.scale    = phina.geom.Vector2(1, 1);
       this.origin   = phina.geom.Vector2(0.5, 0.5);
@@ -7444,10 +7453,12 @@ phina.namespace(function() {
       this._overFlags = {};
       this._touchFlags = {};
 
-      this.width = 64;
-      this.height = 64;
-      this.radius = 32;
-      this.boundingType = 'rect';
+      this.x = options.x;
+      this.y = options.y;
+      this.width = options.width;
+      this.height = options.height;
+      this.radius = options.radius;
+      this.boundingType = options.boundingType;
     },
 
     /**
@@ -7820,7 +7831,21 @@ phina.namespace(function() {
           // TODO: どうしようかな??
         }
       },
-    }
+    },
+    _static: {
+      defaults: {
+        x: 0,
+        y: 0,
+        width: 64,
+        height: 64,
+        radius: 32,
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0,
+        boundingType: 'rect',
+      },
+    },
+
   });
 
   
@@ -9777,15 +9802,11 @@ phina.namespace(function() {
     init: function(options) {
       options = (options || {});
       
-      this.superInit();
+      this.superInit(options);
 
       this.visible = true;
       this.alpha = 1.0;
       this._worldAlpha = 1.0;
-
-      this.width = options.width || 64;
-      this.height = options.height || 64;
-      this.radius = options.radius || 32;
     },
 
     /**
