@@ -145,6 +145,16 @@ phina.namespace(function() {
       return this;
     },
 
+    quadraticCurveTo: function() {
+      this.context.quadraticCurveTo.apply(this.context, arguments);
+      return this;
+    },
+
+    bezierCurveTo: function() {
+      this.context.bezierCurveTo.apply(this.context, arguments);
+      return this;
+    },
+
     /**
      * パス内を塗りつぶす
      */
@@ -760,6 +770,10 @@ phina.namespace(function() {
       measureText: function(font, text) {
         this._context.font = font;
         return this._context.measureText(text);
+      },
+
+      createLinearGradient: function() {
+        return this._context.createLinearGradient.apply(this._context, arguments);
       },
     },
   });

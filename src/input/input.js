@@ -20,6 +20,7 @@
       this.domElement = domElement || window.document;
 
       this.position = phina.geom.Vector2(0, 0);
+      this.startPosition = phina.geom.Vector2(0, 0);
       this.deltaPosition = phina.geom.Vector2(0, 0);
       this.prevPosition = phina.geom.Vector2(0, 0);
       this._tempPosition = phina.geom.Vector2(0, 0);
@@ -48,6 +49,10 @@
       }
       else {
         this._moveFlag = true;
+      }
+
+      if (this.start) {
+        this.startPosition.set(this.position.x, this.position.y);
       }
 
       // 前回の座標を更新
