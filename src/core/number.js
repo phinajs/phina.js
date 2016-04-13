@@ -95,6 +95,10 @@
     
     while(n-- > 0) { str = ch + str; }
     
+    if (str.indexOf("-") >= 0) {
+      str = "-" + str.replace("-", "");
+    }
+
     return str;
   });
 
