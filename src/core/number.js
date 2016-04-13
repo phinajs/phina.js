@@ -145,8 +145,10 @@
    */
   Number.prototype.$method("step",  function(limit, step, fn, self) {
     self = self || this;
-    for (var i=+this; i<=limit; i+=step) {
-      fn.call(self, i, this);
+    if (this < limit && step > 0 || this > limit && step < 0) {
+      for (var i=+this; i<=limit; i+=step) {
+        fn.call(self, i, this);
+      }
     }
     return this;
   });
