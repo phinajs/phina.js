@@ -41,7 +41,15 @@
     else {
       var args = arguments;
       /** @ignore */
-      rep_fn = function(m, k) { return args[ parseInt(k) ] || ''; };
+      rep_fn = function(m, k) {
+        var v = args[ parseInt(k) ];
+        if (v !== undefined && v !== null) {
+          return v;
+        }
+        else {
+          return '';
+        }
+      };
     }
     
     return this.replace( /\{(\w+)\}/g, rep_fn );

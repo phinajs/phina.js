@@ -17,7 +17,6 @@ phina.namespace(function() {
     /** 基準位置 */
     origin: null,
 
-
     /**
      * @constructor
      */
@@ -41,8 +40,8 @@ phina.namespace(function() {
       this.y = options.y;
       this.width = options.width;
       this.height = options.height;
-      this.radius = 32;
-      this.boundingType = 'rect';
+      this.radius = options.radius;
+      this.boundingType = options.boundingType;
     },
 
     /**
@@ -426,6 +425,7 @@ phina.namespace(function() {
         scaleX: 1,
         scaleY: 1,
         rotation: 0,
+        boundingType: 'rect',
       },
     },
 
