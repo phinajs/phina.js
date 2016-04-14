@@ -14,9 +14,10 @@
   /**
    * @property {Object} first
    * 最初の要素
-   *
+   * 
+   *     @example   
    *     arr = [6, 5, 2, 3, 1, 4]
-   *     arr.first; // => 6
+   *     console.log(arr.first); // => 6
    */
   Array.prototype.accessor("first", {
       "get": function()   { return this[0]; },
