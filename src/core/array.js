@@ -484,7 +484,7 @@
    *     arr.range(2, 14, 5); // => [2, 7, 12]
    *     arr.range(2, -3);    // => [2, 1, 0, -1, -2]
    *
-   * @param {Number} [start=0] 最初の値
+   * @param {Number} start 最初の値
    * @param {Number} end 最後の値（省略不可）
    * @param {Number} [step=1または-1] 間隔
    */
