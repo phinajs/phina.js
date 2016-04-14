@@ -206,6 +206,14 @@
     return temp;
   });
 
+  /**
+   * @method  $toArray
+   * 配列化
+   */
+  Object.prototype.$method("$toArray", function() {
+    return Array.prototype.slice.call(this);
+  });
+
   Object.prototype.$method('$watch', function(key, callback) {
     var target = this;
     var descriptor = null;
