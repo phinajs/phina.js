@@ -63,11 +63,11 @@ th.describe("app.Element", function() {
             backgroundColor: 'red',
           },
           x: 100,
-          y: 100,
+          y: 100
         },
       },
     });
-
+    phina.display.CircleShape().addChildTo(elm.shape);
     console.log(elm.toJSON());
     console.log(JSON.stringify(elm.toJSON(), null, '  '));
   });
