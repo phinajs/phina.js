@@ -27,12 +27,13 @@ var CIRCLE_PURSUIT_RATE = 0.25;  // 収束率
 phina.define('Circle', {
   superClass: 'CircleShape',
 
-  init: function(color) {
-    this.superInit({
-      fill: color,
-      stroke: null,
-      radius: CIRCLE_RADIUS,
+  init: function(options) {
+    options = (options || {}).$safe({
+      fill: 'red',  // 塗りつぶし色
+      stroke: null, // ストローク色
+      radius: CIRCLE_RADIUS, // 半径
     });
+    this.superInit(options);
 
     this.blendMode = 'lighter';
   },
@@ -74,9 +75,13 @@ phina.define("MainScene", {
     // サークルを生成
     (CIRCLE_MAX_NUM).times(function(i) {
       var color = "hsla({0}, 75%, 50%, 0.75)".format(360/CIRCLE_MAX_NUM*i);
-      var circle = Circle(color).addChildTo(this.group);
-      circle.x = Math.randint(0, this.gridX.width);
-      circle.y = Math.randint(0, this.gridY.width);
+      var x = Math.randint(0, this.gridX.width);
+      var y = Math.randint(0, this.gridY.width);
+      var circle = Circle({
+        fill: color,
+        x: x,
+        y: y,
+      }).addChildTo(this.group);
     }, this);
 
     // チェイン

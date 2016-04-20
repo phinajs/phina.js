@@ -27,12 +27,13 @@ var FLOOR_HEIGHT = 960;
 phina.define('Circle', {
   superClass: 'CircleShape',
 
-  init: function(color) {
-    this.superInit({
-      fill: color,  // 塗りつぶし色
+  init: function(options) {
+    options = (options || {}).$safe({
+      fill: 'red',  // 塗りつぶし色
       stroke: null, // ストローク色
       radius: CIRCLE_RADIUS, // 半径
     });
+    this.superInit(options);
 
     this.blendMode = 'lighter';
     // 下への移動値
@@ -92,8 +93,11 @@ phina.define("MainScene", {
   addCircle: function(x, y) {
     var color = "hsla({0}, 75%, 50%, 0.75)".format(Math.randint(0, 360));
     // サークルを生成
-    var circle = Circle(color).addChildTo(this);
-    circle.setPosition(x, y);
+    var circle = Circle({
+      fill: color,
+      x: x,
+      y: y,
+    }).addChildTo(this);
   },
 });
 
