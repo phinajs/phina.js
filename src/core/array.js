@@ -7,17 +7,17 @@
   /**
    * @class global.Array
    * # 拡張した Array クラス
-   * Array クラスを拡張しています
+   * Array クラスを拡張しています。
    */
 
 
   /**
    * @property {Object} first
    * 最初の要素
-   * 
-   *     @example   
-   *     arr = [6, 5, 2, 3, 1, 4]
-   *     console.log(arr.first); // => 6
+   *
+   * ### Example
+   *     arr = [6, 5, 2, 3, 1, 4];
+   *     arr.first; // => 6
    */
   Array.prototype.accessor("first", {
       "get": function()   { return this[0]; },
@@ -28,7 +28,8 @@
    * @property {Object} last
    * 最後の要素
    *
-   *     arr = [6, 5, 2, 3, 1, 4]
+   * ### Example
+   *     arr = [6, 5, 2, 3, 1, 4];
    *     arr.last; // => 4
    */
   Array.prototype.accessor("last", {
@@ -38,10 +39,11 @@
 
   /**
    * @method equals
-   * 渡された配列と等しいかどうかをチェックします
+   * 渡された配列と等しいかどうかをチェックします。
    *
-   * 要素同士を === で比較します。要素に配列が含まれている場合は {@link global.Array#deepEquals} を使用してください。
+   * 要素同士を === で比較します。要素に配列が含まれている場合は {@link #deepEquals} を使用してください。
    *
+   * ### Example
    *     arr1 = [6, 5, 2, 3, 1, 4];
    *     arr1.equals([6, 5, 2, 3, 1, 4]);       // => true
    *     arr2 = [6, 5, 2, [3, 1], 4];
@@ -66,13 +68,14 @@
 
   /**
    * @method deepEquals
-   * ネストされている配列を含め、渡された配列と等しいかどうかをチェックします
+   * ネストされている配列を含め、渡された配列と等しいかどうかをチェックします。
    *
+   * ※equalsDeep にするか検討. (Java では deepEquals なのでとりあえず合わせとく)
+   *
+   * ### Example
    *     arr = [6, 5, 2, [3, 1], 4];
    *     arr.equals([6, 5, 2, [3, 1], 4]);     // => false
    *     arr.deepEquals([6, 5, 2, [3, 1], 4]); // => true
-   *
-   * equalsDeep にするか検討. (Java では deepEquals なのでとりあえず合わせとく)
    *
    * @param {Array} arr 比較する対象の配列
    * @return {Boolean} チェックの結果
@@ -92,10 +95,11 @@
 
   /**
    * @method contains
-   * 指定した要素が配列に含まれているかをチェックします
+   * 指定した要素が配列に含まれているかをチェックします。
    *
    * 比較には厳密な同値（三重イコール演算子 === で使われるのと同じ方法）を用います。
    *
+   * ### Example
    *     arr = [6, 5, 2, 3, 1, 4];
    *     arr.contains(3);     // => true
    *     arr.contains(3, 4);  // => false
@@ -112,11 +116,12 @@
   
   /**
    * @method at
-   * 指定したインデックスの要素を返します（ループ・負数の指定可）
+   * 指定したインデックスの要素を返します（ループ・負数の指定可）。
    *
    * 添字が負数の場合は末尾からのオフセットとみなします。末尾の要素が -1 番目になります。  
    * 添字の絶対値が Array.length 以上の場合はループします。
    *
+   * ### Example
    *     arr = ['a', 'b', 'c', 'd', 'e', 'f'];
    *     arr.at(0);  // => 'a'
    *     arr.at(6);  // => 'a'
@@ -137,10 +142,11 @@
 
   /**
    * @method find
-   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初の要素を返します
+   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初の要素を返します。
    *
    * どの要素もマッチしなければ undefined を返します。
    *
+   * ### Example
    *     arr = ['foo', 'bar', 'hoge', 'fuga'];
    *     arr.find( function(elm) {
    *       return elm.indexOf('a') >= 0;
@@ -166,10 +172,11 @@
 
   /**
    * @method findIndex
-   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初のインデックスを返します
+   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初のインデックスを返します。
    *
    * どの要素もマッチしなければ -1 を返します。
    *
+   * ### Example
    *     arr = ['foo', 'bar', 'hoge', 'fuga'];
    *     arr.findIndex( function(elm) {
    *       return elm.indexOf('a') >= 0;
@@ -196,8 +203,9 @@
   /**
    * @method swap
    * @chainable
-   * a 番目の要素 と b 番目の要素を入れ替えます
+   * a 番目の要素 と b 番目の要素を入れ替えます。
    *
+   * ### Example
    *     arr1 = ['a', 'b', 'c', 'd'];
    *     arr2 = arr1.swap(0, 3); // => ['d', 'b', 'c', 'a']
    *     arr1 === arr2;          // => true
@@ -216,8 +224,9 @@
   /**
    * @method erase
    * @chainable
-   * 指定したオブジェクトと一致した最初の要素を削除します
+   * 指定したオブジェクトと一致した最初の要素を削除します。
    *
+   * ### Example
    *     arr1 = ['a', 'b', 'b', 'c'];
    *     arr2 = arr1.erase('b'); // => ['a', 'b', 'c']
    *     arr1 === arr2;          // => true
@@ -235,8 +244,9 @@
   /**
    * @method eraseAll
    * @chainable
-   * 指定したオブジェクトと一致したすべての要素を削除します
+   * 指定したオブジェクトと一致したすべての要素を削除します。
    *
+   * ### Example
    *     arr1 = ['a', 'b', 'b', 'c'];
    *     arr2 = arr1.eraseAll('b'); // => ['a', 'c']
    *     arr1 === arr2;             // => true
@@ -255,10 +265,11 @@
   /**
    * @method eraseIf
    * @chainable
-   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初の要素を削除します
+   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）最初の要素を削除します。
    *
    * どの要素もマッチしなければ何も起きません。
    *
+   * ### Example
    *     arr = ['foo', 'bar', 'hoge', 'fuga'];
    *     arr.eraseIf( function(elm) {
    *       return elm.indexOf('o') >= 0;
@@ -280,10 +291,11 @@
   /**
    * @method eraseIfAll
    * @chainable
-   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）すべての要素を削除します
+   * 各要素を引数にして関数を実行し、その値が真となる（＝条件にマッチする）すべての要素を削除します。
    *
    * どの要素もマッチしなければ何も起きません。
    *
+   * ### Example
    *     arr = ['foo', 'bar', 'hoge', 'fuga'];
    *     arr.eraseIfAll( function(elm) {
    *       return elm.indexOf('o') >= 0;
@@ -304,11 +316,12 @@
   
   /**
    * @method random
-   * 配列からランダムに1つ取り出した要素を返します
+   * 配列からランダムに1つ取り出した要素を返します。
    *
    * 取り出す範囲をインデックスで指定することもできます。  
-   * {@link global.Array#pickup}、{@link global.Array#lot} と同じです。  
+   * {@link #pickup}、{@link #lot} と同じです。  
    *
+   * ### Example
    *     arr = ['foo', 'bar', 'hoge', 'fuga'];
    *     arr.random(2, 3);  // => 'hoge' または 'fuga'
    *
@@ -324,10 +337,10 @@
   
   /**
    * @method pickup
-   * 配列からランダムで1つ取り出した要素を返します
+   * 配列からランダムで1つ取り出した要素を返します。
    *
-   * {@link global.Array#random}、{@link global.Array#lot} と同じです。
-   * @inheritdoc global.Array#random
+   * {@link #random}、{@link #lot} と同じです。
+   * @inheritdoc #random
    */
   Array.prototype.$method("pickup", function(min, max) {
     min = min || 0;
@@ -337,10 +350,10 @@
   
   /**
    * @method lot
-   * 配列からランダムで1つ取り出した要素を返します
+   * 配列からランダムで1つ取り出した要素を返します。
    *
-   * {@link global.Array#random}、{@link global.Array#pickup} と同じです。
-   * @inheritdoc global.Array#random
+   * {@link #random}、{@link #pickup} と同じです。
+   * @inheritdoc #random
    */
   Array.prototype.$method("lot", function(min, max) {
     min = min || 0;
@@ -350,10 +363,11 @@
   
   /**
    * @method uniq
-   * 要素の重複を取り除いた配列を生成して返します
+   * 要素の重複を取り除いた配列を生成して返します。
    *
    * 自分自身は破壊されません。
    *
+   * ### Example
    *     arr = [1, 2, 3, 4, 3, 2];
    *     arr.uniq(); // => [1, 2, 3, 4]
    *
@@ -369,10 +383,11 @@
 
   /**
    * @method flatten
-   * 自身を再帰的に平滑化した配列を生成して返します
+   * 自身を再帰的に平滑化した配列を生成して返します。
    *
    * level を指定しなければ深さの際限なく完全に平滑化します。
    *
+   * ### Example
    *     arr = [1, 2, [3, [4, 5]]];
    *     arr.flatten();  // => [1, 2, 3, 4, 5]
    *     arr.flatten(1); // => [1, 2, 3, [4, 5]]
@@ -402,8 +417,9 @@
 
   /**
    * @method clone
-   * 自身のコピーを生成して返します
+   * 自身のコピーを生成して返します。
    *
+   * ### Example
    *     arr1 = [1, 2, [3, 4]];
    *     arr2 = arr1.clone();      // => [1, 2, [3, 4]]
    *     arr1[2] === arr2[2];      // => true
@@ -435,8 +451,9 @@
   /**
    * @method clear
    * @chainable
-   * 自身を空の配列にします
+   * 自身を空の配列にします。
    *
+   * ### Example
    *     arr = [1, 2, [3, 4]];
    *     arr.clear(); // => []
    */
@@ -448,8 +465,9 @@
   /**
    * @method fill
    * @chainable
-   * 自身の一部の要素を特定の値で埋めます
+   * 自身の一部の要素を特定の値で埋めます。
    *
+   * ### Example
    *     arr = [1, 2, 3, 4, 5];
    *     arr.fill("x");       // => ["x", "x", "x", "x", "x"]
    *     arr.fill("x", 2, 4); // => [1, 2, "x", "x", 5]
@@ -473,19 +491,20 @@
   /**
    * @method range
    * @chainable
-   * 自身を等差数列（一定間隔の整数値の列）とします
+   * 自身を等差数列（一定間隔の整数値の列）とします。
    *
-   * 引数が1つの場合、0～end（end含まず）の整数の配列です  
-   * 引数が2つの場合、start～end（end含まず）の整数の配列です  
-   * 引数が3つの場合、start～end（end含まず）かつ start + n * step (nは整数)を満たす整数の配列です
+   * - 引数が1つの場合、0～end（end含まず）の整数の配列です。  
+   * - 引数が2つの場合、start～end（end含まず）の整数の配列です。  
+   * - 引数が3つの場合、start～end（end含まず）かつ start + n * step (nは整数)を満たす整数の配列です。
    *
+   * ### Example
    *     arr = [];
    *     arr.range(4);        // => [0, 1, 2, 3]
    *     arr.range(2, 5);     // => [2, 3, 4]
    *     arr.range(2, 14, 5); // => [2, 7, 12]
    *     arr.range(2, -3);    // => [2, 1, 0, -1, -2]
    *
-   * @param {Number} start 最初の値
+   * @param {Number} start 最初の値（デフォルトは 0）
    * @param {Number} end 最後の値（省略不可）
    * @param {Number} [step=1または-1] 間隔
    */
@@ -518,8 +537,9 @@
   /**
    * @method shuffle
    * @chainable
-   * 自身の要素をランダムにシャッフルします
+   * 自身の要素をランダムにシャッフルします。
    *
+   * ### Example
    *     arr = [1, 2, 3, 4, 5];
    *     arr.shuffle(); // => [5, 1, 4, 2, 3] など
    */
@@ -537,10 +557,11 @@
 
   /**
    * @method sum
-   * 要素の合計値を返します
+   * 要素の合計値を返します。
    *
    * 要素に数値以外が含まれる場合の挙動は不定です。
    *
+   * ### Example
    *     arr = [1, 2, 3, 4, 5, 6];
    *     arr.sum(); // => 21
    *
@@ -556,10 +577,11 @@
 
   /**
    * @method average
-   * 要素の平均値を返します
+   * 要素の平均値を返します。
    *
    * 要素に数値以外が含まれる場合の挙動は不定です。
    *
+   * ### Example
    *     arr = [1, 2, 3, 4, 5, 6]
    *     arr.average(); // => 3.5
    *
@@ -577,22 +599,23 @@
   /**
    * @method each
    * @chainable
-   * 要素を順番に渡しながら関数を繰り返し実行します
+   * 要素を順番に渡しながら関数を繰り返し実行します。
    *
    * メソッドチェーンに対応していますが、このメソッドによって自分自身は変化しません。
    *
+   * ###Reference
+   * - [Array.prototype.forEach() - JavaScript | MDN](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+   *
+   * ### Example
    *     arr = [1, 2, 3];
    *     arr.each( function(elm) {
    *       console.log(elm * elm)
    *     });
    *     // => 1
-   *           4
-   *           9
+   *     //    4
+   *     //    9
    *
    * @param {Function} callback 各要素に対して実行するコールバック関数
-   * @param {Object} callback.currentValue 現在処理されている配列の要素
-   * @param {Number} callback.index 現在処理されている配列の要素のインデックス
-   * @param {Array} callback.array 適用されている配列
    * @param {Object} [self=this] callback 内で this として参照される値
    */
   Array.prototype.$method("each", function() {
@@ -621,8 +644,9 @@
   /**
    * @method range
    * @static
-   * インスタンスメソッドの {@link global.Array#range} と同じです
+   * インスタンスメソッドの {@link #range} と同じです。
    *
+   * ### Example
    *     Array.range(2, 14, 5); // => [2, 7, 12]
    */
   Array.$method("range", function(start, end, step) {
@@ -633,10 +657,9 @@
   /**
    * @method of
    * @static
-   * ES6 準拠の of 関数です
+   * ES6 準拠の of 関数です。可変長引数をとって Array オブジェクトにして返します。
    *
-   * 可変長引数をとって Array オブジェクトにして返します。
-   *
+   * ### Example
    *     Array.of();        // => []
    *     Array.of(1, 2, 3); // => [1, 2, 3]
    *
@@ -650,12 +673,12 @@
   /**
    * @method from
    * @static
-   * ES6 準拠の from 関数です
+   * ES6 準拠の from 関数です。array-like オブジェクトから新しい配列を生成します。
    *
-   * array-like オブジェクトから新しい配列を生成します。  
    * array-like オブジェクトとは、length プロパティを持ち、数字の添字でアクセス可能なオブジェクトのことです。  
    * 通常の配列のほか、String、arguments、NodeList なども array-like オブジェクトです。
    *
+   * ### Example
    *     Array.from([1, 2, 3], function(elm){ return elm * elm} ); // => [1, 4, 9]
    *     Array.from("foo");                                        // => ["f", "o", "o"]
    *     Array.from( document.querySelectorAll("span"))            // => [Element, Element, Element,...]
@@ -675,10 +698,11 @@
   
   /**
    * @method most
-   * 指定した関数の返り値が最小となる要素と最大となる要素をまとめて返します
+   * 指定した関数の返り値が最小となる要素と最大となる要素をまとめて返します。
    *
    * 空の配列に対して実行すると {max: Infinity, min: -Infinity} を返します。
    *
+   * ### Example
    *     [5,1,4,1,9,2,-10].most(); // => {max:9, min: -10}
    *
    *     points = [ {x:0, y:0}, {x:640, y:960}, {x:-80, y:100} ];
