@@ -63,7 +63,7 @@ th.describe("app.Element", function() {
             backgroundColor: 'red',
           },
           x: 100,
-          y: 100
+          y: 100,
         },
       },
     });
