@@ -67,7 +67,7 @@ th.describe("app.Element", function() {
         },
       },
     });
-
+    phina.display.CircleShape().addChildTo(elm.shape);
     console.log(elm.toJSON());
     console.log(JSON.stringify(elm.toJSON(), null, '  '));
   });
