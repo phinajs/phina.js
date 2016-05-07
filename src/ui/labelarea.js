@@ -66,9 +66,8 @@ phina.namespace(function() {
         }
 
         var j = 0;
-        var breakFlag = false;
         var char;
-        while (true) {
+        loop: while (true) {
           //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
 
           var len = text.length;
@@ -93,8 +92,7 @@ phina.namespace(function() {
             do {
               char = text[pos++];
               if (pos >= len) {
-                breakFlag = true;
-                break;
+                break loop;
               }
               if (!cache[char]) {
                 cache[char] = context.measureText(char).width;
@@ -104,9 +102,7 @@ phina.namespace(function() {
 
             --pos;
           }
-          if (breakFlag) {
-            break;
-          }
+          
           //0 のときは無限ループになるので、1にしとく
           if (pos === 0) pos = 1;
 
