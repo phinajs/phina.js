@@ -91,7 +91,7 @@ phina.namespace(function() {
 
             do {
               char = text[pos++];
-              if (pos >= len) {
+              if (pos > len) {
                 break loop;
               }
               if (!cache[char]) {
