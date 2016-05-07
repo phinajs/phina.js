@@ -148,7 +148,7 @@ th.describe('ui.LabelArea', function() {
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(10).join('LabelAreaTestString\n');
+    label.text = new Array(10).join('LabelArea TestString\n');
   });
   
   th.it('scroll', function(){
