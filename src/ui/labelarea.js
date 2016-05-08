@@ -68,15 +68,16 @@ phina.namespace(function() {
 
         // はみ出ていたら強制的に改行する
         line.toArray().each(function(ch) {
-          totalWidth += cache[ch];
+          var w = cache[ch];
 
-          if (totalWidth >= rowWidth) {
+          if ((totalWidth+w) > rowWidth) {
             lines.push(str);
             str = '';
             totalWidth = 0;
           }
 
           str += ch;
+          totalWidth += w;
         });
 
         // 残りがあれば push する
