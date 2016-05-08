@@ -571,6 +571,16 @@ phina.namespace(function() {
       return this.beginPath().ellipse(x, y, width, height).stroke();
     },
 
+    fillText: function() {
+      this._context.fillText.apply(this._context, arguments);
+      return this;
+    },
+
+    strokeText: function() {
+      this._context.strokeText.apply(this._context, arguments);
+      return this;
+    },
+
     /*
      * 画像を描画
      */
@@ -774,6 +784,10 @@ phina.namespace(function() {
 
       createLinearGradient: function() {
         return this._context.createLinearGradient.apply(this._context, arguments);
+      },
+
+      createRadialGradient: function() {
+        return this._context.createRadialGradient.apply(this._context, arguments);
       },
     },
   });
