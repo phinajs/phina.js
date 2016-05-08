@@ -148,19 +148,25 @@ th.describe('ui.LabelArea', function() {
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(10).join('LabelArea TestString\n');
+    label.text = 'あいうえおかきくけこさしすせそ\n';
+    label.text += 'Hello, world!\n';
+    // label.text += 'LabelArea TestString\n';
+    label.text += new Array(10).join('LabelArea TestString\n');
   });
   
   th.it('scroll', function(){
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(10).join('LabelArea test string.\n');
-    label.tweener.to({
-      scrollY: 600,
-    },1000,'easeInBack').to({
-      scrollY:0,
-    },1000,'easeInBack').setLoop(true);
+    label.text = ('LabelArea test string.\n').repeat(1);
+    label.tweener
+      .to({
+        scrollY: 100,
+      },1000,'easeInBack')
+      .to({
+        scrollY:0,
+      }, 1000,'easeInBack')
+      .setLoop(true);
     
   });
 
