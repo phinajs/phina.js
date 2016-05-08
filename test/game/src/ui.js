@@ -159,14 +159,18 @@ th.describe('ui.LabelArea', function() {
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
     label.text = ('LabelArea test string.\n').repeat(1);
-    label.tweener
-      .to({
-        scrollY: 100,
-      },1000,'easeInBack')
-      .to({
-        scrollY:0,
-      }, 1000,'easeInBack')
-      .setLoop(true);
+
+    setTimeout(function() {
+      label.scrollY = 10;
+    }, 1000);
+    // label.tweener
+    //   .to({
+    //     scrollY: 100,
+    //   },1000,'easeInBack')
+    //   .to({
+    //     scrollY:0,
+    //   }, 1000,'easeInBack')
+    //   .setLoop(true);
     
   });
 
