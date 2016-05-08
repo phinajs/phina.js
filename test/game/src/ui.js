@@ -158,20 +158,16 @@ th.describe('ui.LabelArea', function() {
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = ('LabelArea test string.\n').repeat(1);
+    label.text = ('LabelArea test string.\n').repeat(10);
 
-    setTimeout(function() {
-      label.scrollY = 10;
-    }, 1000);
-    // label.tweener
-    //   .to({
-    //     scrollY: 100,
-    //   },1000,'easeInBack')
-    //   .to({
-    //     scrollY:0,
-    //   }, 1000,'easeInBack')
-    //   .setLoop(true);
-    
+    label.tweener
+      .to({
+        scrollY: 600,
+      },1000,'easeInBack')
+      .to({
+        scrollY:0,
+      }, 1000,'easeInBack')
+      .setLoop(true);
   });
 
   th.it('align', function() {
