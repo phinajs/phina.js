@@ -52,7 +52,7 @@ phina.namespace(function() {
       var pos = rowWidth / context.measureText('あ').width | 0;
 
       var cache = this.getTextWidthCache();
-      for (var i = lines.length - 1; 0 <= i; --i) {
+      for (var i = lines.length - 1; i >= 0; --i) {
         var text = lines[i];
         if (text === '') {
           continue;
@@ -60,48 +60,48 @@ phina.namespace(function() {
 
         var j = 0;
         var char;
-        loop: while (true) {
-          //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
+        (function() {
+          while (true) {
 
-          var len = text.length;
-          if (pos >= len) pos = len - 1;
-          char = text.substring(0, pos);
-          if (!cache[char]) {
-            cache[char] = context.measureText(char).width;
+            var len = text.length;
+            if (pos >= len) pos = len - 1;
+            char = text.substring(0, pos);
+            if (!cache[char]) {
+              cache[char] = context.measureText(char).width;
+            }
+            var textWidth = cache[char];
+
+            if (rowWidth < textWidth) {
+              do {
+                char = text[--pos];
+                if (!cache[char]) {
+                  cache[char] = context.measureText(char).width;
+                }
+                textWidth -= cache[char];
+              } while (rowWidth < textWidth);
+
+            } else {
+
+              do {
+                char = text[pos++];
+                if (pos > len) {
+                  return;
+                }
+                if (!cache[char]) {
+                  cache[char] = context.measureText(char).width;
+                }
+                textWidth += cache[char];
+              } while (rowWidth >= textWidth);
+
+              --pos;
+            }
+            //0 のときは無限ループになるので、1にしとく
+            if (pos === 0) pos = 1;
+
+            lines.splice(i + j, 1, text.substring(0, pos), text = text.substring(pos, len));
+            ++j;
           }
-          var textWidth = cache[char];
-
-          if (rowWidth < textWidth) {
-            do {
-              char = text[--pos];
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth -= cache[char];
-            } while (rowWidth < textWidth);
-
-          } else {
-
-            do {
-              char = text[pos++];
-              if (pos > len) {
-                break loop;
-              }
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth += cache[char];
-            } while (rowWidth >= textWidth);
-
-            --pos;
-          }
-          
-          //0 のときは無限ループになるので、1にしとく
-          if (pos === 0) pos = 1;
-
-          lines.splice(i + j, 1, text.substring(0, pos), text = text.substring(pos, len));
-          ++j;
-        }
+        })();
 
       }
 
