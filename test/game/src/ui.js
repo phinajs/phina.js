@@ -151,7 +151,7 @@ th.describe('ui.LabelArea', function() {
     label.text = 'あいうえおかきくけこさしすせそ\n';
     label.text += 'Hello, world!\n';
     // label.text += 'LabelArea TestString\n';
-    label.text += new Array(10).join('LabelArea TestString\n');
+    label.text += ('LabelArea TestString\n').repeat(10);
   });
   
   th.it('scroll', function(){
@@ -274,9 +274,6 @@ th.describe('ui.LabelArea', function() {
     label.setSize(200,200);
     label.lineHeight = 2;
     label.text = 'lineHeight = ' + label.lineHeight + text;
-
-
-    
   });
 
 
