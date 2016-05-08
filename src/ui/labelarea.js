@@ -41,7 +41,7 @@ phina.namespace(function() {
       return cache || (textWidthCache[this.font] = {});
     },
     
-    spliceLines: function() {
+    spliceLines: function(lines) {
       var rowWidth = this.width;
       var context = this.canvas.context;
       context.font = this.font;
@@ -57,12 +57,12 @@ phina.namespace(function() {
         }
       });
 
-      var tempLines = this._lines.map(function(line) {
+      var tempLines = lines.map(function(line) {
         // だいたいの長さを超えていない場合はチェックしない
         if (line.length < limitLength) {
           return line;
         }
-        var lines = [];
+        var localLines = [];
         var str = '';
         var totalWidth = 0;
 
@@ -71,7 +71,7 @@ phina.namespace(function() {
           var w = cache[ch];
 
           if ((totalWidth+w) > rowWidth) {
-            lines.push(str);
+            localLines.push(str);
             str = '';
             totalWidth = 0;
           }
@@ -81,9 +81,9 @@ phina.namespace(function() {
         });
 
         // 残りがあれば push する
-        if (str) lines.push(str);
+        if (str) localLines.push(str);
 
-        return lines;
+        return localLines;
       }).flatten();
 
       return tempLines;
@@ -93,13 +93,15 @@ phina.namespace(function() {
       if (this._lineUpdate === false) {
         return this._lines;
       }
-
       this._lineUpdate = false;
-      var lines = this._lines = (this.text + '').split('\n');
 
-      if (this.width < 1) return lines;
-
-      this._lines = this.spliceLines();
+      var lines = (this.text + '').split('\n');
+      if (this.width < 1) {
+        this._lines = lines;
+      }
+      else {
+        this._lines = this.spliceLines(lines);
+      }
 
       return this._lines;
     },

@@ -150,7 +150,6 @@ th.describe('ui.LabelArea', function() {
     label.position.set(this.gridX.center(), this.gridY.center());
     label.text = 'あいうえおかきくけこさしすせそ\n';
     label.text += 'Hello, world!\n';
-    // label.text += 'LabelArea TestString\n';
     label.text += ('LabelArea TestString\n').repeat(10);
   });
   
