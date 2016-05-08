@@ -41,16 +41,9 @@ phina.namespace(function() {
       return cache || (textWidthCache[this.font] = {});
     },
     
-    getLines: function() {
-      if (this._lineUpdate === false) {
-        return this._lines;
-      }
-
-      this._lineUpdate = false;
-      var lines = this._lines = (this.text + '').split('\n');
-
-      if (this.width < 1) return lines;
-
+    spliceLines: function(lines){
+      lines = lines || this._lines;
+      
       var rowWidth = this.width;
 
       var context = this.canvas.context;
@@ -113,6 +106,18 @@ phina.namespace(function() {
       }
 
       return lines;
+    },
+    
+    getLines: function() {
+      if (this._lineUpdate === false) {
+        return this._lines;
+      }
+
+      this._lineUpdate = false;
+      var lines = this._lines = (this.text + '').split('\n');
+
+      if (this.width < 1) return lines;
+      return this.spliceLines(lines);
 
     },
 
