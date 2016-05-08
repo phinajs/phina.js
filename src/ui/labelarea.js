@@ -41,7 +41,7 @@ phina.namespace(function() {
       return cache || (textWidthCache[this.font] = {});
     },
     
-    spliceLines: function(lines){
+    spliceLines: function(lines) {
       lines = lines || this._lines;
       
       var rowWidth = this.width;
@@ -49,9 +49,44 @@ phina.namespace(function() {
       var context = this.canvas.context;
       context.font = this.font;
       //どのへんで改行されるか目星つけとく
-      var pos = rowWidth / context.measureText('あ').width | 0;
-
+      var limitLength = rowWidth / context.measureText('あ').width | 0;
       var cache = this.getTextWidthCache();
+
+      // update cache
+      this._text.toArray().each(function(char) {
+        if (!cache[char]) {
+          cache[char] = context.measureText(char).width;
+        }
+      });
+
+      var tempLines = lines.map(function(line) {
+        if (line.length < limitLength) {
+          return line;
+        }
+        var lines = [];
+        var str = '';
+        var totalWidth = 0;
+
+        line.toArray().each(function(ch) {
+          totalWidth += cache[ch];
+
+          if (totalWidth >= rowWidth) {
+            lines.push(str);
+            str = '';
+            totalWidth = 0;
+          }
+
+          str += ch;
+        });
+        if (str) lines.push(str);
+
+        console.log(lines);
+
+        return lines;
+      }).flatten();
+
+      return tempLines;
+
       for (var i = lines.length - 1; i >= 0; --i) {
         var text = lines[i];
         if (text === '') {
@@ -117,8 +152,8 @@ phina.namespace(function() {
       var lines = this._lines = (this.text + '').split('\n');
 
       if (this.width < 1) return lines;
-      return this.spliceLines(lines);
 
+      return this.spliceLines(lines);
     },
 
     prerender: function(canvas) {
