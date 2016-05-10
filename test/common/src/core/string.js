@@ -62,6 +62,13 @@ describe('#String', function() {
     assert.equal("This is a string.".include("was"), false);
   });
 
+  it('each', function() {
+    var str = 'abc';
+    str.each(function(ch, i) {
+      assert.equal(ch, str[i]);
+    });
+  });
+
   it('toArray', function() {
     assert("12345".toArray().equals(['1', '2', '3', '4', '5']));
     assert("あいうえお".toArray().equals(['あ', 'い', 'う', 'え', 'お']));

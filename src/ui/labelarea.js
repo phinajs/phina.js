@@ -49,9 +49,9 @@ phina.namespace(function() {
       var cache = this.getTextWidthCache();
 
       // update cache
-      this._text.toArray().forEach(function(char) {
-        if (!cache[char]) {
-          cache[char] = context.measureText(char).width;
+      this._text.each(function(ch) {
+        if (!cache[ch]) {
+          cache[ch] = context.measureText(ch).width;
         }
       });
       
