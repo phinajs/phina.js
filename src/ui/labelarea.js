@@ -46,28 +46,23 @@ phina.namespace(function() {
       var context = this.canvas.context;
       context.font = this.font;
 
-      // どのへんで改行されるか目星つけとく
-      var limitLength = rowWidth / context.measureText('あ').width | 0;
       var cache = this.getTextWidthCache();
 
       // update cache
-      this._text.toArray().each(function(char) {
+      this._text.toArray().forEach(function(char) {
         if (!cache[char]) {
           cache[char] = context.measureText(char).width;
         }
       });
-
-      var tempLines = lines.map(function(line) {
-        // だいたいの長さを超えていない場合はチェックしない
-        if (line.length < limitLength) {
-          return line;
-        }
-        var localLines = [];
+      
+      var localLines = [];
+      lines.forEach(function(line) {
+        
         var str = '';
         var totalWidth = 0;
 
         // はみ出ていたら強制的に改行する
-        line.toArray().each(function(ch) {
+        line.toArray().forEach(function(ch) {
           var w = cache[ch];
 
           if ((totalWidth+w) > rowWidth) {
@@ -80,13 +75,13 @@ phina.namespace(function() {
           totalWidth += w;
         });
 
-        // 残りがあれば push する
-        if (str) localLines.push(str);
+        // 残りを push する
+        localLines.push(str);
 
-        return localLines;
-      }).flatten();
+      });
+      
 
-      return tempLines;
+      return localLines;
     },
     
     getLines: function() {
