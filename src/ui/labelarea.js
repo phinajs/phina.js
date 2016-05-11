@@ -62,7 +62,7 @@ phina.namespace(function() {
         var totalWidth = 0;
 
         // はみ出ていたら強制的に改行する
-        line.toArray().forEach(function(ch) {
+        line.each(function(ch) {
           var w = cache[ch];
 
           if ((totalWidth+w) > rowWidth) {
