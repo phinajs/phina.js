@@ -1098,6 +1098,27 @@
   });
   
   /**
+   * @method each
+   * 各文字を順番に渡しながら関数を繰り返し実行します。
+   *
+   * ### Example
+   *     str = 'abc';
+   *     str.each(function(ch) {
+   *       console.log(ch);
+   *     });
+   *     // => 'a'
+   *     //    'b'
+   *     //    'c'
+   *
+   * @param {Function} callback 各要素に対して実行するコールバック関数
+   * @param {Object} [self=this] callback 内で this として参照される値
+   */
+  String.prototype.$method("each", function() {
+    Array.prototype.forEach.apply(this, arguments);
+    return this;
+  });
+  
+  /**
    * @method toArray
    * 1文字ずつ分解した配列を返します。
    *
@@ -10139,6 +10160,16 @@ phina.namespace(function() {
       return this.beginPath().ellipse(x, y, width, height).stroke();
     },
 
+    fillText: function() {
+      this._context.fillText.apply(this._context, arguments);
+      return this;
+    },
+
+    strokeText: function() {
+      this._context.strokeText.apply(this._context, arguments);
+      return this;
+    },
+
     /*
      * 画像を描画
      */
@@ -10342,6 +10373,10 @@ phina.namespace(function() {
 
       createLinearGradient: function() {
         return this._context.createLinearGradient.apply(this._context, arguments);
+      },
+
+      createRadialGradient: function() {
+        return this._context.createRadialGradient.apply(this._context, arguments);
       },
     },
   });
@@ -11767,7 +11802,9 @@ phina.namespace(function() {
       // pushScene, popScene 対策
       this.on('push', function() {
         // onenter 対策で描画しておく
-        this._draw();
+        if (this.currentScene.canvas) {
+          this._draw();
+        }
       });
     },
 
@@ -12150,83 +12187,64 @@ phina.namespace(function() {
       return cache || (textWidthCache[this.font] = {});
     },
     
+    spliceLines: function(lines) {
+      var rowWidth = this.width;
+      var context = this.canvas.context;
+      context.font = this.font;
+
+      var cache = this.getTextWidthCache();
+
+      // update cache
+      this._text.each(function(ch) {
+        if (!cache[ch]) {
+          cache[ch] = context.measureText(ch).width;
+        }
+      });
+      
+      var localLines = [];
+      lines.forEach(function(line) {
+        
+        var str = '';
+        var totalWidth = 0;
+
+        // はみ出ていたら強制的に改行する
+        line.each(function(ch) {
+          var w = cache[ch];
+
+          if ((totalWidth+w) > rowWidth) {
+            localLines.push(str);
+            str = '';
+            totalWidth = 0;
+          }
+
+          str += ch;
+          totalWidth += w;
+        });
+
+        // 残りを push する
+        localLines.push(str);
+
+      });
+      
+
+      return localLines;
+    },
+    
     getLines: function() {
       if (this._lineUpdate === false) {
         return this._lines;
       }
-
       this._lineUpdate = false;
-      var lines = this._lines = (this.text + '').split('\n');
 
-      if (this.width < 1) return lines;
-
-      var rowWidth = this.width;
-
-      var context = this.canvas.context;
-      context.font = this.font;
-      //どのへんで改行されるか目星つけとく
-      var pos = rowWidth / context.measureText('あ').width | 0;
-
-      var cache = this.getTextWidthCache();
-      for (var i = lines.length - 1; 0 <= i; --i) {
-        var text = lines[i];
-        if (text === '') {
-          continue;
-        }
-
-        var j = 0;
-        var breakFlag = false;
-        var char;
-        while (true) {
-          //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
-
-          var len = text.length;
-          if (pos >= len) pos = len - 1;
-          char = text.substring(0, pos);
-          if (!cache[char]) {
-            cache[char] = context.measureText(char).width;
-          }
-          var textWidth = cache[char];
-
-          if (rowWidth < textWidth) {
-            do {
-              char = text[--pos];
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth -= cache[char];
-            } while (rowWidth < textWidth);
-
-          } else {
-
-            do {
-              char = text[pos++];
-              if (pos >= len) {
-                breakFlag = true;
-                break;
-              }
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth += cache[char];
-            } while (rowWidth >= textWidth);
-
-            --pos;
-          }
-          if (breakFlag) {
-            break;
-          }
-          //0 のときは無限ループになるので、1にしとく
-          if (pos === 0) pos = 1;
-
-          lines.splice(i + j, 1, text.substring(0, pos), text = text.substring(pos, len));
-          ++j;
-        }
-
+      var lines = (this.text + '').split('\n');
+      if (this.width < 1) {
+        this._lines = lines;
+      }
+      else {
+        this._lines = this.spliceLines(lines);
       }
 
-      return lines;
-
+      return this._lines;
     },
 
     prerender: function(canvas) {
