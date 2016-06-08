@@ -39,7 +39,7 @@ var ASSETS = {
     'background': '../assets/images/flappy/background.png',
     'tube1': '../assets/images/flappy/tube1.png',
     'tube2': '../assets/images/flappy/tube2.png',
-    'tomapiko': '../assets/images/tomapiko_ss.png',
+    'tomapiko': '../assets/images/character/tomapiko.png',
   },
   spritesheet: {
     'tomapiko': '../assets/tmss/tomapiko.tmss',
@@ -227,14 +227,8 @@ phina.define('Player', {
     });
 
     this.sprite = Sprite('tomapiko').addChildTo(this);
-    this.sprite.scaleX = -1;
     this.sprite.anim = FrameAnimation('tomapiko').attachTo(this.sprite);
     this.sprite.anim.gotoAndPlay('fly');
-
-    // Shape({
-    //   width: this.width,
-    //   height: this.height,
-    // }).addChildTo(this);
 
     this.lock = false;
   },
@@ -303,7 +297,7 @@ phina.main(function() {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     assets: ASSETS,
-    startLabel: location.search.substr(1).toObject().scene || 'title',
+    startLabel: location.search.substr(1).toObject().scene || 'main',
   });
 
   app.enableStats();
