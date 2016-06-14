@@ -39,10 +39,10 @@ var ASSETS = {
     'background': '../assets/images/flappy/background.png',
     'tube1': '../assets/images/flappy/tube1.png',
     'tube2': '../assets/images/flappy/tube2.png',
-    'tomapiko': '../assets/images/character/tomapiko.png',
+    'tomapiyo': '../assets/images/character/tomapiyo.png',
   },
   spritesheet: {
-    'tomapiko': '../assets/tmss/tomapiko.tmss',
+    'character': '../assets/tmss/character.tmss',
   },
   sound: {
     'touch': TOUCH_SE,
@@ -226,8 +226,8 @@ phina.define('Player', {
       height: 32,
     });
 
-    this.sprite = Sprite('tomapiko').addChildTo(this);
-    this.sprite.anim = FrameAnimation('tomapiko').attachTo(this.sprite);
+    this.sprite = Sprite('tomapiyo').addChildTo(this);
+    this.sprite.anim = FrameAnimation('character').attachTo(this.sprite);
     this.sprite.anim.gotoAndPlay('fly');
 
     this.lock = false;
