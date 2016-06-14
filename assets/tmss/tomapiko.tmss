@@ -35,6 +35,12 @@
       "frames": [15, 16, 17, 16],
       "next": "right",
       "frequency": 4
+    },
+    "damage": {
+      "frames": [4]
+    },
+    "die": {
+      "frames": [5]
     }
   }
 }

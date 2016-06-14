@@ -244,6 +244,8 @@ phina.define('Player', {
 
     if (this.bottom > FLOOR_Y) {
       this.bottom = FLOOR_Y;
+      this.rotation = 0;
+      this.sprite.anim.gotoAndPlay('die');
       this.flare('fall');
     }
 
@@ -260,6 +262,8 @@ phina.define('Player', {
   fall: function() {
     this.lock = true;
     this.physical.force(0, -5);
+
+    this.sprite.anim.gotoAndPlay('damage');
   },
 });
 
