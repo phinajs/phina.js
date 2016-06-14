@@ -17,11 +17,11 @@ phina.globalize();
 
 var ASSETS = {
   image: {
-    'tomapiko': '../assets/images/tomapiko_ss.png',
+    'tomapiyo': '../assets/images/character/tomapiyo.png',
     'karasu': '../assets/images/karasu_ss.png',
   },
   spritesheet: {
-    'tomapiko': '../assets/tmss/tomapiko.tmss',
+    'character': '../assets/tmss/character.tmss',
     'karasu': '../assets/tmss/karasu.tmss',
   },
   sound: {
@@ -80,9 +80,8 @@ phina.define('Player', {
   superClass: 'Sprite',
 
   init: function(index) {
-    this.superInit('tomapiko');
-    this.scaleX = -1;
-    this.anim = FrameAnimation('tomapiko').attachTo(this);
+    this.superInit('tomapiyo');
+    this.anim = FrameAnimation('character').attachTo(this);
     this.anim.gotoAndPlay('fly');
 
     this.physical.gravity.set(0, 0.5);
