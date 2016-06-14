@@ -368,14 +368,18 @@ phina.define('GameOverDialog', {
       this.exit();
     }.bind(this);
     this.btnShare.onclick = function() {
-      alert();
+      var url = Twitter.createURL({
+        text: 'キャラが一通り揃ったので記念にゲーム作りました♪ SCORE: {score}'.format(options),
+        hashtags: 'js,game,phina_js',
+        url: location.href,
+      });
+      window.open(url, 'share window', 'width=480, height=320');
     }.bind(this);
 
     this.score = 0;
     this.tweener
       .to({score: options.score})
       ;
-
   },
 
   update: function() {
