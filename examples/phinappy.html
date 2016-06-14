@@ -48,6 +48,7 @@ var ASSETS = {
   },
   sound: {
     'touch': TOUCH_SE,
+    'damage': '../assets/sounds/damage.mp3'
   },
 };
 
@@ -146,6 +147,8 @@ phina.define('MainScene', {
     this.scoreBoxGroup.sleep();
     this.floor.sleep();
     this.player.fall();
+
+    SoundManager.play('damage');
   },
 
   gameover: function() {
