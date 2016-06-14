@@ -23,6 +23,7 @@ canvas {
 
 phina.globalize();
 
+var QUERY           = QueryString.parse();
 var SCREEN_WIDTH    = 960;
 var SCREEN_HEIGHT   = 640;
 var PIECE_SIZE      = 80;
@@ -40,7 +41,7 @@ var ASSETS = {
     'background': '../assets/images/flappy/background.png',
     'tube1': '../assets/images/flappy/tube1.png',
     'tube2': '../assets/images/flappy/tube2.png',
-    'tomapiyo': '../assets/images/character/tomapiyo.png',
+    'character': '../assets/images/character/{0}.png'.format(QUERY.c || 'tomapiyo'),
   },
   spritesheet: {
     'character': '../assets/tmss/character.tmss',
@@ -231,7 +232,7 @@ phina.define('Player', {
       height: 32,
     });
 
-    this.sprite = Sprite('tomapiyo').addChildTo(this);
+    this.sprite = Sprite('character').addChildTo(this);
     this.sprite.anim = FrameAnimation('character').attachTo(this.sprite);
     this.sprite.anim.gotoAndPlay('fly');
 
@@ -347,6 +348,7 @@ phina.define('GameOverDialog', {
           fill: 'orange',
           stroke: 'brown',
           text: 'OK',
+          fontSize: 26,
         },
         btnShare: {
           className: 'Button',
@@ -357,6 +359,7 @@ phina.define('GameOverDialog', {
           fill: 'orange',
           stroke: 'brown',
           text: 'SHARE',
+          fontSize: 26,
         },
       }
     });
@@ -364,11 +367,15 @@ phina.define('GameOverDialog', {
     this.btnOK.onpush = function() {
       this.exit();
     }.bind(this);
+    this.btnShare.onclick = function() {
+      alert();
+    }.bind(this);
 
     this.score = 0;
     this.tweener
       .to({score: options.score})
       ;
+
   },
 
   update: function() {
