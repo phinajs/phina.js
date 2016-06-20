@@ -26,6 +26,7 @@
     "util/color.js",
     "util/random.js",
     "util/querystring.js",
+    "util/ajax.js",
 
     "asset/asset.js",
     "asset/assetmanager.js",
