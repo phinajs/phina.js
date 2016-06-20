@@ -121,7 +121,11 @@ phina.namespace(function() {
           var text = phina.asset.File();
           return text.load(path);
         }
-      }
+      },
+      register: function(key, func) {
+        this.assetLoadFunctions[key] = func;
+        return this;
+      },
     }
 
   });
