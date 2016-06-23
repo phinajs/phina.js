@@ -69,9 +69,6 @@ phina.namespace(function() {
 
     _static: {
       defaults: {
-        width: 640,
-        height: 960,
-
         exitType: 'auto',
 
         lie: false,

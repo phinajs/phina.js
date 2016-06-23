@@ -15,9 +15,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params);
-
       params = ({}).$safe(params, phina.game.PauseScene.defaults);
+      this.superInit(params);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -46,9 +45,6 @@ phina.namespace(function() {
 
     _static: {
       defaults: {
-        width: 640,
-        height: 960,
-
         fontColor: 'white',
         backgroundColor: 'hsla(0, 0%, 0%, 0.85)',
 

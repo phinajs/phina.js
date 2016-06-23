@@ -13,9 +13,8 @@ phina.namespace(function() {
     superClass: 'phina.display.DisplayScene',
 
     init: function(options) {
-      this.superInit(options);
-
       var defaults = phina.game.SplashScene.defaults;
+      this.superInit(options);
 
       var texture = phina.asset.Texture();
       texture.load(defaults.imageURL).then(function() {
