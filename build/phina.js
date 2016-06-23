@@ -7795,6 +7795,7 @@ phina.namespace(function() {
       var e = {
         pointer: p,
         interactive: this,
+        over: overFlag,
       };
 
       if (!prevOverFlag && overFlag) {
