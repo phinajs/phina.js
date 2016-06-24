@@ -269,6 +269,27 @@
   });
   
   /**
+   * @method each
+   * 各文字を順番に渡しながら関数を繰り返し実行します。
+   *
+   * ### Example
+   *     str = 'abc';
+   *     str.each(function(ch) {
+   *       console.log(ch);
+   *     });
+   *     // => 'a'
+   *     //    'b'
+   *     //    'c'
+   *
+   * @param {Function} callback 各要素に対して実行するコールバック関数
+   * @param {Object} [self=this] callback 内で this として参照される値
+   */
+  String.prototype.$method("each", function() {
+    Array.prototype.forEach.apply(this, arguments);
+    return this;
+  });
+  
+  /**
    * @method toArray
    * 1文字ずつ分解した配列を返します。
    *

@@ -55,7 +55,9 @@ phina.namespace(function() {
       // pushScene, popScene 対策
       this.on('push', function() {
         // onenter 対策で描画しておく
-        this._draw();
+        if (this.currentScene.canvas) {
+          this._draw();
+        }
       });
     },
 

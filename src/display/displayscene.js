@@ -10,7 +10,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit();
 
-      params = ({}).$safe(params, phina.display.DisplayScene.default);
+      params = ({}).$safe(params, phina.display.DisplayScene.defaults);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
@@ -46,7 +46,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      default: {
+      defaults: {
         width: 640,
         height: 960,
       },
