@@ -275,7 +275,7 @@ phina.namespace(function() {
 
     /**
      * @method getCol
-     * col 番目の列を配列で返します。ol が 0、1、2 のいずれかでなければ null を返します。
+     * col 番目の列を配列で返します。col が 0、1、2 のいずれかでなければ null を返します。
      *
      * ### Example
      *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);

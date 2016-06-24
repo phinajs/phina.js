@@ -15,9 +15,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params);
-
       params = ({}).$safe(params, phina.game.ResultScene.defaults);
+      this.superInit(params);
 
       var message = params.message.format(params);
 
@@ -124,9 +123,6 @@ phina.namespace(function() {
         message: 'this is phina.js project.',
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
-
-        width: 640,
-        height: 960,
 
         fontColor: 'white',
         backgroundColor: 'hsl(200, 80%, 64%)',

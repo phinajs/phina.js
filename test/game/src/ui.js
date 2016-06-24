@@ -148,20 +148,25 @@ th.describe('ui.LabelArea', function() {
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(10).join('LabelArea test string.\n');
+    label.text = 'あいうえおかきくけこさしすせそ\n';
+    label.text += 'Hello, world!\n';
+    label.text += ('LabelArea TestString\n').repeat(10);
   });
   
   th.it('scroll', function(){
     var label = phina.ui.LabelArea().addChildTo(this);
     label.backgroundColor = '#aaa';
     label.position.set(this.gridX.center(), this.gridY.center());
-    label.text = new Array(10).join('LabelArea test string.\n');
-    label.tweener.to({
-      scrollY: 600,
-    },1000,'easeInBack').to({
-      scrollY:0,
-    },1000,'easeInBack').setLoop(true);
-    
+    label.text = ('LabelArea test string.\n').repeat(10);
+
+    label.tweener
+      .to({
+        scrollY: 600,
+      },1000,'easeInBack')
+      .to({
+        scrollY:0,
+      }, 1000,'easeInBack')
+      .setLoop(true);
   });
 
   th.it('align', function() {
@@ -268,9 +273,6 @@ th.describe('ui.LabelArea', function() {
     label.setSize(200,200);
     label.lineHeight = 2;
     label.text = 'lineHeight = ' + label.lineHeight + text;
-
-
-    
   });
 
 

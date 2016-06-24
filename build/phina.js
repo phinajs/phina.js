@@ -1098,6 +1098,27 @@
   });
   
   /**
+   * @method each
+   * 各文字を順番に渡しながら関数を繰り返し実行します。
+   *
+   * ### Example
+   *     str = 'abc';
+   *     str.each(function(ch) {
+   *       console.log(ch);
+   *     });
+   *     // => 'a'
+   *     //    'b'
+   *     //    'c'
+   *
+   * @param {Function} callback 各要素に対して実行するコールバック関数
+   * @param {Object} [self=this] callback 内で this として参照される値
+   */
+  String.prototype.$method("each", function() {
+    Array.prototype.forEach.apply(this, arguments);
+    return this;
+  });
+  
+  /**
    * @method toArray
    * 1文字ずつ分解した配列を返します。
    *
@@ -4943,6 +4964,73 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
+   * @class phina.util.Ajax
+   * 
+   */
+  phina.define('phina.util.Ajax', {
+    _static: {
+      defaults: {
+        type: 'GET',
+        contentType: 'application/x-www-form-urlencoded',
+        responseType: 'json',
+        data: null,
+        url: '',
+      },
+
+      request: function(options) {
+        var data = ({}).$safe(options, this.defaults);
+
+        var xhr = new XMLHttpRequest();
+        var flow = phina.util.Flow(function(resolve) {
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              if ([200, 201, 0].indexOf(xhr.status) !== -1) {
+                resolve(xhr.response);
+              }
+            }
+          };
+
+          xhr.open(data.type, data.url);
+          xhr.responseType = data.responseType;
+          xhr.send(null);
+        });
+
+        return flow;
+      },
+      get: function(url) {
+        return this.request({
+          type: 'GET',
+          url: url,
+        });
+      },
+      post: function(url) {
+        return this.request({
+          type: 'POST',
+          url: url,
+        });
+      },
+      put: function(url) {
+        return this.request({
+          type: 'PUT',
+          url: url,
+        });
+      },
+      del: function(url) {
+        return this.request({
+          type: 'DELETE',
+          url: url,
+        });
+      },
+    },
+  });
+
+});
+
+
+
+phina.namespace(function() {
+
+  /**
    * @class phina.asset.Asset
    * 
    */
@@ -5144,7 +5232,11 @@ phina.namespace(function() {
           var text = phina.asset.File();
           return text.load(path);
         }
-      }
+      },
+      register: function(key, func) {
+        this.assetLoadFunctions[key] = func;
+        return this;
+      },
     }
 
   });
@@ -7703,6 +7795,7 @@ phina.namespace(function() {
       var e = {
         pointer: p,
         interactive: this,
+        over: overFlag,
       };
 
       if (!prevOverFlag && overFlag) {
@@ -10139,6 +10232,16 @@ phina.namespace(function() {
       return this.beginPath().ellipse(x, y, width, height).stroke();
     },
 
+    fillText: function() {
+      this._context.fillText.apply(this._context, arguments);
+      return this;
+    },
+
+    strokeText: function() {
+      this._context.strokeText.apply(this._context, arguments);
+      return this;
+    },
+
     /*
      * 画像を描画
      */
@@ -10342,6 +10445,10 @@ phina.namespace(function() {
 
       createLinearGradient: function() {
         return this._context.createLinearGradient.apply(this._context, arguments);
+      },
+
+      createRadialGradient: function() {
+        return this._context.createRadialGradient.apply(this._context, arguments);
       },
     },
   });
@@ -11348,7 +11455,7 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit();
 
-      params = ({}).$safe(params, phina.display.DisplayScene.default);
+      params = ({}).$safe(params, phina.display.DisplayScene.defaults);
 
       this.canvas = phina.graphics.Canvas();
       this.canvas.setSize(params.width, params.height);
@@ -11384,7 +11491,7 @@ phina.namespace(function() {
     },
 
     _static: {
-      default: {
+      defaults: {
         width: 640,
         height: 960,
       },
@@ -11767,7 +11874,9 @@ phina.namespace(function() {
       // pushScene, popScene 対策
       this.on('push', function() {
         // onenter 対策で描画しておく
-        this._draw();
+        if (this.currentScene.canvas) {
+          this._draw();
+        }
       });
     },
 
@@ -12150,83 +12259,64 @@ phina.namespace(function() {
       return cache || (textWidthCache[this.font] = {});
     },
     
+    spliceLines: function(lines) {
+      var rowWidth = this.width;
+      var context = this.canvas.context;
+      context.font = this.font;
+
+      var cache = this.getTextWidthCache();
+
+      // update cache
+      this._text.each(function(ch) {
+        if (!cache[ch]) {
+          cache[ch] = context.measureText(ch).width;
+        }
+      });
+      
+      var localLines = [];
+      lines.forEach(function(line) {
+        
+        var str = '';
+        var totalWidth = 0;
+
+        // はみ出ていたら強制的に改行する
+        line.each(function(ch) {
+          var w = cache[ch];
+
+          if ((totalWidth+w) > rowWidth) {
+            localLines.push(str);
+            str = '';
+            totalWidth = 0;
+          }
+
+          str += ch;
+          totalWidth += w;
+        });
+
+        // 残りを push する
+        localLines.push(str);
+
+      });
+      
+
+      return localLines;
+    },
+    
     getLines: function() {
       if (this._lineUpdate === false) {
         return this._lines;
       }
-
       this._lineUpdate = false;
-      var lines = this._lines = (this.text + '').split('\n');
 
-      if (this.width < 1) return lines;
-
-      var rowWidth = this.width;
-
-      var context = this.canvas.context;
-      context.font = this.font;
-      //どのへんで改行されるか目星つけとく
-      var pos = rowWidth / context.measureText('あ').width | 0;
-
-      var cache = this.getTextWidthCache();
-      for (var i = lines.length - 1; 0 <= i; --i) {
-        var text = lines[i];
-        if (text === '') {
-          continue;
-        }
-
-        var j = 0;
-        var breakFlag = false;
-        var char;
-        while (true) {
-          //if (rowWidth > (cache[text] || (cache[text] = dummyContext.measureText(text).width))) break;
-
-          var len = text.length;
-          if (pos >= len) pos = len - 1;
-          char = text.substring(0, pos);
-          if (!cache[char]) {
-            cache[char] = context.measureText(char).width;
-          }
-          var textWidth = cache[char];
-
-          if (rowWidth < textWidth) {
-            do {
-              char = text[--pos];
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth -= cache[char];
-            } while (rowWidth < textWidth);
-
-          } else {
-
-            do {
-              char = text[pos++];
-              if (pos >= len) {
-                breakFlag = true;
-                break;
-              }
-              if (!cache[char]) {
-                cache[char] = context.measureText(char).width;
-              }
-              textWidth += cache[char];
-            } while (rowWidth >= textWidth);
-
-            --pos;
-          }
-          if (breakFlag) {
-            break;
-          }
-          //0 のときは無限ループになるので、1にしとく
-          if (pos === 0) pos = 1;
-
-          lines.splice(i + j, 1, text.substring(0, pos), text = text.substring(pos, len));
-          ++j;
-        }
-
+      var lines = (this.text + '').split('\n');
+      if (this.width < 1) {
+        this._lines = lines;
+      }
+      else {
+        this._lines = this.spliceLines(lines);
       }
 
-      return lines;
-
+      return this._lines;
     },
 
     prerender: function(canvas) {
@@ -12592,9 +12682,8 @@ phina.namespace(function() {
     superClass: 'phina.display.DisplayScene',
 
     init: function(options) {
-      this.superInit(options);
-
       var defaults = phina.game.SplashScene.defaults;
+      this.superInit(options);
 
       var texture = phina.asset.Texture();
       texture.load(defaults.imageURL).then(function() {
@@ -12647,9 +12736,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params);
-
       params = ({}).$safe(params, phina.game.TitleScene.defaults);
+      this.superInit(params);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -12696,8 +12784,6 @@ phina.namespace(function() {
       defaults: {
         title: 'phina.js games',
         message: '',
-        width: 640,
-        height: 960,
 
         fontColor: 'white',
         backgroundColor: 'hsl(200, 80%, 64%)',
@@ -12728,9 +12814,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params);
-
       params = ({}).$safe(params, phina.game.ResultScene.defaults);
+      this.superInit(params);
 
       var message = params.message.format(params);
 
@@ -12838,9 +12923,6 @@ phina.namespace(function() {
         hashtags: 'phina_js,game,javascript',
         url: phina.global.location && phina.global.location.href,
 
-        width: 640,
-        height: 960,
-
         fontColor: 'white',
         backgroundColor: 'hsl(200, 80%, 64%)',
         backgroundImage: '',
@@ -12922,9 +13004,6 @@ phina.namespace(function() {
 
     _static: {
       defaults: {
-        width: 640,
-        height: 960,
-
         exitType: 'auto',
 
         lie: false,
@@ -13055,9 +13134,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(params) {
-      this.superInit(params);
-
       params = ({}).$safe(params, phina.game.PauseScene.defaults);
+      this.superInit(params);
 
       this.backgroundColor = params.backgroundColor;
 
@@ -13086,9 +13164,6 @@ phina.namespace(function() {
 
     _static: {
       defaults: {
-        width: 640,
-        height: 960,
-
         fontColor: 'white',
         backgroundColor: 'hsla(0, 0%, 0%, 0.85)',
 
