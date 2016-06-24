@@ -3,7 +3,8 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Vector3
-   * ベクトルクラス
+   * # 3次元ベクトルクラス（未実装）
+   * 3次元のベクトルや座標を表すクラスです。
    */
   phina.define('phina.geom.Vector3', {
 

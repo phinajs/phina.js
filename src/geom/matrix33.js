@@ -3,15 +3,32 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Matrix33
-   * マトリックスクラス
+   * # 行列クラス
+   * 3x3の行列を表すクラスです。
+   * 
+   * <pre>
+   * | m00 m01 m02 |
+   * | m10 m11 m12 |
+   * | m20 m21 m22 |
+   * </pre>
    */
   phina.define('phina.geom.Matrix33', {
 
     /**
-     * @constructor
-     * m00 m01 m02
-     * m10 m11 m12
-     * m20 m21 m22
+     * @method init
+     * マトリックスクラスのコンストラクタです。
+     *
+     * 引数は m00, m01, m02, m10, m11, m12, m20, m21, m22 の順に指定します。
+     * 引数が9個に満たない場合は単位行列を生成します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat1.m00 + mat2.m00; // => 2
+     *     mat1.m01 - mat2.m01; // => 2
+     *
+     * @param {Number...} m00, m01,... 各要素の値
+     * @return {phina.geom.Matrix33} 行列オブジェクト
      */
     init: function() {
       if (arguments.length >= 9) {
@@ -22,6 +39,20 @@ phina.namespace(function() {
       }
     },
 
+    /**
+     * @method set
+     * @chainable
+     * this の各要素の値を再設定します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat2.set(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.toString() == mat2.toString(); // => true
+     *
+     * @param {Number...} m00, m01,... 各要素の値
+     * @return {phina.geom.Matrix33} 行列オブジェクト
+     */
     set: function(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
       this.m00 = m00; this.m01 = m01; this.m02 = m02;
       this.m10 = m10; this.m11 = m11; this.m12 = m12;
@@ -30,6 +61,18 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method identity
+     * @chainable
+     * this を単位行列にします。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat1.identity().toString() == mat2.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 単位行列
+     */
     identity: function() {
       this.m00 = 1; this.m01 = 0; this.m02 = 0;
       this.m10 = 0; this.m11 = 1; this.m12 = 0;
@@ -38,7 +81,16 @@ phina.namespace(function() {
     },
 
     /**
-     * クローン
+     * @method clone
+     * this のコピーを生成して返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = mat1.clone();
+     *     mat1.toString() == mat2.toString(); // => true
+     *     mat1 == mat2; // => false
+     *
+     * @return {phina.geom.Matrix33} 行列オブジェクト
      */
     clone: function() {
       return phina.geom.Matrix33(
@@ -49,7 +101,15 @@ phina.namespace(function() {
     },
 
     /**
-     * 行列式
+     * @method determinant
+     * 行列式を返します
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -2, 0, -1, 3, 1, 4, 2, 1);
+     *     mat1.determinant(); // => -10
+     *     mat1.identity().determinant(); // => 1
+     *
+     * @return {Number} 行列式
      */
     determinant: function() {
       var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
@@ -60,7 +120,16 @@ phina.namespace(function() {
     },
 
     /**
-     * 転置
+     * @method transpose
+     * @chainable
+     * 転置行列を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33(1, 4, 7, 2, 5, 8, 3, 6, 9);
+     *     mat1.transpose().toString() == mat2.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 転置行列
      */
     transpose: function() {
       var swap = function(a, b) {
@@ -77,7 +146,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 逆行列
+     * @method invert
+     * @chainable
+     * 逆行列を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     mat2 = mat1.clone().invert();
+     *     mat3 = mat1.clone().multiply(mat2);
+     *     mat3.toString() == phina.geom.Matrix33.IDENTITY.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 逆行列
      */
     invert: function() {
       var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
@@ -108,7 +187,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 掛け算
+     * @method multiply
+     * this に other を乗じます。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     mat2 = mat1.clone().invert();
+     *     mat3 = mat1.clone().multiply(mat2);
+     *     mat3.toString() == phina.geom.Matrix33.IDENTITY.toString(); // => true
+     *
+     * @param {phina.geom.Matrix33} other 乗じる行列
+     * @return {phina.geom.Matrix33} 乗算結果の行列
      */
     multiply: function(mat) {
         var tm = this.m;
@@ -137,7 +226,16 @@ phina.namespace(function() {
     },
 
     /**
-     * ベクトルとの掛け算
+     * @method multiplyVector2
+     * this に2次元ベクトル v を乗じます。乗算結果は2次元ベクトルになります？？？？？
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *     v2 = v.clone();
+     *     v2.x == v.x; // => true
+     *
+     * @param {phina.geom.Vector2} v 乗じるベクトル
+     * @return {phina.geom.Vector2} 乗算結果のベクトル
      */
     multiplyVector2: function(v) {
       var vx = this.m00*v.x + this.m01*v.y + this.m02;
@@ -147,6 +245,19 @@ phina.namespace(function() {
     },
 
     // 行
+    /**
+     * @method getRow
+     * row 番目の行を配列で返します。row が 0、1、2 のいずれかでなければ null を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.getRow(0); // [1, 2, 3]
+     *     mat1.getRow(1); // [4, 5, 6]
+     *     mat1.getRow(9); // null
+     *
+     * @param {0/1/2} row 行番号
+     * @return {Number[]} 行を表す配列
+     */
     getRow: function(row) {
       if ( row === 0 ) {
         return [ this.m00, this.m01, this.m02 ];
@@ -162,7 +273,19 @@ phina.namespace(function() {
       }
     },
 
-    // 列
+    /**
+     * @method getCol
+     * col 番目の列を配列で返します。ol が 0、1、2 のいずれかでなければ null を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.getCol(0); // [1, 4, 7]
+     *     mat1.getCol(1); // [2, 5, 8]
+     *     mat1.getRow(-1); // null
+     *
+     * @param {0/1/2} col 列番号
+     * @return {Number[]} 列を表す配列
+     */
     getCol: function(col) {
       if ( col === 0 ) {
         return [ this.m00, this.m10, this.m20 ];
@@ -177,8 +300,17 @@ phina.namespace(function() {
         return null;
       }
     },
+
     /**
-     * 文字列化
+     * @method toString
+     * 行列を JSON 形式で表現した文字列を返します。
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *     v2 = v.clone();
+     *     v2.x == v.x; // => true
+     *
+     * @return {String} JSON 文字列
      */
     toString: function() {
       return "|{m00}, {m01}, {m02}|\n|{m10}, {m11}, {m12}|\n|{m20}, {m21}, {m22}|".format(this);
@@ -186,7 +318,8 @@ phina.namespace(function() {
 
     _accessor: {
       /**
-       * x
+       * @property x
+       * （これは間違い？？？）
        */
       x: {
         "get": function()   { return this._x; },
@@ -196,7 +329,10 @@ phina.namespace(function() {
     
   });
 
-
+  /**
+   * @property {phina.geom.Matrix33} IDENTITY 単位行列
+   * @readonly
+   */
   phina.geom.Matrix33.IDENTITY = phina.geom.Matrix33().identity();
 
 });

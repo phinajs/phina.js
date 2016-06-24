@@ -3,19 +3,63 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Collision
+   * # 衝突判定用クラス
+   * 衝突判定のためのクラスです。すべてのメソッドがスタティックメソッドです。
    * 
    */
   phina.define('phina.geom.Collision', {
 
     _static: {
+      /**
+       * @method testCircleCircle
+       * @static
+       * 2つの円領域が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     circle1 = phina.geom.Circle(100, 100, 30);
+       *     circle2 = phina.geom.Circle(130, 140, 30);
+       * phina.geom.Collision.testCircleCircle(circle1, circle2); // => true
+       *
+       * @param {phina.geom.Circle} circle1 円領域オブジェクト
+       * @param {phina.geom.Circle} circle2 円領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testCircleCircle: function(circle0, circle1) {
         var distanceSquared = phina.geom.Vector2.distanceSquared(circle0, circle1);
         return distanceSquared <= Math.pow(circle0.radius + circle1.radius, 2);
       },
+      /**
+       * @method testRectRect
+       * @static
+       * 2つの矩形領域が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     rect1 = phina.geom.Rect(100, 100, 30, 40);
+       *     rect2 = phina.geom.Rect(200, 200, 10, 10);
+       *     phina.geom.Collision.testRectRect(rect1, rect2); // => false
+       *
+       * @param {phina.geom.Rect} rect1 矩形領域オブジェクト
+       * @param {phina.geom.Rect} rect2 矩形領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testRectRect: function(rect0, rect1) {
         return (rect0.left < rect1.right) && (rect0.right > rect1.left) &&
           (rect0.top < rect1.bottom) && (rect0.bottom > rect1.top);
       },
+      /**
+       * @method testCircleRect
+       * @static
+       * 円領域と矩形領域が重なっているかどうかかを判定します
+       *
+       * ### Example
+       *     circle = phina.geom.Circle(100, 100, 30);
+       *     rect = phina.geom.Rect(100, 100, 30, 40);
+       *     phina.geom.Collision.testCircleRect(circle, rect); // => true
+       *
+       * @param {phina.geom.Circle} circle 円領域オブジェクト
+       * @param {phina.geom.Rect} rect 矩形領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testCircleRect: function(circle, rect) {
         // まずは大きな矩形で判定(高速化)
         var bigRect = phina.geom.Rect(rect.left-circle.radius, rect.top-circle.radius, rect.width+circle.radius*2, rect.height+circle.radius*2);
@@ -54,7 +98,22 @@ phina.namespace(function() {
         
         return false;
       },
-      // 円と2点を結ぶ線分の当たり判定
+      /**
+       * @method testCircleLine
+       * @static
+       * 円領域と線分が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     circle = phina.geom.Circle(100, 100, 20);
+       *     p1 = phina.geom.Vector2(0, 0);
+       *     p2 = phina.geom.Vector2(300, 400);
+       *     phina.geom.Collision.testCircleLine(circle, p1, p2); // => true
+       *
+       * @param {phina.geom.Circle} circle 円領域オブジェクト
+       * @param {phina.geom.Vector2} p1 線分の端の座標
+       * @param {phina.geom.Vector2} p2 線分の端の座標
+       * @return {Boolean} 円領域と線分が重なっているかどうか
+       */
       testCircleLine : function(circle, p1, p2) {
         // 先に線分端との判定
         if (circle.contains(p1.x, p1.y) || circle.contains(p2.x, p2.y)) return true;
