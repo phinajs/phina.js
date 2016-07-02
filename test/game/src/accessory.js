@@ -124,7 +124,21 @@ th.describe("accessory.Tweener", function() {
       ]
     });
   });
-
+  
+  th.it('clone', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.accessory.Tweener().attachTo(shape);
+    tweener
+      .to({x:320, y:480}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000);
+    var tweener2 = tweener.clone();
+    
+    var shape = phina.display.RectangleShape({
+      x: 640,
+      y: 960,
+    }).addChildTo(this);
+    shape.attach(tweener2);
+  });
 
 });
 
