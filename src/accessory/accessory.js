@@ -36,6 +36,10 @@ phina.namespace(function() {
       this.target.detach(this);
       this.target = null;
     },
+    clone: function() {
+      return phina.accessory.Accessory();
+    },
+    
   });
 
   phina.app.Element.prototype.$method('attach', function(accessory) {
