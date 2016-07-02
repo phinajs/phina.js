@@ -83,6 +83,15 @@ th.describe('game.LoadingScene', function() {
         },
       });
       this.app.pushScene(scene);
+
+    };
+    
+    this.onresume = function() {
+      (6).times(function(i) {
+        var sprite = phina.display.Sprite('a' + (i + 1)).addChildTo(this);
+        sprite.setPosition(i * 100, i * 150);
+        sprite.alpha = 0.5;
+      }, this);
     };
   });
 
