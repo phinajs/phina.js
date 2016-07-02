@@ -244,6 +244,24 @@ th.describe("accessory.Flickable", function() {
       label.text = angle;
     };
   });
+  
+  th.it('clone', function() {
+  
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(160, 480);
+    shape.flickable.enable();
+
+    shape.flickable.horizontal = true;
+    shape.flickable.vertical = false;
+    
+    var flickable = shape.flickable.clone();
+  
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(480, 480);
+    flickable.enable();
+    flickable.attachTo(shape);
+    
+  });
 });
 
 
