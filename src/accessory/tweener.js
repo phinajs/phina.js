@@ -215,7 +215,7 @@ phina.namespace(function() {
     
     clone: function() {
       var tweener = Tweener(this.target);
-      tweener._tasks = this.tasks.clone();
+      tweener._tasks = this._tasks.clone();
       tweener._index = this._index;
       tweener.playing = this.playing;
       tweener._loop = this._loop;
