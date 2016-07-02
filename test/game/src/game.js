@@ -94,6 +94,50 @@ th.describe('game.LoadingScene', function() {
       }, this);
     };
   });
+  
+  
+    th.it('local_spritesheet', function() {
+      phina.display.Label('Hello').addChildTo(this).setPosition(320, 480);
+
+      this.onenter = function() {
+        var scene = phina.game.LoadingScene({
+          assets: {
+            image: {
+              text: 'http://dummyimage.com/1200x1900/000/fff&text=text?id=' + Math.random(),
+            },
+            
+            spritesheet: {
+              ss: {
+                frame: {
+                  width: 600,
+                  height: 280,
+                  cols: 2,
+                  rows: 5,
+                },
+                
+                animations: {
+                  animation: {
+                    frames: Array.range(0, 10),
+                    next: 'animation',
+                    frequency: 5,
+                  },
+                },
+              },
+            },
+          },
+        });
+        this.app.pushScene(scene);
+
+      };
+      
+      this.onresume = function() {
+        var sprite = phina.display.Sprite('text').addChildTo(this);
+        sprite.setPosition(320, 480);
+        var anim = phina.accessory.FrameAnimation('ss');
+        anim.attachTo(sprite);
+        anim.gotoAndPlay('animation');
+      };
+    });
 
 });
 
