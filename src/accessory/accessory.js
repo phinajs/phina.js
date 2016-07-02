@@ -37,7 +37,7 @@ phina.namespace(function() {
       this.target = null;
     },
     clone: function() {
-      return phina.accessory.Accessory();
+      return phina.accessory.Accessory(this.target);
     },
     
   });
