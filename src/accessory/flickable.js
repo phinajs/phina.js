@@ -102,6 +102,14 @@ phina.namespace(function() {
     enable: function() {
       this._enable = true;
     },
+    
+    clone: function() {
+      var flickable = phina.accessory.Flickable(this.target);
+      flickable.friction   = this.friction;
+      flickable.horizontal = this.horizontal;
+      flickable.vertical   = this.vertical;
+      return flickable;
+    },
 
   });
 
