@@ -59,6 +59,12 @@ phina.namespace(function() {
       this.friction = fr;
       return this;
     },
+    
+    clone: function() {
+      return phina.accessory.Physical(this.target)
+        .setFriction(this.friction)
+        .setGravity(this.gravity.x, this.gravity.y);
+    },
   });
 
   phina.app.Element.prototype.getter('physical', function() {
