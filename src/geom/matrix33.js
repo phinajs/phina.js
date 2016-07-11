@@ -227,12 +227,13 @@ phina.namespace(function() {
 
     /**
      * @method multiplyVector2
-     * this に2次元ベクトル v を乗じます。乗算結果は2次元ベクトルになります？？？？？
+     * this に2次元ベクトル v を乗じます。
+     * ２次元ベクトルは (x, y, 1) として乗算します.
      *
      * ### Example
-     *     v = phina.geom.Vector2(3, 4);
-     *     v2 = v.clone();
-     *     v2.x == v.x; // => true
+     *     mat = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     v = Vector2(2, 4)
+     *     mat.multiplyVector2(v) // => {x: -3, y: 12}
      *
      * @param {phina.geom.Vector2} v 乗じるベクトル
      * @return {phina.geom.Vector2} 乗算結果のベクトル
@@ -316,17 +317,6 @@ phina.namespace(function() {
       return "|{m00}, {m01}, {m02}|\n|{m10}, {m11}, {m12}|\n|{m20}, {m21}, {m22}|".format(this);
     },
 
-    _accessor: {
-      /**
-       * @property x
-       * （これは間違い？？？）
-       */
-      x: {
-        "get": function()   { return this._x; },
-        "set": function(v)  { this._x = v; }
-      },
-    }
-    
   });
 
   /**
