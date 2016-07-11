@@ -2589,7 +2589,8 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Vector2
-   * ベクトルクラス
+   * # 2次元ベクトルクラス
+   * 2次元のベクトルや座標を表すクラスです。
    */
   phina.define('phina.geom.Vector2', {
 
@@ -2599,7 +2600,15 @@ phina.namespace(function() {
     y: 0,
 
     /**
-     * @constructor
+     * @method init
+     * 2次元ベクトルのコンストラクタです。
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *
+     * @param {Number} x ベクトルの x 座標
+     * @param {Number} y ベクトルの y 座標
+     * @return {phina.geom.Vector2} 2次元ベクトルオブジェクト
      */
     init: function(x, y) {
       this.x = x;
@@ -2607,22 +2616,48 @@ phina.namespace(function() {
     },
 
     /**
-     * 複製
+     * @method clone
+     * this のコピーを生成して返します。
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *     v2 = v.clone();
+     *     v2.x == v.x; // => true
+     *
+     * @return {Object} 生成したベクトル
      */
     clone: function() {
       return phina.geom.Vector2(this.x, this.y);
     },
 
     /**
-     * 等しいかどうかをチェック
-     * @return {Boolean}
+     * @method equals
+     * this の各要素がすべて other と等しいかどうかを返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v2 = phina.geom.Vector2(5, 6);
+     *     v1.equals(v2); // => false
+     *
+     * @param {phina.geom.Vector2} other 比較する対象のベクトル
+     * @return {Boolean} 等しいかどうか
      */
     equals: function(v) {
       return (this.x === v.x && this.y === v.y);
     },
 
     /**
-     * セッター
+     * @method set
+     * @chainable
+     * this の各要素の値を再設定します。
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *     v.set(5, 6);
+     *
+     * @param {Number} x ベクトルの x 座標
+     * @param {Number} y ベクトルの y 座標
+     * @return {phina.geom.Vector2} 再設定後のベクトル
      */
     set: function(x, y) {
       this.x = x;
@@ -2631,7 +2666,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 加算
+     * @method add
+     * @chainable
+     * this に other を加えます。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v2 = phina.geom.Vector2(5, 6);
+     *     v1.add(v2); // => phina.geom.Vector(8, 10)
+     *
+     * @param {phina.geom.Vector2} other ベクトル
+     * @return {phina.geom.Vector2} 加算した結果のベクトル
      */
     add: function(v) {
       this.x += v.x;
@@ -2640,7 +2685,19 @@ phina.namespace(function() {
     },
 
     /**
-     * 減算
+     * @method sub
+     * @chainable
+     * this から other を減じます。
+     *
+     * ベクトルが座標を表す場合は、指定した座標から自分自身へと向かうベクトルが得られます。
+     * 
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v2 = phina.geom.Vector2(1, 5);
+     *     v1.sub(v2); // => phina.geom.Vector(2, -1)
+     *
+     * @param {phina.geom.Vector2} other ベクトル
+     * @return {phina.geom.Vector2} 減算した結果のベクトル
      */
     sub: function(v) {
       this.x -= v.x;
@@ -2649,7 +2706,16 @@ phina.namespace(function() {
     },
 
     /**
-     * 乗算
+     * @method mul
+     * @chainable
+     * this の各要素に数値 n を乗じます。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.mul(3) // => phina.geom.Vector(9, 12)
+     *
+     * @param {Number} n 乗じる値
+     * @return {phina.geom.Vector2} 乗算した結果のベクトル
      */
     mul: function(n) {
       this.x *= n;
@@ -2658,7 +2724,16 @@ phina.namespace(function() {
     },
 
     /**
-     * 除算
+     * @method div
+     * @chainable
+     * this の各要素を数値 n で割ります。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(8, 16);
+     *     v1.div(2) // => phina.geom.Vector(4, 8)
+     *
+     * @param {Number} n 割る値
+     * @return {phina.geom.Vector2} 除算した結果のベクトル
      */
     div: function(n) {
       //console.assert(n != 0, "0 division!!");
@@ -2669,7 +2744,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 反転
+     * @method negate
+     * @chainable
+     * this の各要素の正負を反転します。
+     *
+     * this と同じ大きさで方向が逆のベクトルが得られます。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, -4);
+     *     v1.negate() // => phina.geom.Vector(-3, 4)
+     *
+     * @return {phina.geom.Vector2} 反転後のベクトル
      */
     negate: function() {
       this.x = -this.x;
@@ -2679,58 +2764,118 @@ phina.namespace(function() {
     },
 
     /**
-     * @method
-     * 内積.
-     * 投影ベクトルを求めたり, 類似度に使ったり.
+     * @method dot
+     * other との内積を返します。
+     *
+     * 投影ベクトルを求めたり、類似度の計算に利用することができます。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v2 = phina.geom.Vector2(-2, 2);
+     *     v1.dot(v2) // => 2
+     *
+     * @param {phina.geom.Vector2} other ベクトル
+     * @return {Number} 内積
      */
     dot: function(v) {
       return this.x * v.x + this.y * v.y;
     },
 
     /**
-     * @method
-     * 外積
+     * @method cross
+     * other との外積（クロス積）を返します。
+     *
+     * 2次元ベクトルでの外積はベクトルでなく数値を返すことに注意してください。
+     * other より this 時計回りにあるときは正の値になり、反時計回りにあるときは負の値になります。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v2 = phina.geom.Vector2(3, 1);
+     *     v1.cross(v2) // => -8
+     *
+     * @param {phina.geom.Vector2} other ベクトル
+     * @return {Number} 外積
      */
     cross: function(v) {
       return (this.x*v.y) - (this.y*v.x);
     },
 
     /**
-     * 長さを取得
-     * ### memo
-     * magnitude って名前の方が良いかも. 検討中.
-     * @return {Number}
+     * @method length
+     * this の大きさを返します。
+     *
+     * (memo) magnitude って名前の方が良いかも. 検討中.
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.length(); // => 5
+     *
+     * @return {Number} ベクトルの大きさ
      */
     length: function() {
       return Math.sqrt(this.x*this.x + this.y*this.y);
     },
     
     /**
-     * 2乗された長さを取得
-     * C# の名前を引用
-     * or lengthSquare or lengthSqrt
-     * @return {Number}
+     * @method lengthSquared
+     * this の大きさの自乗を返します。
+     *
+     * C# の名前を引用（or lengthSquare or lengthSqrt）
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.lengthSquared(); // => 25
+     *
+     * @return {Number} ベクトルの大きさの自乗
      */
     lengthSquared: function() {
       return this.x*this.x + this.y*this.y;
     },
     
     /**
-     * ２点間の距離を返す
+     * @method distance
+     * this と other を座標とみなしたときの2点間の距離を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(1, 2);
+     *     v2 = phina.geom.Vector2(4, 6);
+     *     v1.distance(v2); // => 5
+     *
+     * @param {phina.geom.Vector2} other 座標を表すベクトル
+     * @return {Number} 2点間の距離
      */
     distance: function(v) {
       return Math.sqrt( Math.pow(this.x-v.x, 2) + Math.pow(this.y-v.y, 2) );
     },
     
     /**
-     * ２点間の距離を返す
+     * @method distanceSquared
+     * this と other を座標とみなしたときの2点間の距離の自乗を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(1, 2);
+     *     v2 = phina.geom.Vector2(4, 6);
+     *     v1.distanceSquared(v2); // => 25
+     *
+     * @param {phina.geom.Vector2} other 座標を表すベクトル
+     * @return {Number} 2点間の距離の自乗
      */
     distanceSquared: function(v) {
       return Math.pow(this.x-v.x, 2) + Math.pow(this.y-v.y, 2);
     },
 
     /**
-     * ランダムベクトルをセット
+     * @method random
+     * @chainable
+     * 角度が min から max の範囲（度単位）で大きさが len のランダムなベクトルを返します。
+     *
+     * ### Example
+     *     phina.geom.Vector2().random(90, 180, 1); // => phina.geom.Vector2(-0.5, 0.866) など
+     *
+     * @param {Number} [min=0] 角度（度単位）の下限値
+     * @param {Number} [max=360] 角度（度単位）の上限値
+     * @param {Number} [len=1] 大きさ
+     * @return {phina.geom.Vector2} ランダム化したベクトル
      */
     random: function(min, max, len) {
       var degree = phina.util.Random.randfloat(min || 0, max || 360);
@@ -2744,7 +2889,15 @@ phina.namespace(function() {
     },
     
     /**
-     * 正規化
+     * @method normalize
+     * @chainable
+     * this を正規化します。すなわち、this と同じ方向で大きさが1のベクトルを返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.normalize(); // => phina.geom.Vector2(0.6, 0.8)
+     *
+     * @return {phina.geom.Vector2} 正規化したベクトル
      */
     normalize: function() {
       this.div(this.length());
@@ -2752,16 +2905,28 @@ phina.namespace(function() {
     },
 
     /**
-     * 文字列に変換
-     * @return {String}
+     * @method toString
+     * this を JSON 形式で表現した文字列を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.toString(); // => "{x:3, y:4}"
+     *
+     * @return {String} JSON 文字列
      */
     toString: function() {
       return "{x:{x}, y:{y}}".format(this);
     },
 
     /**
-     * 大体の向きを文字列で取得
-     * @return {String}
+     * @method getDirection
+     * this のおおよその方向を示した文字列を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 4);
+     *     v1.getDirection(); // => "up"
+     *
+     * @return {String} 方向を表す文字列（"up", "right", "down", "left"）
      */
     getDirection: function() {
       var angle = this.toDegree();
@@ -2779,8 +2944,14 @@ phina.namespace(function() {
     },
 
     /**
-     * 角度に変換
-     * @return {Number}
+     * @method toAngle
+     * this と x 軸との角度（ラジアン単位）を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(-2, 0);
+     *     v1.toAngle(); // => 3.14159
+     *
+     * @return {Number} ベクトルの角度（ラジアン単位）
      */
     toAngle: function() {
       var rad = Math.atan2(this.y, this.x);
@@ -2788,7 +2959,16 @@ phina.namespace(function() {
     },
     
     /**
-     * 角度(radian)と長さでベクトルをセット
+     * @method fromAngle
+     * @chainable
+     * 角度（ラジアン単位）と大きさを指定してベクトルを設定します。
+     *
+     * ### Example
+     *     phina.geom.Vector2().fromAngle(Math.PI/4, 2); // => phina.geom.Vector2(1.4142, 1.4142)
+     *
+     * @param {Number} rad 角度（ラジアン単位）
+     * @param {Number} [len=1] 大きさ
+     * @return {phina.geom.Vector2} ベクトル
      */
     fromAngle: function(rad, len) {
       len = len || 1;
@@ -2799,22 +2979,47 @@ phina.namespace(function() {
     },
 
     /**
-     * 角度に変換(degree)
-     * @return {Number}
+     * @method toDegree
+     * this と x 軸との角度（度単位）を返します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(-2, 2);
+     *     v1.toAngle(); // => 135
+     *
+     * @return {Number} ベクトルの角度（度単位）
      */
     toDegree: function() {
       return this.toAngle().toDegree();
     },
     
     /**
-     * 角度(degree)と長さでベクトルをセット
+     * @method fromDegree
+     * @chainable
+     * 角度（度単位）と大きさを指定してベクトルを設定します。
+     *
+     * ### Example
+     *     phina.geom.Vector2().fromDegree(60, 2); // => phina.geom.Vector2(1, 1.732)
+     *
+     * @param {Number} deg 角度（度単位）
+     * @param {Number} [len=1] 大きさ
+     * @return {phina.geom.Vector2} ベクトル
      */
     fromDegree: function(deg, len) {
       return this.fromAngle(deg.toRadian(), len);
     },
 
     /**
-     * 任意の角度(radian)で回転
+     * @method rotate
+     * @chainable
+     * this を回転します。
+     *
+     * ### Example
+     *     v1 = phina.geom.Vector2(3, 1);
+     *     v1.rotate(Math.PI/2); // => phina.geom.Vector2(-1, 3);
+     *
+     * @param {Number} rad 角度（ラジアン単位）
+     * @param {Number} [center=(0, 0)] 回転の中心座標
+     * @return {Number} 回転後のベクトル
      */
     rotate: function(rad, center) {
       center = center || phina.geom.Vector2(0, 0);
@@ -2833,9 +3038,18 @@ phina.namespace(function() {
 
     _static: {
       /**
-       * @method
+       * @method min
        * @static
-       * min
+       * v1 と v2 の各要素に対し、より小さい方を要素とする新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     v2 = phina.geom.Vector2(-3, 2);
+       *     phina.geom.Vector2.min(v1, v2); // phina.geom.Vector2(-3, 1);
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {phina.geom.Vector2} 生成したベクトル
        */
       min: function(a, b) {
         return phina.geom.Vector2(
@@ -2845,9 +3059,18 @@ phina.namespace(function() {
       },
 
       /**
-       * @method
+       * @method max
        * @static
-       * max
+       * 2次元ベクトル v1 と v2 の各要素に対し、より大きい方を要素とする新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     v2 = phina.geom.Vector2(-3, 2);
+       *     phina.geom.Vector2.max(v1, v2); // phina.geom.Vector2(3, 2);
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {phina.geom.Vector2} 生成したベクトル
        */
       max: function(a, b) {
         return phina.geom.Vector2(
@@ -2857,96 +3080,199 @@ phina.namespace(function() {
       },
 
       /**
-       * @method
+       * @method add
        * @static
-       * 加算
+       * v1 に v2 を加算した新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     v2 = phina.geom.Vector2(-3, 2);
+       *     phina.geom.Vector2.add(v1, v2); // phina.geom.Vector2(0, 3);
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {phina.geom.Vector2} 加算した結果
        */
       add: function(lhs, rhs) {
         return phina.geom.Vector2(lhs.x+rhs.x, lhs.y+rhs.y);
       },
       
       /**
-       * @method
+       * @method sub
        * @static
-       * 減算
+       * 2次元ベクトル v1 から v2 を減じた新しいベクトルを生成して返します。
+       *
+       * ベクトルが座標を表す場合、2つ目の座標から1つ目の座標へと向かうベクトルが得られます。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     v2 = phina.geom.Vector2(-3, 2);
+       *     phina.geom.Vector2.sub(v1, v2); // phina.geom.Vector2(6, -1);
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {phina.geom.Vector2} 減算した結果
        */
       sub: function(lhs, rhs) {
         return phina.geom.Vector2(lhs.x-rhs.x, lhs.y-rhs.y);
       },
       
       /**
-       * @method
+       * @method mul
        * @static
-       * 乗算
+       * 2次元ベクトル v の各要素に n を乗じた新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     phina.geom.Vector2.mul(v1, 2); // phina.geom.Vector2(6, 2)
+       *
+       * @param {phina.geom.Vector2} v ベクトル
+       * @param {phina.geom.Vector2} n 乗じる値
+       * @return {phina.geom.Vector2} 乗算した結果
        */
       mul: function(v, n) {
         return phina.geom.Vector2(v.x*n, v.y*n);
       },
       
       /**
-       * @method
+       * @method div
        * @static
-       * 割算
+       * 2次元ベクトル v の各要素を n で割った新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     phina.geom.Vector2.div(v1, 2); // phina.geom.Vector2(1.5, 0.5)
+       *
+       * @param {phina.geom.Vector2} v ベクトル
+       * @param {phina.geom.Vector2} n 割る値
+       * @return {phina.geom.Vector2} 除算した結果
        */
       div: function(v, n) {
         return phina.geom.Vector2(v.x/n, v.y/n);
       },
       
       /**
-       * @method
+       * @method negate
        * @static
-       * 反転
+       * 2次元ベクトル v を反転した新しいベクトルを生成して返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 1);
+       *     phina.geom.Vector2.negate(); // phina.geom.Vector2(-3, -1)
+       *
+       * @param {phina.geom.Vector2} v ベクトル
+       * @return {phina.geom.Vector2} 反転したベクトル
        */
       negate: function(v) {
         return phina.geom.Vector2(-v.x, -v.y);
       },
       
       /**
-       * @method
+       * @method dot
        * @static
-       * 内積.
-       * 投影ベクトルを求めたり, 類似度に使ったり.
+       * 2次元ベクトル v1 と v2 の内積を返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 4);
+       *     v2 = phina.geom.Vector2(-2, 2);
+       *     phina.geom.Vector2.dot(v1, v2) // => 2
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {phina.geom.Vector2} 内積
        */
       dot: function(lhs, rhs) {
         return lhs.x * rhs.x + lhs.y * rhs.y;
       },
       
       /**
-       * @method
+       * @method cross
        * @static
-       * 外積
+       * 2次元ベクトル v1 と v2 の外積（クロス積）を返します。
+       *
+       * 2次元ベクトルでの外積はベクトルでなく数値を返すことに注意してください。
+       * 1つ目のベクトルが2つ目のベクトルより時計回りにあるときは正の値になり、反時計回りにあるときは負の値になります。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(3, 4);
+       *     v2 = phina.geom.Vector2(3, 1);
+       *     phina.geom.Vector2.cross(v1, v2); // => -8
+       *
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @return {Number} 外積
        */
       cross: function(lhs, rhs) {
         return (lhs.x*rhs.y) - (lhs.y*rhs.x);
       },
       
       /**
-       * @method
+       * @method distance
        * @static
-       * ２点間の距離を返す
+       * v1 と v2 を座標とみなしたときの2点間の距離を返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.distance(v1, v2); // => 5
+       *
+       * @param {phina.geom.Vector2} v1 座標を表すベクトル
+       * @param {phina.geom.Vector2} v2 座標を表すベクトル
+       * @return {Number} 2点間の距離
        */
       distance: function(lhs, rhs) {
         return Math.sqrt( Math.pow(lhs.x-rhs.x, 2) + Math.pow(lhs.y-rhs.y, 2) );
       },
 
+      /**
+       * @method distanceSquared
+       * @static
+       * v1 と v2 を座標とみなしたときの2点間の距離の自乗を返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.distanceSquared(v1, v2); // => 25
+       *
+       * @param {phina.geom.Vector2} v1 座標を表すベクトル
+       * @param {phina.geom.Vector2} v2 座標を表すベクトル
+       * @return {Number} 2点間の距離の自乗
+       */
       distanceSquared: function(lhs, rhs) {
         return Math.pow(lhs.x-rhs.x, 2) + Math.pow(lhs.y-rhs.y, 2);
       },
 
-
       /**
-       * @method
+       * @method manhattanDistance
        * @static
-       * マンハッタン距離
+       * v1 と v2 を座標とみなしたときの2点間のマンハッタン距離（軸に平行に進むときの最短距離）を返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.manhattanDistance(v1, v2); // => 7
+       *
+       * @param {phina.geom.Vector2} v1 座標を表すベクトル
+       * @param {phina.geom.Vector2} v2 座標を表すベクトル
+       * @return {Number} 2点間のマンハッタン距離
        */
       manhattanDistance: function(lhs, rhs) {
         return Math.abs(lhs.x-rhs.x) + Math.abs(lhs.y-rhs.y);
       },
       
       /**
-       * @method
+       * @method normal
        * @static
-       * 法線ベクトル
+       * v1 と v2 を座標とみなしたときの、v2 から v1 に向かうベクトルに対する法線ベクトルを返します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.normal(v1, v2); // => phina.geom.Vector2(4, -3)
+       *
+       * @param {phina.geom.Vector2} v1 座標を表すベクトル
+       * @param {phina.geom.Vector2} v2 座標を表すベクトル
+       * @return {phina.geom.Vector2} 法線ベクトル
        */
       normal: function(a, b) {
         var temp = phina.geom.Vector2.sub(a, b);
@@ -2955,9 +3281,20 @@ phina.namespace(function() {
       },
 
       /**
-       * @method
+       * @method reflect
        * @static
-       * 反射ベクトル
+       * 2次元ベクトル v を壁への入射ベクトルとして、壁に反射した際のベクトル（反射ベクトル）を返します。
+       *
+       * 壁の向きは法線ベクトル normal によって表します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(4, 3);
+       *     normal = phina.geom.Vector2(-1, 1);
+       *     phina.geom.Vector2.reflect(v1, normal); // => phina.geom.Vector2(2, 5)
+       *
+       * @param {phina.geom.Vector2} v 入射ベクトル
+       * @param {phina.geom.Vector2} normal 壁の法線ベクトル
+       * @return {phina.geom.Vector2} 反射ベクトル
        */
       reflect: function(v, normal) {
         var len = phina.geom.Vector2.dot(v, normal);
@@ -2967,30 +3304,54 @@ phina.namespace(function() {
       },
 
       /**
-       * @method
+       * @method lerp
        * @static
-       * 補間.
-       * 0.5 で lhs と rhs の中間ベクトルを求めることができます.
+       * a と b を t で線形補間します。
+       * t=0.5 で a と b の中間ベクトルを求めることができます。
+       *
+       * ### Example
+       *     a = phina.geom.Vector2(1, 2);
+       *     b = phina.geom.Vector2(4, 6);
+       *     Vector2.lerp(a, b, 0.5); // => (2.5, 4)
+       *     Vector2.lerp(a, b, 0) // => (1, 2)
+       *     Vector2.lerp(a, b, 1) // => (4, 6)
+       * 
+       * @param {phina.geom.Vector2} a ベクトル
+       * @param {phina.geom.Vector2} b ベクトル
+       * @param {Number} t ？？？
+       * @return {Number} 補間ベクトル？
        */
-      lerp: function(lhs, rhs, t) {
-        // TODO: 
+      lerp: function(a, b, t) {
         return phina.geom.Vector2(
-          lhs.x + (rhs.x-lhs.x)*t,
-          lhs.y + (rhs.y-lhs.y)*t
+          a.x + (b.x-a.x)*t,
+          a.y + (b.y-a.y)*t
         );
       },
       
       
       /**
-       * @method
+       * @method slerp
        * @static
-       * 補間
+       * 補間（未実装）
        */
       slerp: function(lhs, rhs, t) {
           // TODO:
           // cos...
       },
 
+      /**
+       * @method random
+       * @static
+       * 角度が min から max の範囲（度単位）で大きさが len のランダムなベクトルを生成して返します。
+       *
+       * ### Example
+       *     phina.geom.Vector2.random(90, 180, 1); // => phina.geom.Vector2(-0.5, 0.866) など
+       *
+       * @param {Number} [min=0] 角度（度単位）の下限値
+       * @param {Number} [max=360] 角度（度単位）の上限値
+       * @param {Number} [len=1] 大きさ
+       * @return {phina.geom.Vector2} 生成したベクトル
+       */
       random: function(min, max, len) {
         return phina.geom.Vector2().random(min, max).mul(len||1);
       },
@@ -2998,10 +3359,30 @@ phina.namespace(function() {
 
   });
 
+  /**
+   * @property {phina.geom.Vector2} ZERO ゼロベクトル
+   * @readonly
+   */
   phina.geom.Vector2.ZERO = phina.geom.Vector2(0, 0);
+  /**
+   * @property {phina.geom.Vector2} LEFT 左方向の単位ベクトル
+   * @readonly
+   */
   phina.geom.Vector2.LEFT = phina.geom.Vector2(-1, 0);
+  /**
+   * @property {phina.geom.Vector2} RIGHT 右方向の単位ベクトル
+   * @readonly
+   */
   phina.geom.Vector2.RIGHT= phina.geom.Vector2(1, 0);
+  /**
+   * @property {phina.geom.Vector2} UP 上方向の単位ベクトル
+   * @readonly
+   */
   phina.geom.Vector2.UP   = phina.geom.Vector2(0, -1);
+  /**
+   * @property {phina.geom.Vector2} DOWN 下方向の単位ベクトル
+   * @readonly
+   */
   phina.geom.Vector2.DOWN = phina.geom.Vector2(0, 1);
 
 });
@@ -3011,7 +3392,8 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Vector3
-   * ベクトルクラス
+   * # 3次元ベクトルクラス（未実装）
+   * 3次元のベクトルや座標を表すクラスです。
    */
   phina.define('phina.geom.Vector3', {
 
@@ -3040,15 +3422,32 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Matrix33
-   * マトリックスクラス
+   * # 行列クラス
+   * 3x3の行列を表すクラスです。
+   * 
+   * <pre>
+   * | m00 m01 m02 |
+   * | m10 m11 m12 |
+   * | m20 m21 m22 |
+   * </pre>
    */
   phina.define('phina.geom.Matrix33', {
 
     /**
-     * @constructor
-     * m00 m01 m02
-     * m10 m11 m12
-     * m20 m21 m22
+     * @method init
+     * マトリックスクラスのコンストラクタです。
+     *
+     * 引数は m00, m01, m02, m10, m11, m12, m20, m21, m22 の順に指定します。
+     * 引数が9個に満たない場合は単位行列を生成します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat1.m00 + mat2.m00; // => 2
+     *     mat1.m01 - mat2.m01; // => 2
+     *
+     * @param {Number...} m00, m01,... 各要素の値
+     * @return {phina.geom.Matrix33} 行列オブジェクト
      */
     init: function() {
       if (arguments.length >= 9) {
@@ -3059,6 +3458,20 @@ phina.namespace(function() {
       }
     },
 
+    /**
+     * @method set
+     * @chainable
+     * this の各要素の値を再設定します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat2.set(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.toString() == mat2.toString(); // => true
+     *
+     * @param {Number...} m00, m01,... 各要素の値
+     * @return {phina.geom.Matrix33} 行列オブジェクト
+     */
     set: function(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
       this.m00 = m00; this.m01 = m01; this.m02 = m02;
       this.m10 = m10; this.m11 = m11; this.m12 = m12;
@@ -3067,6 +3480,18 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method identity
+     * @chainable
+     * this を単位行列にします。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33();
+     *     mat1.identity().toString() == mat2.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 単位行列
+     */
     identity: function() {
       this.m00 = 1; this.m01 = 0; this.m02 = 0;
       this.m10 = 0; this.m11 = 1; this.m12 = 0;
@@ -3075,7 +3500,16 @@ phina.namespace(function() {
     },
 
     /**
-     * クローン
+     * @method clone
+     * this のコピーを生成して返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = mat1.clone();
+     *     mat1.toString() == mat2.toString(); // => true
+     *     mat1 == mat2; // => false
+     *
+     * @return {phina.geom.Matrix33} 行列オブジェクト
      */
     clone: function() {
       return phina.geom.Matrix33(
@@ -3086,7 +3520,15 @@ phina.namespace(function() {
     },
 
     /**
-     * 行列式
+     * @method determinant
+     * 行列式を返します
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -2, 0, -1, 3, 1, 4, 2, 1);
+     *     mat1.determinant(); // => -10
+     *     mat1.identity().determinant(); // => 1
+     *
+     * @return {Number} 行列式
      */
     determinant: function() {
       var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
@@ -3097,7 +3539,16 @@ phina.namespace(function() {
     },
 
     /**
-     * 転置
+     * @method transpose
+     * @chainable
+     * 転置行列を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat2 = phina.geom.Matrix33(1, 4, 7, 2, 5, 8, 3, 6, 9);
+     *     mat1.transpose().toString() == mat2.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 転置行列
      */
     transpose: function() {
       var swap = function(a, b) {
@@ -3114,7 +3565,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 逆行列
+     * @method invert
+     * @chainable
+     * 逆行列を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     mat2 = mat1.clone().invert();
+     *     mat3 = mat1.clone().multiply(mat2);
+     *     mat3.toString() == phina.geom.Matrix33.IDENTITY.toString(); // => true
+     *
+     * @return {phina.geom.Matrix33} 逆行列
      */
     invert: function() {
       var m00 = this.m00; var m01 = this.m01; var m02 = this.m02;
@@ -3145,7 +3606,17 @@ phina.namespace(function() {
     },
 
     /**
-     * 掛け算
+     * @method multiply
+     * this に other を乗じます。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     mat2 = mat1.clone().invert();
+     *     mat3 = mat1.clone().multiply(mat2);
+     *     mat3.toString() == phina.geom.Matrix33.IDENTITY.toString(); // => true
+     *
+     * @param {phina.geom.Matrix33} other 乗じる行列
+     * @return {phina.geom.Matrix33} 乗算結果の行列
      */
     multiply: function(mat) {
         var tm = this.m;
@@ -3174,7 +3645,17 @@ phina.namespace(function() {
     },
 
     /**
-     * ベクトルとの掛け算
+     * @method multiplyVector2
+     * this に2次元ベクトル v を乗じます。
+     * ２次元ベクトルは (x, y, 1) として乗算します.
+     *
+     * ### Example
+     *     mat = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
+     *     v = Vector2(2, 4)
+     *     mat.multiplyVector2(v) // => {x: -3, y: 12}
+     *
+     * @param {phina.geom.Vector2} v 乗じるベクトル
+     * @return {phina.geom.Vector2} 乗算結果のベクトル
      */
     multiplyVector2: function(v) {
       var vx = this.m00*v.x + this.m01*v.y + this.m02;
@@ -3184,6 +3665,19 @@ phina.namespace(function() {
     },
 
     // 行
+    /**
+     * @method getRow
+     * row 番目の行を配列で返します。row が 0、1、2 のいずれかでなければ null を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.getRow(0); // [1, 2, 3]
+     *     mat1.getRow(1); // [4, 5, 6]
+     *     mat1.getRow(9); // null
+     *
+     * @param {0/1/2} row 行番号
+     * @return {Number[]} 行を表す配列
+     */
     getRow: function(row) {
       if ( row === 0 ) {
         return [ this.m00, this.m01, this.m02 ];
@@ -3199,7 +3693,19 @@ phina.namespace(function() {
       }
     },
 
-    // 列
+    /**
+     * @method getCol
+     * col 番目の列を配列で返します。col が 0、1、2 のいずれかでなければ null を返します。
+     *
+     * ### Example
+     *     mat1 = phina.geom.Matrix33(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *     mat1.getCol(0); // [1, 4, 7]
+     *     mat1.getCol(1); // [2, 5, 8]
+     *     mat1.getRow(-1); // null
+     *
+     * @param {0/1/2} col 列番号
+     * @return {Number[]} 列を表す配列
+     */
     getCol: function(col) {
       if ( col === 0 ) {
         return [ this.m00, this.m10, this.m20 ];
@@ -3214,26 +3720,28 @@ phina.namespace(function() {
         return null;
       }
     },
+
     /**
-     * 文字列化
+     * @method toString
+     * 行列を JSON 形式で表現した文字列を返します。
+     *
+     * ### Example
+     *     v = phina.geom.Vector2(3, 4);
+     *     v2 = v.clone();
+     *     v2.x == v.x; // => true
+     *
+     * @return {String} JSON 文字列
      */
     toString: function() {
       return "|{m00}, {m01}, {m02}|\n|{m10}, {m11}, {m12}|\n|{m20}, {m21}, {m22}|".format(this);
     },
 
-    _accessor: {
-      /**
-       * x
-       */
-      x: {
-        "get": function()   { return this._x; },
-        "set": function(v)  { this._x = v; }
-      },
-    }
-    
   });
 
-
+  /**
+   * @property {phina.geom.Matrix33} IDENTITY 単位行列
+   * @readonly
+   */
   phina.geom.Matrix33.IDENTITY = phina.geom.Matrix33().identity();
 
 });
@@ -3243,23 +3751,64 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Rect
+   * # 矩形領域を表すクラス
+   * キャンバス上の矩形領域を扱うクラスです。
    * 
    */
   phina.define('phina.geom.Rect', {
 
-    /** x */
+    /**
+     * @property {Number} x
+     * 矩形の左上頂点の x 座標
+     */
     x: 0,
-    /** y */
+    /**
+     * @property {Number} y
+     * 矩形の左上頂点の y 座標
+     */
     y: 0,
-    /** 幅 */
+    /**
+     * @property {Number} width
+     * 矩形の幅
+     */
     width: 32,
-    /** 高さ */
+    /**
+     * @property {Number} hight
+     * 矩形の高さ
+     */
     height: 32,
 
+    /**
+     * @method init
+     * 矩形領域のコンストラクタです。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(8, 16, 32, 64);
+     *
+     * @param {Number} x 矩形の左上頂点の x 座標
+     * @param {Number} y 矩形の左上頂点の y 座標
+     * @param {Number} width 幅
+     * @param {Number} height 高さ
+     * @return {phina.geom.Rect} 矩形領域オブジェクト
+     */
     init: function(x, y, width, height) {
       this.set(x, y, width, height);
     },
 
+    /**
+     * @method set
+     * @chainable
+     * this の各値を再設定します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(8, 16, 32, 64);
+     *     rect.set(0, 16, 32, 64);
+     *
+     * @param {Number} x 矩形の左上頂点の x 座標
+     * @param {Number} y 矩形の左上頂点の y 座標
+     * @param {Number} width 幅
+     * @param {Number} height 高さ
+     */
     set: function(x, y, width, height) {
       this.x = x;
       this.y = y;
@@ -3269,24 +3818,88 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method moveTo
+     * @chainable
+     * 矩形領域を座標 (x, y) に移動します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(8, 16, 32, 64);
+     *     rect.centerX; // => 24
+     *     rect.moveTo(0, 0);
+     *     rect.centerX; // => 16
+     *
+     * @param {Number} x 移動先の x 座標
+     * @param {Number} y 移動先の y 座標
+     */
     moveTo: function(x, y) {
       this.x = x;
       this.y = y;
       return this;
     },
 
+    /**
+     * @method moveBy
+     * @chainable
+     * 矩形領域を (x, y) だけ移動します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(8, 16, 32, 64);
+     *     rect.moveBy(10, -10);
+     *     rect.x; // => 18
+     *     rect.y; // => 6
+     *
+     * @param {Number} x 移動量の x 座標
+     * @param {Number} y 移動量の y 座標
+     */
     moveBy: function(x, y) {
       this.x += x;
       this.y += y;
       return this;
     },
 
+    /**
+     * @method setSizse
+     * @chainable
+     * 矩形領域の幅と高さを変更します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(8, 16, 32, 64);
+     *     rect.setSize(10, 20);
+     *     rect.width; // => 10
+     *     rect.height; // => 20
+     *
+     * @param {Number} width 幅
+     * @param {Number} height 高さ
+     */
     setSize: function(w, h) {
       this.width = w;
       this.height = h;
       return this;
     },
 
+    /**
+     * @method padding
+     * @chainable
+     * 矩形領域の中にパディング領域を設定します。
+     *
+     * 矩形領域自体のサイズはパディング領域の分だけ小さくなります。  
+     * 幅の指定方法は CSS の padding 指定と同じように時計回りです。  
+     * 引数が1つの場合は上下左右の値、引数が2つの場合は上下と左右の値、引数が３つの場合は上、左右、下の値と解釈します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(50, 100, 150, 200);
+     *     rect.padding(10);
+     *     rect.x; // => 60
+     *     rect.y; // => 110
+     *     rect.width; // => 130
+     *     rect.height; // => 180
+     *
+     * @param {Number} top 上辺のパディング幅
+     * @param {Number} right 右辺のパディング幅
+     * @param {Number} bottom 下辺のパディング幅
+     * @param {Number} left 左辺のパディング幅
+     */
     padding: function(top, right, bottom, left) {
       // css の padding に合わせて時計回りにパラメータ調整
       switch (arguments.length) {
@@ -3312,21 +3925,65 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method contains
+     * 座標 (x, y) が 矩形領域の中に含まれるかどうかを返します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(50, 100, 150, 200);
+     *     rect.contains(35, 68); // =>  true
+     *     rect.contains(200, 68); // => false
+     *
+     * @param {Number} x 判定する対象の x 座標
+     * @param {Number} y 判定する対象の y 座標
+     * @return {Boolean} 指定した座標が矩形領域の中に含まれるかどうか
+     */
     contains: function(x, y) {
       return this.left <= x && x <= this.right && this.top <= y && y <= this.bottom;
     },
 
+    /**
+     * @method clone
+     * this のコピーを生成して返します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(50, 100, 150, 200);
+     *     rect2 = rect.clone();
+     *     rect2.x == rect.x; // => true
+     *
+     * @return {Object} 生成した矩形領域
+     */
     clone: function() {
       return phina.geom.Rect(this.x, this.y, this.width, this.height);
     },
 
+    /**
+     * @method toCircle
+     * 矩形領域内に収まる最大の円領域を生成して返します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(32, 64, 100, 200);
+     *     circle = rect.toCircle();
+     *     circle.x; // => 82
+     *     circle.y; // => 164
+     *     circle.radius; // => 50
+     *
+     * @return {Object} 生成した円領域
+     */
     toCircle: function() {
       var radius = ((this.width < this.height) ? this.width : this.height)/2;
       return phina.geom.Circle(this.centerX, this.centerY, radius);
     },
 
     /**
-     * 配列に変換
+     * @method toArray
+     * this の各値を要素とする配列を生成して返します。
+     *
+     * ### Example
+     *     rect = phina.geom.Rect(32, 64, 100, 200);
+     *     rect.toArray(); // => [32, 64, 100, 200]
+     *
+     * @return {Number[]} 生成した配列
      */
     toArray: function() {
       return [this.x, this.y, this.width, this.height];
@@ -3335,32 +3992,49 @@ phina.namespace(function() {
     _accessor: {
       
       /**
-       * @property  left
-       * left
+       * @property {Number} left
+       * キャンバス左端から矩形領域の左辺までの距離
+       *
+       * left を変更すると矩形領域の幅（width）が自動的に調整されます。
+       *
+       * ### Example
+       *     rect = phina.geom.Rect(32, 64, 100, 200);
+       *     rect.left; // => 32
+       *     rect.width; // => 100
+       *     rect.right; // => 132
+       *     
+       *     rect.left = 42;
+       *     rect.width; // => 90
        */
       left: {
         "get": function()   { return this.x; },
         "set": function(v)  { this.width -= v-this.x; this.x = v; }
       },
       /**
-       * @property  top
-       * top
+       * @property {Number} top
+       * キャンバス上端から矩形領域の上辺までの位置
+       *
+       * top を変更すると矩形領域の高さ（height）が自動的に調整されます。
        */
       top: {
         "get": function()   { return this.y; },
         "set": function(v)  { this.height -= v-this.y; this.y = v; }
       },
       /**
-       * @property  right
-       * right
+       * @property {Number} right
+       * キャンバス左端から矩形領域の右辺までの距離
+       *
+       * right を変更すると矩形領域の幅（width）が自動的に調整されます。
        */
       right: {
         "get": function()   { return this.x + this.width; },
         "set": function(v)  { this.width += v-this.right; },
       },
       /**
-       * @property  bottom
-       * bottom
+       * @property {Number} bottom
+       * キャンバス上端から矩形領域の下辺までの位置
+       *
+       * bottom を変更すると矩形領域の高さ（height）が自動的に調整されます。
        */
       bottom: {
         "get": function()   { return this.y + this.height; },
@@ -3368,8 +4042,10 @@ phina.namespace(function() {
       },
       
       /**
-       * @property  centerX
-       * centerX
+       * @property {Number} centerX
+       * 矩形領域の x 座標
+       *
+       * 現時点では読み取り専用です。
        */
       centerX: {
         "get": function()   { return this.x + this.width/2; },
@@ -3377,10 +4053,11 @@ phina.namespace(function() {
           // TODO: 検討中
         },
       },
-      
       /**
-       * @property  centerY
-       * centerY
+       * @property {Number} centerY
+       * 矩形領域の y 座標
+       *
+       * 現時点では読み取り専用です。
        */
       centerY: {
         "get": function()   { return this.y + this.height/2; },
@@ -3399,21 +4076,58 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Circle
+   * # 円領域を表すクラス
+   * キャンバス上の円領域を扱うクラスです。
    * 
    */
   phina.define('phina.geom.Circle', {
 
-    /** x */
+    /**
+     * @property {Number} x
+     * 円の中心の x 座標
+     */
     x: 0,
-    /** y */
+    /**
+     * @property {Number} y
+     * 円の中心の y 座標
+     */
     y: 0,
-    /** 半径 */
+    /**
+     * @property {Number} radius
+     * 円の半径
+     */
     radius: 32,
 
+    /**
+     * @method init
+     * 円領域のコンストラクタです。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(32, 64, 128);
+     *
+     * @param {Number} x 円の中心の x 座標
+     * @param {Number} y 円の中心の y 座標
+     * @param {Number} radius 半径
+     * @return {phina.geom.Rect} 円領域オブジェクト
+     */
     init: function(x, y, radius) {
       this.set(x, y, radius);
     },
 
+    /**
+     * @method set
+     * @chainable
+     * this の各値を再設定します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(32, 64, 128);
+     *     circle.set(100, 200, 32);
+     *
+     * @param {Number} x 円を囲う矩形の左上頂点の x 座標
+     * @param {Number} y 円を囲う矩形の左上頂点の x 座標
+     * @param {Number} radius 半径
+     * @return {phina.geom.Circle} 円領域オブジェクト
+     */
     set: function(x, y, radius) {
       this.x = x;
       this.y = y;
@@ -3422,18 +4136,59 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method moveTo
+     * @chainable
+     * 円領域を座標 (x, y) に移動します。(x, y) は円の中心を表します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(300, 300, 40);
+     *     circle.left; // => 260
+     *     circle.moveTo(100, 100);
+     *     circle.left; // => 60
+     *
+     * @param {Number} x 移動先の x 座標
+     * @param {Number} y 移動先の y 座標
+     */
     moveTo: function(x, y) {
       this.x = x;
       this.y = y;
       return this;
     },
 
+    /**
+     * @method moveBy
+     * @chainable
+     * 円領域を (x, y) だけ移動します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(300, 300, 40);
+     *     circle.left; // => 260
+     *     circle.moveBy(100, 100);
+     *     circle.left; // => 460
+     *
+     * @param {Number} x 移動量の x 座標
+     * @param {Number} y 移動量の y 座標
+     */
     moveBy: function(x, y) {
       this.x += x;
       this.y += y;
       return this;
     },
 
+    /**
+     * @method contains
+     * 座標 (x, y) が円領域の中に含まれるかどうかを返します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(300, 300, 100);
+     *     circle.contains(350, 350); // =>  true
+     *     circle.contains(350, 400); // => false
+     *
+     * @param {Number} x 判定する対象の x 座標
+     * @param {Number} y 判定する対象の y 座標
+     * @return {Boolean} 指定した座標が円領域の中に含まれるかどうか
+     */
     contains: function(x, y) {
       var lenX = this.x-x;
       var lenY = this.y-y;
@@ -3442,17 +4197,47 @@ phina.namespace(function() {
       return lenSquared <= this.radius*this.radius;
     },
 
+    /**
+     * @method clone
+     * this のコピーを生成して返します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(50, 100, 40);
+     *     circle2 = circle.clone();
+     *     circle2.x == circle.x; // => true
+     *
+     * @return {Object} 生成した円領域
+     */
     clone: function() {
       return phina.geom.Circle(this.x, this.y, this.radius);
     },
 
+    /**
+     * @method toRect
+     * 円に外接する正方形を表す矩形領域を生成して返します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(50, 100, 40);
+     *     rect = circle.toRect();
+     *     rect.x; // => 10
+     *     rect.y; // => 60
+     *     rect.width; // => 80
+     *
+     * @return {Object} 生成した矩形領域
+     */
     toRect: function() {
       var size = this.size;
       return phina.geom.Rect(this.x - this.radius, this.y - this.radius, size, size);
     },
-
     /**
-     * 配列に変換
+     * @method toArray
+     * this の各値を要素とする配列を生成して返します。
+     *
+     * ### Example
+     *     circle = phina.geom.Circle(50, 100, 40);
+     *     rect.toArray(); // => [50, 100, 40]
+     *
+     * @return {Number[]} 生成した配列
      */
     toArray: function() {
       return [this.x, this.y, this.radius];
@@ -3461,8 +4246,18 @@ phina.namespace(function() {
     _accessor: {
       
       /**
-       * @property  left
-       * left
+       * @property {Number} left
+       * @readonly
+       * キャンバス左端から円の左端までの距離
+       *
+       * 現時点では読み取り専用です。
+       *
+       * ### Example
+       *     circle = phina.geom.Circle(200, 300, 100);
+       *     circle.left; // => 100
+       *     circle.top; // => 200
+       *     circle.right; // => 300
+       *     circle.bottom; // => 400
        */
       left: {
         "get": function()   { return this.x - this.radius; },
@@ -3471,8 +4266,11 @@ phina.namespace(function() {
         }
       },
       /**
-       * @property  top
-       * top
+       * @property {Number} top
+       * @readonly
+       * キャンバス上端から円の上端までの距離
+       *
+       * 現時点では読み取り専用です。
        */
       top: {
         "get": function()   { return this.y - this.radius; },
@@ -3481,8 +4279,11 @@ phina.namespace(function() {
         }
       },
       /**
-       * @property  right
-       * right
+       * @property {Number} right
+       * @readonly
+       * キャンバス右端から円の右端までの距離
+       *
+       * 現時点では読み取り専用です。
        */
       right: {
         "get": function()   { return this.x + this.radius; },
@@ -3491,8 +4292,11 @@ phina.namespace(function() {
         }
       },
       /**
-       * @property  bottom
-       * bottom
+       * @property {Number} bottom
+       * @readonly
+       * キャンバス下端から円の下端までの距離
+       *
+       * 現時点では読み取り専用です。
        */
       bottom: {
         "get": function()   { return this.y + this.radius; },
@@ -3500,10 +4304,12 @@ phina.namespace(function() {
           // TODO: 
         }
       },
-      
       /**
-       * @property  size
-       * size
+       * @property {Number} size
+       * @readonly
+       * 円の直径
+       *
+       * 現時点では読み取り専用です。
        */
       size: {
         "get": function()   { return this.radius*2; },
@@ -3522,19 +4328,63 @@ phina.namespace(function() {
 
   /**
    * @class phina.geom.Collision
+   * # 衝突判定用クラス
+   * 衝突判定のためのクラスです。すべてのメソッドがスタティックメソッドです。
    * 
    */
   phina.define('phina.geom.Collision', {
 
     _static: {
+      /**
+       * @method testCircleCircle
+       * @static
+       * 2つの円領域が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     circle1 = phina.geom.Circle(100, 100, 30);
+       *     circle2 = phina.geom.Circle(130, 140, 30);
+       * phina.geom.Collision.testCircleCircle(circle1, circle2); // => true
+       *
+       * @param {phina.geom.Circle} circle1 円領域オブジェクト
+       * @param {phina.geom.Circle} circle2 円領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testCircleCircle: function(circle0, circle1) {
         var distanceSquared = phina.geom.Vector2.distanceSquared(circle0, circle1);
         return distanceSquared <= Math.pow(circle0.radius + circle1.radius, 2);
       },
+      /**
+       * @method testRectRect
+       * @static
+       * 2つの矩形領域が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     rect1 = phina.geom.Rect(100, 100, 30, 40);
+       *     rect2 = phina.geom.Rect(200, 200, 10, 10);
+       *     phina.geom.Collision.testRectRect(rect1, rect2); // => false
+       *
+       * @param {phina.geom.Rect} rect1 矩形領域オブジェクト
+       * @param {phina.geom.Rect} rect2 矩形領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testRectRect: function(rect0, rect1) {
         return (rect0.left < rect1.right) && (rect0.right > rect1.left) &&
           (rect0.top < rect1.bottom) && (rect0.bottom > rect1.top);
       },
+      /**
+       * @method testCircleRect
+       * @static
+       * 円領域と矩形領域が重なっているかどうかかを判定します
+       *
+       * ### Example
+       *     circle = phina.geom.Circle(100, 100, 30);
+       *     rect = phina.geom.Rect(100, 100, 30, 40);
+       *     phina.geom.Collision.testCircleRect(circle, rect); // => true
+       *
+       * @param {phina.geom.Circle} circle 円領域オブジェクト
+       * @param {phina.geom.Rect} rect 矩形領域オブジェクト
+       * @return {Boolean} 領域が重なっているかどうか
+       */
       testCircleRect: function(circle, rect) {
         // まずは大きな矩形で判定(高速化)
         var bigRect = phina.geom.Rect(rect.left-circle.radius, rect.top-circle.radius, rect.width+circle.radius*2, rect.height+circle.radius*2);
@@ -3573,7 +4423,22 @@ phina.namespace(function() {
         
         return false;
       },
-      // 円と2点を結ぶ線分の当たり判定
+      /**
+       * @method testCircleLine
+       * @static
+       * 円領域と線分が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     circle = phina.geom.Circle(100, 100, 20);
+       *     p1 = phina.geom.Vector2(0, 0);
+       *     p2 = phina.geom.Vector2(300, 400);
+       *     phina.geom.Collision.testCircleLine(circle, p1, p2); // => true
+       *
+       * @param {phina.geom.Circle} circle 円領域オブジェクト
+       * @param {phina.geom.Vector2} p1 線分の端の座標
+       * @param {phina.geom.Vector2} p2 線分の端の座標
+       * @return {Boolean} 円領域と線分が重なっているかどうか
+       */
       testCircleLine : function(circle, p1, p2) {
         // 先に線分端との判定
         if (circle.contains(p1.x, p1.y) || circle.contains(p2.x, p2.y)) return true;
@@ -3632,6 +4497,14 @@ phina.namespace(function() {
 
   /**
    * @class phina.util.EventDispatcher
+   * # イベントを扱うためのクラス
+   * イベントを扱うためのメソッドやプロパティを定義しているクラスです。
+   * phina.js が提供するクラスの多くはこの EventDispatcher クラスの子孫となっているため、
+   * ほとんどのオブジェクトで容易にイベントを扱うことができます。
+   *
+   * # 少し説明
+   * this.onxxx = function(){}; でもイベントリスナを設定できるが、あまり推奨しない。
+   * 呼び出される順序は、まず this.onxxxx が呼び出され、あとは on() で登録した順番。
    */
   phina.define('phina.util.EventDispatcher', {
 
@@ -3639,6 +4512,34 @@ phina.namespace(function() {
       this._listeners = {};
     },
 
+    /**
+     * @method on
+     * @chainable
+     * イベントリスナを登録します。
+     *
+     * １つのイベントに対するイベントリスナはいくつでも登録することができます。
+     *
+     * 標準のイベントを検知するには、オブジェクトの {@link Object2D#interactive} プロパティが true である必要があります。
+     * {@link Object2D#interactive} プロパティを設定するには {@link Object2D#setInteractive} メソッドを呼び出してください。
+     *
+     * また、{@link #flare} や {@link #fire} によって定義したカスタムイベントに対するイベントリスナも登録することが
+     * できます。カスタムイベントのイベントリスナは {@link Object2D#interactive} プロパティによらず呼び出されます。
+     * なおカスタムイベントのオブジェクトは Event オブジェクトとは異なります。
+     *
+     * ###Reference
+     * 標準のイベントの種類は以下を参照してください。  
+     * - [Event reference | MDN]( https://developer.mozilla.org/en-US/docs/Web/Events )
+     *
+     * ### Example
+     *     var shape = CircleShape().addChildTo(this).setInteractive(true).setPosition(50, 50);
+     *     shape.on("touchstart", function(e){
+     *       this.color = "blue";
+     *     });
+     *
+     * @param {String} type イベントの種類
+     * @param {Function} listener イベントリスナとなる関数
+     * @param {Object} listener.event Event オブジェクト、またはカスタムイベントのオブジェクト
+     */
     on: function(type, listener) {
       if (this._listeners[type] === undefined) {
         this._listeners[type] = [];
@@ -3648,6 +4549,16 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method off
+     * @chainable
+     * イベントリスナを削除します。
+     *
+     * ある種類のイベントに対するイベントリスナをすべて削除するには {@link #clear} を使用してください。
+     *
+     * @param {String} type イベントの種類
+     * @param {Function} listener イベントリスナ関数
+     */
     off: function(type, listener) {
       var listeners = this._listeners[type];
       var index = listeners.indexOf(listener);
@@ -3657,7 +4568,15 @@ phina.namespace(function() {
       return this;
     },
 
-    fire: function(e) {
+    /**
+     * @method fire
+     * @chainable
+     * カスタムイベントを表すオブジェクトを指定してカスタムイベントを発火します。
+     *
+     * @param {Object} event カスタムイベントを表すオブジェクト
+     * @param {String} event.type カスタムイベントの名前
+     */
+     fire: function(e) {
       e.target = this;
       var oldEventName = 'on' + e.type;
       if (this[oldEventName]) this[oldEventName](e);
@@ -3673,6 +4592,21 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method flare
+     * @chainable
+     * イベント名を指定してカスタムイベントを発火します。
+     *
+     * param 引数を指定することによりカスタムイベントに任意のプロパティを設定することができます。  
+     * これにより、呼び出し元がイベントリスナに任意の値を渡すことができます。  
+     * （ただし target プロパティには必ず自分自身が格納されます。）
+     *
+     * ### Example
+     *     //
+     *
+     * @param {String} type カスタムイベントの名前
+     * @param {Object} [param] カスタムイベントにプロパティを設定するためのオブジェクト
+    */
     flare: function(type, param) {
       var e = {type:type};
       if (param) {
@@ -3685,6 +4619,17 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method one
+     * @chainable
+     * 一度だけ実行されるイベントリスナを登録します。
+     *
+     * 指定したイベントリスナが一度実行されると、そのイベントリスナは削除されます。それ以外の挙動は {@link #on} と同じです。
+     *
+     * @param {String} type イベントの種類
+     * @param {Function} listener イベントリスナとなる関数
+     * @param {Object} listener.event Event オブジェクト、またはカスタムイベントのオブジェクト
+     */
     one: function(type, listener) {
       var self = this;
       
@@ -3699,11 +4644,29 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * @method has
+     * イベントリスナが登録されているかどうかを調べます。
+     *
+     * 指定したイベントの種類に対するイベントリスナが登録されている場合は true、そうでない場合は false を返します。
+     *
+     * @param {String} type イベントの種類
+     * @return {Boolean} 指定したイベントのイベントリスナが登録されているかどうか
+     */
     has: function(type) {
       if (this._listeners[type] === undefined && !this["on" + type]) return false;
       return true;
     },
 
+    /**
+     * @method clear
+     * @chainable
+     * ある種類のイベントに対するイベントリスナをすべて削除します。
+     *
+     * 特定のイベントリスナのみを削除するには {@link #off} を使用してください。
+     *
+     * @param {String} type イベントの種類
+     */
     clear: function(type) {
       var oldEventName = 'on' + type;
       if (this[oldEventName]) delete this[oldEventName];
@@ -3712,8 +4675,30 @@ phina.namespace(function() {
     },
   });
 
-
-  // 別名のメソッドを定義
+  /**
+   * @method addEventListener
+   * {@link #on} のエイリアスです。
+   */
+  /**
+   * @method removeEventListener
+   * {@link #off} のエイリアスです。
+   */
+  /**
+   * @method clearEventListener
+   * {@link #clear} のエイリアスです。
+   */
+  /**
+   * @method hasEventListener
+   * {@link #has} のエイリアスです。
+   */
+  /**
+   * @method dispatchEvent
+   * {@link #fire} のエイリアスです。
+   */
+  /**
+   * @method dispatchEventByType
+   * {@link #flare} のエイリアスです。
+   */
   (function() {
     var methodMap = {
       addEventListener: 'on',
