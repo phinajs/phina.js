@@ -27,7 +27,11 @@ phina.namespace(function() {
       var flows = [];
 
       var counter = 0;
-
+      var length = 0;
+      params.forIn(function(type, assets) {
+        length += Object.keys(assets).length;
+      });
+      
       params.forIn(function(type, assets) {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
@@ -39,7 +43,7 @@ phina.namespace(function() {
             self.flare('progress', {
               key: key,
               asset: asset,
-              progress: (++counter/flows.length),
+              progress: (++counter/length),
             });
           });
           flows.push(flow);

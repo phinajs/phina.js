@@ -191,5 +191,57 @@ th.describe("asset.AssetLoader", function() {
       console.log(e);
     };
   });
+  th.it('local_spritesheet', function() {
+    var loader = phina.asset.AssetLoader();
+    var flow = loader.load({
+      image: {
+        'tomapiko': '../../assets/images/character/tomapiyo.png',
+      },
+      spritesheet: {
+        ss: {
+         "frame": {
+           "width": 64,
+           "height": 64,
+           "cols": 6,
+           "rows": 3,
+         },
+         // アニメーション
+         "animations" : {
+           "down": {
+             "frames": [6,7,8,7],
+             "next": "down",
+             "frequency": 5,
+           },
+         },
+        
+        },
+      },
+    });
 
+    var logLabel = phina.display.Label({
+      text: '# Loaded\n',
+      align: 'left',
+    }).addChildTo(this);
+    logLabel.x = 100;
+    logLabel.y = 200;
+
+    flow.then(function() {
+      var elm = phina.display.Sprite('tomapiko').addChildTo(this);
+      elm.x = 320;
+      elm.y = 480;
+      var anim = phina.accessory.FrameAnimation('ss');
+      anim.attachTo(elm);
+      anim.gotoAndPlay('down');
+      
+      this.onpointstart = function(app) {
+        elm.x = app.pointer.x;
+        elm.y = app.pointer.y;
+      };
+    }.bind(this));
+
+    loader.onprogress = function(e) {
+      logLabel.text += '- ' + e.key + '\n';
+      console.log(e);
+    };
+  });
 });
