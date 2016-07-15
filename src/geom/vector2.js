@@ -720,26 +720,25 @@ phina.namespace(function() {
       /**
        * @method lerp
        * @static
-       * v1 と v2 の補間？？？
-       * 
-       * t=0.5 で v1 と v2 の中間ベクトルを求めることができます。
-       * ベクトルが座標を表す場合、2点間の内分点を返します。
+       * a と b を t で線形補間します。
+       * t=0.5 で a と b の中間ベクトルを求めることができます。
        *
        * ### Example
-       *     v1 = phina.geom.Vector2(1, 2);
-       *     v2 = phina.geom.Vector2(4, 6);
-       *     phina.geom.Vector2.manhattanDistance(v1, v2); // => 7
-       *
-       * @param {phina.geom.Vector2} v1 ベクトル
-       * @param {phina.geom.Vector2} v2 ベクトル
+       *     a = phina.geom.Vector2(1, 2);
+       *     b = phina.geom.Vector2(4, 6);
+       *     Vector2.lerp(a, b, 0.5); // => (2.5, 4)
+       *     Vector2.lerp(a, b, 0) // => (1, 2)
+       *     Vector2.lerp(a, b, 1) // => (4, 6)
+       * 
+       * @param {phina.geom.Vector2} a ベクトル
+       * @param {phina.geom.Vector2} b ベクトル
        * @param {Number} t ？？？
        * @return {Number} 補間ベクトル？
        */
-      lerp: function(lhs, rhs, t) {
-        // TODO: 
+      lerp: function(a, b, t) {
         return phina.geom.Vector2(
-          lhs.x + (rhs.x-lhs.x)*t,
-          lhs.y + (rhs.y-lhs.y)*t
+          a.x + (b.x-a.x)*t,
+          a.y + (b.y-a.y)*t
         );
       },
       
