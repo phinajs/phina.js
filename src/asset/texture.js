@@ -22,8 +22,6 @@ phina.namespace(function() {
         // this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
       }
 
-      this.domElement.src = this.src;
-
       var self = this;
       this.domElement.onload = function(e) {
         self.loaded = true;
@@ -36,6 +34,8 @@ phina.namespace(function() {
         e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
         e.target.onerror = null;
       };
+
+      this.domElement.src = this.src;
     },
 
     clone: function () {
