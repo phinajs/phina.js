@@ -6123,7 +6123,11 @@ phina.namespace(function() {
       var flows = [];
 
       var counter = 0;
-
+      var length = 0;
+      params.forIn(function(type, assets) {
+        length += Object.keys(assets).length;
+      });
+      
       params.forIn(function(type, assets) {
         assets.forIn(function(key, value) {
           var func = phina.asset.AssetLoader.assetLoadFunctions[type];
@@ -6135,7 +6139,7 @@ phina.namespace(function() {
             self.flare('progress', {
               key: key,
               asset: asset,
-              progress: (++counter/flows.length),
+              progress: (++counter/length),
             });
           });
           flows.push(flow);
@@ -6360,8 +6364,6 @@ phina.namespace(function() {
         // this.domElement.crossOrigin = 'Anonymous'; // クロスオリジン解除
       }
 
-      this.domElement.src = this.src;
-
       var self = this;
       this.domElement.onload = function(e) {
         self.loaded = true;
@@ -6374,6 +6376,8 @@ phina.namespace(function() {
         e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
         e.target.onerror = null;
       };
+
+      this.domElement.src = this.src;
     },
 
     clone: function () {
