@@ -159,8 +159,7 @@ phina.namespace(function() {
      * @return {Boolean} 指定したイベントのイベントリスナが登録されているかどうか
      */
     has: function(type) {
-      if (this._listeners[type] === undefined && !this["on" + type]) return false;
-      return true;
+      return (this._listeners[type] !== undefined && this._listeners[type].length !== 0) || !!this['on' + type];
     },
 
     /**
