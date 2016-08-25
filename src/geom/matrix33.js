@@ -228,11 +228,11 @@ phina.namespace(function() {
     /**
      * @method multiplyVector2
      * this に2次元ベクトル v を乗じます。
-     * ２次元ベクトルは (x, y, 1) として乗算します.
+     * 2次元ベクトルは (x, y, 1) として乗算します。
      *
      * ### Example
      *     mat = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
-     *     v = Vector2(2, 4)
+     *     v = phina.geom.Vector2(2, 4)
      *     mat.multiplyVector2(v) // => {x: -3, y: 12}
      *
      * @param {phina.geom.Vector2} v 乗じるベクトル

@@ -720,20 +720,20 @@ phina.namespace(function() {
       /**
        * @method lerp
        * @static
-       * a と b を t で線形補間します。
-       * t=0.5 で a と b の中間ベクトルを求めることができます。
+       * v1 と v2 を媒介変数 t で線形補間します。
+       * t=0.5 で v1 と v2 の中間ベクトルを求めることができます。
        *
        * ### Example
-       *     a = phina.geom.Vector2(1, 2);
-       *     b = phina.geom.Vector2(4, 6);
-       *     Vector2.lerp(a, b, 0.5); // => (2.5, 4)
-       *     Vector2.lerp(a, b, 0) // => (1, 2)
-       *     Vector2.lerp(a, b, 1) // => (4, 6)
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.lerp(v1, v2, 0.5); // => (2.5, 4)
+       *     phina.geom.Vector2.lerp(v1, v2, 0); // => (1, 2)
+       *     phina.geom.Vector2.lerp(v1, v2, 1); // => (4, 6)
        * 
-       * @param {phina.geom.Vector2} a ベクトル
-       * @param {phina.geom.Vector2} b ベクトル
-       * @param {Number} t ？？？
-       * @return {Number} 補間ベクトル？
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @param {Number} t 媒介変数
+       * @return {phina.geom.Vector2} 線形補間の結果
        */
       lerp: function(a, b, t) {
         return phina.geom.Vector2(
