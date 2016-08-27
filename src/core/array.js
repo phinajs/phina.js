@@ -673,10 +673,13 @@
   /**
    * @method from
    * @static
-   * ES6 準拠の from 関数です。array-like オブジェクトから新しい配列を生成します。
+   * ES6 準拠の from 関数です。array-like オブジェクトかiterable オブジェクトから新しい配列を生成します。
    *
-   * array-like オブジェクトとは、length プロパティを持ち、数字の添字でアクセス可能なオブジェクトのことです。  
+   * array-like オブジェクトとは、length プロパティを持ち、数字の添字でアクセス可能なオブジェクトのことです。
    * 通常の配列のほか、String、arguments、NodeList なども array-like オブジェクトです。
+   *
+   * iterable オブジェクトとは、Symbol.iterator プロパティを持つオブジェクトのことです。
+   * 通常の配列のほか、String、arguments、NodeList なども iterable オブジェクトです。
    *
    * ### Example
    *     Array.from([1, 2, 3], function(elm){ return elm * elm} ); // => [1, 4, 9]
@@ -690,6 +693,17 @@
    */
   Array.$method("from", function(arrayLike, callback, context) {
     if (!Object(arrayLike).length) return [];
+
+    if (Symbol && Symbol.iterator && arrayLike[Symbol.iterator]) {
+        var result = [];
+        var iterator = arrayLike[Symbol.iterator]();
+        while (true) {
+            var iteratorResult = iterator.next();
+            if (iteratorResult.done) break;
+            result.push(iteratorResult.value);
+        }
+        return result;
+    }
 
     return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {
       return item;
