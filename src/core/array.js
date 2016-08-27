@@ -700,7 +700,9 @@
         while (true) {
             var iteratorResult = iterator.next();
             if (iteratorResult.done) break;
-            result.push(iteratorResult.value);
+
+            var value = typeof callback === 'function' ? callback.bind(context || this)(iteratorResult.value) : iteratorResult.value;
+            result.push(value);
         }
         return result;
     }
