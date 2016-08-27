@@ -694,8 +694,8 @@
   Array.$method("from", function(arrayLike, callback, context) {
     if (!Object(arrayLike).length) return [];
 
+    var result = [];
     if (Symbol && Symbol.iterator && arrayLike[Symbol.iterator]) {
-        var result = [];
         var iterator = arrayLike[Symbol.iterator]();
         while (true) {
             var iteratorResult = iterator.next();
@@ -707,7 +707,10 @@
         return result;
     }
 
-    return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {
+    for (var i = 0, len = arrayLike.length; i < len; i++) {
+        result.push(arrayLike[i]);
+    }
+    return result.map(typeof callback == 'function' ? callback : function(item) {
       return item;
     }, context);
   });
