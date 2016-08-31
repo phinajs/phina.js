@@ -31,8 +31,8 @@ phina.namespace(function() {
         console.error("[phina.js] not found `{0}`!".format(this.src));
 
         var key = self.src.split('/').last.replace('.png', '').split('?').first.split('#').first;
-        e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
         e.target.onerror = null;
+        e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
       };
 
       this.domElement.src = this.src;
