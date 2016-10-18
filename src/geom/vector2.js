@@ -716,7 +716,30 @@ phina.namespace(function() {
         
         return phina.geom.Vector2.sub(v, temp);
       },
-
+      
+      /**
+       * @method wall
+       * @static
+       * 2次元ベクトル v を壁への入射ベクトルとして、壁に沿ったベクトル（壁ずりクトル）を返します。
+       *
+       * 壁の向きは法線ベクトル normal によって表します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(4, 3);
+       *     normal = phina.geom.Vector2(-1, 1);
+       *     phina.geom.Vector2.wall(v1, normal); // => phina.geom.Vector2(3, 4)
+       *
+       * @param {phina.geom.Vector2} v 入射ベクトル
+       * @param {phina.geom.Vector2} normal 壁の法線ベクトル
+       * @return {phina.geom.Vector2} 壁ずりベクトル
+       */
+      wall: function(v, normal) {
+        var len = phina.geom.Vector2.dot(v, normal);
+        var temp= phina.geom.Vector2.mul(normal, len);
+        
+        return phina.geom.Vector2.sub(v, temp);
+      },
+      
       /**
        * @method lerp
        * @static
