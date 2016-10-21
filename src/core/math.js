@@ -129,19 +129,22 @@
   Math.$method("randfloat", function(min, max) {
     return Math.random()*(max-min)+min;
   });
-  
+
   /**
    * @static
    * @method randbool
    * ランダムに真偽値を生成します。
+   * 引数で百分率を指定する事もできます。
    *
    * ### Example
-   *     Math.randbool(); // => true または false
+   *     Math.randbool();   // => true または false
+   *     Math.randbool(80); // => 80% の確率で true
    *
+   * @param {Number} percent  真になる百分率
    * @return {Boolean} ランダムな真偽値
    */
-  Math.$method("randbool", function() {
-    return Math.randint(0, 1) === 1;
+  Math.$method("randbool", function(perecent) {
+    return Math.randint(0, 100) < (perecent || 50);
   });
     
 })();
