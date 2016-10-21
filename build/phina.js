@@ -1885,10 +1885,13 @@
   /**
    * @method from
    * @static
-   * ES6 準拠の from 関数です。array-like オブジェクトから新しい配列を生成します。
+   * ES6 準拠の from 関数です。array-like オブジェクトかiterable オブジェクトから新しい配列を生成します。
    *
-   * array-like オブジェクトとは、length プロパティを持ち、数字の添字でアクセス可能なオブジェクトのことです。  
+   * array-like オブジェクトとは、length プロパティを持ち、数字の添字でアクセス可能なオブジェクトのことです。
    * 通常の配列のほか、String、arguments、NodeList なども array-like オブジェクトです。
+   *
+   * iterable オブジェクトとは、Symbol.iterator プロパティを持つオブジェクトのことです。
+   * 通常の配列のほか、String、arguments、NodeList なども iterable オブジェクトです。
    *
    * ### Example
    *     Array.from([1, 2, 3], function(elm){ return elm * elm} ); // => [1, 4, 9]
@@ -1903,7 +1906,23 @@
   Array.$method("from", function(arrayLike, callback, context) {
     if (!Object(arrayLike).length) return [];
 
-    return Array.prototype.map.call(arrayLike, typeof callback == 'function' ? callback : function(item) {
+    var result = [];
+    if (Symbol && Symbol.iterator && arrayLike[Symbol.iterator]) {
+        var iterator = arrayLike[Symbol.iterator]();
+        while (true) {
+            var iteratorResult = iterator.next();
+            if (iteratorResult.done) break;
+
+            var value = typeof callback === 'function' ? callback.bind(context || this)(iteratorResult.value) : iteratorResult.value;
+            result.push(value);
+        }
+        return result;
+    }
+
+    for (var i = 0, len = arrayLike.length; i < len; i++) {
+        result.push(arrayLike[i]);
+    }
+    return result.map(typeof callback == 'function' ? callback : function(item) {
       return item;
     }, context);
   });
@@ -2263,19 +2282,22 @@
   Math.$method("randfloat", function(min, max) {
     return Math.random()*(max-min)+min;
   });
-  
+
   /**
    * @static
    * @method randbool
    * ランダムに真偽値を生成します。
+   * 引数で百分率を指定する事もできます。
    *
    * ### Example
-   *     Math.randbool(); // => true または false
+   *     Math.randbool();   // => true または false
+   *     Math.randbool(80); // => 80% の確率で true
    *
+   * @param {Number} percent  真になる百分率
    * @return {Boolean} ランダムな真偽値
    */
-  Math.$method("randbool", function() {
-    return Math.randint(0, 1) === 1;
+  Math.$method("randbool", function(perecent) {
+    return Math.randint(0, 100) < (perecent || 50);
   });
     
 })();
@@ -3302,24 +3324,47 @@ phina.namespace(function() {
         
         return phina.geom.Vector2.sub(v, temp);
       },
-
+      
+      /**
+       * @method wall
+       * @static
+       * 2次元ベクトル v を壁への入射ベクトルとして、壁に沿ったベクトル（壁ずりクトル）を返します。
+       *
+       * 壁の向きは法線ベクトル normal によって表します。
+       *
+       * ### Example
+       *     v1 = phina.geom.Vector2(4, 3);
+       *     normal = phina.geom.Vector2(-1, 1);
+       *     phina.geom.Vector2.wall(v1, normal); // => phina.geom.Vector2(3, 4)
+       *
+       * @param {phina.geom.Vector2} v 入射ベクトル
+       * @param {phina.geom.Vector2} normal 壁の法線ベクトル
+       * @return {phina.geom.Vector2} 壁ずりベクトル
+       */
+      wall: function(v, normal) {
+        var len = phina.geom.Vector2.dot(v, normal);
+        var temp= phina.geom.Vector2.mul(normal, len);
+        
+        return phina.geom.Vector2.sub(v, temp);
+      },
+      
       /**
        * @method lerp
        * @static
-       * a と b を t で線形補間します。
-       * t=0.5 で a と b の中間ベクトルを求めることができます。
+       * v1 と v2 を媒介変数 t で線形補間します。
+       * t=0.5 で v1 と v2 の中間ベクトルを求めることができます。
        *
        * ### Example
-       *     a = phina.geom.Vector2(1, 2);
-       *     b = phina.geom.Vector2(4, 6);
-       *     Vector2.lerp(a, b, 0.5); // => (2.5, 4)
-       *     Vector2.lerp(a, b, 0) // => (1, 2)
-       *     Vector2.lerp(a, b, 1) // => (4, 6)
+       *     v1 = phina.geom.Vector2(1, 2);
+       *     v2 = phina.geom.Vector2(4, 6);
+       *     phina.geom.Vector2.lerp(v1, v2, 0.5); // => (2.5, 4)
+       *     phina.geom.Vector2.lerp(v1, v2, 0); // => (1, 2)
+       *     phina.geom.Vector2.lerp(v1, v2, 1); // => (4, 6)
        * 
-       * @param {phina.geom.Vector2} a ベクトル
-       * @param {phina.geom.Vector2} b ベクトル
-       * @param {Number} t ？？？
-       * @return {Number} 補間ベクトル？
+       * @param {phina.geom.Vector2} v1 ベクトル
+       * @param {phina.geom.Vector2} v2 ベクトル
+       * @param {Number} t 媒介変数
+       * @return {phina.geom.Vector2} 線形補間の結果
        */
       lerp: function(a, b, t) {
         return phina.geom.Vector2(
@@ -3647,11 +3692,11 @@ phina.namespace(function() {
     /**
      * @method multiplyVector2
      * this に2次元ベクトル v を乗じます。
-     * ２次元ベクトルは (x, y, 1) として乗算します.
+     * 2次元ベクトルは (x, y, 1) として乗算します。
      *
      * ### Example
      *     mat = phina.geom.Matrix33(0, -1, 1, -1, 4, -2, 1, 1, 1);
-     *     v = Vector2(2, 4)
+     *     v = phina.geom.Vector2(2, 4)
      *     mat.multiplyVector2(v) // => {x: -3, y: 12}
      *
      * @param {phina.geom.Vector2} v 乗じるベクトル
@@ -4654,8 +4699,7 @@ phina.namespace(function() {
      * @return {Boolean} 指定したイベントのイベントリスナが登録されているかどうか
      */
     has: function(type) {
-      if (this._listeners[type] === undefined && !this["on" + type]) return false;
-      return true;
+      return (this._listeners[type] !== undefined && this._listeners[type].length !== 0) || !!this['on' + type];
     },
 
     /**
@@ -6373,8 +6417,8 @@ phina.namespace(function() {
         console.error("[phina.js] not found `{0}`!".format(this.src));
 
         var key = self.src.split('/').last.replace('.png', '').split('?').first.split('#').first;
-        e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
         e.target.onerror = null;
+        e.target.src = "http://dummyimage.com/128x128/444444/eeeeee&text=" + key;
       };
 
       this.domElement.src = this.src;
@@ -12247,10 +12291,10 @@ phina.namespace(function() {
       this.width = this._image.domElement.width;
       this.height = this._image.domElement.height;
 
-      this.frameIndex = 0;
-
       if (width) { this.width = width; }
       if (height) { this.height = height; }
+
+      this.frameIndex = 0;
 
       return this;
     },
