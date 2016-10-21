@@ -174,6 +174,9 @@ describe('#Array', function() {
 
   it('from', function() {
     assert(Array.from("foo").equals(['f', 'o', 'o']));
+    assert(Array.from("😉😉😉").equals(['😉', '😉', '😉']));
+    assert(Array.from([1, 2, 3], function(v) {return v * v}).equals([1, 4, 9]));
+    assert(Array.from({length: 3}, function(_, i) {return i}).equals([0, 1, 2]));
   });
   
   it('most', function() {
