@@ -40,7 +40,7 @@ phina.namespace(function() {
       var cache = textWidthCache[this.font];
       return cache || (textWidthCache[this.font] = {});
     },
-    
+
     spliceLines: function(lines) {
       var rowWidth = this.width;
       var context = this.canvas.context;
@@ -49,48 +49,91 @@ phina.namespace(function() {
       var cache = this.getTextWidthCache();
 
       // update cache
-      this._text.each(function(ch) {
-        if (!cache[ch]) {
-          cache[ch] = context.measureText(ch).width;
-        }
+      lines.forEach(function(line) {
+        line.forEach(function(elm) {
+          elm.text.each(function(ch) {
+            if (!cache[ch]) {
+              cache[ch] = context.measureText(ch).width;
+            }
+          });
+        });
       });
-      
+
       var localLines = [];
       lines.forEach(function(line) {
-        
-        var str = '';
         var totalWidth = 0;
 
-        // はみ出ていたら強制的に改行する
-        line.each(function(ch) {
-          var w = cache[ch];
+        // 幅を超える文字列の前に改行を加える
+        line.forEach(function(elm) {
+          var str = '';
+          elm.text.each(function(ch) {
+            var w = cache[ch];
 
-          if ((totalWidth+w) > rowWidth) {
-            localLines.push(str);
-            str = '';
-            totalWidth = 0;
-          }
+            if ((totalWidth+w) > rowWidth) {
+              str += '\n';
+              totalWidth = 0;
+            }
 
-          str += ch;
-          totalWidth += w;
+            str += ch;
+            totalWidth += w;
+          });
+          elm.text = str;
         });
 
-        // 残りを push する
-        localLines.push(str);
-
+        // 改めて改行ごとに要素を分割する
+        var localLine = [];
+        line.forEach(function(element) {
+          var first = true;
+          element.splitElement('\n').forEach(function(elm) {
+            if (first) {
+              first = false;
+            } else {
+              localLines.push(localLine);
+              localLine = [];
+            }
+            localLine.push(elm);
+          });
+        });
+        localLines.push(localLine);
       });
-      
 
       return localLines;
     },
-    
+
     getLines: function() {
       if (this._lineUpdate === false) {
         return this._lines;
       }
       this._lineUpdate = false;
 
-      var lines = (this.text + '').split('\n');
+
+      var textElements;
+      if (this._text instanceof Array) {
+        textElements = this._text.map(function(str){
+          return TextElement(str);
+        });
+      } else {
+        textElements = [TextElement(this._text)];
+      }
+
+      // 改行ごとに要素を分割する
+      var lines = [];
+      var line = [];
+      textElements.forEach(function(element) {
+        var first = true;
+        element.splitElement('\n').forEach(function(elm) {
+          if (first) {
+            first = false;
+          } else {
+            lines.push(line);
+            line = [];
+          }
+          line.push(elm);
+        });
+      });
+
+      lines.push(line);
+
       if (this.width < 1) {
         this._lines = lines;
       }
@@ -104,7 +147,7 @@ phina.namespace(function() {
     prerender: function(canvas) {
       var context = canvas.context;
       context.font = this.font;
-      context.textAlign = this.align;
+      context.textAlign = 'left';
       context.textBaseline = this.baseline;
 
       var text = this.text + '';
@@ -115,7 +158,7 @@ phina.namespace(function() {
 
       var fontSize = this.fontSize;
       var lineSize = fontSize * this.lineHeight;
-      var offsetX = this.getOffsetX() * width;
+      var offsetX = 0;
       var offsetY = this.getOffsetY();
       if (offsetY === 0) {
         offsetY = -Math.floor(length / 2) * lineSize;
@@ -146,24 +189,56 @@ phina.namespace(function() {
     },
 
     renderFill: function(canvas) {
-      var context = canvas.context;
-      var offsetX = this.offsetX;
+      var width = this.width;
       var offsetY = this.offsetY;
       var lineSize = this.lineSize;
       var start = this.start;
+      // alignに対応するためすべてtextAlign='left'で表示開始位置を前後させる。
       this.lines.forEach(function(line, i) {
-        context.fillText(line, offsetX, (start + i) * lineSize + offsetY);
-      }, this);
+          var offsetX = this.offsetX;
+          var w = 0;
+          line.forEach(function(elm) {
+            w += canvas.context.measureText(elm.text).width;
+          });
+          if (this.align == 'center') {
+            offsetX = -1 * w / 2;
+          } else if (this.align == 'left' || this.align == 'start') {
+            offsetX = -1 * width / 2 + this.padding;
+          } else {
+            offsetX = width / 2 - w - this.padding;
+          }
+
+          // 1要素ごとに左にずらして表示
+          line.forEach(function(elm) {
+            offsetX += elm.doFill(canvas, offsetX, (start + i) * lineSize + offsetY);
+          }, this);
+        }, this);
     },
 
     renderStroke: function(canvas) {
-      var context = canvas.context;
-      var offsetX = this.offsetX;
+      var width = this.width;
       var offsetY = this.offsetY;
       var lineSize = this.lineSize;
       var start = this.start;
-      this.lines.forEach(function(line, i) {
-        context.strokeText(line, offsetX, (start + i) * lineSize + offsetY);
+      // alignに対応するためすべてtextAlign='left'で表示開始位置を前後させる。
+      this._lines.forEach(function(line, i) {
+        var offsetX = this.offsetX;
+        var w = 0;
+        line.forEach(function(elm) {
+          w += canvas.context.measureText(elm.text).width;
+        });
+        if (this.align == 'center') {
+          offsetX = -1 * w / 2;
+        } else if (this.align == 'left' || this.align == 'start') {
+          offsetX = -1 * width / 2 + this.padding;
+        } else {
+          offsetX = width / 2 - w - this.padding;
+        }
+
+        // 1要素ごとに左にずらして表示
+        line.forEach(function(elm) {
+          offsetX += elm.doStroke(canvas, offsetX, (start + i) * lineSize + offsetY);
+        }, this);
       }, this);
     },
 
