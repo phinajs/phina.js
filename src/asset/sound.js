@@ -22,7 +22,7 @@ phina.namespace(function() {
       this.gainNode = this.context.createGain();
     },
 
-    play: function() {
+    play: function(when, offset, duration) {
       if (this.source) {
         // TODO: キャッシュする？
       }
@@ -37,7 +37,7 @@ phina.namespace(function() {
       this.source.connect(this.gainNode);
       this.gainNode.connect(this.context.destination);
       // play
-      this.source.start(0);
+      this.source.start(when || 0, offset || 0, duration);
       
       // check play end
       if (this.source.buffer) {
