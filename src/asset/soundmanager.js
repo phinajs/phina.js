@@ -13,11 +13,11 @@ phina.namespace(function() {
       muteFlag: false,
       currentMusic: null,
 
-      play: function(name) {
+      play: function(name, when, offset, duration) {
         var sound = phina.asset.AssetManager.get('sound', name);
 
         sound.volume = this.getVolume();
-        sound.play();
+        sound.play(when, offset, duration);
 
         return sound;
       },
@@ -62,7 +62,7 @@ phina.namespace(function() {
         return this.muteFlag;
       },
 
-      playMusic: function(name, fadeTime, loop) {
+      playMusic: function(name, fadeTime, loop, when, offset, duration) {
         loop = (loop !== undefined) ? loop : true;
 
         if (this.currentMusic) {
@@ -72,7 +72,7 @@ phina.namespace(function() {
         var music = phina.asset.AssetManager.get('sound', name);
 
         music.setLoop(loop);
-        music.play();
+        music.play(when, offset, duration);
 
         if (fadeTime > 0) {
           var count = 32;
