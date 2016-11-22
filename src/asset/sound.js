@@ -37,7 +37,7 @@ phina.namespace(function() {
       this.source.connect(this.gainNode);
       this.gainNode.connect(this.context.destination);
       // play
-      this.source.start(when || 0, offset || 0, duration);
+      this.source.start(when ? when + this.context.currentTime : 0, offset || 0, duration);
       
       // check play end
       if (this.source.buffer) {
