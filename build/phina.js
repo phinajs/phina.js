@@ -6533,7 +6533,7 @@ phina.namespace(function() {
 
       // connect
       this.source.connect(this.gainNode);
-      this.gainNode.connect(this.context.destination);
+      this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
       this.source.start(when || 0, offset || 0, duration);
       
@@ -6734,7 +6734,29 @@ phina.namespace(function() {
       },
     },
 
+    _defined: function() {
+      this.accessor('volume', {
+        get: function() {
+          return this.getMasterGain().gain.value;
+        },
+        set: function(v) {
+          this.getMasterGain().gain.value = v;
+        },
+      });
+      
+    },
+    
     _static: {
+      
+      getMasterGain: function() {
+        if(!this._masterGain) {
+          var context = this.getAudioContext();
+          this._masterGain = context.createGain();
+          this._masterGain.connect(context.destination);
+        }
+        return this._masterGain;
+      },
+      
       getAudioContext: function() {
         if (!phina.util.Support.webAudio) return null;
 
