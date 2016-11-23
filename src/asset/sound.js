@@ -23,26 +23,31 @@ phina.namespace(function() {
     },
 
     play: function(when, offset, duration) {
+      offset = offset || 0;
       if (this.source) {
         // TODO: キャッシュする？
       }
 
-      this.source = this.context.createBufferSource();
-      this.source.buffer = this.buffer;
-      this.source.loop = this._loop;
-      this.source.loopStart = this._loopStart;
-      this.source.loopEnd = this._loopEnd;
+      var source = this.source = this.context.createBufferSource();
+      var buffer = source.buffer = this.buffer;
+      source.loop = this._loop;
+      source.loopStart = this._loopStart;
+      source.loopEnd = this._loopEnd;
 
       // connect
-      this.source.connect(this.gainNode);
+      source.connect(this.gainNode);
       this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
-      this.source.start(when ? when + this.context.currentTime : 0, offset || 0, duration);
+      source.start(when ? when + this.context.currentTime : 0, offset, duration);
       
       // check play end
-      if (this.source.buffer) {
-        var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
-        window.setTimeout(function(self) {
+      if (buffer) {
+        if (typeof duration === 'undefined') {
+          duration = buffer.duration - offset;
+        }
+        when = when || 0;
+        var time = ((Math.min(duration, buffer.duration - offset)) / source.playbackRate.value + when) * 1000;
+        setTimeout(function(self) {
           self.flare('ended');
         }, time, this);
       }
