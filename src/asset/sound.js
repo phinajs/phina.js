@@ -23,7 +23,6 @@ phina.namespace(function() {
     },
 
     play: function(when, offset, duration) {
-      offset = offset || 0;
       if (this.source) {
         // TODO: キャッシュする？
       }
@@ -38,19 +37,12 @@ phina.namespace(function() {
       source.connect(this.gainNode);
       this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
-      source.start(when ? when + this.context.currentTime : 0, offset, duration);
+      source.start(when ? when + this.context.currentTime : 0, offset || 0, duration);
       
       // check play end
-      if (buffer) {
-        if (typeof duration === 'undefined') {
-          duration = buffer.duration - offset;
-        }
-        when = when || 0;
-        var time = ((Math.min(duration, buffer.duration - offset)) / source.playbackRate.value + when) * 1000;
-        setTimeout(function(self) {
-          self.flare('ended');
-        }, time, this);
-      }
+      source.addEventListener('ended', function(){
+        self.flare('ended');
+      });
 
       return this;
     },
@@ -58,8 +50,10 @@ phina.namespace(function() {
     stop: function() {
       // stop
       if (this.source) {
+        // stop すると source.endedも発火する
         this.source.stop && this.source.stop(0);
         this.source = null;
+        this.flare('stop');
       }
 
       return this;
