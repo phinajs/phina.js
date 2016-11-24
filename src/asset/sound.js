@@ -33,6 +33,7 @@ phina.namespace(function() {
       source.loop = this._loop;
       source.loopStart = this._loopStart;
       source.loopEnd = this._loopEnd;
+      source.playbackRate.value = this._playbackRate;
 
       // connect
       source.connect(this.gainNode);
@@ -61,7 +62,6 @@ phina.namespace(function() {
     },
 
     pause: function() {
-      this._playbackRate = this.source.playbackRate;
       this.source.playbackRate.value = 0;
       this.flare('pause');
       return this;
@@ -119,6 +119,11 @@ phina.namespace(function() {
     },
     setLoopEnd: function(loopEnd) {
       this.loopEnd = loopEnd;
+      return this;
+    },
+    
+    setPlaybackRate: function(playbackRate) {
+      this.playbackRate = playbackRate;
       return this;
     },
 
@@ -237,6 +242,15 @@ phina.namespace(function() {
           if (this.source) this.source._loopEnd = v;
         },
       },
+      playbackRate: {
+        get: function() { return this._playbackRate; },
+        set: function(v) {
+          this._playbackRate = v;
+          if(this.source && this.source.playbackRate.value !== 0){
+            this.source.playbackRate.value = v;
+          }
+        },
+      }
     },
 
     _defined: function() {
