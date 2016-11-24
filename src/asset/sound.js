@@ -12,7 +12,8 @@ phina.namespace(function() {
     _loop: false,
     _loopStart: 0,
     _loopEnd: 0,
-
+    _playbackRate: 1,
+    
     /**
      * @constructor
      */
@@ -41,8 +42,8 @@ phina.namespace(function() {
       
       // check play end
       source.addEventListener('ended', function(){
-        self.flare('ended');
-      });
+        this.flare('ended');
+      }.bind(this));
 
       return this;
     },
@@ -60,12 +61,15 @@ phina.namespace(function() {
     },
 
     pause: function() {
-      this.source.disconnect();
+      this._playbackRate = this.source.playbackRate;
+      this.source.playbackRate.value = 0;
+      this.flare('pause');
       return this;
     },
 
     resume: function() {
-      this.source.connect(this.gainNode);
+      this.source.playbackRate.value = this._playbackRate;
+      this.flare('resume');
       return this;
     },
 
