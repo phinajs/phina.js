@@ -59,10 +59,10 @@
       var self = this;
 
       this.startTime = this.currentTime = (new Date()).getTime();
-
+      var runner = self.runner;
       var fn = function() {
         var delay = self.run();
-        self.runner(fn, delay);
+        runner(fn, delay);
       };
       fn();
 
