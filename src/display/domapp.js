@@ -32,7 +32,7 @@ phina.namespace(function() {
       }
       
       if(typeof options.runner === 'function') {
-        this.ticker.runner = runner;
+        this.ticker.runner = options.runner;
       }
 
       this.mouse = phina.input.Mouse(this.domElement);
