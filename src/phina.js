@@ -41,15 +41,58 @@ var phina = phina || {};
     },
   });
 
+  
+  /**
+   * @method testUA
+   * UAを正規表現テスト
+   */
+  phina.$method('testUA', function(regExp) {
+    if (!phina.global.navigator) return false;
+    var ua = phina.global.navigator.userAgent;
+    return regExp.test(ua);
+  });
+
+  /**
+   * @method isAndroid
+   * Android かどうかをチェック
+   */
+  phina.$method('isAndroid', function() {
+    return phina.testUA(/Android/);
+  });
+  
+  /**
+   * @method isIPhone
+   * iPhone かどうかをチェック
+   */
+  phina.$method('isIPhone', function() {
+    return phina.testUA(/iPhone/);
+  });
+  
+  /**
+   * @method isIPad
+   * iPad かどうかをチェック
+   */
+  phina.$method('isIPad', function() {
+    return phina.testUA(/iPad/);
+  });
+  
+  /**
+   * @method isIOS
+   * iOS かどうかをチェック
+   */
+  phina.$method('isIOS', function() {
+    return phina.testUA(/iPhone|iPad/);
+  });
+
   /**
    * @method isMobile
    * mobile かどうかをチェック
    */
   phina.$method('isMobile', function() {
-    if (!phina.global.navigator) return false;
-    var ua = phina.global.navigator.userAgent;
-    return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
+    return phina.testUA(/iPhone|iPad|Android/);
   });
+  
+  
 
 
   // support node.js
