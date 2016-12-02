@@ -2344,15 +2344,58 @@ var phina = phina || {};
     },
   });
 
+  
+  /**
+   * @method testUA
+   * UAを正規表現テスト
+   */
+  phina.$method('testUA', function(regExp) {
+    if (!phina.global.navigator) return false;
+    var ua = phina.global.navigator.userAgent;
+    return regExp.test(ua);
+  });
+
+  /**
+   * @method isAndroid
+   * Android かどうかをチェック
+   */
+  phina.$method('isAndroid', function() {
+    return phina.testUA(/Android/);
+  });
+  
+  /**
+   * @method isIPhone
+   * iPhone かどうかをチェック
+   */
+  phina.$method('isIPhone', function() {
+    return phina.testUA(/iPhone/);
+  });
+  
+  /**
+   * @method isIPad
+   * iPad かどうかをチェック
+   */
+  phina.$method('isIPad', function() {
+    return phina.testUA(/iPad/);
+  });
+  
+  /**
+   * @method isIOS
+   * iOS かどうかをチェック
+   */
+  phina.$method('isIOS', function() {
+    return phina.testUA(/iPhone|iPad/);
+  });
+
   /**
    * @method isMobile
    * mobile かどうかをチェック
    */
   phina.$method('isMobile', function() {
-    if (!phina.global.navigator) return false;
-    var ua = phina.global.navigator.userAgent;
-    return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
+    return phina.testUA(/iPhone|iPad|Android/);
   });
+  
+  
 
 
   // support node.js
@@ -5134,6 +5177,7 @@ phina.namespace(function() {
       this.frame = 0;
       this.deltaTime = 0;
       this.elapsedTime = 0;
+      this.runner = phina.util.Ticker.runner;
     },
 
     tick: function(func) {
@@ -5167,10 +5211,10 @@ phina.namespace(function() {
       var self = this;
 
       this.startTime = this.currentTime = (new Date()).getTime();
-
+      var runner = self.runner;
       var fn = function() {
         var delay = self.run();
-        setTimeout(fn, delay);
+        runner(fn, delay);
       };
       fn();
 
@@ -5198,6 +5242,13 @@ phina.namespace(function() {
         },
       },
     },
+    
+    _static: {
+      runner: function(run, delay) {
+        setTimeout(run, delay);
+      },
+    },
+    
   });
 
 })();
@@ -6522,6 +6573,9 @@ phina.namespace(function() {
     },
 
     play: function(when, offset, duration) {
+      when = when ? when + this.context.currentTime : 0;
+      offset = offset || 0;
+
       if (this.source) {
         // TODO: キャッシュする？
       }
@@ -6537,7 +6591,12 @@ phina.namespace(function() {
       source.connect(this.gainNode);
       this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
-      source.start(when ? when + this.context.currentTime : 0, offset || 0, duration);
+      if (duration !== undefined) {
+        source.start(when, offset, duration);
+      }
+      else {
+        source.start(when, offset);
+      }
       
       // check play end
       source.addEventListener('ended', function(){
@@ -9881,7 +9940,7 @@ phina.namespace(function() {
   var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
-    updateType: 'normal',
+    updateType: 'delta',
 
     /**
      * @constructor
@@ -12802,6 +12861,10 @@ phina.namespace(function() {
       if (options.fps !== undefined) {
         this.fps = options.fps;
       }
+      
+      if(typeof options.runner === 'function') {
+        this.ticker.runner = options.runner;
+      }
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
@@ -12910,6 +12973,9 @@ phina.namespace(function() {
         if (options.append) {
           document.body.appendChild(options.domElement);
         }
+      }
+      if(!options.runner && phina.isAndroid()) {
+        options.runner = phina.global.requestAnimationFrame;
       }
       this.superInit(options);
 
