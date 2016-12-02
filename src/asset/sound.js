@@ -24,6 +24,9 @@ phina.namespace(function() {
     },
 
     play: function(when, offset, duration) {
+      when = when ? when + this.context.currentTime : 0;
+      offset = offset || 0;
+
       if (this.source) {
         // TODO: キャッシュする？
       }
@@ -39,7 +42,12 @@ phina.namespace(function() {
       source.connect(this.gainNode);
       this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
-      source.start(when ? when + this.context.currentTime : 0, offset || 0, duration);
+      if (duration !== undefined) {
+        source.start(when, offset, duration);
+      }
+      else {
+        source.start(when, offset);
+      }
       
       // check play end
       source.addEventListener('ended', function(){
