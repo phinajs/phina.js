@@ -56,19 +56,17 @@ phina.namespace(function() {
      * @private
      */
     _calcWorldAlpha: function() {
+      if (this.alpha < 0) {
+        this._worldAlpha = 0;
+        return;
+      }
       if (!this.parent) {
-        if (this.alpha < 0) {
-          this.alpha = 0;
-        }
         this._worldAlpha = this.alpha;
         return ;
       }
       else {
         var worldAlpha = (this.parent._worldAlpha !== undefined) ? this.parent._worldAlpha : 1.0; 
         // alpha
-        if (this.alpha < 0) {
-          this.alpha = 0;
-        }
         this._worldAlpha = worldAlpha * this.alpha;
       }
     },
