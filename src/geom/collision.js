@@ -162,6 +162,20 @@ phina.namespace(function() {
        * @return {Boolean} 線分1と線分2が重なっているかどうか
        */
       testLineLine : function(p1, p2, p3, p4) {
+        //同一ＸＹ軸上に乗ってる場合の誤判定回避
+        if (p1.x == p2.x && p1.x == p3.x && p1.x == p4.x) {
+          var min = Math.min(p1.y, p2.y);
+          var max = Math.max(p1.y, p2.y);
+          if (min <= p3.y && p3.y <= max || min <= p4.y && p4.y <= max) return true;
+          return false;
+        }
+        if (p1.y == p2.y && p1.y == p3.y && p1.y == p4.y) {
+          var min = Math.min(p1.x, p2.x);
+          var max = Math.max(p1.x, p2.x);
+          if (min <= p3.x && p3.x <= max || min <= p4.x && p4.x <= max) return true;
+          return false;
+        }
+        //通常判定
         var a = (p1.x - p2.x) * (p3.y - p1.y) + (p1.y - p2.y) * (p1.x - p3.x);
         var b = (p1.x - p2.x) * (p4.y - p1.y) + (p1.y - p2.y) * (p1.x - p4.x);
         var c = (p3.x - p4.x) * (p1.y - p3.y) + (p3.y - p4.y) * (p3.x - p1.x);
