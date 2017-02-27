@@ -142,6 +142,79 @@ phina.namespace(function() {
         }
         return false;
       },
+      /**
+       * @method testLineLine
+       * @static
+       * 2つの線分が重なっているかどうかを判定します
+       * 参考：http://www5d.biglobe.ne.jp/~tomoya03/shtml/algorithm/Intersection.htm
+       *
+       * ### Example
+       *     p1 = phina.geom.Vector2(100, 100);
+       *     p2 = phina.geom.Vector2(200, 200);
+       *     p3 = phina.geom.Vector2(150, 240);
+       *     p4 = phina.geom.Vector2(200, 100);
+       * phina.geom.Collision.testLineLine(p1, p2, p3, p4); // => true
+       *
+       * @param {phina.geom.Vector2} p1 線分1の端の座標
+       * @param {phina.geom.Vector2} p2 線分1の端の座標
+       * @param {phina.geom.Vector2} p3 線分2の端の座標
+       * @param {phina.geom.Vector2} p4 線分2の端の座標
+       * @return {Boolean} 線分1と線分2が重なっているかどうか
+       */
+      testLineLine : function(p1, p2, p3, p4) {
+        //同一ＸＹ軸上に乗ってる場合の誤判定回避
+        if (p1.x == p2.x && p1.x == p3.x && p1.x == p4.x) {
+          var min = Math.min(p1.y, p2.y);
+          var max = Math.max(p1.y, p2.y);
+          if (min <= p3.y && p3.y <= max || min <= p4.y && p4.y <= max) return true;
+          return false;
+        }
+        if (p1.y == p2.y && p1.y == p3.y && p1.y == p4.y) {
+          var min = Math.min(p1.x, p2.x);
+          var max = Math.max(p1.x, p2.x);
+          if (min <= p3.x && p3.x <= max || min <= p4.x && p4.x <= max) return true;
+          return false;
+        }
+        //通常判定
+        var a = (p1.x - p2.x) * (p3.y - p1.y) + (p1.y - p2.y) * (p1.x - p3.x);
+        var b = (p1.x - p2.x) * (p4.y - p1.y) + (p1.y - p2.y) * (p1.x - p4.x);
+        var c = (p3.x - p4.x) * (p1.y - p3.y) + (p3.y - p4.y) * (p3.x - p1.x);
+        var d = (p3.x - p4.x) * (p2.y - p3.y) + (p3.y - p4.y) * (p3.x - p2.x);
+        return a * b <= 0 && c * d <= 0;
+      },
+      /**
+       * @method testRectLine
+       * @static
+       * 矩形と線分が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     rect = phina.geom.Rect(120, 130, 40, 50);
+       *     p1 = phina.geom.Vector2(100, 100);
+       *     p2 = phina.geom.Vector2(200, 200);
+       * phina.geom.Collision.testRectLine(rect, p1, p2); // => true
+       *
+       * @param {phina.geom.Rect} rect 矩形領域オブジェクト
+       * @param {phina.geom.Vector2} p1 線分の端の座標
+       * @param {phina.geom.Vector2} p2 線分の端の座標
+       * @return {Boolean} 矩形と線分が重なっているかどうか
+       */
+      testRectLine : function(rect, p1, p2) {
+          //包含判定(p1が含まれてれば良いのでp2の判定はしない）
+          if (rect.left <= p1.x && p1.x <= rect.right && rect.top <= p1.y && p1.y <= rect.bottom ) return true;
+
+          //矩形の４点
+          var r1 = phina.geom.Vector2(rect.left, rect.top);     //左上
+          var r2 = phina.geom.Vector2(rect.right, rect.top);    //右上
+          var r3 = phina.geom.Vector2(rect.right, rect.bottom); //右下
+          var r4 = phina.geom.Vector2(rect.left, rect.bottom);  //左下
+
+          //矩形の４辺をなす線分との接触判定
+          if (phina.geom.Collision.testLineLine(p1, p2, r1, r2)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r2, r3)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r3, r4)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r1, r4)) return true;
+          return false;
+      },
     }
 
   });
