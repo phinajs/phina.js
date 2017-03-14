@@ -352,7 +352,10 @@ phina.namespace(function() {
 });
 
 phina.namespace(function () {
-
+  /**
+   * @class phina.display.PathShape
+   *
+   */
   var PathShape = phina.define('phina.display.PathShape', {
     superClass: 'phina.display.Shape',
     paths: null,
@@ -365,7 +368,7 @@ phina.namespace(function () {
       this.lineJoin = options.lineJoin;
       this.lineCap = options.lineCap;
     },
-    
+
     setPaths: function (paths) {
       this.paths = paths;
       this._dirtyDraw = true;
