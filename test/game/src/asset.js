@@ -126,7 +126,7 @@ th.describe("asset.SoundManager", function() {
     });
   });
 
-  th.it('mute/unmute', function() {
+  th.it('mute_unmute', function() {
     var loader = phina.asset.AssetLoader();
     var flow = loader.load({
       sound: {

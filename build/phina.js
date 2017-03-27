@@ -2344,15 +2344,58 @@ var phina = phina || {};
     },
   });
 
+  
+  /**
+   * @method testUA
+   * UAを正規表現テスト
+   */
+  phina.$method('testUA', function(regExp) {
+    if (!phina.global.navigator) return false;
+    var ua = phina.global.navigator.userAgent;
+    return regExp.test(ua);
+  });
+
+  /**
+   * @method isAndroid
+   * Android かどうかをチェック
+   */
+  phina.$method('isAndroid', function() {
+    return phina.testUA(/Android/);
+  });
+  
+  /**
+   * @method isIPhone
+   * iPhone かどうかをチェック
+   */
+  phina.$method('isIPhone', function() {
+    return phina.testUA(/iPhone/);
+  });
+  
+  /**
+   * @method isIPad
+   * iPad かどうかをチェック
+   */
+  phina.$method('isIPad', function() {
+    return phina.testUA(/iPad/);
+  });
+  
+  /**
+   * @method isIOS
+   * iOS かどうかをチェック
+   */
+  phina.$method('isIOS', function() {
+    return phina.testUA(/iPhone|iPad/);
+  });
+
   /**
    * @method isMobile
    * mobile かどうかをチェック
    */
   phina.$method('isMobile', function() {
-    if (!phina.global.navigator) return false;
-    var ua = phina.global.navigator.userAgent;
-    return (ua.indexOf("iPhone") > 0 || ua.indexOf("iPad") > 0 || ua.indexOf("Android") > 0);
+    return phina.testUA(/iPhone|iPad|Android/);
   });
+  
+  
 
 
   // support node.js
@@ -4512,6 +4555,79 @@ phina.namespace(function() {
         }
         return false;
       },
+      /**
+       * @method testLineLine
+       * @static
+       * 2つの線分が重なっているかどうかを判定します
+       * 参考：http://www5d.biglobe.ne.jp/~tomoya03/shtml/algorithm/Intersection.htm
+       *
+       * ### Example
+       *     p1 = phina.geom.Vector2(100, 100);
+       *     p2 = phina.geom.Vector2(200, 200);
+       *     p3 = phina.geom.Vector2(150, 240);
+       *     p4 = phina.geom.Vector2(200, 100);
+       * phina.geom.Collision.testLineLine(p1, p2, p3, p4); // => true
+       *
+       * @param {phina.geom.Vector2} p1 線分1の端の座標
+       * @param {phina.geom.Vector2} p2 線分1の端の座標
+       * @param {phina.geom.Vector2} p3 線分2の端の座標
+       * @param {phina.geom.Vector2} p4 線分2の端の座標
+       * @return {Boolean} 線分1と線分2が重なっているかどうか
+       */
+      testLineLine : function(p1, p2, p3, p4) {
+        //同一ＸＹ軸上に乗ってる場合の誤判定回避
+        if (p1.x == p2.x && p1.x == p3.x && p1.x == p4.x) {
+          var min = Math.min(p1.y, p2.y);
+          var max = Math.max(p1.y, p2.y);
+          if (min <= p3.y && p3.y <= max || min <= p4.y && p4.y <= max) return true;
+          return false;
+        }
+        if (p1.y == p2.y && p1.y == p3.y && p1.y == p4.y) {
+          var min = Math.min(p1.x, p2.x);
+          var max = Math.max(p1.x, p2.x);
+          if (min <= p3.x && p3.x <= max || min <= p4.x && p4.x <= max) return true;
+          return false;
+        }
+        //通常判定
+        var a = (p1.x - p2.x) * (p3.y - p1.y) + (p1.y - p2.y) * (p1.x - p3.x);
+        var b = (p1.x - p2.x) * (p4.y - p1.y) + (p1.y - p2.y) * (p1.x - p4.x);
+        var c = (p3.x - p4.x) * (p1.y - p3.y) + (p3.y - p4.y) * (p3.x - p1.x);
+        var d = (p3.x - p4.x) * (p2.y - p3.y) + (p3.y - p4.y) * (p3.x - p2.x);
+        return a * b <= 0 && c * d <= 0;
+      },
+      /**
+       * @method testRectLine
+       * @static
+       * 矩形と線分が重なっているかどうかを判定します
+       *
+       * ### Example
+       *     rect = phina.geom.Rect(120, 130, 40, 50);
+       *     p1 = phina.geom.Vector2(100, 100);
+       *     p2 = phina.geom.Vector2(200, 200);
+       * phina.geom.Collision.testRectLine(rect, p1, p2); // => true
+       *
+       * @param {phina.geom.Rect} rect 矩形領域オブジェクト
+       * @param {phina.geom.Vector2} p1 線分の端の座標
+       * @param {phina.geom.Vector2} p2 線分の端の座標
+       * @return {Boolean} 矩形と線分が重なっているかどうか
+       */
+      testRectLine : function(rect, p1, p2) {
+          //包含判定(p1が含まれてれば良いのでp2の判定はしない）
+          if (rect.left <= p1.x && p1.x <= rect.right && rect.top <= p1.y && p1.y <= rect.bottom ) return true;
+
+          //矩形の４点
+          var r1 = phina.geom.Vector2(rect.left, rect.top);     //左上
+          var r2 = phina.geom.Vector2(rect.right, rect.top);    //右上
+          var r3 = phina.geom.Vector2(rect.right, rect.bottom); //右下
+          var r4 = phina.geom.Vector2(rect.left, rect.bottom);  //左下
+
+          //矩形の４辺をなす線分との接触判定
+          if (phina.geom.Collision.testLineLine(p1, p2, r1, r2)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r2, r3)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r3, r4)) return true;
+          if (phina.geom.Collision.testLineLine(p1, p2, r1, r4)) return true;
+          return false;
+      },
     }
 
   });
@@ -5134,6 +5250,7 @@ phina.namespace(function() {
       this.frame = 0;
       this.deltaTime = 0;
       this.elapsedTime = 0;
+      this.runner = phina.util.Ticker.runner;
     },
 
     tick: function(func) {
@@ -5167,10 +5284,10 @@ phina.namespace(function() {
       var self = this;
 
       this.startTime = this.currentTime = (new Date()).getTime();
-
+      var runner = self.runner;
       var fn = function() {
         var delay = self.run();
-        setTimeout(fn, delay);
+        runner(fn, delay);
       };
       fn();
 
@@ -5198,6 +5315,13 @@ phina.namespace(function() {
         },
       },
     },
+    
+    _static: {
+      runner: function(run, delay) {
+        setTimeout(run, delay);
+      },
+    },
+    
   });
 
 })();
@@ -6510,7 +6634,8 @@ phina.namespace(function() {
     _loop: false,
     _loopStart: 0,
     _loopEnd: 0,
-
+    _playbackRate: 1,
+    
     /**
      * @constructor
      */
@@ -6520,30 +6645,36 @@ phina.namespace(function() {
       this.gainNode = this.context.createGain();
     },
 
-    play: function() {
+    play: function(when, offset, duration) {
+      when = when ? when + this.context.currentTime : 0;
+      offset = offset || 0;
+
       if (this.source) {
         // TODO: キャッシュする？
       }
 
-      this.source = this.context.createBufferSource();
-      this.source.buffer = this.buffer;
-      this.source.loop = this._loop;
-      this.source.loopStart = this._loopStart;
-      this.source.loopEnd = this._loopEnd;
+      var source = this.source = this.context.createBufferSource();
+      var buffer = source.buffer = this.buffer;
+      source.loop = this._loop;
+      source.loopStart = this._loopStart;
+      source.loopEnd = this._loopEnd;
+      source.playbackRate.value = this._playbackRate;
 
       // connect
-      this.source.connect(this.gainNode);
-      this.gainNode.connect(this.context.destination);
+      source.connect(this.gainNode);
+      this.gainNode.connect(phina.asset.Sound.getMasterGain());
       // play
-      this.source.start(0);
+      if (duration !== undefined) {
+        source.start(when, offset, duration);
+      }
+      else {
+        source.start(when, offset);
+      }
       
       // check play end
-      if (this.source.buffer) {
-        var time = (this.source.buffer.duration/this.source.playbackRate.value)*1000;
-        window.setTimeout(function(self) {
-          self.flare('ended');
-        }, time, this);
-      }
+      source.addEventListener('ended', function(){
+        this.flare('ended');
+      }.bind(this));
 
       return this;
     },
@@ -6551,20 +6682,24 @@ phina.namespace(function() {
     stop: function() {
       // stop
       if (this.source) {
+        // stop すると source.endedも発火する
         this.source.stop && this.source.stop(0);
         this.source = null;
+        this.flare('stop');
       }
 
       return this;
     },
 
     pause: function() {
-      this.source.disconnect();
+      this.source.playbackRate.value = 0;
+      this.flare('pause');
       return this;
     },
 
     resume: function() {
-      this.source.connect(this.gainNode);
+      this.source.playbackRate.value = this._playbackRate;
+      this.flare('resume');
       return this;
     },
 
@@ -6614,6 +6749,11 @@ phina.namespace(function() {
     },
     setLoopEnd: function(loopEnd) {
       this.loopEnd = loopEnd;
+      return this;
+    },
+    
+    setPlaybackRate: function(playbackRate) {
+      this.playbackRate = playbackRate;
       return this;
     },
 
@@ -6732,9 +6872,40 @@ phina.namespace(function() {
           if (this.source) this.source._loopEnd = v;
         },
       },
+      playbackRate: {
+        get: function() { return this._playbackRate; },
+        set: function(v) {
+          this._playbackRate = v;
+          if(this.source && this.source.playbackRate.value !== 0){
+            this.source.playbackRate.value = v;
+          }
+        },
+      }
     },
 
+    _defined: function() {
+      this.accessor('volume', {
+        get: function() {
+          return this.getMasterGain().gain.value;
+        },
+        set: function(v) {
+          this.getMasterGain().gain.value = v;
+        },
+      });
+      
+    },
+    
     _static: {
+      
+      getMasterGain: function() {
+        if(!this._masterGain) {
+          var context = this.getAudioContext();
+          this._masterGain = context.createGain();
+          this._masterGain.connect(context.destination);
+        }
+        return this._masterGain;
+      },
+      
       getAudioContext: function() {
         if (!phina.util.Support.webAudio) return null;
 
@@ -6779,11 +6950,11 @@ phina.namespace(function() {
       muteFlag: false,
       currentMusic: null,
 
-      play: function(name) {
+      play: function(name, when, offset, duration) {
         var sound = phina.asset.AssetManager.get('sound', name);
 
         sound.volume = this.getVolume();
-        sound.play();
+        sound.play(when, offset, duration);
 
         return sound;
       },
@@ -6828,7 +6999,7 @@ phina.namespace(function() {
         return this.muteFlag;
       },
 
-      playMusic: function(name, fadeTime, loop) {
+      playMusic: function(name, fadeTime, loop, when, offset, duration) {
         loop = (loop !== undefined) ? loop : true;
 
         if (this.currentMusic) {
@@ -6838,7 +7009,7 @@ phina.namespace(function() {
         var music = phina.asset.AssetManager.get('sound', name);
 
         music.setLoop(loop);
-        music.play();
+        music.play(when, offset, duration);
 
         if (fadeTime > 0) {
           var count = 32;
@@ -9842,7 +10013,7 @@ phina.namespace(function() {
   var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
-    updateType: 'normal',
+    updateType: 'delta',
 
     /**
      * @constructor
@@ -11728,6 +11899,10 @@ phina.namespace(function() {
      * @private
      */
     _calcWorldAlpha: function() {
+      if (this.alpha < 0) {
+        this._worldAlpha = 0;
+        return;
+      }
       if (!this.parent) {
         this._worldAlpha = this.alpha;
         return ;
@@ -12763,6 +12938,10 @@ phina.namespace(function() {
       if (options.fps !== undefined) {
         this.fps = options.fps;
       }
+      
+      if(typeof options.runner === 'function') {
+        this.ticker.runner = options.runner;
+      }
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);
@@ -12871,6 +13050,9 @@ phina.namespace(function() {
         if (options.append) {
           document.body.appendChild(options.domElement);
         }
+      }
+      if(!options.runner && phina.isAndroid()) {
+        options.runner = phina.global.requestAnimationFrame;
       }
       this.superInit(options);
 

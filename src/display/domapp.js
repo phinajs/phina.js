@@ -30,6 +30,10 @@ phina.namespace(function() {
       if (options.fps !== undefined) {
         this.fps = options.fps;
       }
+      
+      if(typeof options.runner === 'function') {
+        this.ticker.runner = options.runner;
+      }
 
       this.mouse = phina.input.Mouse(this.domElement);
       this.touch = phina.input.Touch(this.domElement);

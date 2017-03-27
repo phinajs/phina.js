@@ -56,6 +56,10 @@ phina.namespace(function() {
      * @private
      */
     _calcWorldAlpha: function() {
+      if (this.alpha < 0) {
+        this._worldAlpha = 0;
+        return;
+      }
       if (!this.parent) {
         this._worldAlpha = this.alpha;
         return ;

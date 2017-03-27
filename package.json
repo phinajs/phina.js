@@ -21,7 +21,7 @@
   "homepage": "http://phinajs.com",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "gulp": "^3.8.10",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.4.3",
     "gulp-download": "0.0.1",
     "gulp-header": "^1.7.1",

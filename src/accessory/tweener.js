@@ -10,7 +10,7 @@ phina.namespace(function() {
   var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
 
-    updateType: 'normal',
+    updateType: 'delta',
 
     /**
      * @constructor
