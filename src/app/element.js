@@ -4,7 +4,7 @@ phina.namespace(function() {
   /**
    * @class phina.app.Element
    * @extends phina.util.EventDispatcher
-   * #主に要素の親子関係を扱うクラス
+   * # 主に要素の親子関係を扱うクラス
    * 主に親子関係等を定義するクラスです。
    */
   phina.define('phina.app.Element', {
@@ -178,7 +178,7 @@ phina.namespace(function() {
       return this;
     },
     /**
-     * @method wakeUp
+     * @method sleep
      * 自身を無効にします。
      */
     sleep: function() {
