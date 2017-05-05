@@ -8,7 +8,7 @@
     "core/math.js",
 
     "phina.js",
-    
+
     "geom/vector2.js",
     "geom/vector3.js",
     "geom/matrix33.js",
@@ -75,6 +75,7 @@
     "display/canvasrenderer.js",
     "display/domapp.js",
     "display/canvasapp.js",
+    "display/textelement.js",
 
 
     "effect/wave.js",

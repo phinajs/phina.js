@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Label
-   * 
+   *
    */
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
@@ -37,12 +37,14 @@ phina.namespace(function() {
       var canvas = this.canvas;
       canvas.context.font = this.font;
       this._lines.forEach(function(line) {
-        var w = canvas.context.measureText(line).width;
+        var w = 0;
+        line.forEach(function(elm) {
+        	w += canvas.context.measureText(elm.text).width;
+        });
         if (width < w) {
           width = w;
         }
       }, this);
-      if (this.align !== 'center') width*=2;
 
       return width + this.padding*2;
     },
@@ -56,7 +58,7 @@ phina.namespace(function() {
     prerender: function(canvas) {
       var context = canvas.context;
       context.font = this.font;
-      context.textAlign = this.align;
+      context.textAlign = 'left';
       context.textBaseline = this.baseline;
 
       var lines = this._lines;
@@ -66,16 +68,48 @@ phina.namespace(function() {
     },
 
     renderFill: function(canvas) {
-      var context = canvas.context;
       this._lines.forEach(function(line, i) {
-        context.fillText(line, 0, i*this.lineSize+this._offset);
+        // alignに対応するためすべてtextAlign='left'で表示開始位置を前後させる。
+        var offsetX = 0;
+        var w = 0;
+        line.forEach(function(elm) {
+          w += canvas.context.measureText(elm.text).width;
+        });
+        if (this.align == 'center') {
+          offsetX = -1 * w / 2;
+        } else if (this.align == 'left' || this.align == 'start') {
+          offsetX = -1 * this.calcCanvasWidth() / 2 + this.padding;
+        } else {
+          offsetX = this.calcCanvasWidth() / 2 - w - this.padding;
+        }
+
+        // 1要素ごとに左にずらして表示
+        line.forEach(function(elm) {
+          offsetX += elm.doFill(canvas, offsetX, i*this.lineSize+this._offset);
+        }, this);
       }, this);
     },
 
     renderStroke: function(canvas) {
-      var context = canvas.context;
       this._lines.forEach(function(line, i) {
-        context.strokeText(line, 0, i*this.lineSize+this._offset);
+        // alignに対応するためすべてtextAlign='left'で表示開始位置を前後させる。
+        var offsetX = 0;
+        var w = 0;
+        line.forEach(function(elm) {
+          w += canvas.context.measureText(elm.text).width;
+        });
+        if (this.align == 'center') {
+          offsetX = -1 * w / 2;
+        } else if (this.align == 'left' || this.align == 'start') {
+          offsetX = -1 * this.calcCanvasWidth() / 2 + this.padding;
+        } else {
+          offsetX = this.calcCanvasWidth() / 2 - w - this.padding;
+        }
+
+        // 1要素ごとに左にずらして表示
+        line.forEach(function(elm) {
+          offsetX += elm.doStroke(canvas, offsetX, i*this.lineSize+this._offset);
+        }, this);
       }, this);
     },
 
@@ -87,7 +121,31 @@ phina.namespace(function() {
         get: function() { return this._text; },
         set: function(v) {
           this._text = v;
-          this._lines = (this.text + '').split('\n');
+          // 配列でも文字列受け取る
+          if (this._text instanceof Array) {
+            this._textElements = this._text.map(function(str){
+              return TextElement(str);
+            });
+          } else {
+            this._textElements = [TextElement(this._text)];
+          }
+
+          // 改行ごとに要素を分割する
+          this._lines = [];
+          var line = [];
+          this._textElements.forEach(function(element) {
+            var first = true;
+            element.splitElement('\n').forEach(function(elm) {
+              if (first) {
+                first = false;
+              } else {
+                this._lines.push(line);
+                line = [];
+              }
+              line.push(elm);
+            }, this);
+          }, this);
+          this._lines.push(line);
         },
       },
 
@@ -106,13 +164,13 @@ phina.namespace(function() {
         stroke: null,
         strokeWidth: 2,
 
-        // 
+        //
         text: 'Hello, world!',
-        // 
+        //
         fontSize: 32,
         fontWeight: '',
         fontFamily: "'HiraKakuProN-W3'", // Hiragino or Helvetica,
-        // 
+        //
         align: 'center',
         baseline: 'middle',
         lineHeight: 1.2,
