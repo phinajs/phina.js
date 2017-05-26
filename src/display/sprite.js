@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Sprite
-   * 
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.Sprite', {
     superClass: 'phina.display.DisplayElement',

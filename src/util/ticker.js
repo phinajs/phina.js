@@ -4,6 +4,7 @@
   /**
    * @class phina.util.Ticker
    * tick management class
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.util.Ticker', {
     superClass: 'phina.util.EventDispatcher',

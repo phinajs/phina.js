@@ -6,6 +6,7 @@ phina.namespace(function() {
    * @extends phina.util.EventDispatcher
    * # 主に要素の親子関係を扱うクラス
    * 主に親子関係等を定義するクラスです。
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.app.Element', {
     superClass: 'phina.util.EventDispatcher',

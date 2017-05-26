@@ -3,6 +3,10 @@ phina.namespace(function() {
 
   var textWidthCache = {};
 
+  /**
+   * @class phina.ui.LabelArea
+   * @extends phina.display.Label
+   */
   var LabelArea = phina.define('phina.ui.LabelArea', {
     superClass: 'phina.display.Label',
 

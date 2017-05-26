@@ -6,6 +6,7 @@ phina.namespace(function() {
   /**
    * @class phina.ui.Button
    * Button
+   * @extends phina.display.Shape
    */
   phina.define('phina.ui.Button', {
     superClass: 'phina.display.Shape',

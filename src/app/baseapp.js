@@ -3,6 +3,7 @@ phina.namespace(function() {
   /**
    * @class phina.app.BaseApp
    * ベースとなるアプリケーションクラス
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.app.BaseApp', {
     superClass: 'phina.util.EventDispatcher',

@@ -2,7 +2,7 @@
 ;(function() {
   /**
    * @class phina.input.Input
-   * 
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.input.Input', {
 

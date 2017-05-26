@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.ManagerScene
-   * 
+   * @extends phina.app.Scene
    */
   phina.define('phina.game.ManagerScene', {
     superClass: 'phina.app.Scene',

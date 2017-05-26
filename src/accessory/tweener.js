@@ -6,6 +6,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.Tweener
    * Tweener
+   * @extends phina.accessory.Accessory
    */
   var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',

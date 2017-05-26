@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.SpriteSheet
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.SpriteSheet', {
     superClass: "phina.asset.Asset",

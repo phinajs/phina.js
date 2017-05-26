@@ -9,7 +9,8 @@ phina.namespace(function() {
   var b2 = phina.box2d.b2;
 
   /**
-   * @class
+   * @class phina.box2d.Box2dBody
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.box2d.Box2dBody', {
     superClass: 'phina.accessory.Accessory',

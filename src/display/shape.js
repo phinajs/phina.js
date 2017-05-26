@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Shape
-   *
+   * @extends phina.display.PlainElement
    */
   var Shape = phina.define('phina.display.Shape', {
     superClass: 'phina.display.PlainElement',
@@ -159,7 +159,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.RectangleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
@@ -191,7 +191,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.CircleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
@@ -218,7 +218,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.TriangleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.TriangleShape', {
     superClass: 'phina.display.Shape',
@@ -248,7 +248,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.StarShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.StarShape', {
     superClass: 'phina.display.Shape',
@@ -285,7 +285,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.PolygonShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.PolygonShape', {
     superClass: 'phina.display.Shape',
@@ -320,7 +320,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.HeartShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.HeartShape', {
     superClass: 'phina.display.Shape',
@@ -354,7 +354,7 @@ phina.namespace(function() {
 phina.namespace(function () {
   /**
    * @class phina.display.PathShape
-   *
+   * @extends phina.display.Shape
    */
   var PathShape = phina.define('phina.display.PathShape', {
     superClass: 'phina.display.Shape',

@@ -4,6 +4,7 @@ phina.namespace(function() {
    * @class phina.input.GamepadManager
    * ゲームパッドマネージャー.
    * ゲームパッド接続状況の監視、個々のゲームパッドの入力状態の更新を行う.
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.input.GamepadManager', {
     superClass: 'phina.util.EventDispatcher',

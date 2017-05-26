@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Script
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Script', {
     superClass: "phina.asset.Asset",

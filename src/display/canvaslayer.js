@@ -3,6 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Layer
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.DisplayElement',
@@ -38,7 +39,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.display.Layer
+   * @class phina.display.CanvasLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.display.CanvasLayer', {
     superClass: 'phina.display.Layer',
@@ -73,7 +75,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class
+   * @class phina.display.ThreeLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.display.ThreeLayer', {
     superClass: 'phina.display.Layer',
