@@ -6,6 +6,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.Flickable
    * Flickable
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.Flickable', {
     superClass: 'phina.accessory.Accessory',

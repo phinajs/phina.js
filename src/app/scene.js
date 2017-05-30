@@ -1,6 +1,9 @@
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Scene
+   * @extends phina.app.Element
+   */
   phina.define('phina.app.Scene', {
     superClass: 'phina.app.Element',
 

@@ -2,7 +2,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Font
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define("phina.asset.Font", {
     superClass: "phina.asset.Asset",

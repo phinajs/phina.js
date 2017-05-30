@@ -4,6 +4,7 @@ phina.namespace(function() {
   /**
    * @class phina.effect.Wave
    * Button
+   * @extends phina.display.CircleShape
    */
   phina.define('phina.effect.Wave', {
     superClass: 'phina.display.CircleShape',

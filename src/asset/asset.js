@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Asset
-   * 
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.asset.Asset', {
     superClass: "phina.util.EventDispatcher",

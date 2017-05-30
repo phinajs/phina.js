@@ -21,10 +21,20 @@ var phina = phina || {};
    */
   phina.VERSION = '<%= version %>';
 
+  /**
+   * @method isNode
+   * @member phina
+   * @static
+   */
   phina.$method('isNode', function() {
     return (typeof module !== 'undefined');
   });
 
+  /**
+   * @method namespace
+   * @member phina
+   * @static
+   */
   phina.$method('namespace', function(fn) {
     fn.call(this);
   });
@@ -45,6 +55,8 @@ var phina = phina || {};
   /**
    * @method testUA
    * UAを正規表現テスト
+   * @member phina
+   * @static
    */
   phina.$method('testUA', function(regExp) {
     if (!phina.global.navigator) return false;
@@ -55,6 +67,8 @@ var phina = phina || {};
   /**
    * @method isAndroid
    * Android かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isAndroid', function() {
     return phina.testUA(/Android/);
@@ -63,6 +77,8 @@ var phina = phina || {};
   /**
    * @method isIPhone
    * iPhone かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIPhone', function() {
     return phina.testUA(/iPhone/);
@@ -71,6 +87,8 @@ var phina = phina || {};
   /**
    * @method isIPad
    * iPad かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIPad', function() {
     return phina.testUA(/iPad/);
@@ -79,6 +97,8 @@ var phina = phina || {};
   /**
    * @method isIOS
    * iOS かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIOS', function() {
     return phina.testUA(/iPhone|iPad/);
@@ -87,6 +107,8 @@ var phina = phina || {};
   /**
    * @method isMobile
    * mobile かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isMobile', function() {
     return phina.testUA(/iPhone|iPad|Android/);
@@ -196,8 +218,11 @@ phina.namespace(function() {
   });
 
   var chachedClasses = {};
-  /*
-   * 
+  
+  /**
+   * @method using
+   * @member phina
+   * @static
    */
   phina.$method('using', function(path) {
     if (!path) {
@@ -214,8 +239,11 @@ phina.namespace(function() {
     return current;
   });
   
-  /*
+  /**
+   * @method register
    * 
+   * @member phina
+   * @static
    */
   phina.$method('register', function(path, _class) {
     var pathes = path.split(/[,.\/ ]|::/);
@@ -278,7 +306,11 @@ phina.namespace(function() {
     return _class;
   });
 
-
+  /**
+   * @method globalize
+   * @member phina
+   * @static
+   */
   phina.$method('globalize', function() {
     phina.forIn(function(key, value) {
       var ns = key;

@@ -3,6 +3,7 @@
 
   /**
    * @class phina.util.Tween
+   * @extends phina.util.EventDispatcher
    * 
    */
   phina.define('phina.util.Tween', {

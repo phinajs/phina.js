@@ -7,7 +7,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.LoadingScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.LoadingScene', {
     superClass: 'phina.display.DisplayScene',

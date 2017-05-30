@@ -2,7 +2,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.GameApp
-   * 
+   * @extends phina.display.CanvasApp
    */
   phina.define('phina.game.GameApp', {
     superClass: 'phina.display.CanvasApp',

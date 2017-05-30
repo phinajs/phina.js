@@ -4,7 +4,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Sound
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Sound', {
     superClass: "phina.asset.Asset",

@@ -79,6 +79,9 @@
 
 ;(function() {
 
+  /**
+   * @class phina.input.TouchList
+   */
   phina.define('phina.input.TouchList', {
     domElement: null,
     touchMap: null,

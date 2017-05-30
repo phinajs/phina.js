@@ -26,7 +26,8 @@ phina.namespace(function() {
   var b2 = phina.box2d.b2;
 
   /**
-   * @class
+   * @class phina.box2d.Box2dLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.box2d.Box2dLayer', {
     superClass: 'phina.display.Layer',

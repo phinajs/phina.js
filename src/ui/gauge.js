@@ -2,7 +2,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.ui.Gauge
-   * 
+   * @extends phina.display.Shape
    */
   phina.define('phina.ui.Gauge', {
     superClass: 'phina.display.Shape',
@@ -135,7 +135,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.ui.CircleGauge
-   * 
+   * @extends phina.ui.Gauge
    */
   phina.define('phina.ui.CircleGauge', {
     superClass: 'phina.ui.Gauge',
