@@ -30,9 +30,12 @@ phina.namespace(function() {
     },
 
     renderObject: function(obj) {
-      if (obj.visible === false) return ;
+      if (obj.visible === false && !obj.interactive) return;
 
       obj._calcWorldMatrix && obj._calcWorldMatrix();
+			
+			if (obj.visible === false) return;
+
       obj._calcWorldAlpha && obj._calcWorldAlpha();
 
       var context = this.canvas.context;
