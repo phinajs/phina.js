@@ -24,6 +24,10 @@ phina.namespace(function() {
         });
       }
 
+			this.accessories.each(function(accessory) {
+				accessory.update && accessory.update(e.app);
+			});
+
       // 更新
       if (element.update) element.update(app);
 
