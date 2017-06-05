@@ -1,6 +1,8 @@
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Updater
+   */
   phina.define('phina.app.Updater', {
 
     init: function(app) {

@@ -8,6 +8,7 @@ phina.namespace(function() {
   /**
    * @class phina.graphics.CanvasRecorder
    * Reference <https://github.com/jnordberg/gif.js/>
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.graphics.CanvasRecorder', {
 

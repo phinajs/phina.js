@@ -8,6 +8,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.FrameAnimation
    * FrameAnimation
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.FrameAnimation', {
     superClass: 'phina.accessory.Accessory',

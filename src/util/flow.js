@@ -4,6 +4,7 @@
   /**
    * @class phina.util.Flow
    * tick management class
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.util.Flow', {
     superClass: 'phina.util.EventDispatcher',

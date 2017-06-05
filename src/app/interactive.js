@@ -1,6 +1,8 @@
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Interactive
+   */
   phina.define('phina.app.Interactive', {
 
     init: function(app) {

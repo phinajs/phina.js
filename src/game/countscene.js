@@ -7,7 +7,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.CountScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.CountScene', {
     superClass: 'phina.display.DisplayScene',

@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.CanvasApp
-   * 
+   * @extends phina.display.DomApp
    */
   phina.define('phina.display.CanvasApp', {
     superClass: 'phina.display.DomApp',

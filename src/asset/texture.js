@@ -2,7 +2,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Texture
-   *
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Texture', {
     superClass: "phina.asset.Asset",

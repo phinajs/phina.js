@@ -3,7 +3,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.PlainElement
-   *
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.PlainElement', {
     superClass: 'phina.display.DisplayElement',
