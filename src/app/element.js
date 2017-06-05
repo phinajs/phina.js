@@ -23,7 +23,7 @@ phina.namespace(function() {
     init: function() {
       this.superInit();
       this.children = [];
-			this.accessories = [];
+      this.accessories = [];
     },
 
     addChild: function(child) {
@@ -59,7 +59,7 @@ phina.namespace(function() {
     },
 
     getChildByName: function(name) {
-      // TODO: 
+      // TODO:
     },
 
     getChildIndex: function(child) {
@@ -92,7 +92,7 @@ phina.namespace(function() {
 
       this.parent.removeChild(this);
       this.parent = null;
-      
+
       return this;
     },
 
@@ -113,14 +113,14 @@ phina.namespace(function() {
     fromJSON: function(json) {
 
       var createChildren = function(name, data) {
-        // 
+        //
         var args = data.arguments;
         args = (args instanceof Array) ? args : [args];
-        // 
+        //
         var _class = phina.using(data.className);
-        // 
+        //
         var element = _class.apply(null, args);
-        
+
         element.name = name;
         this[name] = element;
 
@@ -157,9 +157,9 @@ phina.namespace(function() {
           });
         }
       });
-      
+
       keys.push('name', 'className');
-      
+
       var json = {};
       keys.each(function(key) {
         json[key] = this[key];
@@ -179,5 +179,5 @@ phina.namespace(function() {
       return json;
     },
   });
-  
+
 });

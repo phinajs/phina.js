@@ -26,12 +26,12 @@ phina.namespace(function() {
       this._tasks = [];
       this._index = 0;
       this.playing = true;
-			this.building = true;
+      this.building = true;
       this._update = this._updateTask;
     },
 
     update: function(app) {
-			if (!this.playing) return;
+      if (!this.playing) return;
       this._update(app);
     },
 
@@ -170,7 +170,7 @@ phina.namespace(function() {
     },
 
     stop: function() {
-    	this.playing = false;
+      this.playing = false;
       this.rewind();
       return this;
     },
@@ -230,21 +230,21 @@ phina.namespace(function() {
     },
 
     _add: function(params) {
-			if (!this.building) this.clear();
+      if (!this.building) this.clear();
       this._tasks.push(params);
     },
 
     _updateTask: function(app) {
-			this.building = false;
+      this.building = false;
       var task = this._tasks[this._index];
       if (!task) {
         if (this._loop) {
-					this.rewind();
-					this._update(app);
+          this.rewind();
+          this._update(app);
         } else {
           this.playing = false;
         }
-				return;
+        return;
       }
       else {
         ++this._index;
@@ -273,13 +273,13 @@ phina.namespace(function() {
 
         this._update = this._updateWait;
       }
-			else if (task.type === 'call') {
-				task.data.func.apply(task.data.self, task.data.args);
+      else if (task.type === 'call') {
+        task.data.func.apply(task.data.self, task.data.args);
       }
-			else if (task.type === 'set') {
-				this.target.$extend(task.data.values);
-			}
-			this._update(app); // 1フレーム消費しないよう再帰
+      else if (task.type === 'set') {
+        this.target.$extend(task.data.values);
+      }
+      this._update(app); // 1フレーム消費しないよう再帰
     },
 
     _updateTween: function(app) {
