@@ -240,10 +240,11 @@ phina.namespace(function() {
       if (!task) {
         if (this._loop) {
 					this.rewind();
+					this._update(app);
         } else {
           this.playing = false;
-					return;
         }
+				return;
       }
       else {
         ++this._index;

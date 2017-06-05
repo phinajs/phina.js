@@ -24,8 +24,8 @@ phina.namespace(function() {
         });
       }
 
-			this.accessories.each(function(accessory) {
-				accessory.update && accessory.update(e.app);
+			element.accessories.each(function(accessory) {
+				accessory.update && accessory.update(app);
 			});
 
       // 更新
@@ -96,5 +96,5 @@ phina.namespace(function() {
 
   });
 
-  
+
 });
