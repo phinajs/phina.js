@@ -1,7 +1,6 @@
 
 
 phina.namespace(function() {
-  
   /**
    * @class phina.display.CanvasRenderer
    */
@@ -16,12 +15,12 @@ phina.namespace(function() {
       if (scene.backgroundColor) {
         this.canvas.clearColor(scene.backgroundColor);
       }
-      
+
       this._context.save();
       this.renderChildren(scene);
       this._context.restore();
     },
-    
+
     renderChildren: function(obj) {
       // 子供たちも実行
       if (obj.children.length > 0) {
@@ -33,9 +32,12 @@ phina.namespace(function() {
     },
 
     renderObject: function(obj) {
-      if (obj.visible === false) return ;
+      if (obj.visible === false && !obj.interactive) return;
 
       obj._calcWorldMatrix && obj._calcWorldMatrix();
+
+      if (obj.visible === false) return;
+
       obj._calcWorldAlpha && obj._calcWorldAlpha();
 
       var context = this.canvas.context;
