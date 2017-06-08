@@ -30,7 +30,7 @@ phina.namespace(function() {
    * @extends phina.display.Layer
    */
   phina.define('phina.box2d.Box2dLayer', {
-    superClass: 'phina.display.Layer',
+    superClass: 'phina.display.CanvasLayer',
 
 
     init: function(params) {
