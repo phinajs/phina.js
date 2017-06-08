@@ -2324,10 +2324,20 @@ var phina = phina || {};
    */
   phina.VERSION = '0.2.0';
 
+  /**
+   * @method isNode
+   * @member phina
+   * @static
+   */
   phina.$method('isNode', function() {
     return (typeof module !== 'undefined');
   });
 
+  /**
+   * @method namespace
+   * @member phina
+   * @static
+   */
   phina.$method('namespace', function(fn) {
     fn.call(this);
   });
@@ -2348,6 +2358,8 @@ var phina = phina || {};
   /**
    * @method testUA
    * UAを正規表現テスト
+   * @member phina
+   * @static
    */
   phina.$method('testUA', function(regExp) {
     if (!phina.global.navigator) return false;
@@ -2358,6 +2370,8 @@ var phina = phina || {};
   /**
    * @method isAndroid
    * Android かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isAndroid', function() {
     return phina.testUA(/Android/);
@@ -2366,6 +2380,8 @@ var phina = phina || {};
   /**
    * @method isIPhone
    * iPhone かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIPhone', function() {
     return phina.testUA(/iPhone/);
@@ -2374,6 +2390,8 @@ var phina = phina || {};
   /**
    * @method isIPad
    * iPad かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIPad', function() {
     return phina.testUA(/iPad/);
@@ -2382,6 +2400,8 @@ var phina = phina || {};
   /**
    * @method isIOS
    * iOS かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isIOS', function() {
     return phina.testUA(/iPhone|iPad/);
@@ -2390,6 +2410,8 @@ var phina = phina || {};
   /**
    * @method isMobile
    * mobile かどうかをチェック
+   * @member phina
+   * @static
    */
   phina.$method('isMobile', function() {
     return phina.testUA(/iPhone|iPad|Android/);
@@ -2499,8 +2521,11 @@ phina.namespace(function() {
   });
 
   var chachedClasses = {};
-  /*
-   * 
+  
+  /**
+   * @method using
+   * @member phina
+   * @static
    */
   phina.$method('using', function(path) {
     if (!path) {
@@ -2517,8 +2542,11 @@ phina.namespace(function() {
     return current;
   });
   
-  /*
+  /**
+   * @method register
    * 
+   * @member phina
+   * @static
    */
   phina.$method('register', function(path, _class) {
     var pathes = path.split(/[,.\/ ]|::/);
@@ -2581,7 +2609,11 @@ phina.namespace(function() {
     return _class;
   });
 
-
+  /**
+   * @method globalize
+   * @member phina
+   * @static
+   */
   phina.$method('globalize', function() {
     phina.forIn(function(key, value) {
       var ns = key;
@@ -4880,6 +4912,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.util.Tween
+   * @extends phina.util.EventDispatcher
    * 
    */
   phina.define('phina.util.Tween', {
@@ -5229,6 +5262,7 @@ phina.namespace(function() {
   /**
    * @class phina.util.Ticker
    * tick management class
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.util.Ticker', {
     superClass: 'phina.util.EventDispatcher',
@@ -5408,6 +5442,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.util.ChangeDispatcher
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.util.ChangeDispatcher', {
     superClass: 'phina.util.EventDispatcher',
@@ -5458,6 +5493,7 @@ phina.namespace(function() {
   /**
    * @class phina.util.Flow
    * tick management class
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.util.Flow', {
     superClass: 'phina.util.EventDispatcher',
@@ -6185,7 +6221,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Asset
-   * 
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.asset.Asset', {
     superClass: "phina.util.EventDispatcher",
@@ -6267,7 +6303,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.AssetLoader
-   * 
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.asset.AssetLoader', {
     superClass: "phina.util.EventDispatcher",
@@ -6406,7 +6442,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.File
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.File', {
     superClass: "phina.asset.Asset",
@@ -6479,7 +6515,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Script
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Script', {
     superClass: "phina.asset.Asset",
@@ -6512,7 +6548,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Texture
-   *
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Texture', {
     superClass: "phina.asset.Asset",
@@ -6626,7 +6662,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Sound
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.Sound', {
     superClass: "phina.asset.Asset",
@@ -7114,7 +7150,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.SpriteSheet
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define('phina.asset.SpriteSheet', {
     superClass: "phina.asset.Asset",
@@ -7234,7 +7270,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.asset.Font
-   * 
+   * @extends phina.asset.Asset
    */
   phina.define("phina.asset.Font", {
     superClass: "phina.asset.Asset",
@@ -7349,7 +7385,7 @@ phina.namespace(function() {
 ;(function() {
   /**
    * @class phina.input.Input
-   * 
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.input.Input', {
 
@@ -7697,6 +7733,9 @@ phina.namespace(function() {
 
 ;(function() {
 
+  /**
+   * @class phina.input.TouchList
+   */
   phina.define('phina.input.TouchList', {
     domElement: null,
     touchMap: null,
@@ -8287,6 +8326,7 @@ phina.namespace(function() {
    * @class phina.input.GamepadManager
    * ゲームパッドマネージャー.
    * ゲームパッド接続状況の監視、個々のゲームパッドの入力状態の更新を行う.
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.input.GamepadManager', {
     superClass: 'phina.util.EventDispatcher',
@@ -8818,7 +8858,9 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Updater
+   */
   phina.define('phina.app.Updater', {
 
     init: function(app) {
@@ -8915,7 +8957,9 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Interactive
+   */
   phina.define('phina.app.Interactive', {
 
     init: function(app) {
@@ -9050,6 +9094,7 @@ phina.namespace(function() {
   /**
    * @class phina.app.BaseApp
    * ベースとなるアプリケーションクラス
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.app.BaseApp', {
     superClass: 'phina.util.EventDispatcher',
@@ -9284,17 +9329,28 @@ phina.namespace(function() {
   /**
    * @class phina.app.Element
    * @extends phina.util.EventDispatcher
+   * # 主に要素の親子関係を扱うクラス
+   * 主に親子関係等を定義するクラスです。
    */
   phina.define('phina.app.Element', {
     superClass: 'phina.util.EventDispatcher',
 
-    /// 親
+    /**
+     * @property parent
+     * 親要素
+     */
     parent: null,
 
-    /// 子供
+    /**
+     * @property children
+     * 子要素
+     */
     children: null,
 
-    /// 有効化どうか
+    /**
+     * @property awake
+     * 有効かどうか
+     */
     awake: true,
 
     /**
@@ -9305,6 +9361,14 @@ phina.namespace(function() {
       this.children = [];
     },
 
+    /**
+     * @method addChild
+     * 自身に子要素を追加します。
+     *
+     * 自身を子要素として引数で指定した要素に追加するには {@link #addChildTo} を使用してください。
+     *
+     * @param {Object} child 追加する子要素
+     */
     addChild: function(child) {
       if (child.parent) child.remove();
 
@@ -9315,13 +9379,26 @@ phina.namespace(function() {
 
       return child;
     },
-
+    /**
+     * @method addChildTo
+     * 自身を子要素として引数で指定した要素に追加します。
+     *
+     * 自身に子要素を追加するには {@link #addChild} を使用してください。
+     *
+     * @param {Object} parent 自身を子要素として追加する要素
+     */
     addChildTo: function(parent) {
       parent.addChild(this);
 
       return this;
     },
-
+    /**
+     * @method addChildAt
+     * 自身を、指定した要素の子要素の任意の配列インデックスに追加します。
+     *
+     * @param {Object} child 追加する子要素
+     * @param {Number} index インデックス番号
+     */
     addChildAt: function(child, index) {
       if (child.parent) child.remove();
 
@@ -9332,23 +9409,48 @@ phina.namespace(function() {
 
       return child;
     },
-
+    /**
+     * @method getChildAt
+     * 指定したインデックスの子要素を返します。
+     *
+     * @param {Number} index インデックス番号
+     * @return {Object} 指定したインデックスの子要素
+     */
     getChildAt: function(index) {
       return this.children.at(index);
     },
-
+    /**
+     * @method getChildByName
+     * 指定した名前の子要素を返します。（未実装）
+     */
     getChildByName: function(name) {
-      // TODO: 
+      // TODO:
     },
-
+    /**
+     * @method getChildIndex
+     * 指定した子要素のインデックス番号を返します。
+     *
+     * @param {Object} child 子要素
+     * @return {Number} 指定した子要素のインデックス番号
+     */
     getChildIndex: function(child) {
       return this.children.indexOf(child);
     },
-
+    /**
+     * @method getParent
+     * 指定した要素の親要素を返します。
+     *
+     * @return {Object} 指定した要素の親要素
+     */
     getParent: function() {
       return this.parent;
     },
-
+    /**
+     * @method getRoot
+     * 指定した要素の階層ツリーのルートを返します。
+     *
+     * @return {Object} 指定した要素の階層ツリーのルート
+     */
     getRoot: function() {
       var elm = this;
       for (elm=this.parent; elm.parent != null; elm = elm.parent) {
@@ -9356,7 +9458,13 @@ phina.namespace(function() {
       }
       return elm;
     },
-
+    /**
+     * @method removeChild
+     * @chainable
+     * 指定した要素を自身の子要素から削除します。
+     *
+     * @param {Object} child 要素
+     */
     removeChild: function(child) {
       var index = this.children.indexOf(child);
       if (index !== -1) {
@@ -9365,41 +9473,72 @@ phina.namespace(function() {
       }
       return this;
     },
-
+    /**
+     * @method remove
+     * 自身を親要素の子要素から削除します。
+     */
     remove: function() {
       if (!this.parent) return ;
 
       this.parent.removeChild(this);
       this.parent = null;
-      
+
       return this;
     },
-
+    /**
+     * @method isAwake
+     * 自身が有効かどうかを返します。
+     *
+     * @return {Boolean} 有効かどうか
+     */
     isAwake: function() {
       return this.awake;
     },
-
+    /**
+     * @method wakeUp
+     * 自身を有効にします。
+     */
     wakeUp: function() {
       this.awake = true;
       return this;
     },
-
+    /**
+     * @method sleep
+     * 自身を無効にします。
+     */
     sleep: function() {
       this.awake = false;
       return this;
     },
-
+    /**
+     * @method fromJSON
+     * JSON 形式を使って自身に子要素を追加することができます。
+     *
+     * ### Example
+     *      this.fromJSON({
+     *        "children": {
+     *          "label": {                  //キー名が追加する子要素の名前になる
+     *            "className": "Label",     //クラス
+     *            "arguments": ['hello!'],  //初期化時の引数
+     *            "x":320,                  //その他プロパティ
+     *            "y":480,
+     *          },
+     *        },
+     *      });
+     *
+     * @param {JSON} json JSON 形式
+     */
     fromJSON: function(json) {
 
       var createChildren = function(name, data) {
-        // 
+        //
         var args = data.arguments;
         args = (args instanceof Array) ? args : [args];
-        // 
+        //
         var _class = phina.using(data.className);
-        // 
+        //
         var element = _class.apply(null, args);
-        
+
         element.name = name;
         this[name] = element;
 
@@ -9422,7 +9561,12 @@ phina.namespace(function() {
 
       return this;
     },
-
+    /**
+     * @method toJSON
+     * 自身の子要素を JSON 形式で返します。
+     *
+     * @return {JSON} JSON形式
+     */
     toJSON: function() {
       var keys = Object.keys(phina.using(this.className).defaults || {});
 
@@ -9436,9 +9580,9 @@ phina.namespace(function() {
           });
         }
       });
-      
+
       keys.push('name', 'className');
-      
+
       var json = {};
       keys.each(function(key) {
         json[key] = this[key];
@@ -9458,7 +9602,7 @@ phina.namespace(function() {
       return json;
     },
   });
-  
+
 });
 
 phina.namespace(function() {
@@ -9901,7 +10045,10 @@ phina.namespace(function() {
 
 phina.namespace(function() {
 
-
+  /**
+   * @class phina.app.Scene
+   * @extends phina.app.Element
+   */
   phina.define('phina.app.Scene', {
     superClass: 'phina.app.Element',
 
@@ -9935,6 +10082,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.accessory.Accessory
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.accessory.Accessory', {
     superClass: 'phina.util.EventDispatcher',
@@ -10008,11 +10156,20 @@ phina.namespace(function() {
 
   /**
    * @class phina.accessory.Tweener
-   * Tweener
+   * # Tweener
+   * Tweenerはオブジェクトのプロパティに対して、
+   * Tweenアニメーションの効果を与えるクラスです。  
+   * 主に {@link phina.app.Element} とそのサブクラスで使用されます。
+   * @extends phina.accessory.Accessory
    */
   var Tweener = phina.define('phina.accessory.Tweener', {
     superClass: 'phina.accessory.Accessory',
-
+    
+    /**
+     * アニメーションを更新する方法を指定します。  
+     * 変更するとdurationによる時間の進み方が変わります。  
+     * 詳しくは{@link #UPDATE_MAP}を参照してください。
+     */
     updateType: 'delta',
 
     /**
@@ -10032,15 +10189,31 @@ phina.namespace(function() {
       this._update = this._updateTask;
     },
 
+    /**
+     * @param {phina.app.BaseApp} app
+     */
     update: function(app) {
       this._update(app);
     },
 
+    /**
+     * {@link #updateType}を変更します。
+     * @param {String} type 更新方法を表す文字列
+     * @chainable
+     */
     setUpdateType: function(type) {
       this.updateType = type;
       return this;
     },
 
+    /**
+     * propsで指定した値になるまで、durationで指定した時間をかけて、アニメーションさせます。
+     * @param {Object} props 変更したいプロパティをkeyとしたオブジェクト
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     * 
+     */
     to: function(props, duration, easing) {
       this._add({
         type: 'tween',
@@ -10052,6 +10225,13 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * アニメーション開始時の値とpropsで指定した値を加算した値になるまで、durationで指定した時間をかけて、アニメーションさせます。
+     * @param {Object} props 変更したいプロパティをkeyとしたオブジェクト
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     by: function(props, duration, easing) {
       this._add({
         type: 'tween',
@@ -10064,6 +10244,13 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * propsで指定した値からアニメーション開始時の値になるまで、durationで指定した時間をかけて、アニメーションさせます。
+     * @param {Object} props 変更したいプロパティをkeyとしたオブジェクト
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     from: function(props, duration, easing) {
       this._add({
         type: 'tween',
@@ -10075,6 +10262,11 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * 指定した時間が経過するまで待機します。
+     * @param {Number} time waitする時間
+     * @chainable
+     */
     wait: function(time) {
       this._add({
         type: 'wait',
@@ -10085,6 +10277,13 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * 現在設定されているアニメーションが終了した時に呼び出される関数をセットします。
+     * @param {Function} func 呼び出される関数
+     * @param {Object} self (optional) func内でthisにしたいオブジェクト。
+     * @param {Object[]} args (optional) funcの引数にしたい値
+     * @chainable
+     */
     call: function(func, self, args) {
       this._add({
         type: 'call',
@@ -10098,9 +10297,11 @@ phina.namespace(function() {
     },
 
     /**
-     * プロパティをセット
-     * @param {Object} key
-     * @param {Object} value
+     * 現在設定されているアニメーションが終了した時にプロパティをセットします。  
+     * 第一引数にオブジェクトをセットすることもできます。
+     * @param {String | Object} key valueをセットするプロパティ名か、変更したいプロパティをkeyとしたオブジェクト。
+     * @param {Object} value (optional) セットする値
+     * @chainable
      */
     set: function(key, value) {
       var values = null;
@@ -10121,41 +10322,107 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * x, yに対して、 {@link #to} の処理を行います。
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     moveTo: function(x, y, duration, easing) {
       return this.to({ x: x, y: y }, duration, easing);
     },
+    
+    /**
+     * x, yに対して、 {@link #by} の処理を行います。
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     moveBy: function(x, y, duration, easing) {
       return this.by({ x: x, y: y }, duration, easing);
     },
 
+    /**
+     * rotationに対して、 {@link #to} の処理を行います。
+     * @param {Number} rotation
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     rotateTo: function(rotation, duration, easing) {
       return this.to({ rotation: rotation }, duration, easing);
     },
+    
+    /**
+     * rotationに対して、 {@link #by} の処理を行います。
+     * @param {Number} rotation
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     rotateBy: function(rotation, duration, easing) {
       return this.by({ rotation: rotation }, duration, easing);
     },
 
+    /**
+     * scaleX, scaleYに対して {@link #to} の処理を行います。
+     * @param {Number} scale scaleXとscaleYに設定する値
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     scaleTo: function(scale, duration, easing) {
       return this.to({ scaleX: scale, scaleY: scale }, duration, easing);
     },
+    /**
+     * scaleX, scaleYに対して {@link #by} の処理を行います。
+     * @param {Number} scale scaleXとscaleYに設定する値
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     scaleBy: function(scale, duration, easing) {
       return this.by({ scaleX: scale, scaleY: scale }, duration, easing);
     },
 
+    /**
+     * alphaに対して {@link #to} の処理を行います。
+     * @param {Number} value alphaに設定する値
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     fade: function(value, duration, easing) {
       return this.to({ alpha: value }, duration, easing);
     },
 
+    /**
+     * alphaを0にするアニメーションを設定します。
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     fadeOut: function(duration, easing) {
       return this.fade(0.0, duration, easing);
     },
 
+    /**
+     * alphaを1にするアニメーションを設定します。
+     * @param {Number} duration (optional) アニメーションにかける時間
+     * @param {String} easing (optional) easing {@link phina.util.Tween#EASING}を参照してください。
+     * @chainable
+     */
     fadeIn: function(duration, easing) {
       return this.fade(1.0, duration, easing);
     },
 
     /**
      * アニメーション開始
+     * @chainable
      */
     play: function() {
       this.playing = true;
@@ -10164,12 +10431,17 @@ phina.namespace(function() {
 
     /**
      * アニメーションを一時停止
+     * @chainable
      */
     pause: function() {
       this.playing = false;
       return this;
     },
 
+    /**
+     * アニメーションを停止し、最初まで巻き戻します。
+     * @chainable
+     */
     stop: function() {
       this.playing = false;
       this.rewind();
@@ -10178,6 +10450,7 @@ phina.namespace(function() {
 
     /**
      * アニメーションを巻き戻す
+     * @chainable
      */
     rewind: function() {
       this._update = this._updateTask;
@@ -10202,6 +10475,7 @@ phina.namespace(function() {
     /**
      * アニメーションループ設定
      * @param {Boolean} flag
+     * @chainable
      */
     setLoop: function(flag) {
       this._loop = flag;
@@ -10210,12 +10484,29 @@ phina.namespace(function() {
 
     /**
      * アニメーションをクリア
+     * @chainable
      */
     clear: function() {
       this._init();
       return this;
     },
 
+    /**
+     * JSON形式でアニメーションを設定します。
+     * @chainable
+     * @param {Object} json
+     * @param {Boolean} json.loop (optional) ループする場合true
+     * @param {Array[]} json.tweens 設定するアニメーション
+     * 
+     * ```
+     * [
+     *   [method, arg1, arg2,,,],
+     *   ['to', {value: 100}, 1000, 'swing'],
+     *   ['wait', 1000],
+     *   ['set', 'text', 'END']
+     * ]
+     * ```
+     */
     fromJSON: function(json) {
       if (json.loop !== undefined) {
         this.setLoop(json.loop);
@@ -10331,6 +10622,18 @@ phina.namespace(function() {
     },
 
     _static: {
+      /**
+       * @static
+       * {@link #updateType}に設定する更新方法の定義です。
+       * 下記の表に定義済みの更新方法を{@link #updateType}に設定することで、
+       * アニメーションの更新方法を変更することができます。
+       * 
+       * | 更新方法 | 単位(デフォルト値) | 1フレームあたりのアニメーション速度 |
+       * |-|-|-|
+       * | normal | ミリ秒(1000) | app.fpsによって変化 |
+       * | delta | ミリ秒(1000) | 経過時間によって変化 |
+       * | fps | フレーム(30) | 必ず同じ速度で変化 |
+       */
       UPDATE_MAP: {
         normal: {
           func: function(app) {
@@ -10359,6 +10662,11 @@ phina.namespace(function() {
 
   var UPDATE_MAP = Tweener.UPDATE_MAP;
 
+  /**
+   * @member phina.app.Element
+   * @property tweener
+   * 自身にアタッチ済みの{@link phina.accessory.Tweener}オブジェクト。
+   */
   phina.app.Element.prototype.getter('tweener', function() {
     if (!this._tweener) {
       this._tweener = phina.accessory.Tweener().attachTo(this);
@@ -10375,6 +10683,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.Draggable
    * Draggable
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.Draggable', {
     superClass: 'phina.accessory.Accessory',
@@ -10477,6 +10786,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.Flickable
    * Flickable
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.Flickable', {
     superClass: 'phina.accessory.Accessory',
@@ -10594,6 +10904,7 @@ phina.namespace(function() {
   /**
    * @class phina.accessory.FrameAnimation
    * FrameAnimation
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.FrameAnimation', {
     superClass: 'phina.accessory.Accessory',
@@ -10685,9 +10996,10 @@ phina.namespace(function() {
 
   /**
    * @class phina.accessory.Physical
-   * 本物ではないので名前変えるかも*
+   * 本物ではないので名前変えるかも
    * FakePhysical or MarioPhysical or LiePhysical
    * RetroPysical or PysicaLike
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.accessory.Physical', {
     superClass: 'phina.accessory.Accessory',
@@ -11668,6 +11980,7 @@ phina.namespace(function() {
   /**
    * @class phina.graphics.CanvasRecorder
    * Reference <https://github.com/jnordberg/gif.js/>
+   * @extends phina.util.EventDispatcher
    */
   phina.define('phina.graphics.CanvasRecorder', {
 
@@ -11846,7 +12159,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.DisplayElement
-   * 
+   * @extends phina.app.Object2D
    */
   phina.define('phina.display.DisplayElement', {
     superClass: 'phina.app.Object2D',
@@ -11923,7 +12236,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.PlainElement
-   *
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.PlainElement', {
     superClass: 'phina.display.DisplayElement',
@@ -11956,7 +12269,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Shape
-   *
+   * @extends phina.display.PlainElement
    */
   var Shape = phina.define('phina.display.Shape', {
     superClass: 'phina.display.PlainElement',
@@ -12112,7 +12425,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.RectangleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
@@ -12144,7 +12457,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.CircleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.CircleShape', {
     superClass: 'phina.display.Shape',
@@ -12171,7 +12484,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.TriangleShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.TriangleShape', {
     superClass: 'phina.display.Shape',
@@ -12201,7 +12514,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.StarShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.StarShape', {
     superClass: 'phina.display.Shape',
@@ -12238,7 +12551,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.PolygonShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.PolygonShape', {
     superClass: 'phina.display.Shape',
@@ -12273,7 +12586,7 @@ phina.namespace(function() {
 phina.namespace(function() {
   /**
    * @class phina.display.HeartShape
-   *
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.HeartShape', {
     superClass: 'phina.display.Shape',
@@ -12305,7 +12618,10 @@ phina.namespace(function() {
 });
 
 phina.namespace(function () {
-
+  /**
+   * @class phina.display.PathShape
+   * @extends phina.display.Shape
+   */
   var PathShape = phina.define('phina.display.PathShape', {
     superClass: 'phina.display.Shape',
     paths: null,
@@ -12318,7 +12634,7 @@ phina.namespace(function () {
       this.lineJoin = options.lineJoin;
       this.lineCap = options.lineCap;
     },
-    
+
     setPaths: function (paths) {
       this.paths = paths;
       this._dirtyDraw = true;
@@ -12427,11 +12743,12 @@ phina.namespace(function () {
 
 });
 
+
 phina.namespace(function() {
 
   /**
    * @class phina.display.Sprite
-   * 
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.Sprite', {
     superClass: 'phina.display.DisplayElement',
@@ -12520,7 +12837,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Label
-   * 
+   * @extends phina.display.Shape
    */
   phina.define('phina.display.Label', {
     superClass: 'phina.display.Shape',
@@ -12655,7 +12972,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class
+   * @class phina.display.DisplayScene
+   * @extends phina.app.Scene
    */
   phina.define('phina.display.DisplayScene', {
     superClass: 'phina.app.Scene',
@@ -12715,6 +13033,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.Layer
+   * @extends phina.display.DisplayElement
    */
   phina.define('phina.display.Layer', {
     superClass: 'phina.display.DisplayElement',
@@ -12750,7 +13069,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class phina.display.Layer
+   * @class phina.display.CanvasLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.display.CanvasLayer', {
     superClass: 'phina.display.Layer',
@@ -12785,7 +13105,8 @@ phina.namespace(function() {
 phina.namespace(function() {
 
   /**
-   * @class
+   * @class phina.display.ThreeLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.display.ThreeLayer', {
     superClass: 'phina.display.Layer',
@@ -12824,7 +13145,9 @@ phina.namespace(function() {
 
 
 phina.namespace(function() {
-  
+  /**
+   * @class phina.display.CanvasRenderer
+   */
   phina.define('phina.display.CanvasRenderer', {
 
     init: function(canvas) {
@@ -12836,12 +13159,12 @@ phina.namespace(function() {
       if (scene.backgroundColor) {
         this.canvas.clearColor(scene.backgroundColor);
       }
-      
+
       this._context.save();
       this.renderChildren(scene);
       this._context.restore();
     },
-    
+
     renderChildren: function(obj) {
       // 子供たちも実行
       if (obj.children.length > 0) {
@@ -12853,9 +13176,12 @@ phina.namespace(function() {
     },
 
     renderObject: function(obj) {
-      if (obj.visible === false) return ;
+      if (obj.visible === false && !obj.interactive) return;
 
       obj._calcWorldMatrix && obj._calcWorldMatrix();
+
+      if (obj.visible === false) return;
+
       obj._calcWorldAlpha && obj._calcWorldAlpha();
 
       var context = this.canvas.context;
@@ -13034,7 +13360,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.display.CanvasApp
-   * 
+   * @extends phina.display.DomApp
    */
   phina.define('phina.display.CanvasApp', {
     superClass: 'phina.display.DomApp',
@@ -13137,6 +13463,7 @@ phina.namespace(function() {
   /**
    * @class phina.effect.Wave
    * Button
+   * @extends phina.display.CircleShape
    */
   phina.define('phina.effect.Wave', {
     superClass: 'phina.display.CircleShape',
@@ -13170,6 +13497,7 @@ phina.namespace(function() {
   /**
    * @class phina.ui.Button
    * Button
+   * @extends phina.display.Shape
    */
   phina.define('phina.ui.Button', {
     superClass: 'phina.display.Shape',
@@ -13240,7 +13568,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.ui.Gauge
-   * 
+   * @extends phina.display.Shape
    */
   phina.define('phina.ui.Gauge', {
     superClass: 'phina.display.Shape',
@@ -13373,7 +13701,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.ui.CircleGauge
-   * 
+   * @extends phina.ui.Gauge
    */
   phina.define('phina.ui.CircleGauge', {
     superClass: 'phina.ui.Gauge',
@@ -13436,6 +13764,10 @@ phina.namespace(function() {
 
   var textWidthCache = {};
 
+  /**
+   * @class phina.ui.LabelArea
+   * @extends phina.display.Label
+   */
   var LabelArea = phina.define('phina.ui.LabelArea', {
     superClass: 'phina.display.Label',
 
@@ -13714,7 +14046,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.ManagerScene
-   * 
+   * @extends phina.app.Scene
    */
   phina.define('phina.game.ManagerScene', {
     superClass: 'phina.app.Scene',
@@ -13891,7 +14223,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.SplashScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.SplashScene', {
     superClass: 'phina.display.DisplayScene',
@@ -13943,7 +14275,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.TitleScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.TitleScene', {
     superClass: 'phina.display.DisplayScene',
@@ -14021,7 +14353,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.ResultScene
-   *
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.ResultScene', {
     superClass: 'phina.display.DisplayScene',
@@ -14157,7 +14489,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.LoadingScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.LoadingScene', {
     superClass: 'phina.display.DisplayScene',
@@ -14238,7 +14570,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.CountScene
-   * 
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.CountScene', {
     superClass: 'phina.display.DisplayScene',
@@ -14341,7 +14673,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.PauseScene
-   *
+   * @extends phina.display.DisplayScene
    */
   phina.define('phina.game.PauseScene', {
     superClass: 'phina.display.DisplayScene',
@@ -14394,7 +14726,7 @@ phina.namespace(function() {
 
   /**
    * @class phina.game.GameApp
-   * 
+   * @extends phina.display.CanvasApp
    */
   phina.define('phina.game.GameApp', {
     superClass: 'phina.display.CanvasApp',
@@ -14579,10 +14911,11 @@ phina.namespace(function() {
   var b2 = phina.box2d.b2;
 
   /**
-   * @class
+   * @class phina.box2d.Box2dLayer
+   * @extends phina.display.Layer
    */
   phina.define('phina.box2d.Box2dLayer', {
-    superClass: 'phina.display.Layer',
+    superClass: 'phina.display.CanvasLayer',
 
 
     init: function(params) {
@@ -14651,7 +14984,8 @@ phina.namespace(function() {
   var b2 = phina.box2d.b2;
 
   /**
-   * @class
+   * @class phina.box2d.Box2dBody
+   * @extends phina.accessory.Accessory
    */
   phina.define('phina.box2d.Box2dBody', {
     superClass: 'phina.accessory.Accessory',
