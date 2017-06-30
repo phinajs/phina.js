@@ -4,13 +4,13 @@ var concat  = require('gulp-concat');
 var replace = require('gulp-replace');
 var config  = require('../config');
 
-gulp.task('concat', function() {
-  return gulp.src(config.concat.target)
+gulp.task('build', function() {
+  return gulp.src(config.build.target)
     .pipe(concat('phina.js'))
     .pipe(replace('<%= version %>', config.package.version))
     .pipe(header(config.banner, {
       pkg: config.package,
     }))
-    .pipe(gulp.dest(config.concat.output))
+    .pipe(gulp.dest(config.build.output))
     ;
 });

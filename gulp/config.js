@@ -125,28 +125,12 @@ module.exports = {
   banner: banner,
   files: files,
 
-  concat: {
+  build: {
     target: files,
     output: './build/',
   },
 
-  riot: {
-    target: ['./app/tags/*.pug', './app/tags/**/*.pug'],
-    output: './app/assets/scripts',
-  },
-  less: {
-    target: ['./app/assets/styles/*.less', './app/assets/styles/**/*.less'],
-    output: './app/assets/styles',
-  },
-  release: {
-    target: '../../app/includes',
-    output: {
-      js: './public/scripts',
-      css: './public/styles',
-    },
-  },
-
   watch: {
-    target: ['concat'],
+    target: ['build'],
   },
 };

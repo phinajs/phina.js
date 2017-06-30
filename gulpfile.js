@@ -17,4 +17,4 @@ gulp.task('watch', function() {
 });
 
 // default tasks
-gulp.task('default', ['concat', 'uglify', 'watch']);
+gulp.task('default', ['build', 'uglify', 'watch']);
