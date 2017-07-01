@@ -1,91 +1,20 @@
 /*
-* gulpfile.js
-*/
+ * gulpfile.js
+ */
+
 
 var gulp = require('gulp');
-var gutil = require('gulp-util');
-var ghelper = require('gulp-helper');
-ghelper.require();
+var requireDir = require('require-dir');
+requireDir('./gulp/tasks', {recurse: true});
 
-var pkg = require('./package.json');
-var config = require('./src/config.json');
-var ip = require('ip');
+var config = require('./gulp/config');
 
-var banner = [
-  "/* ",
-  " * <%= pkg.name %> <%= pkg.version %>",
-  " * <%= pkg.description %>",
-  " * MIT Licensed",
-  " * ",
-  " * Copyright (C) 2015 phi, http://phinajs.com",
-  " */",
-  "",
-  "",
-  "'use strict';",
-  "",
-  "",
-].join('\n');
-
-
-
-gulp.task('default', ['uglify']);
-gulp.task('dev', ['watch', 'webserver']);
-
-gulp.task('concat', function() {
-  var scripts = config.files.map(function(f) {
-    return './src/' + f;
-  });
-
-  return gulp.src(scripts)
-    .pipe(concat('phina.js'))
-    .pipe(replace('<%= version %>', pkg.version))
-    .pipe(header(banner, {
-      pkg: pkg,
-    }))
-    .pipe(gulp.dest('./build/'))
-    ;
-});
-
-gulp.task('uglify', ['concat'], function() {
-  return gulp.src('./build/phina.js')
-    .pipe(uglify({
-      banner: '/* hoge */'
-    }))
-    .pipe(header(banner, {
-      pkg: pkg,
-    }))
-    .pipe(rename({
-      extname: '.min.js'
-    }))
-    .pipe(gulp.dest('./build/'))
-    .on('end', function() {
-      util.log(util.colors.blue('finish'));
-      gutil.beep();
-    });
-});
-
-gulp.task('docs', shell.task([
-  'jsduck ./src --output ./docs --title "phina.js docs"',
-]));
-
+// watch
 gulp.task('watch', function() {
-  gulp.watch(['./src/*', './src/**/*'], ['default']);
+  config.watch.target.forEach(function(task) {
+    gulp.watch(config[task].target, [task]);
+  });
 });
 
-
-gulp.task('webserver', function() {
-  gulp.src('.')
-    .pipe(webserver({
-      host: ip.address(),
-      // livereload: true,
-      // port: 9000,
-      directoryListing: true,
-      open: true,
-    }));
-});
-
-gulp.task('download', function() {
-  download('http://tmlife.net')
-    .pipe(gulp.dest('downloads/'));
-});
-
+// default tasks
+gulp.task('default', ['build', 'uglify', 'watch']);
