@@ -130,7 +130,12 @@ module.exports = {
     output: './build/',
   },
 
+  uglify: {
+    target: './build/phina.js',
+    output: './build/',
+  },
+
   watch: {
-    target: ['build'],
+    target: ['build', 'uglify'],
   },
 };
