@@ -68,7 +68,7 @@ describe('#Date', function() {
 
   it('calculateAge', function() {
     var age = Date.calculateAge('1988-9-16');
-    assert.equal(Date.calculateAge('1988-9-16'), 27); // 27 歳
+    assert.equal(Date.calculateAge('1988-9-16'), 28); // 28 歳
     assert.equal(Date.calculateAge('1988-9-16', '2000-1-1'), 11); // 11 歳
   });
 

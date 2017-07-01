@@ -19,6 +19,7 @@ var files = [
   "core/number.js",
   "core/string.js",
   "core/array.js",
+  "core/function.js",
   "core/date.js",
   "core/math.js",
 
