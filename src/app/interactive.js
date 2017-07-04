@@ -121,13 +121,14 @@ phina.namespace(function() {
         obj._touchFlags[p.id] = false;
         obj.flare('pointend', e);
 
-        if (obj._overFlags[p.id]) {
+        if (phina.isMobile() && obj._overFlags[p.id]) {
           obj._overFlags[p.id] = false;
           obj.flare('pointout', e);
+          this._holds.erase(obj);
         }
       }
     },
   });
 
-  
+
 });
