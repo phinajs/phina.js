@@ -42,7 +42,12 @@ phina.namespace(function() {
       }
     },
 
-    gotoAndPlay: function(name) {
+    gotoAndPlay: function(name, keep) {
+      keep = (keep !== undefined) ? keep : true;
+      if (keep && name === this.currentAnimationName
+               && this.currentFrameIndex < this.currentAnimation.frames.length) {
+        return this;
+      }
       this.frame = 0;
       this.currentFrameIndex = 0;
       this.currentAnimation = this.ss.getAnimation(name);
