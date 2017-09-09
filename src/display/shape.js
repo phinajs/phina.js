@@ -120,7 +120,7 @@ phina.namespace(function() {
         this.render(this.canvas);
         this._dirtyDraw = false;
       }
-      this.superMethod('draw', canvas);
+      this._draw();
     },
 
     _static: {

@@ -15,6 +15,10 @@ phina.namespace(function() {
     },
 
     draw: function(canvas) {
+      this._draw();
+    },
+
+    _draw: function(canvas) {
       var image = this.canvas.domElement;
       var w = image.width;
       var h = image.height;
