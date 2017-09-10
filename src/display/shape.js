@@ -37,13 +37,16 @@ phina.namespace(function() {
       this.watchDraw = true;
       this._dirtyDraw = true;
 
-      this.on('enterframe', function() {
+      var checkRender = function() {
         // render
         if (this.watchDraw && this._dirtyDraw === true) {
           this.render(this.canvas);
           this._dirtyDraw = false;
         }
-      });
+      };
+
+      this.on('enterframe', checkRender);
+      this.on('added', checkRender);
     },
 
     calcCanvasWidth: function() {
