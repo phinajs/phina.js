@@ -15,7 +15,7 @@ phina.namespace(function() {
     },
 
     draw: function(canvas) {
-      this._draw();
+      this._draw(canvas);
     },
 
     _draw: function(canvas) {
