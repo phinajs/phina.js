@@ -449,13 +449,11 @@ phina.namespace(function () {
       canvas.lineJoin = this.lineJoin;
       var paths = this.paths;
       if (paths.length > 1) {
-        var c = canvas.context;
         var p = paths[0];
-        c.beginPath();
-        c.moveTo(p.x, p.y);
+        canvas.beginPath().moveTo(p.x, p.y);
         for (var i = 1, len = paths.length; i < len; ++i) {
           p = paths[i];
-          c.lineTo(p.x, p.y);
+          canvas.lineTo(p.x, p.y);
         }
       }
     },

@@ -25,23 +25,26 @@ phina.namespace(function() {
       this.context = this.canvas.getContext('2d');
       this.context.lineCap = 'round';
       this.context.lineJoin = 'round';
+      this.resetTransform();
     },
 
     /**
      * サイズをセット
      */
     setSize: function(width, height) {
-      this.canvas.width   = width;
-      this.canvas.height  = height;
+      this.domElement.style.width = width + "px";
+      this.domElement.style.height = height + "px";
+      this.canvas.width  = width * window.devicePixelRatio;
+      this.canvas.height = height * window.devicePixelRatio;
       return this;
     },
 
     setSizeToScreen: function() {
-      this.canvas.style.position  = "fixed";
-      this.canvas.style.margin    = "0px";
-      this.canvas.style.padding   = "0px";
-      this.canvas.style.left      = "0px";
-      this.canvas.style.top       = "0px";
+      this.canvas.style.position = "fixed";
+      this.canvas.style.margin   = "0";
+      this.canvas.style.padding  = "0";
+      this.canvas.style.left     = "0";
+      this.canvas.style.top      = "0";
       return this.setSize(window.innerWidth, window.innerHeight);
     },
 
@@ -51,28 +54,24 @@ phina.namespace(function() {
       var _fitFunc = function() {
         var e = this.domElement;
         var s = e.style;
-        
+
         s.position = "absolute";
         s.margin = "auto";
-        s.left = "0px";
-        s.top  = "0px";
-        s.bottom = "0px";
-        s.right = "0px";
+        s.left = "0";
+        s.top = "0";
+        s.bottom = "0";
+        s.right = "0";
 
-        var rateWidth = e.width/window.innerWidth;
-        var rateHeight= e.height/window.innerHeight;
         var rate = e.height/e.width;
-        
-        if (rateWidth > rateHeight) {
-          s.width  = Math.floor(innerWidth)+"px";
-          s.height = Math.floor(innerWidth*rate)+"px";
+
+        if (e.width/window.innerWidth > e.height/window.innerHeight) {
+          this.setSize(Math.floor(window.innerWidth), Math.floor(window.innerWidth*rate));
         }
         else {
-          s.width  = Math.floor(innerHeight/rate)+"px";
-          s.height = Math.floor(innerHeight)+"px";
+          this.setSize(Math.floor(window.innerHeight/rate), Math.floor(window.innerHeight));
         }
       }.bind(this);
-      
+
       // 一度実行しておく
       _fitFunc();
 
@@ -89,8 +88,15 @@ phina.namespace(function() {
       x = x || 0;
       y = y || 0;
       width = width || this.width;
-      height= height|| this.height;
-      this.context.clearRect(x, y, width, height);
+      height = height || this.height;
+
+      var context = this.context;
+
+      context.save();
+      this.resetTransform(); // 行列初期化
+      context.clearRect(x, y, width, height);
+      context.restore();
+
       return this;
     },
 
@@ -98,12 +104,12 @@ phina.namespace(function() {
       x = x || 0;
       y = y || 0;
       width = width || this.width;
-      height= height|| this.height;
+      height = height || this.height;
 
       var context = this.context;
 
       context.save();
-      context.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0); // 行列初期化
+      this.resetTransform(); // 行列初期化
       context.fillStyle = fillStyle;     // 塗りつぶしスタイルセット
       context.fillRect(x, y, width, height);
       context.restore();
@@ -179,7 +185,7 @@ phina.namespace(function() {
       return this;
     },
 
-        
+
     /**
      * 点描画
      */
@@ -193,7 +199,7 @@ phina.namespace(function() {
     line: function(x0, y0, x1, y1) {
       return this.moveTo(x0, y0).lineTo(x1, y1);
     },
-    
+
     /**
      * ラインを描画
      */
@@ -214,12 +220,12 @@ phina.namespace(function() {
         patternTable = pattern.toString(2);
       }
       patternTable = patternTable.padding(16, '1');
-      
+
       var vx = x1-x0;
       var vy = y1-y0;
       var len = Math.sqrt(vx*vx + vy*vy);
       vx/=len; vy/=len;
-      
+
       var x = x0;
       var y = y0;
       for (var i=0; i<len; ++i) {
@@ -230,7 +236,7 @@ phina.namespace(function() {
         x += vx;
         y += vy;
       }
-      
+
       return this;
     },
 
@@ -242,10 +248,10 @@ phina.namespace(function() {
       var vx = x1-x0;
       var vy = y1-y0;
       var angle = Math.atan2(vy, vx)*180/Math.PI;
-      
+
       this.drawLine(x0, y0, x1, y1);
       this.fillPolygon(x1, y1, arrowRadius || 5, 3, angle);
-      
+
       return this;
     },
 
@@ -280,7 +286,7 @@ phina.namespace(function() {
       this.fill();
       return this;
     },
-    
+
     /**
      * 四角形パスを作成する
      */
@@ -288,7 +294,7 @@ phina.namespace(function() {
       this.context.rect.apply(this.context, arguments);
       return this;
     },
-    
+
     /**
      * 四角形塗りつぶし描画
      */
@@ -296,7 +302,7 @@ phina.namespace(function() {
       this.context.fillRect.apply(this.context, arguments);
       return this;
     },
-    
+
     /**
      * 四角形ライン描画
      */
@@ -304,7 +310,7 @@ phina.namespace(function() {
       this.context.strokeRect.apply(this.context, arguments);
       return this;
     },
-    
+
     /**
      * 角丸四角形パス
      */
@@ -313,7 +319,7 @@ phina.namespace(function() {
       var r = x + width - radius;
       var t = y + radius;
       var b = y + height - radius;
-      
+
       /*
       var ctx = this.context;
       ctx.moveTo(l, y);
@@ -326,13 +332,13 @@ phina.namespace(function() {
       ctx.lineTo(x, t);
       ctx.quadraticCurveTo(x, y, l, y);
       /**/
-      
+
       this.context.arc(l, t, radius,     -Math.PI, -Math.PI*0.5, false);  // 左上
       this.context.arc(r, t, radius, -Math.PI*0.5,            0, false);  // 右上
       this.context.arc(r, b, radius,            0,  Math.PI*0.5, false);  // 右下
       this.context.arc(l, b, radius,  Math.PI*0.5,      Math.PI, false);  // 左下
       this.closePath();
-      
+
       return this;
     },
 
@@ -357,7 +363,7 @@ phina.namespace(function() {
       this.context.arc(x, y, radius, 0, Math.PI*2, false);
       return this;
     },
-    
+
     /**
      * 塗りつぶし円を描画
      */
@@ -369,7 +375,7 @@ phina.namespace(function() {
       c.fill();
       return this;
     },
-    
+
     /**
      * ストローク円を描画
      */
@@ -389,14 +395,14 @@ phina.namespace(function() {
       this.context.arc(x, y, radius, startAngle, endAngle, anticlockwise);
       return this;
     },
-    
+
     /**
      * 塗りつぶし円弧を描画
      */
     fillArc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
       return this.beginPath().arc(x, y, radius, startAngle, endAngle, anticlockwise).fill();
     },
-    
+
     /**
      * ストローク円弧を描画
      */
@@ -420,14 +426,14 @@ phina.namespace(function() {
       return this.beginPath().pie(x, y, radius, startAngle, endAngle, anticlockwise).stroke();
     },
 
-    
+
     /**
      * ポリゴンパス
      */
     polygon: function(x, y, size, sides, offsetAngle) {
       var radDiv = (Math.PI*2)/sides;
       var radOffset = (offsetAngle!==undefined) ? offsetAngle*Math.PI/180 : -Math.PI/2;
-      
+
       this.moveTo(x + Math.cos(radOffset)*size, y + Math.sin(radOffset)*size);
       for (var i=1; i<sides; ++i) {
         var rad = radDiv*i+radOffset;
@@ -451,7 +457,7 @@ phina.namespace(function() {
     strokePolygon: function(x, y, radius, sides, offsetAngle) {
       return this.beginPath().polygon(x, y, radius, sides, offsetAngle).stroke();
     },
-    
+
     /**
      * star
      */
@@ -592,7 +598,7 @@ phina.namespace(function() {
      * 行列をセット
      */
     setTransform: function(m11, m12, m21, m22, dx, dy) {
-      this.context.setTransform(m11, m12, m21, m22, dx, dy);
+      this.context.setTransform(m11 * window.devicePixelRatio, m12, m21, m22 * window.devicePixelRatio, dx * window.devicePixelRatio, dy * window.devicePixelRatio);
       return this;
     },
 
@@ -600,25 +606,23 @@ phina.namespace(function() {
      * 行列をリセット
      */
     resetTransform: function() {
-      this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
-      return this;
+      return this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
     },
     /**
      * 中心に移動
      */
     transformCenter: function() {
-      this.context.setTransform(1, 0, 0, 1, this.width/2, this.height/2);
-      return this;
+      return this.setTransform(1, 0, 0, 1, this.width/2, this.height/2);
     },
 
     /**
      * 移動
      */
     translate: function(x, y) {
-      this.context.translate(x, y);
+      this.context.translate(x * window.devicePixelRatio, y * window.devicePixelRatio);
       return this;
     },
-    
+
     /**
      * 回転
      */
@@ -626,7 +630,7 @@ phina.namespace(function() {
       this.context.rotate(rotation);
       return this;
     },
-    
+
     /**
      * スケール
      */
@@ -659,7 +663,7 @@ phina.namespace(function() {
       var data_url = this.canvas.toDataURL(mime_type);
       // data_url = data_url.replace(mime_type, "image/octet-stream");
       window.open(data_url, "save");
-      
+
       // toDataURL を使えば下記のようなツールが作れるかも!!
       // TODO: プログラムで絵をかいて保存できるツール
     },
@@ -670,16 +674,16 @@ phina.namespace(function() {
        * 幅
        */
       width: {
-        "get": function()   { return this.canvas.width; },
-        "set": function(v)  { this.canvas.width = v; }
+        "get": function()   { return this.canvas.width / window.devicePixelRatio; },
+        "set": function(v)  { this.canvas.width = v * window.devicePixelRatio; }
       },
 
       /**
        * 高さ
        */
       height: {
-        "get": function()   { return this.canvas.height; },
-        "set": function(v)  { this.canvas.height = v; }
+        "get": function()   { return this.canvas.height / window.devicePixelRatio; },
+        "set": function(v)  { this.canvas.height = v * window.devicePixelRatio; }
       },
 
       fillStyle: {

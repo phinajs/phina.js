@@ -14,9 +14,9 @@
     /**
      * @constructor
      */
-    init: function(domElement) {
+    init: function(domElement, width, height) {
       this.superInit();
-      
+
       this.domElement = domElement || window.document;
 
       this.position = phina.geom.Vector2(0, 0);
@@ -32,6 +32,9 @@
       this.flickVelocity = phina.geom.Vector2(0, 0);
 
       this.flags = 0;
+
+      this.width = width || this.domElement.width;
+      this.height = height || this.domElement.height;
     },
 
     update: function() {
@@ -106,17 +109,9 @@
 
     // スケールを考慮
     _move: function(x, y) {
-      this._tempPosition.x = x;
-      this._tempPosition.y = y;
-
-      // adjust scale
       var elm = this.domElement;
-      if (elm.style.width) {
-        this._tempPosition.x *= elm.width / parseInt(elm.style.width);
-      }
-      if (elm.style.height) {
-        this._tempPosition.y *= elm.height / parseInt(elm.style.height);
-      }
+      this._tempPosition.x = x * this.width / (elm.style.width ? parseInt(elm.style.width) : elm.width);
+      this._tempPosition.y = y * this.height / (elm.style.height ? parseInt(elm.style.height) : elm.height);
     },
 
     _accessor: {

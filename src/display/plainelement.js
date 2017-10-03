@@ -15,15 +15,15 @@ phina.namespace(function() {
     },
 
     draw: function(canvas) {
-      var image = this.canvas.domElement;
+      var image = this.canvas;
       var w = image.width;
       var h = image.height;
 
       var x = -w*this.origin.x;
       var y = -h*this.origin.y;
 
-      canvas.context.drawImage(image,
-        0, 0, w, h,
+      canvas.context.drawImage(image.domElement,
+        0, 0, image.domElement.width, image.domElement.height,
         x, y, w, h
         );
     },

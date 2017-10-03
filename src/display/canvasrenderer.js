@@ -48,7 +48,7 @@ phina.namespace(function() {
       if (obj._worldMatrix) {
         // 行列をセット
         var m = obj._worldMatrix;
-        context.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
+        this.canvas.setTransform( m.m00, m.m10, m.m01, m.m11, m.m02, m.m12 );
       }
 
       if (obj.clip) {

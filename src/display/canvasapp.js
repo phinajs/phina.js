@@ -13,7 +13,7 @@ phina.namespace(function() {
      */
     init: function(options) {
       options = (options || {}).$safe(phina.display.CanvasApp.defaults);
-      
+
       if (!options.query && !options.domElement) {
         options.domElement = document.createElement('canvas');
         if (options.append) {
@@ -25,24 +25,23 @@ phina.namespace(function() {
       }
       this.superInit(options);
 
-
       this.gridX = phina.util.Grid({
-        width: options.width,
+        width: this.width,
         columns: options.columns,
       });
       this.gridY = phina.util.Grid({
-        width: options.height,
+        width: this.height,
         columns: options.columns,
       });
 
       this.canvas = phina.graphics.Canvas(this.domElement);
-      this.canvas.setSize(options.width, options.height);
+      this.canvas.setSize(this.width, this.height);
 
       this.backgroundColor = (options.backgroundColor !== undefined) ? options.backgroundColor : 'white';
 
       this.replaceScene(phina.display.DisplayScene({
-        width: options.width,
-        height: options.height,
+        width: this.width,
+        height: this.height,
       }));
 
       if (options.fit) {
@@ -77,7 +76,7 @@ phina.namespace(function() {
         this._scenes.each(function(scene) {
           var c = scene.canvas;
           if (c) {
-            this.canvas.context.drawImage(c.domElement, 0, 0, c.width, c.height);
+            this.canvas.context.drawImage(c.domElement, 0, 0, this.canvas.domElement.width, this.canvas.domElement.height);
           }
         }, this);
       }
@@ -89,8 +88,6 @@ phina.namespace(function() {
 
     _static: {
       defaults: {
-        width: 640,
-        height: 960,
         columns: 12,
         fit: true,
         append: true,
