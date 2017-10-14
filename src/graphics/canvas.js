@@ -32,11 +32,16 @@ phina.namespace(function() {
      * サイズをセット
      */
     setSize: function(width, height) {
+      this._originalRate = height / width;
+      this._setSize(width, height);
+      return this;
+    },
+
+    _setSize: function(width, height) {
       this.domElement.style.width = width + "px";
       this.domElement.style.height = height + "px";
       this.canvas.width  = width * window.devicePixelRatio;
       this.canvas.height = height * window.devicePixelRatio;
-      return this;
     },
 
     setSizeToScreen: function() {
@@ -62,13 +67,11 @@ phina.namespace(function() {
         s.bottom = "0";
         s.right = "0";
 
-        var rate = e.height/e.width;
-
-        if (e.width/window.innerWidth > e.height/window.innerHeight) {
-          this.setSize(Math.floor(window.innerWidth), Math.floor(window.innerWidth*rate));
+        if (window.innerHeight / window.innerWidth > this._originalRate) {
+          this._setSize(Math.floor(window.innerWidth), Math.floor(window.innerWidth*this._originalRate));
         }
         else {
-          this.setSize(Math.floor(window.innerHeight/rate), Math.floor(window.innerHeight));
+          this._setSize(Math.floor(window.innerHeight/this._originalRate), Math.floor(window.innerHeight));
         }
       }.bind(this);
 
