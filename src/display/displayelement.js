@@ -8,10 +8,6 @@ phina.namespace(function() {
   phina.define('phina.display.DisplayElement', {
     superClass: 'phina.app.Object2D',
 
-    /** 表示フラグ */
-    visible: true,
-    /** アルファ */
-    alpha: 1.0,
     /** ブレンドモード */
     blendMode: "source-over",
 
@@ -19,15 +15,26 @@ phina.namespace(function() {
     renderChildBySelf: false,
 
     init: function(options) {
-      options = (options || {});
-      
+      options = ({}).$safe(options, {
+        alpha: 1.0,
+        visible: true,
+      });
+            
       this.superInit(options);
 
-      this.visible = true;
-      this.alpha = 1.0;
+      this.alpha = options.alpha;
+      this.visible = options.visible;
       this._worldAlpha = 1.0;
     },
 
+    /**
+     * アルファ値をセット
+     */
+    setAlpha: function(alpha) {
+      this.alpha = alpha;
+      return this;
+    },
+    
     /**
      * 表示/非表示をセット
      */
