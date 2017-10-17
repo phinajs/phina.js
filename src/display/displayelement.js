@@ -8,6 +8,10 @@ phina.namespace(function() {
   phina.define('phina.display.DisplayElement', {
     superClass: 'phina.app.Object2D',
 
+    /** 表示フラグ */
+    visible: true,
+    /** アルファ */
+    alpha: 1.0,
     /** ブレンドモード */
     blendMode: "source-over",
 
