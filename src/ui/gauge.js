@@ -49,7 +49,7 @@ phina.namespace(function() {
     },
 
     setValue: function(value) {
-      value = Math.clamp(value, 0, this._maxValue);
+      value = Math.clamp(value, 0, this.maxValue);
 
       // end when now value equal value of argument
       if (this.value === value) return ;
@@ -165,7 +165,7 @@ phina.namespace(function() {
       var end = (Math.PI*2)*rate;
       this.startAngle = 0;
       this.endAngle = end;
-      
+
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
     },
