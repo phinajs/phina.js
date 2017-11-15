@@ -1,5 +1,5 @@
 /* 
- * phina.js 0.2.0
+ * phina.js 0.2.1
  * phina.js is a game library in javascript
  * MIT Licensed
  * 
@@ -2322,7 +2322,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.2.0';
+  phina.VERSION = '0.2.1';
 
   /**
    * @method isNode
@@ -13386,11 +13386,7 @@ phina.namespace(function() {
           document.body.appendChild(options.domElement);
         }
       }
-      if(!options.runner && phina.isAndroid()) {
-        options.runner = phina.global.requestAnimationFrame;
-      }
       this.superInit(options);
-
 
       this.gridX = phina.util.Grid({
         width: options.width,
