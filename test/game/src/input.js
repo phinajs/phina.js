@@ -6,7 +6,7 @@ th.describe("input.Input", function() {
       var s = e.app.domElement.style;
       s.top = '';
       s.width = '80%';
-      s.height = '100%';
+      s.height = '120%';
     };
     
     this.onpointstart = function(e) {
