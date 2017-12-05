@@ -111,11 +111,12 @@
 
       // adjust scale
       var elm = this.domElement;
-      if (elm.style.width) {
-        this._tempPosition.x *= elm.width / parseInt(elm.style.width);
+      var rect = elm.getBoundingClientRect();
+      if (rect.width) {
+        this._tempPosition.x *= elm.width / rect.width;
       }
-      if (elm.style.height) {
-        this._tempPosition.y *= elm.height / parseInt(elm.style.height);
+      if (rect.height) {
+        this._tempPosition.y *= elm.height / rect.height;
       }
     },
 
