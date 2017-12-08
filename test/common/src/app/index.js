@@ -25,5 +25,24 @@ describe('#app', function() {
       app.run();
     });
 
+    it('stop_start', function(done) {
+
+      var app = phina.app.BaseApp();
+
+      app.run();
+      app.stop();
+      app.update = function() {
+        assert(app.frame >= 29);
+      };
+      app._draw = function() {
+        assert(app.frame >= 29);
+        done();
+        app.stop();
+      };
+      setTimeout(function() {
+        app.start();
+      }, 1000);
+    });
+
   });
 });
