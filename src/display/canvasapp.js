@@ -20,9 +20,6 @@ phina.namespace(function() {
           document.body.appendChild(options.domElement);
         }
       }
-      if(!options.runner && phina.isAndroid()) {
-        options.runner = phina.global.requestAnimationFrame;
-      }
       this.superInit(options);
 
       this.gridX = phina.util.Grid({

@@ -110,8 +110,9 @@
     // スケールを考慮
     _move: function(x, y) {
       var elm = this.domElement;
-      this._tempPosition.x = x * this.width / (elm.style.width ? parseInt(elm.style.width) : elm.width);
-      this._tempPosition.y = y * this.height / (elm.style.height ? parseInt(elm.style.height) : elm.height);
+      var rect = elm.getBoundingClientRect();
+      this._tempPosition.x = x * this.width / (rect.width ? rect.width : elm.width);
+      this._tempPosition.y = y * this.height / (rect.height ? rect.height : elm.height);
     },
 
     _accessor: {

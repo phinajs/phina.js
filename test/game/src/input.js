@@ -1,3 +1,26 @@
+th.describe("input.Input", function() {
+
+  th.it('adjust_scale', function() {
+    
+    this.onenter = function(e) {
+      var s = e.app.domElement.style;
+      s.top = '';
+      s.width = '80%';
+      s.height = '120%';
+    };
+    
+    this.onpointstart = function(e) {
+      var p = e.pointer;
+      phina.display.CircleShape({
+        x: p.x,
+        y: p.y,
+      }).addChildTo(this);
+    };
+    
+  });
+
+});
+
 th.describe("input.Keyboard", function() {
 
   th.it('init', function() {
