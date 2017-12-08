@@ -12,8 +12,8 @@
     /**
      * @constructor
      */
-    init: function(domElement) {
-      this.superInit(domElement);
+    init: function(domElement, width, height) {
+      this.superInit(domElement, width, height);
 
       this.id = 0;
 
@@ -37,7 +37,7 @@
       if (typeof(button) == "string") {
         button = BUTTON_MAP[button];
       }
-      
+
       return (this.now & button) != 0;
     },
 
@@ -51,7 +51,7 @@
 
       return (this.start & button) != 0;
     },
-        
+
     /**
      * ボタンアップ取得
      */
@@ -59,7 +59,7 @@
       if (typeof(button) == "string") {
         button = BUTTON_MAP[button];
       }
-      
+
       return (this.end & button) != 0;
     },
 

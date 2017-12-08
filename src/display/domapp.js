@@ -13,6 +13,8 @@ phina.namespace(function() {
      * @constructor
      */
     init: function(options) {
+      options = (options || {}).$safe(phina.display.DomApp.defaults);
+
       this.superInit(options);
 
       if (options.domElement) {
@@ -30,14 +32,17 @@ phina.namespace(function() {
       if (options.fps !== undefined) {
         this.fps = options.fps;
       }
-      
+
       if(typeof options.runner === 'function') {
         this.ticker.runner = options.runner;
       }
 
-      this.mouse = phina.input.Mouse(this.domElement);
-      this.touch = phina.input.Touch(this.domElement);
-      this.touchList = phina.input.TouchList(this.domElement, 5);
+      this.width = options.width;
+      this.height = options.height;
+
+      this.mouse = phina.input.Mouse(this.domElement, this.width, this.height);
+      this.touch = phina.input.Touch(this.domElement, this.width, this.height);
+      this.touchList = phina.input.TouchList(this.domElement, this.width, this.height, 5);
       this.keyboard = phina.input.Keyboard(document);
       // 加速度センサーを生成
       this.accelerometer = phina.input.Accelerometer();
@@ -116,7 +121,14 @@ phina.namespace(function() {
       _check(this.currentScene);
     },
 
+    _static: {
+      defaults: {
+        width: 640,
+        height: 960,
+      },
+    },
+
   });
 
-  
+
 });

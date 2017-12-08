@@ -12,8 +12,8 @@
     /**
      * @constructor
      */
-    init: function(domElement, isMulti) {
-      this.superInit(domElement);
+    init: function(domElement, width, height, isMulti) {
+      this.superInit(domElement, width, height);
 
       this.id = null;
 
@@ -40,14 +40,14 @@
     getTouch: function() {
       return this.now != 0;
     },
-    
+
     /**
      * タッチ開始時に true
      */
     getTouchStart: function() {
       return this.start != 0;
     },
-    
+
     /**
      * タッチ終了時に true
      */
@@ -88,8 +88,10 @@
     touches: null,
     _id: null,
 
-    init: function(domElement) {
+    init: function(domElement, width, height) {
       this.domElement = domElement;
+      this.width = width;
+      this.height = height;
 
       this.touches = [];
       var touchMap = this.touchMap = {};
@@ -137,8 +139,8 @@
     },
 
     getEmpty: function() {
-      var touch = phina.input.Touch(this.domElement, true);
-    
+      var touch = phina.input.Touch(this.domElement, this.width, this.height, true);
+
       touch.id = this.id;
       this.touches.push(touch);
 
