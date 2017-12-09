@@ -19,13 +19,9 @@ phina.namespace(function() {
     renderChildBySelf: false,
 
     init: function(options) {
-      options = ({}).$safe(options, {
-        alpha: 1.0,
-        visible: true,
-      });
+      options = ({}).$safe(options || {}, DisplayElement.defaults);
             
       this.superInit(options);
-
       this.alpha = options.alpha;
       this.visible = options.visible;
       this._worldAlpha = 1.0;
@@ -81,7 +77,13 @@ phina.namespace(function() {
         this._worldAlpha = worldAlpha * this.alpha;
       }
     },
+    
+    _static: {
+      defaults: {
+        alpha: 1.0,
+        visible: true,
+      },
+    }
   });
-
 });
 
