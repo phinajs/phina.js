@@ -1,8 +1,6 @@
 
 phina.namespace(function() {
 
-  var BASE_URL = 'http://';
-
   /**
    * @class phina.social.Twitter
    * 
@@ -11,11 +9,11 @@ phina.namespace(function() {
     /**
      * @constructor
      */
-    init: function(options) {
+    init: function() {
     },
 
     _static: {
-      baseURL: 'http://twitter.com/intent',
+      baseURL: 'https://twitter.com/intent',
       defaults: {
         // type: 'tweet',
         text: 'Hello, world!',
