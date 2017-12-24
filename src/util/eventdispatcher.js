@@ -82,7 +82,9 @@ phina.namespace(function() {
      * @param {String} event.type カスタムイベントの名前
      */
      fire: function(e) {
-      e.target = this;
+       if (!e.target) {
+         e.target = this;
+       }
       var oldEventName = 'on' + e.type;
       if (this[oldEventName]) this[oldEventName](e);
       
