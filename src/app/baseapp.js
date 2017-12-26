@@ -169,9 +169,8 @@ phina.namespace(function() {
 
     _loop: function() {
       this._update();
-      this._draw();
-
       this.interactive.check(this.currentScene);
+      this._draw();
 
       // stats update
       if (this.stats) this.stats.update();
