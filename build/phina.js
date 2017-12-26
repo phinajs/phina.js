@@ -1,5 +1,5 @@
 /* 
- * phina.js 0.2.1
+ * phina.js 0.2.2
  * phina.js is a game library in javascript
  * MIT Licensed
  * 
@@ -2322,7 +2322,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.2.1';
+  phina.VERSION = '0.2.2';
 
   /**
    * @method isNode
@@ -5284,11 +5284,16 @@ phina.namespace(function() {
       this.frame = 0;
       this.deltaTime = 0;
       this.elapsedTime = 0;
+      this.isPlaying = true;
       this.runner = phina.util.Ticker.runner;
     },
 
     tick: function(func) {
       this.on('tick', func);
+    },
+
+    untick: function(func) {
+      this.off('tick', func);
     },
 
     run: function() {
@@ -5316,12 +5321,13 @@ phina.namespace(function() {
 
     start: function() {
       var self = this;
-
+      this.isPlaying = true;
       this.startTime = this.currentTime = (new Date()).getTime();
-      var runner = self.runner;
       var fn = function() {
-        var delay = self.run();
-        runner(fn, delay);
+        if (self.isPlaying) {
+          var delay = self.run();
+          self.runner(fn, delay);
+        }
       };
       fn();
 
@@ -5333,7 +5339,8 @@ phina.namespace(function() {
     },
 
     stop: function() {
-      // TODO: 
+      this.isPlaying = false;
+      return this;
     },
 
     rewind: function() {
@@ -7494,11 +7501,12 @@ phina.namespace(function() {
 
       // adjust scale
       var elm = this.domElement;
-      if (elm.style.width) {
-        this._tempPosition.x *= elm.width / parseInt(elm.style.width);
+      var rect = elm.getBoundingClientRect();
+      if (rect.width) {
+        this._tempPosition.x *= elm.width / rect.width;
       }
-      if (elm.style.height) {
-        this._tempPosition.y *= elm.height / parseInt(elm.style.height);
+      if (rect.height) {
+        this._tempPosition.y *= elm.height / rect.height;
       }
     },
 
@@ -9124,13 +9132,19 @@ phina.namespace(function() {
 
     run: function() {
       var self = this;
-
-      this.ticker.tick(function() {
+      this._loopCaller = function() {
         self._loop();
-      });
+      };
+      this.ticker.tick(this._loopCaller);
 
       this.ticker.start();
 
+      return this;
+    },
+
+    kill: function() {
+      this.ticker.stop();
+      this.ticker.untick(this._loopCaller);
       return this;
     },
 
@@ -9255,9 +9269,8 @@ phina.namespace(function() {
 
     _loop: function() {
       this._update();
-      this._draw();
-
       this.interactive.check(this.currentScene);
+      this._draw();
 
       // stats update
       if (this.stats) this.stats.update();
@@ -13620,7 +13633,7 @@ phina.namespace(function() {
     },
 
     setValue: function(value) {
-      value = Math.clamp(value, 0, this._maxValue);
+      value = Math.clamp(value, 0, this.maxValue);
 
       // end when now value equal value of argument
       if (this.value === value) return ;
@@ -13736,7 +13749,7 @@ phina.namespace(function() {
       var end = (Math.PI*2)*rate;
       this.startAngle = 0;
       this.endAngle = end;
-      
+
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
     },
