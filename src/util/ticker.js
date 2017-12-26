@@ -26,11 +26,16 @@
       this.frame = 0;
       this.deltaTime = 0;
       this.elapsedTime = 0;
+      this.isPlaying = true;
       this.runner = phina.util.Ticker.runner;
     },
 
     tick: function(func) {
       this.on('tick', func);
+    },
+
+    untick: function(func) {
+      this.off('tick', func);
     },
 
     run: function() {
@@ -58,12 +63,13 @@
 
     start: function() {
       var self = this;
-
+      this.isPlaying = true;
       this.startTime = this.currentTime = (new Date()).getTime();
-      var runner = self.runner;
       var fn = function() {
-        var delay = self.run();
-        runner(fn, delay);
+        if (self.isPlaying) {
+          var delay = self.run();
+          self.runner(fn, delay);
+        }
       };
       fn();
 
@@ -75,7 +81,8 @@
     },
 
     stop: function() {
-      // TODO: 
+      this.isPlaying = false;
+      return this;
     },
 
     rewind: function() {
