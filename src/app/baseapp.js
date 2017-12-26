@@ -32,13 +32,19 @@ phina.namespace(function() {
 
     run: function() {
       var self = this;
-
-      this.ticker.tick(function() {
+      this._loopCaller = function() {
         self._loop();
-      });
+      };
+      this.ticker.tick(this._loopCaller);
 
       this.ticker.start();
 
+      return this;
+    },
+
+    kill: function() {
+      this.ticker.stop();
+      this.ticker.untick(this._loopCaller);
       return this;
     },
 
