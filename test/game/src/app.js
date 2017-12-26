@@ -72,3 +72,28 @@ th.describe("app.Element", function() {
     console.log(JSON.stringify(elm.toJSON(), null, '  '));
   });
 });
+
+th.describe("app.BaseApp", function() {
+
+  th.it('kill', function() {
+    phina.display.StarShape({
+      x: 320,
+      y: 480,
+      radius: 100,
+    }).addChildTo(this).on('enterframe', function() {
+      this.rotation += 5;
+    });
+    
+    phina.ui.Button({
+      text: '1秒間kill',
+      x: 320,
+      y: 480,
+    }).addChildTo(this).on('push', function() {
+      var app = this.app;
+      app.kill();
+      setTimeout(function() {
+        app.run();
+      }, 1000);
+    }.bind(this));
+  });
+});
