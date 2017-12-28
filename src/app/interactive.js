@@ -179,9 +179,9 @@ phina.namespace(function() {
         obj._touchFlags[p.id] = true;
         if (!events.pointstart._end) {
           targetEvents.push(events.pointstart);
+          // クリックフラグを立てる
+          obj._clicked = true;
         }
-        // クリックフラグを立てる
-        obj._clicked = true;
       }
 
       if (obj._touchFlags[p.id]) {
