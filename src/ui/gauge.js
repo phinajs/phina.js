@@ -8,28 +8,16 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options, {
-        width: 256,
-        height: 32,
-        backgroundColor: 'transparent',
-        fill: 'white',
-        stroke: '#aaa',
-        strokeWidth: 4,
-
-        value: 100,
-        maxValue: 100,
-        gaugeColor: '#44f',
-        cornerRadius: 0,
-      });
-
+      options = ({}).$safe(options || {}, Gauge.defaults);
+      
       this.superInit(options);
 
-      this._value = options.value;
+      this._value = (options.value !== undefined) ? options.value : options.maxValue;
       this.maxValue = options.maxValue;
       this.gaugeColor = options.gaugeColor;
       this.cornerRadius = options.cornerRadius;
 
-      this.visualValue = options.value;
+      this.visualValue = (options.value !== undefined) ? options.value : options.maxValue;
       this.animation = true;
       this.animationTime = 1*1000;
     },
@@ -126,6 +114,20 @@ phina.namespace(function() {
       phina.display.Shape.watchRenderProperty.call(this, 'gaugeColor');
       phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
     },
+    
+    _static: {
+      defaults: {
+        width: 256,
+        height: 32,
+        backgroundColor: 'transparent',
+        fill: 'white',
+        stroke: '#aaa',
+        strokeWidth: 4,
+        maxValue: 100,
+        gaugeColor: '#44f',
+        cornerRadius: 0,
+      },
+    }
   });
 
 });
