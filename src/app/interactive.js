@@ -14,11 +14,7 @@ phina.namespace(function() {
         normal: '',
         hover: 'pointer',
       };
-
-      this._holds = [];
-      this.app.on('changescene', function() {
-        this._holds.clear();
-      }.bind(this));
+      this.hover = false;
     },
 
     enable: function() {
@@ -33,14 +29,14 @@ phina.namespace(function() {
     check: function(root) {
       // カーソルのスタイルを反映
       if (this.app.domElement) {
-        if (this._holds.length > 0) {
+        if (this.hover) {
           this.app.domElement.style.cursor = this.cursor.hover;
         }
         else {
           this.app.domElement.style.cursor = this.cursor.normal;
         }
       }
-
+      this.hover = false;
       if (!this._enable || !this.app.pointers) return ;
 
       if (this.multiTouch) {
@@ -118,10 +114,16 @@ phina.namespace(function() {
       if (element.interactive) {
         // イベント発火対象のイベントの配列を取得
         var targetEvents = this._checkPoint(element, p);
-        // 後ろに重なってる場合の対応
+        
         if (element._overFlags[p.id]) {
+          // 後ろに要素が重なってる場合に pointover, pointout が発火しないようにする
           events.pointover._end = true;
           events.pointout._end = true;
+
+          // 一つでも overFlag が立っている有効な要素があれば、hoverにする
+          if (element.boundingType && element.boundingType !== 'none') {
+            this.hover = true;
+          }
         }
 
         targetEvents.forEach(function(event) {
@@ -161,13 +163,9 @@ phina.namespace(function() {
 
       if (!prevOverFlag && overFlag && !events.pointover._end) {
         targetEvents.push(events.pointover);
-        if (obj.boundingType && obj.boundingType !== 'none') {
-          this._holds.push(obj);
-        }
       }
       if (prevOverFlag && !overFlag && !events.pointout._end) {
         targetEvents.push(events.pointout);
-        this._holds.erase(obj);
       }
 
       if (overFlag && !events.pointstart._end && p.getPointingStart()) {
@@ -191,7 +189,6 @@ phina.namespace(function() {
           if (!events.pointout._end && overFlag && phina.isMobile()) {
             obj._overFlags[p.id] = false;
             targetEvents.push(events.pointout);
-            this._holds.erase(obj);
           }
         }
       }
