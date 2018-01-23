@@ -159,28 +159,22 @@ phina.namespace(function() {
       obj._overFlags[p.id] = overFlag;
       var targetEvents = [];
 
-      if (!prevOverFlag && overFlag) {
-        if (!events.pointover._end) {
-          targetEvents.push(events.pointover);
-        }
+      if (!prevOverFlag && overFlag && !events.pointover._end) {
+        targetEvents.push(events.pointover);
         if (obj.boundingType && obj.boundingType !== 'none') {
           this._holds.push(obj);
         }
       }
-      if (prevOverFlag && !overFlag) {
-        if (!events.pointout._end) {
-          targetEvents.push(events.pointout);
-        }
+      if (prevOverFlag && !overFlag && !events.pointout._end) {
+        targetEvents.push(events.pointout);
         this._holds.erase(obj);
       }
 
-      if (overFlag && p.getPointingStart()) {
+      if (overFlag && !events.pointstart._end && p.getPointingStart()) {
         obj._touchFlags[p.id] = true;
-        if (!events.pointstart._end) {
-          targetEvents.push(events.pointstart);
-          // クリックフラグを立てる
-          obj._clicked = true;
-        }
+        targetEvents.push(events.pointstart);
+        // クリックフラグを立てる
+        obj._clicked = true;
       }
 
       if (obj._touchFlags[p.id]) {
@@ -190,19 +184,15 @@ phina.namespace(function() {
         if (!events.pointmove._end && p._moveFlag) {
           targetEvents.push(events.pointmove);
         }
-      }
-
-      if (obj._touchFlags[p.id] === true && p.getPointingEnd()) {
-        obj._touchFlags[p.id] = false;
-        if (!events.pointend._end) {
+        if (!events.pointend._end && p.getPointingEnd()) {
+          obj._touchFlags[p.id] = false;
           targetEvents.push(events.pointend);
-        }
-        if (phina.isMobile() && overFlag) {
-          obj._overFlags[p.id] = false;
-          if (!events.pointout._end) {
+
+          if (!events.pointout._end && overFlag && phina.isMobile()) {
+            obj._overFlags[p.id] = false;
             targetEvents.push(events.pointout);
+            this._holds.erase(obj);
           }
-          this._holds.erase(obj);
         }
       }
 
