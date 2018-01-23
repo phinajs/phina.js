@@ -148,17 +148,10 @@ phina.namespace(function() {
 
     _checkPoint: function(obj, p) {
       var events = this.events;
-
       var prevOverFlag = obj._overFlags[p.id];
       var overFlag = obj.hitTest(p.x, p.y);
       obj._overFlags[p.id] = overFlag;
       var targetEvents = [];
-
-      var e = {
-        pointer: p,
-        interactive: this,
-        over: overFlag,
-      };
 
       if (!prevOverFlag && overFlag) {
         if (!events.pointover._end) {
