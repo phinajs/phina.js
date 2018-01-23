@@ -247,4 +247,46 @@ th.describe("Interactive", function() {
     });
   });
 
+
+  th.it('click', function() {
+    this.addTitle('クリックができるか');
+
+    var dummyRect = phina.display.RectangleShape({
+      fill: 'gray',
+      width: 500,
+      height: 500,
+      x: this.gridX.center(),
+      y: this.gridY.center(2),
+    }).addChildTo(this);
+    var testArea = phina.ui.LabelArea({
+      text: 'クリックをすると色が変わります',
+      fill: 'white',
+      fontSize: 20,
+      backgroundColor: 'blue',
+      verticalAlign: 'center',
+      baseline: 'middle',
+      x: this.gridX.center(),
+      y: this.gridY.center(2),
+    }).addChildTo(this);
+
+    dummyRect.setInteractive(true);
+    testArea.setInteractive(true);
+
+    testArea.onclick = function(e) {
+      this.backgroundColor = 'aqua';
+    };
+    dummyRect.onclick = function(e) {
+      this.fill = 'blue';
+    };
+
+    this.onclick = function(e) {
+      this.backgroundColor = 'gray';
+    };
+    // click は pointstart で e.pass = true にすると後ろの要素も発火する
+    testArea.onpointstart = function(e) {
+      e.pass = true;
+    };
+
+  });
+
 });
