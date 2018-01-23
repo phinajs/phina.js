@@ -118,6 +118,12 @@ phina.namespace(function() {
       if (element.interactive) {
         // イベント発火対象のイベントの配列を取得
         var targetEvents = this._checkPoint(element, p);
+        // 後ろに重なってる場合の対応
+        if (element._overFlags[p.id]) {
+          events.pointover._end = true;
+          events.pointout._end = true;
+        }
+
         targetEvents.forEach(function(event) {
           // targetを発火元の要素に設定
           event.target = element;
