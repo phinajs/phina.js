@@ -228,11 +228,13 @@
   var run = function(path) {
     var p = path.join('/');
     var code = (function() {
-      var code = th.code(p);
-      var lines = code.split('\n');
-      lines.splice(0, 1);
-      lines.splice(lines.length-1, 1);
-      return lines.join('\n');
+      var codes = [th.preparedCode(p), th.code(p)];
+      return codes.map(function(code) {
+        var lines = code.split('\n');
+        lines.splice(0, 1);
+        lines.splice(lines.length - 1, 1);
+        return lines.join('\n');
+      }).join('\n');
     })();
 
     var a = $.ajax({
