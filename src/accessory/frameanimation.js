@@ -45,9 +45,11 @@ phina.namespace(function() {
     gotoAndPlay: function(name, keep) {
       keep = (keep !== undefined) ? keep : true;
       if (keep && name === this.currentAnimationName
-               && this.currentFrameIndex < this.currentAnimation.frames.length) {
+               && this.currentFrameIndex < this.currentAnimation.frames.length
+               && !this.paused) {
         return this;
       }
+      this.currentAnimationName = name;
       this.frame = 0;
       this.currentFrameIndex = 0;
       this.currentAnimation = this.ss.getAnimation(name);
@@ -59,6 +61,7 @@ phina.namespace(function() {
     },
 
     gotoAndStop: function(name) {
+      this.currentAnimationName = name;
       this.frame = 0;
       this.currentFrameIndex = 0;
       this.currentAnimation = this.ss.getAnimation(name);
