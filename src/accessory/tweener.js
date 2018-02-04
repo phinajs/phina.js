@@ -21,6 +21,8 @@ phina.namespace(function() {
      */
     updateType: 'delta',
 
+    timeScale: 1.0,
+
     /**
      * @constructor
      */
@@ -341,6 +343,37 @@ phina.namespace(function() {
     },
 
     /**
+     * 登録されたタスクをすべて完了する
+     * ループ設定されている場合は先頭から再開
+     */
+    finish: function() {
+      var _loop = this._loop;
+      var _updateType = this.updateType;
+      var _playing = this.playing;
+
+      this._loop = false;
+      this.updateType = "finish";
+
+      this.playing = true;
+      while (this.playing) {
+        this._update(null);
+      }
+
+      this._loop = _loop;
+      this.updateType = _updateType;
+      this.playing = _playing;
+
+      if (this._loop) {
+        this.rewind();
+        if (this.playing) {
+          this.play();
+        }
+      }
+
+      return this;
+    },
+
+    /**
      * JSON形式でアニメーションを設定します。
      * @chainable
      * @param {Object} json
@@ -458,10 +491,10 @@ phina.namespace(function() {
     _getUnitTime: function(app) {
       var obj = UPDATE_MAP[this.updateType];
       if (obj) {
-        return obj.func(app);
+        return obj.func(app) * this.timeScale;
       }
       else {
-        return 1000 / app.fps;
+        return 1000 / app.fps * this.timeScale;
       }
     },
 
@@ -503,6 +536,13 @@ phina.namespace(function() {
             return 1;
           },
           duration: 30,
+        },
+
+        finish: {
+          func: function(app) {
+            return Infinity;
+          },
+          duration: 1,
         },
 
       }
