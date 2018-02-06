@@ -218,13 +218,33 @@ phina.namespace(function() {
         this[name] = element;
 
         element.fromJSON(data);
-        element.addChildTo(this)
+        element.addChildTo(this);
+      }.bind(this);
+
+      var createAccessories = function(name, data) {
+        //
+        var args = data.arguments;
+        args = (args instanceof Array) ? args : [args];
+        //
+        var _class = phina.using(data.className);
+        //
+        var accessory = _class.apply(null, args);
+
+        accessory.name = name;
+        this[name] = accessory;
+
+        accessory.attachTo(this);
       }.bind(this);
 
       json.forIn(function(key, value) {
         if (key === 'children') {
           value.forIn(function(name, data) {
             createChildren(name, data);
+          });
+        }
+        else if (key === 'accessories') {
+          value.forIn(function(name, data) {
+            createAccessories(name, data);
           });
         }
         else {
