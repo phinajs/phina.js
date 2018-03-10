@@ -66,12 +66,13 @@ phina.namespace(function() {
 
     /**
      * @method randbool
-     * ランダムな真偽値を返します。実行すると {@link #seed} は変わってしまいます。
+     * ランダムな真偽値を返します。引数で百分率を指定できます。実行すると {@link #seed} は変わってしまいます。
      * 
+     * @param {Number} [perecent = 50] 真になる百分率
      * @return {Boolean} ランダムな真偽値
      */
-    randbool: function() {
-      return this.randint(0, 1) === 1;
+    randbool: function(perecent) {
+      return this.randint(0, 99) < (perecent || 50);
     },
 
     /**
@@ -178,14 +179,15 @@ phina.namespace(function() {
 
       /**
        * @method phina.util.Random.randbool
-       * ランダムな真偽値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * ランダムな真偽値を返します。引数で百分率を指定できます。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
        * インスタンスメソッドの {@link #randbool} と同じです。
        * 
+       * @param {Number} [perecent = 50] 真になる百分率
        * @return {Number} ランダムな真偽値
        * @static
        */
-      randbool: function() {
-        return this.randint(0, 1) === 1;
+      randbool: function(perecent) {
+        return this.randint(0, 99) < (perecent || 50);
       },
 
       /**
