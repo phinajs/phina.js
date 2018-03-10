@@ -5,7 +5,7 @@ phina.namespace(function() {
    * # 乱数を扱うためのクラス
    * 乱数を扱うためのメソッドやプロパティを定義しているクラスです。
    */
-  phina.define("phina.util.Random", {
+  phina.define('phina.util.Random', {
 
     /**
      * @property {Number} [seed = 1]
@@ -15,7 +15,7 @@ phina.namespace(function() {
 
     /**
      * @constructor
-     * コンストラクタです。引数でシードを設定できます。
+     * コンストラクタです。引数で {@link #seed} を設定できます。
      * 
      * @param {Number} [seed = (Date.now()) || 1] シード
      */
@@ -25,7 +25,7 @@ phina.namespace(function() {
 
     /**
      * @method random
-     * 0~1の乱数を返します。一度 random() を実行すると seed は変わってしまいます。
+     * 0~1の乱数を返します。実行すると {@link #seed} は変わってしまいます。
      * 
      * @return {Number} 0~1 の乱数
      */
@@ -42,7 +42,7 @@ phina.namespace(function() {
 
     /**
      * @method randint
-     * 指定された範囲内でランダムな整数値を返します。一度 randint() を実行すると seed は変わってしまいます。
+     * 指定された範囲内でランダムな整数値を返します。実行すると {@link #seed} は変わってしまいます。
      * 
      * @param {Number} min 範囲の最小値
      * @param {Number} max 範囲の最大値
@@ -54,7 +54,7 @@ phina.namespace(function() {
 
     /**
      * @method randfloat
-     * 指定された範囲内でランダムな数値を返します。一度 randfloat() を実行すると seed は変わってしまいます。
+     * 指定された範囲内でランダムな数値を返します。実行すると {@link #seed} は変わってしまいます。
      * 
      * @param {Number} min 範囲の最小値
      * @param {Number} max 範囲の最大値
@@ -66,7 +66,7 @@ phina.namespace(function() {
 
     /**
      * @method randbool
-     * ランダムな真偽値を返します。一度 randbool() を実行すると seed は変わってしまいます。
+     * ランダムな真偽値を返します。実行すると {@link #seed} は変わってしまいます。
      * 
      * @return {Boolean} ランダムな真偽値
      */
@@ -76,7 +76,7 @@ phina.namespace(function() {
 
     /**
      * @method randarray
-     * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。一度 randarray() を実行すると seed は変わってしまいます。
+     * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。実行すると {@link #seed} は変わってしまいます。
      * 
      * @param {Number} [len = 100] 配列の長さ
      * @param {Number} [min = 0] 範囲の最小値
@@ -104,7 +104,7 @@ phina.namespace(function() {
       MAX: 4294967295,
 
       /**
-       * @property {Number} [seed = (Date.now())] シード
+       * @property {Number} [phina.util.Random.seed = (Date.now())] シード
        * static メソッドの乱数のシードです。
        * 
        * @static
@@ -112,8 +112,8 @@ phina.namespace(function() {
       seed: (Date.now()),
 
       /**
-       * @method getSeed 
-       * シードの値を取得します。
+       * @method phina.util.Random.getSeed 
+       * {@link #phina.util.Random.seed} の値を取得します。
        * 
        * @return {Number} シード
        * @static
@@ -123,8 +123,8 @@ phina.namespace(function() {
       },
 
       /**
-       * @method setSeed
-       * シードの値をセットします。
+       * @method phina.util.Random.setSeed
+       * {@link #phina.util.Random.seed} の値をセットします。
        * 
        * @param {Number} [seed = 1] シード
        * @static
@@ -136,8 +136,9 @@ phina.namespace(function() {
       },
 
       /**
-       * @method random
-       * 0~1の乱数を返します。一度 random() を実行すると seed は変わってしまいます。
+       * @method phina.util.Random.random
+       * 0~1の乱数を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * インスタンスメソッドの {@link #random} と同じです。
        * 
        * @return {Number} 0~1 の乱数
        * @static
@@ -148,8 +149,9 @@ phina.namespace(function() {
       },
 
       /**
-       * @method randint
-       * 指定された範囲内でランダムな整数値を返します。一度 randint() を実行すると seed は変わってしまいます。
+       * @method phina.util.Random.randint
+       * 指定された範囲内でランダムな整数値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * インスタンスメソッドの {@link #randint} と同じです。
        * 
        * @param {Number} min 範囲の最小値
        * @param {Number} max 範囲の最大値
@@ -161,8 +163,9 @@ phina.namespace(function() {
       },
 
       /**
-       * @method randfloat
-       * 指定された範囲内でランダムな数値を返します。一度 randfloat() を実行すると seed は変わってしまいます。
+       * @method phina.util.Random.randfloat
+       * 指定された範囲内でランダムな数値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * インスタンスメソッドの {@link #randfloat} と同じです。
        * 
        * @param {Number} min 範囲の最小値
        * @param {Number} max 範囲の最大値
@@ -174,8 +177,9 @@ phina.namespace(function() {
       },
 
       /**
-       * @method randbool
-       * ランダムな真偽値を返します。一度 randbool() を実行すると seed は変わってしまいます。
+       * @method phina.util.Random.randbool
+       * ランダムな真偽値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * インスタンスメソッドの {@link #randbool} と同じです。
        * 
        * @return {Number} ランダムな真偽値
        * @static
@@ -185,8 +189,9 @@ phina.namespace(function() {
       },
 
       /**
-       * @method randarray
-       * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。一度 randarray() を実行すると seed は変わってしまいます。
+       * @method phina.util.Random.randarray
+       * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * インスタンスメソッドの {@link #randarray} と同じです。
        * 
        * @param {Number} [len = 100] 配列の長さ
        * @param {Number} [min = 0] 範囲の最小値
@@ -205,7 +210,7 @@ phina.namespace(function() {
       },
 
       /**
-       * @method xor32
+       * @method phina.util.Random.xor32
        * xorshift を用いて疑似乱数列を生成します。
        * 
        * @param {Number} seed
@@ -221,7 +226,7 @@ phina.namespace(function() {
       },
 
       /**
-       * @method uuid
+       * @method phina.util.Random.uuid
        * uuid を生成して返します。
        * 
        * @return {String} uuid
@@ -230,7 +235,7 @@ phina.namespace(function() {
       //http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
       uuid: function() {
         var d = new Date().getTime();
-        if(phina.global.performance && typeof phina.global.performance.now === "function"){
+        if(phina.global.performance && typeof phina.global.performance.now === 'function'){
           d += performance.now(); //use high-precision timer if available
         }
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
