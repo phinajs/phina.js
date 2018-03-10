@@ -144,7 +144,7 @@
    * @return {Boolean} ランダムな真偽値
    */
   Math.$method("randbool", function(perecent) {
-    return Math.randint(0, 100) < (perecent || 50);
+    return Math.randint(0, 99) < (perecent || 50);
   });
     
 })();
