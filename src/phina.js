@@ -60,7 +60,7 @@ var phina = phina || {};
     },
   });
 
-  
+
   /**
    * @method phina.testUA
    * 引数の RegExp オブジェクトとユーザーエージェントを比較して返します。
@@ -87,7 +87,7 @@ var phina = phina || {};
   phina.$method('isAndroid', function() {
     return phina.testUA(/Android/);
   });
-  
+
   /**
    * @method phina.isIPhone
    * iPhone かどうかを返します。
@@ -99,7 +99,7 @@ var phina = phina || {};
   phina.$method('isIPhone', function() {
     return phina.testUA(/iPhone/);
   });
-  
+
   /**
    * @method phina.isIPad
    * iPad かどうかを返します。
@@ -111,7 +111,7 @@ var phina = phina || {};
   phina.$method('isIPad', function() {
     return phina.testUA(/iPad/);
   });
-  
+
   /**
    * @method phina.isIOS
    * iOS かどうかを返します。
@@ -135,9 +135,6 @@ var phina = phina || {};
   phina.$method('isMobile', function() {
     return phina.testUA(/iPhone|iPad|Android/);
   });
-  
-  
-
 
   // support node.js
   if (phina.isNode()) {
@@ -194,7 +191,7 @@ phina.namespace(function() {
    * 
    * - _accessor: アクセッサー（ゲッターとセッター）を定義するためのプロパティ
    * - _static: static メンバを定義するためのプロパティ
-   * - _defined: クラスが定義されたときに呼ばれるメソッド
+   * - _defined(): クラスが定義されたときに呼ばれるメソッド
    * 
    * ### _accessor の使用例
    *     var Class = phina.createClass({
@@ -334,11 +331,11 @@ phina.namespace(function() {
   });
 
   var chachedClasses = {};
-  
+
   /**
    * @method phina.using
    * 文字列で定義したパスを使ってオブジェクトを取り出します。パスは , . / \ :: で区切ることができます。
-   * phina.register()で登録したオブジェクトを取り出すときなどに使うと便利な関数です。
+   * {@link #phina.register} で登録したオブジェクトを取り出すときなどに使うと便利な関数です。
    * 
    * ### Example
    *     hoge = {
@@ -370,7 +367,7 @@ phina.namespace(function() {
 
     return current;
   });
-  
+
   /**
    * @method phina.register
    * パス指定でオブジェクトを登録する関数です。パスは , . / \ :: で区切ることができます。
@@ -397,14 +394,14 @@ phina.namespace(function() {
 
     return _class;
   });
-  
+
   var _classDefinedCallback = {};
 
   /**
    * @method phina.define
-   * クラスを定義する関数です。使い方は createClass() とほとんど同じです。
-   * ただし、引数は2つあり、第一引数は定義するクラスのパスを文字列で渡します。第二引数のオブジェクトは phina.createClass の引数と同じようにします。
-   * phina.createClassと違い、変数に代入する必用がなく、パス指定でクラスを定義できます。
+   * クラスを定義する関数です。使い方は {@link createClass} とほとんど同じです。
+   * ただし、引数は2つあり、第一引数は定義するクラスのパスを文字列で渡します。第二引数のオブジェクトは {@link createClass} の引数と同じようにします。
+   * {@link createClass} と違い、変数に代入する必用がなく、パス指定でクラスを定義できます。
    * 
    * ### Example
    *     phina.define('namespace.Class', {
@@ -559,14 +556,4 @@ phina.namespace(function() {
   else {
     phina._mainLoaded = true;
   }
-
-
-
 });
-
-
-
-
-
-
-
