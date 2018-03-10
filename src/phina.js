@@ -1,10 +1,4 @@
 /*
- *
- */
-
-
-
-/*
  * phina.js namespace
  */
 var phina = phina || {};
@@ -13,16 +7,23 @@ var phina = phina || {};
 
   /**
    * @class phina
-   * phina.js namespace
+   * # phina.js namespace
+   * phina.js のネームスペースです。phina.js の提供する機能は（コア拡張以外）全てこのオブジェクトに入っています。
    */
 
   /**
-   * バージョン
+   * @property {String} [phina.VERSION = <%= version %>]
+   * phina.js のバージョンです。
+   * 
+   * @member phina
+   * @static
    */
   phina.VERSION = '<%= version %>';
 
   /**
-   * @method isNode
+   * @method phina.isNode
+   * Node.js の module かどうかをチェックします。
+   * 
    * @member phina
    * @static
    */
@@ -31,7 +32,10 @@ var phina = phina || {};
   });
 
   /**
-   * @method namespace
+   * @method phina.namespace
+   * 引数は関数で、その関数内での this は phina になります。
+   * 
+   * @param {Function} fn 関数
    * @member phina
    * @static
    */
@@ -42,8 +46,13 @@ var phina = phina || {};
   var ns = phina.isNode() ? global : window;
 
   /**
-   * @method global
-   * global
+   * @property {Object} phina.global
+   * Node.js なら global ブラウザなら window を返します。
+   * ゲッターのみ定義されています。
+   * 
+   * @member phina
+   * @readonly
+   * @static
    */
   phina.accessor('global', {
     get: function() {
@@ -53,8 +62,11 @@ var phina = phina || {};
 
   
   /**
-   * @method testUA
-   * UAを正規表現テスト
+   * @method phina.testUA
+   * 引数の RegExp オブジェクトとユーザーエージェントを比較して返します。
+   * 
+   * @param {RegExp} 
+   * @return {Boolean}
    * @member phina
    * @static
    */
@@ -65,8 +77,10 @@ var phina = phina || {};
   });
 
   /**
-   * @method isAndroid
-   * Android かどうかをチェック
+   * @method phina.isAndroid
+   * Android かどうかを返します。
+   * 
+   * @return {Boolean} Android かどうか
    * @member phina
    * @static
    */
@@ -75,8 +89,10 @@ var phina = phina || {};
   });
   
   /**
-   * @method isIPhone
-   * iPhone かどうかをチェック
+   * @method phina.isIPhone
+   * iPhone かどうかを返します。
+   * 
+   * @return {Boolean} iPhone かどうか
    * @member phina
    * @static
    */
@@ -85,8 +101,10 @@ var phina = phina || {};
   });
   
   /**
-   * @method isIPad
-   * iPad かどうかをチェック
+   * @method phina.isIPad
+   * iPad かどうかを返します。
+   * 
+   * @return {Boolean} iPad かどうか
    * @member phina
    * @static
    */
@@ -95,8 +113,10 @@ var phina = phina || {};
   });
   
   /**
-   * @method isIOS
-   * iOS かどうかをチェック
+   * @method phina.isIOS
+   * iOS かどうかを返します。
+   * 
+   * @return {Boolean} iOS かどうか
    * @member phina
    * @static
    */
@@ -105,8 +125,10 @@ var phina = phina || {};
   });
 
   /**
-   * @method isMobile
-   * mobile かどうかをチェック
+   * @method phina.isMobile
+   * モバイルかどうかを返します。具体的には Android, iPhone, iPad のいずれかだと true になります。
+   * 
+   * @return {Boolean} モバイルかどうか
    * @member phina
    * @static
    */
@@ -130,10 +152,104 @@ var phina = phina || {};
 phina.namespace(function() {
 
   /**
+   * @method phina.createClass
+   * クラスを作成する関数です。
+   * 親クラスの指定は文字列でも可能で、文字列のメリットはクラス作成時に親クラスが定義されていなくても、実行時に定義されていればいいところです。
+   * 何も継承しない場合 superClass の指定は不要です。また、親クラスを継承している場合、コンストラクタ内で this.superInit() を実行して親クラスを初期化することが必須です。
+   *
+   * ### Example
+   *     var Class = phina.createClass({
+   * 　　  superClass: 'namespace.Super',//親クラス継承
+   *
+   * 　　  //メンバ変数
+   * 　　  member1: 100,
+   * 　　  member2: 'test',
+   * 　　  member3: null,  
+   *
+   *
+   * 　　  //コンストラクタ
+   * 　　  //Class()を呼び出したとき実行される
+   * 　　  init: function(a, b){
+   * 　　    //スーパークラス(継承したクラス)のinit
+   * 　　    this.superInit(a, b);
+   * 　　    this.a = a;
+   * 　　    this.b = b;
+   * 　　  },
+   * 　　
+   * 　　  //メソッド
+   * 　　  method1: function(){},
+   * 　　  method2: function(){},
+   * 　　
+   * 　　});
+   * 
+   * phina.js のクラスでは superClass を指定すると以下のメソッドが自動で追加されます。
+   * 
+   * - superInit(): 親クラスのコンストラクタを呼び出す（初期化）
+   * - superMethod(): 親クラスのメソッドを呼び出す
+   * 
+   * superInit は引数を変えることで親クラスのコンストラクタを呼ぶときの引数を変えられます。
+   * superMethod は一つ目の引数に呼び出したい親クラスのメソッド名を文字列で、二つ目以降に呼び出したいメソッドの引数を渡します。
+   * 
+   * また phina.js のクラスでは以下の特別な役割をもったプロパティ、メソッドが存在します。
+   * 
+   * - _accessor: アクセッサー（ゲッターとセッター）を定義するためのプロパティ
+   * - _static: static メンバを定義するためのプロパティ
+   * - _defined: クラスが定義されたときに呼ばれるメソッド
+   * 
+   * ### _accessor の使用例
+   *     var Class = phina.createClass({
+   *       init: function() {
+   *         ...
+   *       },
+   * 
+   *       _accessor: function() {
+   *         value: {
+   *           get: function() {
+   *             return this._value;
+   *           },
+   * 
+   *           set: function(v) {
+   *             this._value = v;
+   *             console.log('valueがセットされました！');
+   *           }
+   *         }
+   *       }
+   *     });
+   * 
+   * ### _static の使用例
+   *     var Class = phina.createClass({
+   *       init: function() {
+   *         ...
+   *       },
+   *
+   *       _static: {
+   *
+   *         staticProperty1: 1,
+   *         staticProperty2: 2,
+   *
+   *         staticMethod1: function(){},
+   *         staticMethod2: function(){}
+   *
+   *       }
+   *     });
+   *
+   *     console.log(Class.staticProperty1); // => 1
+   * 
+   * ### _defined の使用例
+   *     var Class = phina.createClass({
+   *       init: function() {
+   *       },
+   *
+   *       _defined: function() {
+   *         console.log('defined!');
+   *       }
+   *     }); // => defined!
+   *
+   *
+   * @param {Object}
+   * @return {Function} クラス
    * @member phina
    * @static
-   * @method createClass
-   * クラスを生成
    */
   phina.$method('createClass', function(params) {
     var props = {};
@@ -220,7 +336,23 @@ phina.namespace(function() {
   var chachedClasses = {};
   
   /**
-   * @method using
+   * @method phina.using
+   * 文字列で定義したパスを使ってオブジェクトを取り出します。パスは , . / \ :: で区切ることができます。
+   * phina.register()で登録したオブジェクトを取り出すときなどに使うと便利な関数です。
+   * 
+   * ### Example
+   *     hoge = {
+   *       foo: {
+   *         bar: {
+   *           num: 100
+   *         }
+   *       }
+   *     };
+   *     var bar = phina.using('hoge.foo.bar');
+   *     console.log(bar.num); // => 100
+   * 
+   * @param {String} path オブジェクトへのパス
+   * @return {Object} 取り出したオブジェクト
    * @member phina
    * @static
    */
@@ -240,8 +372,18 @@ phina.namespace(function() {
   });
   
   /**
-   * @method register
+   * @method phina.register
+   * パス指定でオブジェクトを登録する関数です。パスは , . / \ :: で区切ることができます。
    * 
+   * ### Example
+   *     phina.register('hoge.foo.bar', {
+   *       num: 100,
+   *     });
+   *     console.log(hoge.foo.bar.num); // => 100
+   * 
+   * @param {String} path 登録するオブジェクトのパス
+   * @param {Object} _class 登録するオブジェクト
+   * @return {Object} 登録したオブジェクト
    * @member phina
    * @static
    */
@@ -259,10 +401,41 @@ phina.namespace(function() {
   var _classDefinedCallback = {};
 
   /**
+   * @method phina.define
+   * クラスを定義する関数です。使い方は createClass() とほとんど同じです。
+   * ただし、引数は2つあり、第一引数は定義するクラスのパスを文字列で渡します。第二引数のオブジェクトは phina.createClass の引数と同じようにします。
+   * phina.createClassと違い、変数に代入する必用がなく、パス指定でクラスを定義できます。
+   * 
+   * ### Example
+   *     phina.define('namespace.Class', {
+   *       superClass: 'namespace.Super',//親クラス継承
+   *     
+   *       //メンバ変数
+   *       member1: 100,
+   *       member2: 'test',
+   *       member3: null,  
+   *     
+   *     
+   *       //コンストラクタ
+   *       //Class()を呼び出したとき実行される
+   *       init: function(a, b){
+   *         //スーパークラス(継承したクラス)のinit
+   *         this.superInit(a, b);
+   *         this.a = a;
+   *         this.b = b;
+   *       },
+   *     
+   *       //メソッド
+   *       method1: function(){},
+   *       method2: function(){},
+   *     
+   *     });
+   * 
+   * @param {String} path パス
+   * @param {Object} params オブジェクト
+   * @return {Function} 定義したクラス
    * @member phina
    * @static
-   * @method define
-   * クラスを定義
    */
   phina.$method('define', function(path, params) {
     if (params.superClass) {
@@ -307,7 +480,13 @@ phina.namespace(function() {
   });
 
   /**
-   * @method globalize
+   * @method phina.globalize
+   * phina.js が用意している全てのクラスをグローバルに展開します。（具体的には phina が持つオブジェクトが一通りグローバルに展開されます。）
+   * この関数を実行することで、いちいち global からたどっていかなくても phina.js の用意しているクラスをクラス名だけで呼び出すことができます。
+   * 
+   * ### Example
+   *     phina.globalize();
+   * 
    * @member phina
    * @static
    */
@@ -332,6 +511,20 @@ phina.namespace(function() {
 
   phina._mainListeners = [];
   phina._mainLoaded = false;
+
+  /**
+   * @method phina.main
+   * phina.js でプログラミングする際、メインの処理を記述するための関数です。基本的に phina.js でのプログラミングではこの中にプログラムを書いていくことになります。
+   * 
+   * ### Example
+   *     phina.main(function() {
+   *       //ここにメインの処理を書く
+   *     });
+   * 
+   * @param {Function} func メインの処理
+   * @member phina
+   * @static
+   */
   phina.$method('main', function(func) {
     if (phina._mainLoaded) {
       func();
