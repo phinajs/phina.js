@@ -185,6 +185,23 @@ phina.namespace(function() {
       this.awake = false;
       return this;
     },
+
+    /**
+     * @method sortChildren
+     * 指定したプロパティの値で子要素を並べ替えます。
+     */
+    sortChildren: function(str) {
+      this.children.sort(function(a, b) {
+        if (a[str] > b[str]) {
+          return 1;
+        }
+        if (a[str] < b[str]) {
+          return -1;
+        }
+        return 0;
+      });
+    },
+
     /**
      * @method fromJSON
      * JSON 形式を使って自身に子要素を追加することができます。
