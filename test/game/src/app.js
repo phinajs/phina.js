@@ -97,3 +97,33 @@ th.describe("app.BaseApp", function() {
     }.bind(this));
   });
 });
+
+th.describe('app.Object2D', function() {
+  
+  th.it('zIndex', function() {
+
+    var object2d = [];
+
+    for (var i = 0; i <= 4; i ++) {
+      object2d[i] = phina.display.RectangleShape({
+        x: 320 + 20 * (i - 2),
+        y: 480 + 20 * (i - 2)
+      }).addChildTo(this);
+    }
+
+    object2d[0].zIndex = 4;
+
+    object2d[5] = phina.display.RectangleShape({
+      x: 320 + 20 * 3,
+      y: 480 + 20 * 3,
+      zIndex: -2
+    });
+
+    var self = this;
+
+    this.tweener.wait(1000)
+    .call(function() {
+      object2d[5].addChildTo(self);
+    });
+  });
+});

@@ -29,6 +29,7 @@ phina.namespace(function() {
       this.scale    = phina.geom.Vector2(options.scaleX, options.scaleY);
       this.rotation = options.rotation;
       this.origin   = phina.geom.Vector2(options.originX, options.originY);
+      this.zIndex   = options.zIndex;
 
       this._matrix = phina.geom.Matrix33().identity();
       this._worldMatrix = phina.geom.Matrix33().identity();
@@ -264,6 +265,16 @@ phina.namespace(function() {
       return this;
     },
 
+    _applyZindex: function() {
+      if (this.parent) {
+        this.parent.sortChildren('zIndex');
+      } else {
+        this.one('added', function() {
+          this.parent.sortChildren('zIndex');
+        });
+      }
+    },
+
     _accessor: {
       /**
        * @property    x
@@ -316,6 +327,17 @@ phina.namespace(function() {
       scaleY: {
         "get": function()   { return this.scale.y; },
         "set": function(v)  { this.scale.y = v; }
+      },
+
+      /**
+       * @property   zIndex
+       */
+      zIndex: {
+        'get': function()   { return this._zIndex; },
+        'set': function(v)  {
+          this._zIndex = v;
+          this._applyZindex();
+        }
       },
       
       /**
@@ -414,6 +436,7 @@ phina.namespace(function() {
         }
       },
     },
+    
     _static: {
       defaults: {
         x: 0,
@@ -423,6 +446,7 @@ phina.namespace(function() {
         rotation: 0,
         originX: 0.5,
         originY: 0.5,
+        zIndex: 0,
         
         width: 64,
         height: 64,
@@ -430,8 +454,5 @@ phina.namespace(function() {
         boundingType: 'rect',
       },
     },
-
   });
-
-  
 });
