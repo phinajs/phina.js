@@ -18,7 +18,7 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
 
       this.visualValue = (options.value !== undefined) ? options.value : options.maxValue;
-      this.animation = true;
+      this.animation = options.animation;
       this.animationTime = 1*1000;
     },
 
@@ -126,6 +126,7 @@ phina.namespace(function() {
         maxValue: 100,
         gaugeColor: '#44f',
         cornerRadius: 0,
+        animation: true
       },
     }
   });
