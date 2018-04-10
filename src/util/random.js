@@ -102,10 +102,16 @@ phina.namespace(function() {
     },
 
     _static: {
+      /**
+       * @property {Number} MAX
+       * 内部的に使用される定数です。
+       * 
+       * @static
+       */
       MAX: 4294967295,
 
       /**
-       * @property {Number} [phina.util.Random.seed = (Date.now())] シード
+       * @property {Number} [seed = (Date.now())] シード
        * static メソッドの乱数のシードです。
        * 
        * @static
@@ -113,8 +119,8 @@ phina.namespace(function() {
       seed: (Date.now()),
 
       /**
-       * @method phina.util.Random.getSeed 
-       * {@link #phina.util.Random.seed} の値を取得します。
+       * @method getSeed 
+       * {@link #seed} の値を取得します。
        * 
        * @return {Number} シード
        * @static
@@ -124,21 +130,21 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.setSeed
-       * {@link #phina.util.Random.seed} の値をセットします。
+       * @method setSeed
+       * {@link #seed} の値をセットします。
        * 
        * @param {Number} [seed = 1] シード
        * @static
        * @chainable
        */
       setSeed: function(seed) {
-        this.seed = (seed >>> 0) || 1;
+        this.see = (seed >>> 0) || 1;
         return this;
       },
 
       /**
-       * @method phina.util.Random.random
-       * 0~1の乱数を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * @method random
+       * 0~1の乱数を返します。実行すると {@link #seed} は変わってしまいます。
        * インスタンスメソッドの {@link #random} と同じです。
        * 
        * @return {Number} 0~1 の乱数
@@ -150,8 +156,8 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.randint
-       * 指定された範囲内でランダムな整数値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * @method randint
+       * 指定された範囲内でランダムな整数値を返します。実行すると {@link #seed} は変わってしまいます。
        * インスタンスメソッドの {@link #randint} と同じです。
        * 
        * @param {Number} min 範囲の最小値
@@ -164,8 +170,8 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.randfloat
-       * 指定された範囲内でランダムな数値を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * @method randfloat
+       * 指定された範囲内でランダムな数値を返します。実行すると {@link #seed} は変わってしまいます。
        * インスタンスメソッドの {@link #randfloat} と同じです。
        * 
        * @param {Number} min 範囲の最小値
@@ -178,8 +184,8 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.randbool
-       * ランダムな真偽値を返します。引数で百分率を指定できます。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * @method randbool
+       * ランダムな真偽値を返します。引数で百分率を指定できます。実行すると {@link #seed} は変わってしまいます。
        * インスタンスメソッドの {@link #randbool} と同じです。
        * 
        * @param {Number} [perecent = 50] 真になる百分率
@@ -191,8 +197,8 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.randarray
-       * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。実行すると {@link #phina.util.Random.seed} は変わってしまいます。
+       * @method randarray
+       * 任意の範囲でランダムな整数値を格納した任意の長さの配列を返します。実行すると {@link #seed} は変わってしまいます。
        * インスタンスメソッドの {@link #randarray} と同じです。
        * 
        * @param {Number} [len = 100] 配列の長さ
@@ -212,7 +218,7 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.xor32
+       * @method xor32
        * xorshift を用いて疑似乱数列を生成します。
        * 
        * @param {Number} seed
@@ -228,7 +234,7 @@ phina.namespace(function() {
       },
 
       /**
-       * @method phina.util.Random.uuid
+       * @method uuid
        * uuid を生成して返します。
        * 
        * @return {String} uuid
