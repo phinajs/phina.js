@@ -71,8 +71,8 @@ phina.namespace(function() {
      * @param {Number} [perecent = 50] 真になる百分率
      * @return {Boolean} ランダムな真偽値
      */
-    randbool: function(perecent) {
-      return this.randint(0, 99) < (perecent || 50);
+    randbool: function(percent) {
+      return this.random() < (percent === undefined ? 50 : percent) / 100;
     },
 
     /**
@@ -138,7 +138,7 @@ phina.namespace(function() {
        * @chainable
        */
       setSeed: function(seed) {
-        this.see = (seed >>> 0) || 1;
+        this.seed = (seed >>> 0) || 1;
         return this;
       },
 
