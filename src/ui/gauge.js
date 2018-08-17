@@ -4,7 +4,7 @@ phina.namespace(function() {
    * @class phina.ui.Gauge
    * @extends phina.display.Shape
    */
-  phina.define('phina.ui.Gauge', {
+  var Gauge = phina.define('phina.ui.Gauge', {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
