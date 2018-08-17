@@ -8,7 +8,7 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options || {}, Gauge.defaults);
+      options = ({}).$safe(options || {}, phina.ui.Gauge.defaults);
       
       this.superInit(options);
 
