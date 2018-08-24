@@ -18,8 +18,32 @@ phina.namespace(function() {
       params = ({}).$safe(params, phina.game.TitleScene.defaults);
       this.superInit(params);
 
-      this.backgroundColor = params.backgroundColor;
+      if (params.backgroundImage) {
+        var texture = phina.asset.Texture();
 
+        texture.load(params.backgroundImage).then(function() {
+          this.fromJSON({
+            children: {
+              backgroundImage: {
+                className: 'phina.display.Sprite',
+                arguments: texture,
+                x: this.gridX.center(),
+                y: this.gridY.center(),
+              }
+            }
+          });
+          this._init(params);
+          
+        }.bind(this));
+      }
+      else {
+        this._init(params);
+      }
+    },
+    
+    _init: function(params) {
+      this.backgroundColor = params.backgroundColor;
+      
       this.fromJSON({
         children: {
           titleLabel: {
@@ -28,7 +52,7 @@ phina.namespace(function() {
               text: params.title,
               fill: params.fontColor,
               stroke: false,
-              fontSize: 64,
+              fontSize: params.fontSize,
             },
             x: this.gridX.center(),
             y: this.gridY.span(4),
@@ -45,7 +69,7 @@ phina.namespace(function() {
                 text: "TOUCH START",
                 fill: params.fontColor,
                 stroke: false,
-                fontSize: 32,
+                fontSize: params.fontSize / 2,
               },
               x: this.gridX.center(),
               y: this.gridY.span(12),
@@ -65,6 +89,7 @@ phina.namespace(function() {
         message: '',
 
         fontColor: 'white',
+        fontSize: 64,
         backgroundColor: 'hsl(200, 80%, 64%)',
         backgroundImage: '',
 
