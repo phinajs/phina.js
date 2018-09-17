@@ -37,7 +37,7 @@ phina.namespace(function() {
       });
 
       if (options.count instanceof Array) {
-        this.countList = options.count.reverse();
+        this.countList = options.count.clone().reverse();
       }
       else {
         this.countList = Array.range(1, options.count+1);
