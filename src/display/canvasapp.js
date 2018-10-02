@@ -47,8 +47,14 @@ phina.namespace(function() {
 
       if (options.pixelated) {
         // チラつき防止
+        // ドット絵ゲームのサポート
         // https://drafts.csswg.org/css-images/#the-image-rendering
-        this.domElement.style.imageRendering = 'pixelated';
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering#Browser_compatibility
+        if (navigator.userAgent.match(/Firefox\/\d+/)) {
+          this.domElement.style.imageRendering = 'crisp-edges';
+        } else {
+          this.domElement.style.imageRendering = 'pixelated';
+        }
       }
 
       // pushScene, popScene 対策
