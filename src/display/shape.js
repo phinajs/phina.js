@@ -9,19 +9,8 @@ phina.namespace(function() {
     superClass: 'phina.display.PlainElement',
 
     init: function(options) {
-      options = ({}).$safe(options, {
-        width: 64,
-        height: 64,
-        padding: 8,
+      options = ({}).$safe(options || {}, Shape.defaults);
 
-        backgroundColor: '#aaa',
-        fill: '#00a',
-        stroke: '#aaa',
-        strokeWidth: 4,
-
-        shadow: false,
-        shadowBlur: 4,
-      });
       this.superInit(options);
 
       this.padding = options.padding;
@@ -30,6 +19,8 @@ phina.namespace(function() {
       this.fill = options.fill;
       this.stroke = options.stroke;
       this.strokeWidth = options.strokeWidth;
+      this.lineCap = options.lineCap;
+      this.lineJoin = options.lineJoin;
 
       this.shadow = options.shadow;
       this.shadowBlur = options.shadowBlur;
@@ -98,7 +89,8 @@ phina.namespace(function() {
       if (this.isStrokable()) {
         context.strokeStyle = this.stroke;
         context.lineWidth = this.strokeWidth;
-        context.lineJoin = "round";
+        context.lineCap = this.lineCap;
+        context.lineJoin = this.lineJoin;
         context.shadowBlur = 0;
         this.renderStroke(canvas);
       }
@@ -139,6 +131,21 @@ phina.namespace(function() {
           watchRenderProperty.call(this, key);
         }, this);
       },
+      defaults: {
+        width: 64,
+        height: 64,
+        padding: 8,
+
+        backgroundColor: '#aaa',
+        fill: '#00a',
+        stroke: '#aaa',
+        strokeWidth: 4,
+        lineCap: 'round',
+        lineJoin: 'round',
+
+        shadow: false,
+        shadowBlur: 4,
+      },
     },
 
     _defined: function() {
@@ -151,6 +158,8 @@ phina.namespace(function() {
         'fill',
         'stroke',
         'strokeWidth',
+        'lineCap',
+        'lineJoin',
         'shadow',
         'shadowBlur',
       ]);
@@ -167,14 +176,8 @@ phina.namespace(function() {
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'blue',
-        stroke: '#aaa',
-        strokeWidth: 4,
+      options = ({}).$safe(options || {}, RectangleShape.defaults);
 
-        cornerRadius: 0,
-      });
       this.superInit(options);
 
       this.cornerRadius = options.cornerRadius;
@@ -187,6 +190,17 @@ phina.namespace(function() {
     _defined: function() {
       phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
     },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'blue',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        cornerRadius: 0,
+      },
+    }
   });
 });
 
@@ -200,13 +214,8 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'red',
-        stroke: '#aaa',
-        strokeWidth: 4,
-        radius: 32,
-      });
+      options = ({}).$safe(options || {}, CircleShape.defaults);
+
       this.superInit(options);
 
       this.setBoundingType('circle');
@@ -215,6 +224,16 @@ phina.namespace(function() {
     prerender: function(canvas) {
       canvas.circle(0, 0, this.radius);
     },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'red',
+        stroke: '#aaa',
+        strokeWidth: 4,
+        radius: 32,
+      },
+    }
   });
 });
 
@@ -227,14 +246,8 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'green',
-        stroke: '#aaa',
-        strokeWidth: 4,
+      options = ({}).$safe(options || {}, TriangleShape.defaults);
 
-        radius: 32,
-      });
       this.superInit(options);
 
       this.setBoundingType('circle');
@@ -244,6 +257,16 @@ phina.namespace(function() {
       canvas.polygon(0, 0, this.radius, 3);
     },
 
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'green',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+      },
+    }
   });
 
 });
@@ -256,16 +279,8 @@ phina.namespace(function() {
   phina.define('phina.display.StarShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'yellow',
-        stroke: '#aaa',
-        strokeWidth: 4,
+      options = ({}).$safe(options || {}, StarShape.defaults);
 
-        radius: 32,
-        sides: 5,
-        sideIndent: 0.38,
-      });
       this.superInit(options);
 
       this.setBoundingType('circle');
@@ -281,6 +296,19 @@ phina.namespace(function() {
       phina.display.Shape.watchRenderProperty.call(this, 'sides');
       phina.display.Shape.watchRenderProperty.call(this, 'sideIndent');
     },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'yellow',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        sides: 5,
+        sideIndent: 0.38,
+      },
+    }
   });
 
 });
@@ -293,15 +321,8 @@ phina.namespace(function() {
   phina.define('phina.display.PolygonShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'cyan',
-        stroke: '#aaa',
-        strokeWidth: 4,
+      options = ({}).$safe(options || {}, PolygonShape.defaults);
 
-        radius: 32,
-        sides: 5,
-      });
       this.superInit(options);
 
       this.setBoundingType('circle');
@@ -315,6 +336,18 @@ phina.namespace(function() {
     _defined: function() {
       phina.display.Shape.watchRenderProperty.call(this, 'sides');
     },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'cyan',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        sides: 5,
+      },
+    }
   });
 
 });
@@ -328,15 +361,8 @@ phina.namespace(function() {
   phina.define('phina.display.HeartShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options, {
-        backgroundColor: 'transparent',
-        fill: 'pink',
-        stroke: '#aaa',
-        strokeWidth: 4,
+      options = ({}).$safe(options || {}, HeartShape.defaults);
 
-        radius: 32,
-        cornerAngle: 45,
-      });
       this.superInit(options);
 
       this.setBoundingType('circle');
@@ -350,6 +376,18 @@ phina.namespace(function() {
     _defined: function() {
       phina.display.Shape.watchRenderProperty.call(this, 'cornerAngle');
     },
+
+    _static: {
+      defaults: {
+        backgroundColor: 'transparent',
+        fill: 'pink',
+        stroke: '#aaa',
+        strokeWidth: 4,
+
+        radius: 32,
+        cornerAngle: 45,
+      },
+    }
   });
 
 });
@@ -445,8 +483,6 @@ phina.namespace(function () {
     },
 
     prerender: function (canvas) {
-      canvas.lineCap = this.lineCap;
-      canvas.lineJoin = this.lineJoin;
       var paths = this.paths;
       if (paths.length > 1) {
         var c = canvas.context;
@@ -460,19 +496,10 @@ phina.namespace(function () {
       }
     },
 
-    _defined: function () {
-      phina.display.Shape.watchRenderProperties.call(this, [
-        'lineCap',
-        'lineJoin'
-      ]);
-    },
-
     _static: {
       defaults: {
         fill: false,
         backgroundColor: 'transparent',
-        lineCap: 'round',
-        lineJoin:'round',
       },
     }
 
