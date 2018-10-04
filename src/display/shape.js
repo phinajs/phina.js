@@ -9,7 +9,7 @@ phina.namespace(function() {
     superClass: 'phina.display.PlainElement',
 
     init: function(options) {
-      options = ({}).$safe(options || {}, Shape.defaults);
+      options = ({}).$safe(options || {}, phina.display.Shape.defaults);
 
       this.superInit(options);
 
@@ -176,7 +176,7 @@ phina.namespace(function() {
   phina.define('phina.display.RectangleShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options || {}, RectangleShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.RectangleShape.defaults);
 
       this.superInit(options);
 
@@ -214,7 +214,7 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options || {}, CircleShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.CircleShape.defaults);
 
       this.superInit(options);
 
@@ -246,7 +246,7 @@ phina.namespace(function() {
     superClass: 'phina.display.Shape',
 
     init: function(options) {
-      options = ({}).$safe(options || {}, TriangleShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.TriangleShape.defaults);
 
       this.superInit(options);
 
@@ -279,7 +279,7 @@ phina.namespace(function() {
   phina.define('phina.display.StarShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options || {}, StarShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.StarShape.defaults);
 
       this.superInit(options);
 
@@ -321,7 +321,7 @@ phina.namespace(function() {
   phina.define('phina.display.PolygonShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options || {}, PolygonShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.PolygonShape.defaults);
 
       this.superInit(options);
 
@@ -361,7 +361,7 @@ phina.namespace(function() {
   phina.define('phina.display.HeartShape', {
     superClass: 'phina.display.Shape',
     init: function(options) {
-      options = ({}).$safe(options || {}, HeartShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.HeartShape.defaults);
 
       this.superInit(options);
 
@@ -402,7 +402,7 @@ phina.namespace(function () {
     paths: null,
 
     init: function (options) {
-      options = ({}).$safe(options || {}, PathShape.defaults);
+      options = ({}).$safe(options || {}, phina.display.PathShape.defaults);
 
       this.superInit(options);
       this.paths = options.paths || [];
