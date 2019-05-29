@@ -3,9 +3,9 @@ var banner = [
   "/* ",
   " * <%= pkg.name %> <%= pkg.version %>",
   " * <%= pkg.description %>",
-  " * MIT Licensed",
+  " * Released under the MIT license",
   " * ",
-  " * Copyright (C) 2015 phi, http://phinajs.com",
+  " * <%= license %>",
   " */",
   "",
   "",
@@ -118,10 +118,13 @@ var files = [
 files = files.map(function(f) {
   return './src/' + f;
 });
+var license = require('fs').readFileSync('./LICENSE.txt').toString();
+
 
 module.exports = {
   package: require('../package.json'),
-
+  license: license,
+  licenseForHeader: license.split('\n').join('\n * '),
   banner: banner,
   files: files,
 

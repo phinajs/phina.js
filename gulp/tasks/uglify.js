@@ -11,6 +11,7 @@ gulp.task('uglify', function() {
     .pipe(uglify())
     .pipe(header(config.banner, {
       pkg: config.package,
+      license: config.licenseForHeader,
     }))
     .pipe(rename({
       extname: '.min.js'

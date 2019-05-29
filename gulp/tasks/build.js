@@ -10,6 +10,7 @@ gulp.task('build', function() {
     .pipe(replace('<%= version %>', config.package.version))
     .pipe(header(config.banner, {
       pkg: config.package,
+      license: config.licenseForHeader,
     }))
     .pipe(gulp.dest(config.build.output))
     ;

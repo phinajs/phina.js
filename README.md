@@ -66,3 +66,8 @@ watch and launch
 ```
 $gulp dev
 ```
+
+
+## LICENSE
+
+MIT
