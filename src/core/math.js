@@ -143,8 +143,8 @@
    * @param {Number} percent  真になる百分率
    * @return {Boolean} ランダムな真偽値
    */
-  Math.$method("randbool", function(perecent) {
-    return Math.randint(0, 100) < (perecent || 50);
+  Math.$method("randbool", function(percent) {
+    return Math.random() < (percent === undefined ? 50 : percent) / 100;
   });
     
 })();
