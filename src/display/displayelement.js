@@ -19,15 +19,22 @@ phina.namespace(function() {
     renderChildBySelf: false,
 
     init: function(options) {
-      options = (options || {});
-      
+      options = ({}).$safe(options || {}, DisplayElement.defaults);
+            
       this.superInit(options);
-
-      this.visible = true;
-      this.alpha = 1.0;
+      this.alpha = options.alpha;
+      this.visible = options.visible;
       this._worldAlpha = 1.0;
     },
 
+    /**
+     * アルファ値をセット
+     */
+    setAlpha: function(alpha) {
+      this.alpha = alpha;
+      return this;
+    },
+    
     /**
      * 表示/非表示をセット
      */
@@ -70,7 +77,13 @@ phina.namespace(function() {
         this._worldAlpha = worldAlpha * this.alpha;
       }
     },
+    
+    _static: {
+      defaults: {
+        alpha: 1.0,
+        visible: true,
+      },
+    }
   });
-
 });
 
