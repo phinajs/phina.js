@@ -79,7 +79,7 @@
             });
           }
           else {
-            flow.resolve(arg);
+            flow.resolve(resultValue);
           }
         });
 
