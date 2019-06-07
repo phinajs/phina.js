@@ -17,7 +17,7 @@ phina.namespace(function() {
       this.canvas.setSize(params.width, params.height);
       this.renderer = phina.display.CanvasRenderer(this.canvas);
       this.backgroundColor = (params.backgroundColor) ? params.backgroundColor : null;
-      
+
       this.width = params.width;
       this.height = params.height;
       this.gridX = phina.util.Grid(params.width, 16);
@@ -30,6 +30,13 @@ phina.namespace(function() {
       };
       this._overFlags = {};
       this._touchFlags = {};
+
+      var ctx = this.canvas.context;
+      if (params.imageSmoothing === false) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.msImageSmoothingEnabled = false;
+      }
     },
 
     hitTest: function() {
@@ -50,6 +57,7 @@ phina.namespace(function() {
       defaults: {
         width: 640,
         height: 960,
+        imageSmoothing: true,
       },
     }
 
