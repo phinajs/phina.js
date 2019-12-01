@@ -19,8 +19,8 @@ phina.namespace(function() {
     renderChildBySelf: false,
 
     init: function(options) {
-      options = ({}).$safe(options || {}, DisplayElement.defaults);
-            
+      options = ({}).$safe(options || {}, phina.display.DisplayElement.defaults);
+
       this.superInit(options);
       this.alpha = options.alpha;
       this.visible = options.visible;
@@ -34,7 +34,7 @@ phina.namespace(function() {
       this.alpha = alpha;
       return this;
     },
-    
+
     /**
      * 表示/非表示をセット
      */
@@ -72,12 +72,12 @@ phina.namespace(function() {
         return ;
       }
       else {
-        var worldAlpha = (this.parent._worldAlpha !== undefined) ? this.parent._worldAlpha : 1.0; 
+        var worldAlpha = (this.parent._worldAlpha !== undefined) ? this.parent._worldAlpha : 1.0;
         // alpha
         this._worldAlpha = worldAlpha * this.alpha;
       }
     },
-    
+
     _static: {
       defaults: {
         alpha: 1.0,
