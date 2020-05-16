@@ -708,11 +708,13 @@ phina.namespace(function() {
        *
        * @param {phina.geom.Vector2} v 入射ベクトル
        * @param {phina.geom.Vector2} normal 壁の法線ベクトル
+       * @param {Number} r 減衰係数
        * @return {phina.geom.Vector2} 反射ベクトル
        */
-      reflect: function(v, normal) {
+      reflect: function(v, normal, r) {
+        var R = (r !== undefined) ? r : 1.0;
         var len = phina.geom.Vector2.dot(v, normal);
-        var temp= phina.geom.Vector2.mul(normal, 2*len);
+        var temp= phina.geom.Vector2.mul(normal, 2*len*R);
         
         return phina.geom.Vector2.sub(v, temp);
       },
