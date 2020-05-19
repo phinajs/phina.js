@@ -34,6 +34,7 @@ phina.namespace(function() {
     init: function() {
       this.superInit();
       this.children = [];
+      this.accessories = [];
     },
 
     /**

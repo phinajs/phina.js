@@ -14,13 +14,7 @@ phina.namespace(function() {
     init: function(target) {
       this.superInit();
 
-      this.target = target;
-    },
-    setTarget: function(target) {
-      if (this.target === target) return ;
-
-      this.target = target;
-      return this;
+      if(target) this.attachTo(target);
     },
     getTarget: function() {
       return this.target;
@@ -30,38 +24,25 @@ phina.namespace(function() {
     },
     attachTo: function(element) {
       element.attach(this);
-      this.setTarget(element);
       return this;
     },
     remove: function() {
       this.target.detach(this);
-      this.target = null;
     },
   });
 
   phina.app.Element.prototype.$method('attach', function(accessory) {
-    if (!this.accessories) {
-      this.accessories = [];
-      this.on('enterframe', function(e) {
-        this.accessories.each(function(accessory) {
-          accessory.update && accessory.update(e.app);
-        });
-      });
-    }
-
     this.accessories.push(accessory);
-    accessory.setTarget(this);
+    accessory.target = this;
     accessory.flare('attached');
 
     return this;
   });
 
   phina.app.Element.prototype.$method('detach', function(accessory) {
-    if (this.accessories) {
-      this.accessories.erase(accessory);
-      accessory.setTarget(null);
-      accessory.flare('detached');
-    }
+    this.accessories.erase(accessory);
+    accessory.target = null;
+    accessory.flare('detached');
 
     return this;
   });
