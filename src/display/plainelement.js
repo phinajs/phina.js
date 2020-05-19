@@ -19,8 +19,8 @@ phina.namespace(function() {
       var w = image.width;
       var h = image.height;
 
-      var x = -w*this.origin.x;
-      var y = -h*this.origin.y;
+      var x = -this.width*this.origin.x;
+      var y = -this.height*this.origin.y;
 
       canvas.context.drawImage(image,
         0, 0, w, h,
