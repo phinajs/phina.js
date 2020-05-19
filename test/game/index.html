@@ -35,6 +35,7 @@
 
     <!-- test files -->
     <script src='src/app.js'></script>
+    <script src='src/interactive.js'></script>
     <script src='src/geom.js'></script>
     <script src='src/display.js'></script>
     <script src='src/ui.js'></script>
@@ -228,11 +229,13 @@
   var run = function(path) {
     var p = path.join('/');
     var code = (function() {
-      var code = th.code(p);
-      var lines = code.split('\n');
-      lines.splice(0, 1);
-      lines.splice(lines.length-1, 1);
-      return lines.join('\n');
+      var codes = [th.preparedCode(p), th.code(p)];
+      return codes.map(function(code) {
+        var lines = code.split('\n');
+        lines.splice(0, 1);
+        lines.splice(lines.length - 1, 1);
+        return lines.join('\n');
+      }).join('\n');
     })();
 
     var a = $.ajax({

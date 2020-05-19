@@ -12,6 +12,9 @@
   var Suite = function(title, fn) {
     this.title = title;
     this.fn = fn;
+    this.preparedFn = function() {
+
+    };
     this.testMap = {};
   };
   Suite.prototype.run = function(key) {
@@ -48,6 +51,9 @@
 
     return suite;
   };
+  th.prepare = function(fn) {
+    current.preparedFn = fn;
+  };
   th.it = function(title, fn) {
     var suite = current;
     
@@ -67,6 +73,13 @@
     var test = suiteMap[pathes[0]].testMap[pathes[1]];
 
     return test.fn.toString();
+  };
+
+  th.preparedCode = function(path) {
+    var pathes = path.split('/');
+    var fn = suiteMap[pathes[0]].preparedFn;
+
+    return fn.toString();
   };
 
   th.run = function(path) {
