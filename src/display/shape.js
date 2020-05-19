@@ -27,17 +27,6 @@ phina.namespace(function() {
 
       this.watchDraw = true;
       this._dirtyDraw = true;
-
-      var checkRender = function() {
-        // render
-        if (this.watchDraw && this._dirtyDraw === true) {
-          this.render(this.canvas);
-          this._dirtyDraw = false;
-        }
-      };
-
-      this.on('enterframe', checkRender);
-      this.on('added', checkRender);
     },
 
     calcCanvasWidth: function() {
@@ -115,6 +104,15 @@ phina.namespace(function() {
       this.postrender(this.canvas);
 
       return this;
+    },
+
+    draw: function(canvas) {
+      if (this.watchDraw && this._dirtyDraw === true) {
+        // render
+        this.render(this.canvas);
+        this._dirtyDraw = false;
+      }
+      this._draw(canvas);
     },
 
     _static: {
