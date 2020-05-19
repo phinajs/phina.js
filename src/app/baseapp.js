@@ -9,11 +9,7 @@ phina.namespace(function() {
     superClass: 'phina.util.EventDispatcher',
 
     /** awake */
-    awake: null,
-    /** fps */
-    fps: null,
-    /** frame */
-    frame: null,
+    awake: false,
 
     /**
      * @constructor
@@ -168,6 +164,9 @@ phina.namespace(function() {
     },
 
     _loop: function() {
+      if (!this.awake) {
+        return;
+      }
       this._update();
       this.interactive.check(this.currentScene);
       this._draw();
@@ -177,15 +176,13 @@ phina.namespace(function() {
     },
 
     _update: function() {
-      if (this.awake) {
-        // エンターフレームイベント
-        if (this.has('enterframe')) {
-          this.flare('enterframe');
-        }
-
-        this.update && this.update();
-        this.updater.update(this.currentScene);
+      // エンターフレームイベント
+      if (this.has('enterframe')) {
+        this.flare('enterframe');
       }
+
+      this.update && this.update();
+      this.updater.update(this.currentScene);
     },
 
     /**
