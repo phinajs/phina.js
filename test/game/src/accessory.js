@@ -4,7 +4,7 @@ th.describe("accessory.Tweener", function() {
     var shape = phina.display.CircleShape().addChildTo(this);
     var tweener = phina.accessory.Tweener().attachTo(shape);
     tweener
-      .to({x:320, y:480}, 1000)
+      .to({x:320, y:480}, 1000);
   });
 
   th.it('to', function() {
@@ -12,7 +12,7 @@ th.describe("accessory.Tweener", function() {
     var tweener = phina.accessory.Tweener().attachTo(shape);
     tweener
       .to({x:320, y:480}, 1000)
-      .to({scaleX:4,scaleY:4, rotation:360}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000);
   });
 
   th.it('by', function() {
@@ -21,7 +21,7 @@ th.describe("accessory.Tweener", function() {
     tweener
       .to({x:320, y:480}, 1000)
       .by({x:100, y:100}, 1000)
-      .to({scaleX:4,scaleY:4, rotation:360}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000);
   });
 
   th.it('from', function() {
@@ -29,7 +29,7 @@ th.describe("accessory.Tweener", function() {
     shape.position.set(320, 480);
     var tweener = phina.accessory.Tweener().attachTo(shape);
     tweener
-      .from({scaleX:4,scaleY:4, rotation:360}, 1000)
+      .from({scaleX:4,scaleY:4, rotation:360}, 1000);
   });
 
   th.it('wait', function() {
@@ -38,7 +38,7 @@ th.describe("accessory.Tweener", function() {
     tweener
       .to({x:320, y:480}, 1000)
       .wait(1000)
-      .to({scaleX:4,scaleY:4, rotation:360}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000);
   });
 
   th.it('call', function() {
@@ -52,7 +52,7 @@ th.describe("accessory.Tweener", function() {
       .to({scaleX:4,scaleY:4, rotation:360}, 1000)
       .call(function() {
         shape.style.color = 'blue';
-      })
+      });
   });
 
   th.it('set', function() {
@@ -64,7 +64,7 @@ th.describe("accessory.Tweener", function() {
       .set({scaleX:4, scaleY:4})
       .call(function() {
         shape.fill = 'green';
-      })
+      });
   });
 
   th.it('play', function() {
@@ -87,7 +87,7 @@ th.describe("accessory.Tweener", function() {
       .to({x:320, y:480}, 1000)
       .call(function() {
         this.rewind();
-      })
+      });
   });
 
   th.it('yoyo', function() {
@@ -98,7 +98,7 @@ th.describe("accessory.Tweener", function() {
       .to({x:320+150, y:480}, 1000)
       .call(function() {
         this.yoyo();
-      })
+      });
   });
 
   th.it('loop', function() {
@@ -124,7 +124,21 @@ th.describe("accessory.Tweener", function() {
       ]
     });
   });
-
+  
+  th.it('clone', function() {
+    var shape = phina.display.RectangleShape().addChildTo(this);
+    var tweener = phina.accessory.Tweener().attachTo(shape);
+    tweener
+      .to({x:320, y:480}, 1000)
+      .to({scaleX:4,scaleY:4, rotation:360}, 1000);
+    var tweener2 = tweener.clone();
+    
+    var shape = phina.display.RectangleShape({
+      x: 640,
+      y: 960,
+    }).addChildTo(this);
+    shape.attach(tweener2);
+  });
 
 });
 
@@ -243,6 +257,24 @@ th.describe("accessory.Flickable", function() {
       var angle = e.direction.toAngle().toDegree();
       label.text = angle;
     };
+  });
+  
+  th.it('clone', function() {
+  
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(160, 480);
+    shape.flickable.enable();
+
+    shape.flickable.horizontal = true;
+    shape.flickable.vertical = false;
+    
+    var flickable = shape.flickable.clone();
+  
+    var shape = phina.display.CircleShape().addChildTo(this);
+    shape.setPosition(480, 480);
+    flickable.enable();
+    flickable.attachTo(shape);
+    
   });
 });
 
