@@ -156,20 +156,23 @@
     },
 
     update: function() {
-      this.touches.forEach(function(touch) {
-        if (!touch.released) {
-          touch.update();
+      if (this.touches.length > 0) {
+        var clone = this.touches.slice(0);
+        clone.forEach(function(touch) {
+          if (!touch.released) {
+            touch.update();
 
-          if (touch.flags === 0) {
-            touch.released = true;
+            if (touch.flags === 0) {
+              touch.released = true;
+            }
           }
-        }
-        else {
-          touch.released = false;
-          this.removeTouch(touch);
-        }
+          else {
+            touch.released = false;
+            this.removeTouch(touch);
+          }
 
-      }, this);
+        }, this);
+      }
     },
 
     _accessor: {
